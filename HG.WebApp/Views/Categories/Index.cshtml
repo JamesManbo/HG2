@@ -1,0 +1,354 @@
+﻿
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<HG.WebApp.Dto.CategoryDTO>
+<script>
+    $(document).ready(function () {
+       
+        $("#fileIcon").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=CategoriesImg',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        $(this).val('');
+                        for (var i = 0; i < result.files.length; i++) {
+                            //CKEDITOR.instances['Description'].insertHtml('<img src="' + result.files[i] + '">');
+                              $('#view-card').attr('src', result.files[i]);
+                              $('#ImagePath').val(""+result.files[i]+"");
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+        $("#fileIconEdit").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=CategoriesImg',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        for (var i = 0; i < result.files.length; i++) {
+                            console.log(result.files[i])
+                              $('#view-card-edit').attr('src', result.files[i]);
+                              $('#ImagePath-edit').val(""+result.files[i]+"");
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+                                                   
+    });
+    
+</script>
+<div class="card">
+    <div class="card-body">
+         <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Danh sách danh mục</h3>
+                        <a href="" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addCategoriesModal">Thêm mới</a>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-striped">
+                            <tbody>
+                                @{int i = 1;}
+                                <tr>
+                                    <th>Mã danh mục</th>
+                                    <th>Tên danh mục</th>
+                                    <th>Tên Tiếng Anh</th>
+                                    @*<th>danh mục cha</th>*@
+                                    <th>Mô tả</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model.ToList())
+                                {
+                                    <tr>
+                                     
+                                        <td style="vertical-align: middle">@item.Id</td>
+                                        <td style="vertical-align: middle">@item.Name</td>
+                                        <td style="vertical-align: middle">@item.NameEn</td>
+                                     @*   <td style="vertical-align: middle">
+                                                  @item.ParentId
+                                        </td>*@
+                                        <td style="vertical-align: middle">@item.Description</td>
+                                        <td style="vertical-align: middle">
+                                            @Html.Raw( (item.Status == 0 ? "<span style='color:#2b6893;cursor: pointer;' onclick='UpdateStatus(" + @item.Id + ")'>Ẩn</span>" : "<span style='color:red;cursor: pointer;' onclick='UpdateStatus(" + @item.Id + ")'>Hiện</span>"))
+                                        </td>
+                                       
+                                        <td style="vertical-align: middle">
+                                            <a href="" class="btn btn-warning btn-bordered" id="addData-@(i-1)" name = "@(item.Name + ";" + item.Description + ";" + item.Status+ ";"+ item.ImagePath+ ";" + item.IsShowOnHome + ";"+ item.NameEn )" data-toggle="modal" data-target="#EditCategoriesModal" title="sửa">
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                            </a>
+                                              <script>
+                                                $('#addData-@(i-1)').click(function () {
+                                                    $("#EditCategoryID").val(@item.Id);
+                                                    $("#EditCName" ).val($('#addData-@(i-1)').attr('name').split(';')[0])
+                                                    $("#EditCDes").val($('#addData-@(i-1)').attr('name').split(';')[1]);
+                                                    if($('#addData-@(i-1)').attr('name').split(';')[2] ==1){$("#EditStatus1").prop("checked", true);} else { $("#EditStatus0").prop("checked", true);}
+                                                     var img = $('#addData-@(i-1)').attr('name').split(';')[3];
+                                                    $("#view-card-edit").attr('src', img);
+                                                    if($('#addData-@(i-1)').attr('name').split(';')[4] ==1){$("#EditIsShowOnHome1").prop("checked", true);} else { $("#EditIsShowOnHome0").prop("checked", true);}
+                                                    $("#EditCNameEn" ).val($('#addData-@(i-1)').attr('name').split(';')[5])
+                                                    $('#EditCategoriesModal').show();
+                                                });
+                                            </script>
+                                            <a onclick="confirm.BeforDelete('/Categories/DeleteCate/@item.Id')" class="btn btn-danger btn-bordered" title="xóa">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+                                        </td>
+                                     
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                        <div class="bv_pagging">
+                            @if (Model.PageCount > 1)
+                            {
+                                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, status = ViewBag.status }),
+                                                 new  X.PagedList.Web.Common.PagedListRenderOptions{
+                                       LiElementClasses = new string[] { "page-item" },
+                                       PageClasses = new string[] { "page-link" }
+                                   })
+                            }
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+    </div>
+        <div class="modal" role="dialog" id="addCategoriesModal" style="background:transparent !important;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @using (Html.BeginForm("AddCate", "Categories", FormMethod.Post, new { enctype = "multipart/form-data", id = "formcategory" }))
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">x</span>
+                            </button>
+                            <h4 class="modal-title">Thêm danh mục</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <input type="hidden" id="CategoryID" name="CategoryID" />
+                                        <label>Tên danh mục</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="CName" id="CName" class="form-control" />
+                                    </div>
+                                </div>
+                                 <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <input type="hidden" id="CategoryID" name="CategoryID" />
+                                        <label>Tên Tiếng Anh</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="CNameEn" id="CNameEn" class="form-control" />
+                                    </div>
+                                </div>
+                                 <div class="col-md-12 col-xs-12">
+                                     <div class="col-xs-3">
+                                        <label>Slug</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="CDes" id="CDes" class="form-control" />
+                                    </div>
+                               </div>
+                                  <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <label>Ảnh danh mục</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                     <div class="">
+                                         <input class="form-control hidden" id="ImagePath" name="ImagePath"  style="display: none">
+                                        <input type="file" id="fileIcon" name="Icon" multiple="" style="display: none">
+                                        <button type="button" onclick="$('#fileIcon').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <img id="view-card" src="" style="margin-top: 10px;" width="100" />
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <label>Hiển thị trang chủ</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                      Không <input type="radio" name="IsShowOnHome"  value="0"> 
+                                      Có  <input type="radio" name="IsShowOnHome" checked value="1"> 
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <label>Hiển thị</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                      Ẩn <input type="radio" name="Status"  value="0"> 
+                                      Hiện  <input type="radio" name="Status" checked value="1"> 
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button id="btnAccept" class="btn btn-primary">Đồng ý</button>
+                                    <button id="btnCancel" class="btn btn-default pull-right" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="modal" role="dialog" id="EditCategoriesModal" style="background:transparent !important;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @using (Html.BeginForm("EditCate", "Categories", FormMethod.Post, new { enctype = "multipart/form-data", id = "formcategory" }))
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">x</span>
+                            </button>
+                            <h4 class="modal-title">Chỉnh sửa danh mục</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <input type="hidden" id="EditCategoryID" name="CategoryID" />
+                                        <label>Tên danh mục</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="CName" id="EditCName" class="form-control" />
+                                    </div>
+                                </div>
+                                  <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                       
+                                        <label>Tên Tiếng Anh</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="CNameEn" id="EditCNameEn" class="form-control" />
+                                    </div>
+                                </div>
+                                 <div class="col-md-12 col-xs-12">
+                                     <div class="col-xs-3">
+                                        <label>Slug</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="CDes" id="EditCDes" class="form-control" />
+                                    </div>
+                               </div>
+                                 <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <label>Ảnh danh mục</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                     <div class="">
+                                         <input class="form-control hidden" id="ImagePath-edit" name="IconEdit"  style="display: none">
+                                        <input type="file" id="fileIconEdit" name="IconEdit" multiple="" style="display: none">
+                                        <button type="button" onclick="$('#fileIconEdit').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <img id="view-card-edit" src="" style="margin-top: 10px;" width="100" />
+                                    </div>
+                                    </div>
+                                </div>
+                                 <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <label>Hiển thị trang chủ</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                      Không <input type="radio" name="EditIsShowOnHome"  id="EditIsShowOnHome0"  value="0"> 
+                                      Có  <input type="radio" name="EditIsShowOnHome" id="EditIsShowOnHome1" value="1"> 
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <label>Hiển thị</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                      Ẩn <input type="radio" id="EditStatus0" name="Status" value="0"> 
+                                      Hiện  <input type="radio" id="EditStatus1" name="Status" value="1"> 
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button id="btnAccept" class="btn btn-primary">Đồng ý</button>
+                                    <button id="btnCancel" class="btn btn-default pull-right" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+<div class="c"></div>
+
+</div>
+ <script src="~/BackEnd/Admin/Js/Validate/category.js"></script>
+<script>
+    $(document).ready(function () {
+        category.validateForm();
+        $("#btnCancel").click(function () {
+            $('label[class=error]').hide();
+        });
+        $("#addTagModal").draggable({
+            handle: ".modal-header"
+        });
+    });
+</script>
+
+<style>
+    .table tbody tr td {
+        vertical-align: middle;
+    }
+</style>

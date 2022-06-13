@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500&display=swap" rel="stylesheet">
+
+    <title>Yellow Pages</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
+    />
+    <meta property="og:title" content="yellow page" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/BackEnd/Client/images/iconea.png" />
+    <meta property="og:site_name" content="yellow page" />
+    <meta property="og:description" content="yellow page" />
+     <link rel="shortcut icon" href="/BackEnd/Client/images/iconea.png" />
+    <link rel="stylesheet" href="~/BackEnd/Client/Css/index.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="~/BackEnd/Client/Css/header.css" />
+    <link rel="stylesheet" href="~/BackEnd/Client/Css/footer.css" />
+    <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'vi'}, 'google_translate_element');
+    }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <link rel="stylesheet" href="~/BackEnd/Client/Css/custom_input_checkbox.css" />
+    <link rel="stylesheet" href="~/BackEnd/Admin/Js/notifications/notification.css"  />
+    <script src="~/BackEnd/Client/Js/page2.js"></script>
+    <script src="~/BackEnd/Client/Js/header.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="~/BackEnd/bootstrap/js/bootstrap.js"></script>
+    <script src="~/BackEnd/Admin/Js/notifications/notify.min.js"></script>
+    <script src="~/BackEnd/Admin/Js/notifications/notify-metro.js"></script>
+    <script src="~/BackEnd/Admin/Js/notifications/notifications.js"></script>
+    <script src="~/js/common/common.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LQML8PB19J"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-LQML8PB19J'); </script>
+    <script>
+      $('.dropdown-menu li').on('click', function() {
+          var $dropdown = $('.dropdown-toggle');
+          var text = $(this).text();
+          var $span = $dropdown.find('span');
+  
+          $dropdown.text(text).append($span);
+        });
+    </script>
+</head>
+  <body>
+     <!-- Messenger Chat plugin Code -->
+    <div id="fb-root"></div>
+
+    <!-- Your Chat plugin code -->
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
+    <script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "112152374727905");
+      chatbox.setAttribute("attribution", "biz_inbox");
+    </script>
+
+    <!-- Your SDK code -->
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v13.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <div class="header">
+      <div class="container">
+        <div class="nav flex--between">
+          <div class="nav__logo" style="cursor:pointer" onclick="window.location.href = 'https://edtechagency.net/'">
+            <img src="~/BackEnd/Client/images/LogoEA.png" alt="logo_page" />
+          </div>
+          <div class="nav__icon">
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+          <div class="nav-menu flex--around">
+            <div id="about_pages" class="nav-menu__list"> <a href="https://edtechagency.net/index.php/about-us/">About us</a></div>
+            <div id="yellow_pages" class="nav-menu__list active"><a href="/YellowPage">Yellow Pages</a></div>
+            <div id="reports" class="nav-menu__list">  <a style="text-decoration: auto;" href="https://edtechagency.net/index.php/edu-reports/">Reports</a></div>
+            <div id="products" class="nav-menu__list flex--between">
+              <span>Products</span>
+              <img src="~/BackEnd/Client/images/ArrowDown.jpg" alt="ArrowDown" />
+            </div>
+            <div id="rvent" class="nav-menu__list"><a href="https://edtechagency.net/index.php/category/edu-events/">Events</a></div>
+            <div id="publishing" class="nav-menu__list"> <a href="https://learningtree.vn/">Publishing</a></div>
+            <div id="contact" class="nav-menu__list"> <a href="https://edtechagency.net/index.php/contact/">Contact</a></div>
+               
+            @if(User.Identity.Name == null){
+                 <div id="Login" class="nav-menu__list flex--between" data-target="#login" data-toggle="modal">
+                  <span>Login</span>
+                  <img src="~/BackEnd/Client/images/ArrowDown.jpg" alt="ArrowDown" />
+                </div>
+            }else{
+                 <div  class="nav-menu__list dropdown-toggle" data-toggle="dropdown">
+                    Hello: @User.Identity.Name <span class="caret"></span>
+                </div>
+                  <ul class="dropdown-menu" role="menu">
+                    <li><span style="cursor:pointer" onclick="LogoutClient()" class="dropdown-item">Sign Out</span></li>
+                    <li><span style="cursor:pointer" onclick="AddListting()" class="dropdown-item">Add Listting</span></li>
+                    <li><span style="cursor:pointer" onclick="ProfileFC('@User.Identity.Name')" class="dropdown-item">Profile</span></li>
+                  </ul>
+            }
+            <div class="nav-menu__list flex--between" id="google_translate_element"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+    @*login and register here*@
+    <div id="login" class="modal fade" role="dialog">
+      <div class="modal-dialog"  @*style="background-image:url('/BackEnd/Client/images/popupbg.png')"*@>
+        <div class="modal-content" style="height:366px; background-image:url('/BackEnd/Client/images/popupbg.png');border-radius: 0.9rem;">
+          <div class="modal-body">
+            <button data-dismiss="modal" class="close">&times;</button>
+            <div style="padding-top:50px">Welcome back!</div>
+            <form action="" method="post">
+              <input type="text" name="UserName" id="UserName" class="username form-control2"  placeholder="Username"/>
+              <input type="password" name="password" id="PassWord" class="password form-control2" placeholder="Password"/>
+              <a href="#" class="forgotpass">Forgot Password</a>
+              <input class="btn login" onclick="LoginClient()" style="cursor:pointer" type="button"  value="Login" />
+              <span class="lblregister">You dont have an Account ?</span> <span  onclick="RegisterFC()" style="font-size: 12px; color:white; cursor: pointer">Register</span>
+            </form>
+          </div>
+        </div>
+      </div>  
+    </div>
+       <div id="register" class="modal fade" role="dialog">
+      <div class="modal-dialog"  @*style="background-image:url('/BackEnd/Client/images/popupbg.png')"*@>
+        <div class="modal-content" style="height:465px; background-image:url('/BackEnd/Client/images/popupbg.png');border-radius: 0.9rem;">
+          <div class="modal-body">
+            <button data-dismiss="modal" class="close">&times;</button>
+            <div style="padding-top:50px">Welcome!</div>
+            <form action="" method="post">
+              <input type="text" name="UserName" id="UserNameR" class="username form-control2"  placeholder="Username"/>
+              <input type="text" name="Gmail" id="GmailR" class="username form-control2"  placeholder="Gmail"/>
+              <input type="password" name="password" id="PassWordR" class="password form-control2" placeholder="Password"/>
+              <input type="password" name="ConfirmPassWord" id="ConfirmPassWord" class="password form-control2" placeholder="Conf password"/>
+              <input class="btn login" style="cursor:pointer" onclick="CreateAccount()" type="button"  value="Register" />
+              <span class="lblregister">You already have an Account ?</span> <span  onclick="LoginFC()" style="font-size: 12px; color:white; cursor: pointer">Login</span>
+            </form>
+          </div>
+        </div>
+      </div>  
+    </div>
+    <script>
+       function RegisterFC(){
+                $('#register').modal('toggle');
+                $('#register').modal('show');
+                $('#login').modal('hide');}
+       function LoginClient(){
+            $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("LoginClient","User")",
+                    data: {UserName: $("#UserName").val(), PassWord: $("#PassWord").val()},
+                    dataType: "text",
+                    success: function (msg) {
+                       if(msg == "true"){
+                            window.location.href = "/YellowPage"
+                       }else{
+                            alertmsg.error("please check username or password");
+                       }
+                    },
+                    error: function (req, status, error) {
+                        alertmsg.error("please check username or password");
+                    }
+                }); }
+       function LogoutClient(){
+           window.location.href = "/User/LogoutClient"}
+       function AddListting(){
+           window.location.href = "/AddListting"}
+       function LoginFC(){ 
+            $('#login').modal('toggle');
+            $('#login').modal('show');
+            $('#register').modal('hide');}
+       function CreateAccount(){
+             if($("#UserNameR").val() == '' || $("#UserNameR").val() == undefined || $("#GmailR").val() == '' || $("#GmailR").val() == undefined){
+                  alertmsg.success("Bạn chưa nhập tên hoặc gmail");
+                  return false;
+             }else if($("#PassWordR").val() == '' || $("#PassWordR").val() == undefined){
+                 alertmsg.success("Bạn chưa nhập mật khẩu");
+                 return false;
+             }else if($("#PassWordR").val() != $("#ConfirmPassWord").val()){
+                 alertmsg.success("Mật khẩu chưa giống nhau!");
+                 return false;
+             }else{
+                  $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("RegisterClient","User")",
+                    data: {UserName: $("#UserNameR").val(), PassWord: $("#PassWordR").val(), Gmail: $("#GmailR").val()},
+                    dataType: "text",
+                    success: function (msg) {
+                       if(msg == "true"){
+                            
+                             $('#login').modal('toggle');
+                            $('#login').modal('show');
+                            $('#register').modal('hide');
+                            alertmsg.success("register success, please login your account");
+                            return false;
+                       }else if(msg == "ErrUsername"){
+                            alertmsg.error("Tên tài khoản đã có trong hệ thống");
+                            return false;
+                       }else if(msg == "ErrEmail"){
+                           alertmsg.error("Gmail đã có trong hệ thống");
+                           return false;
+                       }else{
+                           alertmsg.error("Mật khẩu gồm một chữ hoa, một chữ thường và 1 số");
+                            return false;
+                       }
+                    },
+                    error: function (req, status, error) {
+                       alertmsg.error("Mật khẩu gồm một chữ hoa, một chữ thường và 1 số");
+                    }
+                }); 
+             }}
+       function ProfileFC(username){
+           window.location.href = "/User/Profile?username=" + username
+       }
+    </script>
+    <div class="linting">
+      <div class="BG_TOP">
+             <div class="swiper mySwiper2">
+              <div class="swiper-wrapper">
+                 @Html.RenderAction("ListSlider", "EA");
+              </div>
+              <div class="swiper-button-next">
+                <img src="~/Backend/Client/images/Yellow/Primary_Right.png" alt="" />
+              </div>
+              <div class="swiper-button-prev">
+                <img src="~/Backend/Client/images/Yellow/Primary_Left.png" alt="" />
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+      </div>
+      @RenderBody()
+    </div>
+    <div class="footer">
+      <div class="container">
+        <div class="socical__imgae">
+          <a href="https://www.facebook.com/Edtechagency"><img src="~/BackEnd/Client/images/Footer/Fb.png" alt="" /></a> 
+          <a href="tel:+84946267861"><img src="~/BackEnd/Client/images/Footer/Phone.png" alt="" /></a> 
+          <a href="gmail.com"> <img src="~/BackEnd/Client/images/Footer/Mail.png" alt="" /></a> 
+          <a href="https://www.facebook.com/Edtechagency"><img src="~/BackEnd/Client/images/Footer/In.png" alt="" /></a> 
+        </div>
+        <div class="flex--start">
+          <div class="logo__big">
+            <img src="~/BackEnd/Client/images/Footer/LogoBig.png" alt="" />
+          </div>
+          <div class="info__footer">
+            <span>
+              "Educating the mind without educating the heart is no education at
+              all."
+            </span>
+            <p>_ Aristotle_</p>
+            <span>Background images credit:</span>
+            <p>Vincent Van Gogh paintings</p>
+            <p>Oscar Claude Monet paintings</p>
+            <p>All the images are in the public domain</p>
+            <hr />
+            <div class="footer__address">
+              <p>
+                Add: 9th floor, Zodiac building, 19 Duy Tan street, Cau Giay
+                ward, Hanoi, Vietnam
+              </p>
+              <p>
+                Email: hanh.nguyen@edtechagency.net / nguyenhanh.nhh@gmail.com
+              </p>
+              <p>Phone: +84 94 626 7861</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+ <script>
+        var swiper = new Swiper(".mySwiper", {
+          autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+          },
+          slidesPerView: 5,
+          loop: true,
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+        });
+
+         var swiper = new Swiper(".mySwiper2", {
+          autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+          },
+          slidesPerView: 1,
+          loop: true,
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+          },
+        });
+        function GetObjectDataClick(id){
+            window.location.href = "/YellowPageFilter?lstIdCategories=" + id + ""; 
+        }
+</script>
+</html>

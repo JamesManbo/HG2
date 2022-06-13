@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Gate One</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/BackEnd/assets/img/favicon.png" rel="icon">
+    <link href="/BackEnd/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+
+    <link href="/BackEnd/Admin/plugin/select2/select2.min.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/BackEnd/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+    <link href="/BackEnd/Admin/plugin/font-awesome.min.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link href="/BackEnd/assets/css/style.css" rel="stylesheet">
+    <link href="/BackEnd/Admin/plugin/style.default.css" rel="stylesheet">
+    <script src="/BackEnd/assets/vendor/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
+    <script src="/BackEnd/assets/vendor/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="/BackEnd/Admin/plugin/select2/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.3/bootbox.min.js"></script>
+   <script src="/BackEnd/Admin/Js/common/common.js"></script>
+
+
+
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            @* <a href="index.html" class="logo d-flex align-items-center">
+            <img src="/BackEnd/assets/img/logo.png" alt="">
+            <span class="d-none d-lg-block">Gate One</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>*@
+            <div class="logo" style="margin-left: 0px;">
+                <a href="/">
+                    <img src="~/BackEnd/Admin/Images/logo.png" alt="">
+                </a>
+            </div>
+        </div><!-- End Logo -->
+
+
+        <ul class="headmenu">
+            <li class="odd">
+                <a class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                    <span class="count"></span>
+                    <span class="head-icon head-message"></span>
+                    <span class="headmenu-label">Báo cáo</span>
+                </a>
+                <ul class="dropdown-menu newusers" aria-labelledby="dropdownMenuButton1">
+                    <li id="MAIN_121" class="dropdown-item">
+                        <a href="?uid=122" title="" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo số lượng hồ sơ</a>
+                    </li>
+                    <li id="MAIN_121" class="dropdown-item">
+                        <a href="?uid=123" title="Báo cáo theo người xử lý" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo theo người xử lý</a>
+                    </li>
+                    <li id="MAIN_121" class="dropdown-item">
+                        <a href="?uid=1209" title="Báo cáo hồ sơ mức độ 3" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo hồ sơ mức độ 3</a>
+                    </li>
+                    <li id="MAIN_121" class="dropdown-item">
+                        <a href="?uid=1210" title="Báo cáo tổng hợp lệ phí" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;">
+                            <span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo tổng hợp lệ phí
+                        </a>
+                    </li>
+                    <li id="MAIN_121" class="dropdown-item">
+                        <a href="?uid=199" title="Báo cáo theo dõi tiến độ xử lý" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;">
+                            <span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo theo dõi tiến độ xử lý
+                        </a>
+                    </li>
+                </ul>
+
+            </li>
+            <li class="">
+                <a class="dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span class="count"></span><span class="head-icon head-users"></span><span class="headmenu-label">Tìm kiếm</span> </a>
+                <ul class="dropdown-menu newusers" aria-labelledby="dropdownMenuButton2" style="">
+                    <li id="MAIN_111"><a href="?uid=112" title="Toàn bộ hồ sơ (Đang sử dụng)" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-search"></span>&nbsp;&nbsp;&nbsp;Toàn bộ hồ sơ</a></li>
+                    <li id="MAIN_111"><a href="?uid=113" title="" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-search"></span>&nbsp;&nbsp;&nbsp;Tìm kiếm hồ sơ</a></li>
+                    <li id="MAIN_192"><a href="?uid=191" title="Tra cứu Hồ sơ liên thông (Đang sử dụng)" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-search"></span>&nbsp;&nbsp;&nbsp;Tìm kiếm hồ sơ liên thông</a></li>
+
+                </ul>
+            </li>
+            <li class="odd">
+                <a class="dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span class="count"></span><span class="head-icon head-bar"></span><span class="headmenu-label">Trợ giúp</span> </a>
+                <ul class="dropdown-menu newusers" id="dropdownMenuButton3">
+
+
+                    <li><a id="LanhDao" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate- Lanh dao.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Lãnh đạo</a></li>
+                    <li><a id="ChuyenVien" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate- Chuyen Vien.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Chuyên viên</a></li>
+                    <li><a id="CBMC" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate - CBMC.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Cán bộ Một cửa</a></li>
+                    <li><a id="QuanTri" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate - Quan tri.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Quản trị</a></li>
+                    <li><a id="QuyChe" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/QD_116_VP_UBND_tinh.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Quy chế giải quyết TTHC</a></li>
+                    <li><a id="QuyTrinh" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/1820_Quy trinh mau.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Mẫu quy trình giải quyết TTHC</a></li>
+                    <li><a id="HDTN_HSOL" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDTNHSTT.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Hướng dẫn tiếp nhận hồ sơ trực tuyến</a></li>
+                    <li><a id="lnkbtnTaiFile" href="javascript:__doPostBack('lnkbtnTaiFile','')" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tải phần mềm ký số</a></li>
+
+
+                </ul>
+            </li>
+        </ul><!-- End Search Bar -->
+
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle " href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li><!-- End Search Icon-->
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">4</span>
+                    </a><!-- End Notification Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            You have 4 new notifications
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Lorem Ipsum</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>30 min. ago</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-x-circle text-danger"></i>
+                            <div>
+                                <h4>Atque rerum nesciunt</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>1 hr. ago</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            <div>
+                                <h4>Sit rerum fuga</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>2 hrs. ago</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <div>
+                                <h4>Dicta reprehenderit</h4>
+                                <p>Quae dolorem earum veritatis oditseno</p>
+                                <p>4 hrs. ago</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Show all notifications</a>
+                        </li>
+
+                    </ul><!-- End Notification Dropdown Items -->
+
+                </li><!-- End Notification Nav -->
+
+
+                <li class="nav-item dropdown pe-3">
+
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="/BackEnd/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                    </a><
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>Nguyễn Văn Hoàng</h6>
+                            <span>Quản trị</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-person"></i>
+                                <span>Thông tin cá nhân</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Đổi mật khẩu</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Đăng xuất</span>
+                            </a>
+                        </li>
+
+                    </ul><!-- End Profile Dropdown Items -->
+                </li><!-- End Profile Nav -->
+
+            </ul>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link " href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li><!-- End Dashboard Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Tiếp Nhận</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Tiếp nhận hồ sơ</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Hồ sơ liên thông</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Hồ sơn online</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Components Nav -->
+
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#PhongBan-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Quản trị danh mục</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="PhongBan-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="/DanhMuc/PhongBan">
+                            <i class="bi bi-circle"></i><span>Phòng ban</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Lĩnh vực</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Hồ sơn online</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li><!-- End Components Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-journal-text"></i><span>Xử lý</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Hồ sơ xử lý</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Hồ sơ đang xử lý</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Forms Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-journal-text"></i><span>Quản trị hệ thống</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="/QTNguoidung/Index">
+                            <i class="bi bi-circle"></i><span>Người dùng</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="bi bi-circle"></i><span>Vai trò</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Forms Nav -->
+
+        </ul>
+
+    </aside><!-- End Sidebar-->
+
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <div class="content row">
+                @RenderBody()
+            </div>
+        </section>
+
+    </main><!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>GATE ONE</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/BackEnd/assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="/BackEnd/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script src="/BackEnd/assets/vendor/chart.js/chart.min.js"></script>
+    <script src="/BackEnd/assets/vendor/echarts/echarts.min.js"></script>
+    <script src="/BackEnd/assets/vendor/quill/quill.min.js"></script>
+    <script src="/BackEnd/assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="/BackEnd/assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="/BackEnd/assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="/BackEnd/assets/js/main.js"></script>
+    <script src="/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
+    @* <script src="~/BackEnd/daterangepicker/daterangepicker.js"></script>*@
+</body>
+
+</html>

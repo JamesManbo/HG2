@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+  <!-- Google !importantont:!importantSource Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/fontawesome-free/css/all.min.css">
+@*  <link rel="stylesheet" href="~/BackEnd/Admin/Css/adminlte.min.css">*@
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/summernote/summernote-bs4.min.css">
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/codemirror/codemirror.css">
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/codemirror/theme/monokai.css">
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="~/BackEnd/Admin/Js/notifications/notification.css"  />
+  <link rel="stylesheet" href="~/BackEnd/Admin/Css/filter_multi_select.css" />
+   <link rel="stylesheet" href="~/BackEnd/datepicker/datepicker3.css"  />
+   <link rel="stylesheet" href="~/BackEnd/bootstrap/css/bootstrap.min.css"  />
+
+   <link rel="stylesheet" href="~/BackEnd/Admin/Css/menu.css"  />
+
+
+  <!-- jQuery -->
+   <script src="~/BackEnd/Admin/Js/Bootstrap/bootstrap.min.js"></script>
+ <script src="~/BackEnd/Admin/Js/JQuery/jquery.min.js"></script>
+ <script src="~/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
+ <script src="~/BackEnd/Admin/Js/filter-multi-select-bundle.min.js"></script>
+
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="mainwrapper">
+  <div class="header">
+                <div class="logo" style="margin-left: 0px;">
+                    <a href="">
+                        <img src="~/BackEnd/Admin/Images/logo.png" alt=""></a>
+                </div>
+                <div class="headerinner" style="margin-left: 260px;">
+                    <ul class="headmenu">
+                        <li class="odd"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="count"></span><span class="head-icon head-message"></span><span class="headmenu-label">Báo cáo</span> </a>
+                            <ul class="dropdown-menu">
+                                <li id="MAIN_121"><a href="?uid=122" title="" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo số lượng hồ sơ</a></li><li id="MAIN_121"><a href="?uid=123" title="Báo cáo theo người xử lý" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo theo người xử lý</a></li><li id="MAIN_121"><a href="?uid=1209" title="Báo cáo hồ sơ mức độ 3" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo hồ sơ mức độ 3</a></li><li id="MAIN_121"><a href="?uid=1210" title="Báo cáo tổng hợp lệ phí" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo tổng hợp lệ phí</a></li><li id="MAIN_121"><a href="?uid=199" title="Báo cáo theo dõi tiến độ xử lý" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo theo dõi tiến độ xử lý</a></li><li id="MAIN_121"><a href="?uid=157" title="" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo tổng hợp</a></li><li id="MAIN_121"><a href="?uid=183" title="Báo cáo hồ sơ bị loại (Đang sử dụng)" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-bar-chart"></span>&nbsp;&nbsp;&nbsp;Báo cáo hồ sơ bị loại</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="dropdown-toggle" data-toggle="dropdown" data-target="#"><span class="count"></span><span class="head-icon head-users"></span><span class="headmenu-label">Tìm kiếm</span> </a>
+                            <ul class="dropdown-menu newusers">
+                                <li id="MAIN_111"><a href="?uid=112" title="Toàn bộ hồ sơ (Đang sử dụng)" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-search"></span>&nbsp;&nbsp;&nbsp;Toàn bộ hồ sơ</a></li><li id="MAIN_111"><a href="?uid=113" title="" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-search"></span>&nbsp;&nbsp;&nbsp;Tìm kiếm hồ sơ</a></li><li id="MAIN_192"><a href="?uid=191" title="Tra cứu Hồ sơ liên thông (Đang sử dụng)" style="padding:7px 15px !important; font-weight:bold !important;  font-size: 13px !important;"><span class="iconfa-search"></span>&nbsp;&nbsp;&nbsp;Tìm kiếm hồ sơ liên thông</a></li>
+
+                            </ul>
+                        </li>
+                        <li class="odd"><a class="dropdown-toggle" data-toggle="dropdown" data-target="#"><span class="count"></span><span class="head-icon head-bar"></span><span class="headmenu-label">Trợ giúp</span> </a>
+                            <ul class="dropdown-menu">
+                                
+
+                                <li><a id="LanhDao" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate- Lanh dao.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Lãnh đạo</a></li>
+                                <li><a id="ChuyenVien" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate- Chuyen Vien.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Chuyên viên</a></li>
+                                <li><a id="CBMC" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate - CBMC.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Cán bộ Một cửa</a></li>
+                                <li><a id="QuanTri" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDSD OneGate - Quan tri.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tài liệu dành cho Quản trị</a></li>
+                               <li><a id="QuyChe" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/QD_116_VP_UBND_tinh.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Quy chế giải quyết TTHC</a></li>
+                                <li><a id="QuyTrinh" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/1820_Quy trinh mau.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Mẫu quy trình giải quyết TTHC</a></li>
+                               <li><a id="HDTN_HSOL" href="/forms/viewpdf/web/viewer.aspx?filename=HuongDanSuDung/HDTNHSTT.pdf" target="_blank" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Hướng dẫn tiếp nhận hồ sơ trực tuyến</a></li> 
+                                <li><a id="lnkbtnTaiFile" href="javascript:__doPostBack('lnkbtnTaiFile','')" style="padding: 7px 15px !important; font-weight: bold !important; font-size: 13px !important;">Tải phần mềm ký số</a></li>
+
+                                
+                            </ul>
+                        </li>
+                        <li class="right">
+                            <div class="userloggedinfo">
+                                <img src="~/BackEnd/Admin/Images/thumb1.png" alt="">
+                                
+                                <div class="userinfo">
+                                    <ul>
+                                        <li style="display: inline-flex;width: 120px;">
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" data-target="#">
+                                                <span id="labUserName" style="font-size:13px;font-weight:bold;">
+                                                @Html.RenderAction("CurrentUserPartial", "Admin")</span>
+                                                </a>
+                                            <ul class="dropdown-menu ul-userinfo" style="min-width: 120px !important;">
+                                                <li>
+                                                    <a id="ThongTin" href="javascript:__doPostBack('ThongTin','')" style="color:Black;font-size:13px;">Thông tin cá nhân</a></li>
+                                                <li>
+                                                    <a id="doimk" href="javascript:__doPostBack('doimk','')" style="color:Black;font-size:13px;">Đổi mật khẩu</a></li>
+                                                <li>
+                                                    <a id="lnkLogout" href="javascript:__doPostBack('lnkLogout','')" style="color:Black;font-size:13px;">Đăng xuất</a></li>
+                                            </ul>
+                                            
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <!--headmenu-->
+                </div>
+            </div>
+        <div class="leftpanel" style="margin-left: 0px;top: 60px;position: fixed; margin-left: 0px;">
+            <div class="leftmenu">
+                <aside class="accordion">
+                    <span id="menu-header">CHỨC NĂNG</span>
+                    <h1>Tiếp nhận & trả kết quả</h1>
+                    <div class="opened-for-codepen">
+                        <h2>Tiếp nhận</h2>
+                        <div class="opened-for-codepen">
+                            <h3>Tiếp nhận hồ sơ mới</h3>
+                            <div></div>
+                            <h3>Hồ sơ liên thông</h3>
+                            <div></div>
+                        </div>
+                        <h2>Trả kết quả</h2>
+                        <div class="opened-for-codepen">
+                            <h3>Hồ sơ chờ trả kết quả</h3>
+                            <div></div>
+                            <h3>Hồ sơ chưa đến nhận KQ</h3>
+                            <div></div>
+                        </div>
+                    </div>
+                    <h1>Xử lý hồ sơ</h1>
+                    <div class="opened-for-codepen">
+                        <h2>Hồ sơ chờ xử lý</h2>
+                         <div></div>
+                        <h2>Hồ sơ đang xử lý</h2>
+                         <div></div>
+                    </div>
+                    <h1>Quản trị hệ thống</h1>
+                        <div class="opened-for-codepen">
+                            <h2>Nhóm người dùng và vai trò</h2>
+                            <div class="opened-for-codepen">
+                                <h2>Người dùng</h2>
+                                 <div></div>
+                                <h2>Thống kê truy cập</h2>
+                                 <div></div>
+                                <h2>Quản lý nhóm và vai trò</h2>
+                                <div></div>
+                            </div>
+                             <div></div>
+                            <h2>Cấu hình hệ thống</h2>
+                             <div></div>
+                        </div>
+                </aside>
+
+            </div>
+            <!--leftmenu-->
+        </div>
+
+        <div class="rightpanel" style="margin-left: 260px;">
+        <ul class="breadcrumbs">
+                    <li style="margin-left: -200px;" ><a href=""><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+                    <li style="margin-left: -180px;"><span id="breadcrumbsParent">Danh sách hồ sơ</span>&nbsp;<span id="spanBr" class="separator"></span></li>
+                    <li style="margin-left: -80px;"><span id="breadcrumbsChird">Toàn bộ hồ sơ</span></li>
+
+        </ul>
+                <!-- Content Wrapper. Contains page content -->
+      <div>
+        <!-- Main content -->
+   
+     
+            @RenderBody()
+  
+   
+        <!-- /.content -->
+      </div>
+
+    </div>
+
+
+
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    <strong>Copyright &copy; 2014-2021 <a href="#">AdminED.io</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 3.1.0
+    </div>
+  </footer>
+@*
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark" style="height: 140px !important; width: 180px;">
+    <!-- Control sidebar content goes here -->
+  </aside>*@
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<script type="text/javascript">
+  var headers = ["H1","H2","H3","H4","H5","H6"];
+
+$(".accordion").click(function(e) {
+  var target = e.target,
+      name = target.nodeName.toUpperCase();
+  
+  if($.inArray(name,headers) > -1) {
+    var subItem = $(target).next();
+    
+    //slideUp all elements (except target) at current depth or greater
+    var depth = $(subItem).parents().length;
+    var allAtDepth = $(".accordion p, .accordion div").filter(function() {
+      if($(this).parents().length >= depth && this !== subItem.get(0)) {
+        return true; 
+      }
+    });
+    $(allAtDepth).slideUp("fast");
+    
+    //slideToggle target content and adjust bottom border if necessary
+    subItem.slideToggle("fast",function() {
+//        $(".accordion :visible:last").css("border-radius","0 0 10px 10px");
+           //$(".accordion :visible:last");
+    });
+    //$(target).css({"border-bottom-right-radius":"0", "border-bottom-left-radius":"0"});
+  }
+});
+
+</script>
+
+<!-- jQuery UI 1.11.4 -->
+<script src="~/BackEnd/Admin/Js/JQuery/jquery-ui/jquery-ui.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/BackEnd/Admin/Js/Bootstrap/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/BackEnd/Admin/Js/adminlte.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="~/BackEnd/Admin/Js/demo.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+
+
+<!-- AdminLTE for demo purposes -->
+<script src="~/BackEnd/Admin/Js/demo.js"></script>
+<script src="~/BackEnd/Admin/Js/notifications/notify.min.js"></script>
+<script src="~/BackEnd/Admin/Js/notifications/notify-metro.js"></script>
+<script src="~/BackEnd/Admin/Js/notifications/notifications.js"></script>
+<script src="~/js/common/common.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="~/BackEnd/Admin/Js/dashboard.js"></script>
+<script src="~/BackEnd/Admin/Js/bootbox.min.js"></script>
+<script src="~/BackEnd/daterangepicker/daterangepicker.js"></script>
+<script src="~/BackEnd/datepicker/bootstrap-datepicker.js"></script>
+</body>
+</html>

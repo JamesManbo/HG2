@@ -1,0 +1,117 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 100%;
+}
+
+.accordion {
+    /*width: 380px;
+  margin: 20px auto;*/
+}
+
+    .accordion h1, h2, h3, h4 {
+        cursor: pointer;
+    }
+
+    .accordion h2, h3, h4 {
+        font-family: "'Arial','RobotoLight', 'Helvetica Neue', Helvetica, sans-serif";
+        background-image: url(../Images/menuarrow.png);
+        background-repeat: no-repeat;
+    }
+
+    .accordion h1 {
+        padding: 10px 20px;
+        background-color: #333;
+        font-family: 'Arial','RobotoLight', 'Helvetica Neue', Helvetica, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        color: #999;
+        background-image: url(../Images/droparrow.png);
+        background-repeat: no-repeat;
+        background-position: right 19px;
+    }
+
+        .accordion h1:hover {
+            color: #fff;
+        }
+        .accordion h1:focus {
+            color: #fff;
+        }
+
+        .accordion h1:first-child {
+            /*border-radius: 10px 10px 0 0;*/
+        }
+
+        .accordion h1:last-of-type {
+            /*border-radius: 0 0 10px 10px;*/
+        }
+
+        .accordion h1:not(:last-of-type) {
+            border-bottom: 1px solid #232323;
+        }
+
+    .accordion div, .accordion p {
+        display: none;
+    }
+
+    .accordion h2 {
+        padding: 7px 10px 7px 50px;
+        background-color: #eee;
+        font-size: 13px;
+        color: #333;
+        background-position: 25px 12px;
+    }
+
+        .accordion h2:hover {
+            background-color: #fff;
+        }
+
+    .accordion h3 {
+        padding: 7px 10px 7px 70px;
+        background-color: #eee;
+        font-size: 13px;
+        color: #333;
+        background-position: 50px 12px;
+    }
+
+        .accordion h3:hover {
+            background-color: #fff;
+        }
+
+    .accordion h4 {
+        padding: 5px 35px;
+        background-color: #ffc25a;
+        font-size: .9rem;
+        color: #af720a;
+    }
+
+        .accordion h4:hover {
+            background-color: #e0b040;
+        }
+
+    .accordion p {
+        padding: 15px 35px;
+        background-color: #ddd;
+        font-family: "Georgia";
+        font-size: .8rem;
+        color: #333;
+        line-height: 1.3rem;
+    }
+
+    .accordion .opened-for-codepen {
+        display: block;
+    }
+
+#menu-header {
+    font-weight: normal;
+    font-size: 11px;
+    padding: 5px 20px;
+    text-shadow: none;
+    /*background: #232323;*/
+    /*border-bottom: 1px solid #222;*/
+    text-transform: uppercase;
+    color: #999;
+}

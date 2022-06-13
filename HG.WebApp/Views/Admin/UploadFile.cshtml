@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "UploadFile";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<link rel="stylesheet" href="~/BackEnd/Admin/Js/Loadding/loading-bar.min.css" />
+<script src="~/BackEnd/Admin/Js/Loadding/loading-bar.min.js"></script>
+<script>
+    
+         function myFile()
+         {
+            document.getElementById('file').click();
+         };
+          $(document).ready(function () {
+            $('#myItem1').hide();
+            $('#dataExport').show();
+            $("#file").on('change', function () {     
+                $('#myItem1').show();
+                $('#dataExport').hide();
+                if (window.FormData !== undefined) {
+                    var fileUpload = $(this).get(0);
+                    var files = fileUpload.files;
+                    // Create FormData object
+                    var fileData = new FormData();
+                    // Looping over all files and add it to FormData object
+                    for (var i = 0; i < files.length; i++) {
+                        fileData.append(files[i].name, files[i]);
+                    }
+
+                    //Adding one more key to FormData object
+                    fileData.append('username', 'Manas');
+                    $.ajax({
+                        url: '/Upload/UnzipFileImage',
+                        type: "POST",
+                        processData: false,
+                        contentType: false,
+                        data: fileData,
+                        success: function (result) {  
+                            //setTimeout(myGreeting, 5000); 
+                                var bar1 = new ldBar("#myItem1");
+                             /* ldBar stored in the element */
+                                 var bar2 = document.getElementById('myItem1').ldBar;
+                                 bar1.set(100); 
+                            if(result.status == true){  
+                               $('#myItem1').hide();
+                               $('#dataExport').show();
+                                alert(result.msg);
+                            }else{
+                                alert(result.msg);
+                            }
+                        },
+                        error: function (err) {
+                            alert(err.statusText);
+                        }
+                    });
+                } else {
+                    alert("FormData is not supported.");
+                }
+            });
+         });
+         function myGreeting(){   
+             var bar1 = new ldBar("#myItem1");
+                          /* ldBar stored in the element */
+             var bar2 = document.getElementById('myItem1').ldBar;
+             bar1.set(100);             
+    }
+</script>
+<div id="myItem1" class="ldBar" data-preset="bubble" data-value="10"></div>
+
+ <input type="file" id='file' hidden>
+<input href="" id="dataExport" onclick="myFile()" class="btn btn-primary pull-right" type="button" value="UploadFileZip">
+<script>
+     
+    
+</script>

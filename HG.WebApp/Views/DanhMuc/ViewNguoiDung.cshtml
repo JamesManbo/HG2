@@ -1,0 +1,8 @@
+﻿@using HG.WebApp
+@model List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>
+<select onchange="getUser(this);" id="lstuser" style="width: 100%;" class="form-control" name="select3" size="15">
+    @foreach (var item in Model)
+    {
+        <option value="@item.id">@item.ten_nguoi_dung</option>
+    }
+</select>

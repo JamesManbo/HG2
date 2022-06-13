@@ -1,0 +1,199 @@
+﻿
+@{
+    ViewData["Title"] = "ListRole";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<HG.WebApp.AspNetRoles>
+
+<div class="card">
+    <div class="card-body">
+         <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Danh sách nhóm quyền</h3>
+                        <a href="" class="btn btn-primary pull-right" data-toggle="modal" data-target="#addRoleModal">Thêm mới</a>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-striped">
+                            <tbody>
+                                @{int i = 1;}
+                                <tr>
+                                    @*<th>Mã người dùng</th>*@
+                                    <th>Tên quyền</th>
+                                    <th>Mô tả</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                @foreach (var item in Model.ToList())
+                                {
+                                    <tr>
+                                     
+                                        @*<td style="vertical-align: middle">@item.Id</td>*@
+                                        <td style="vertical-align: middle">@item.Name</td>
+                                        <td style="vertical-align: middle">
+                                                  @item.Description
+                                        </td>
+                                        <td style="vertical-align: middle">
+                                            <a href="" class="btn btn-warning btn-bordered" id="addData-@(i-1)" name = "@(item.Name + "," + item.Description + "," + item.Id )" data-toggle="modal" data-target="#EditRoleModal" title="sửa">
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                            </a>
+                                              <script>
+                                                $('#addData-@(i-1)').click(function () {
+                                                    $("#EditUserID").val(@item.Id);
+                                                    $("#EditUserName" ).val($('#addData-@(i-1)').attr('name').split(',')[0])
+                                                    $("#EditPhoneNumber").val($('#addData-@(i-1)').attr('name').split(',')[1]);
+                                                    $("#EditEmail").val($('#addData-@(i-1)').attr('name').split(',')[2]);
+                                                    $('#EditUserModal').show();
+                                                });
+                                            </script>
+                                            <a onclick="confirm.BeforDelete('/User/Delete/@item.Id')" class="btn btn-danger btn-bordered" title="xóa">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+                                        </td>
+                                     
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                        <div class="bv_pagging">
+                            @if (Model.PageCount > 1)
+                            {
+                                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, status = ViewBag.status }))
+                            }
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+    </div>
+        <div class="modal" role="dialog" id="addRoleModal" style="background:transparent !important; width: 70% !important">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @using (Html.BeginForm("AddRole", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "formrole" }))
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">x</span>
+                            </button>
+                            <h4 class="modal-title">Thêm nhóm quyền</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <input type="hidden" id="UserID" name="UserID" />
+                                        <label>Tên quyền</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="Name" id="Name" class="form-control" />
+                                    </div>
+                                </div>
+                                 <div class="col-md-12 col-xs-12">
+                                     <div class="col-xs-3">
+                                        <label>Mô tả</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="Description" id="Description" class="form-control" />
+                                    </div>
+                               </div>
+                                
+                                 <div class="col-md-12 col-xs-12" >
+                                     <div class="col-xs-3" style="text-align:center">
+                                        <label style="color:red">Chọn chức năng</label>
+                                    </div>
+                                   <div class="col-xs-10" >
+                                         @Html.RenderAction("ListFunction", "User")
+                                    </div>
+                               </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button id="btnAccept" class="btn btn-primary">Đồng ý</button>
+                                    <button id="btnCancel" class="btn btn-default pull-right" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="modal" role="dialog" id="EditRoleModal" style="background:transparent !important;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    @using (Html.BeginForm("EditRole", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "formrole" }))
+                    {
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">x</span>
+                            </button>
+                            <h4 class="modal-title">Chỉnh sửa người dùng</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="col-xs-3">
+                                        <input type="hidden" id="EditUserID" name="UserID" />
+                                        <label>Tên đầy đủ</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="UserName" id="EditUserName" class="form-control" />
+                                    </div>
+                                </div>
+                                 <div class="col-md-12 col-xs-12">
+                                     <div class="col-xs-3">
+                                        <label>Số điện thoại</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="PhoneNumber" id="EditPhoneNumber" class="form-control" />
+                                    </div>
+                               </div>
+                                 <div class="col-md-12 col-xs-12">
+                                     <div class="col-xs-3">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" name="Email" id="EditEmail" class="form-control" />
+                                    </div>
+                               </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button id="btnAccept" class="btn btn-primary">Đồng ý</button>
+                                    <button id="btnCancel" class="btn btn-default pull-right" data-dismiss="modal">Hủy bỏ</button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+<div class="c"></div>
+
+</div>
+ <script src="~/BackEnd/Admin/Js/Validate/listrole.js"></script>
+<script>
+    $(document).ready(function () {
+        listrole.validateForm();
+        $("#btnCancel").click(function () {
+            $('label[class=error]').hide();
+        });
+        $("#addTagModal").draggable({
+            handle: ".modal-header"
+        });
+    });
+</script>
+
+<style>
+    .table tbody tr td {
+        vertical-align: middle;
+    }
+</style>
+

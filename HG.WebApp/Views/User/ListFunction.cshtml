@@ -1,0 +1,54 @@
+﻿  
+   @using HG.WebApp.Common;
+@using HG.WebApp.Helper
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<HG.WebApp.Entities.AspModule>  
+
+                  
+                        <input id="LstFullFunction" name="ListModule" value="0" hidden />
+                        <table class="table table-dark">
+                                            <thead>
+                                                <tr>
+                                                    <th st>Tên chức năng</th>
+                                                    <th>Full</th>
+                                                    <th>Add</th>
+                                                    <th>Edit</th>
+                                                    <th>Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.ToList())
+                                                {
+                                                    <tr> 
+                                                       
+                                                        <td >   @item.Name   </td>
+                                                        <td ><input type="checkbox"  class="clsRole" value="@item.Id"  onclick="HandleRoleClick(this.checked)" />    &nbsp;   </td>
+                                                        <td ><input type="checkbox" disabled value="@item.Id" />    &nbsp;   </td>
+                                                        <td ><input type="checkbox" disabled value="@item.Id" />    &nbsp;   </td>
+                                                        <td ><input type="checkbox" disabled value="@item.Id" />    &nbsp;   </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                         </table>                                                                                  
+                        <div class="container">
+                            @if (Model.PageCount > 1)
+                            {
+                                @Html.PagedListPager(Model, page => Url.Action("ListFunction","User", new { page }),
+                                 new  X.PagedList.Web.Common.PagedListRenderOptions{
+                                       LiElementClasses = new string[] { "page-item" },
+                                       PageClasses = new string[] { "page-link" }
+                                })
+                            }
+                        </div>
+<script>
+  function HandleRoleClick(isChecked){
+     //get full
+       let checkedVals = $('.clsRole:checkbox:checked').map(function() {
+           return this.value;
+       }).get();
+      //get add,edt,del here
+       let lstFullRole = checkedVals.join(",");                            
+       $('input[name="ListModule"]').attr('value',lstFullRole);                                           
+ }                          
+</script>     

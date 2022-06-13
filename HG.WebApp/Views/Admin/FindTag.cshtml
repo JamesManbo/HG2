@@ -1,0 +1,259 @@
+﻿@{
+    ViewData["Title"] = "Tìm theo tag";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@using HG.WebApp.Common;
+@using HG.WebApp.Helper
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<HG.WebApp.Dto.ListtingDTO>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="~/BackEnd/Admin/Js/Validate/modal.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#fromdate').datepicker({
+            autoclose: true
+        });
+        $('#todate').datepicker({
+            autoclose: true
+        });
+        modalForm.validateForm();
+        $("#btnCancel").click(function () {
+            $('label[class=error]').hide();
+        });
+        $("#addTagModal").draggable({
+            handle: ".modal-header"
+        });
+    });
+         function myFile()
+         {
+            document.getElementById('file').click();
+         }
+           function myFile()
+         {
+            document.getElementById('file').click();
+         };
+            $(document).ready(function () {
+          $("#file").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFilesExcels?folder=Excels',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        if(result.status == true){
+                            window.location = "/admin"
+                        }
+                        //for (var i = 0; i < result.files.length; i++) {
+                        //    //CKEDITOR.instances['Description'].insertHtml('<img src="' + result.files[i] + '">');
+                        //      //$('#view-card').attr('src', result.files[i]);
+                        //      //$('#ImagePath').val(""+result.files[i]+"");
+                        //}
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+         });
+</script>
+
+
+
+<div class="card">
+    <div class="card-body">
+         <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Danh sách bài viết theo tên <span style="color:blue">@ViewBag.NameTag</span> </h3>
+                        <a href="/Admin/Add" class="btn btn-primary pull-right">Thêm mới</a>
+                         <input type="file" id='file' hidden>
+                        <input href="" id="dataExport" onclick="myFile()" class="btn btn-primary pull-right" type="button" value="Import">
+                       <input href="/Admin/Add" class="btn btn-primary pull-right" type="button" value="Export">
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding">
+                        <table class="table table-striped">
+                            <tbody>
+                                @{int i = 1;}
+                                <tr>
+                                    <th>Thẻ</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Ảnh</th>
+                                      <th>Danh mục</th>
+                                    <th>Pushlic On</th>
+                                    <th>Tên người đại diện</th>
+                                    <th>Trạng thái</th>
+                                    <th></th>
+                                    <th>Xem trước</th>
+                                </tr>
+                                @foreach (var item in Model.ToList())
+                                {
+                                    <tr>
+                                        <td style="vertical-align: middle">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <a href="/News/Detail/@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <span style="font-weight: bold;">Mã Listting:</span> @(item.Id)
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    @{
+                                                        var taglist = HelperSql.GetListTags(@item.Id);
+                                                        if (taglist.Count > 0)
+                                                        {
+                                                            foreach (var tag in taglist)
+                                                            {
+                                                                <a href="/Admin/FindTag?tagName=@(tag.TagName)">#@(tag.TagName)</a><a href="/Admin/DeleteTag/@tag.Id"> x<i class="fa fa-close"></i></a>
+                                                            }
+                                                        }
+                                                    }
+                                                    <a href="#" title="Gán tag" id="addTag-@(i-1)" data-toggle="modal" data-target="#addTagModal">
+                                                        <i class="fa fa-tag"></i>
+                                                    </a>
+                                                    <script>
+                                                        $('#addTag-@(i-1)').click(function () {
+                                                            $('#addTagModal').show();
+                                                            $("#listtingId").val(@item.Id);
+                                                        });
+                                                    </script>
+                                                </div>
+                                            </div>
+
+                                        </td>
+                                        @*<td style="vertical-align: middle">@item.bidv__category.title</td>*@
+                                        <td style="vertical-align: middle">@item.Title</td>
+                                        <td style="vertical-align: middle">
+                                                    <img id="view-card" style="margin-top: 10px;" src="@HelperSql.GetStringIMG(@item.Id)" alt="" width="100" height="100" />
+                                        </td>
+                                        <td style="vertical-align: middle">
+                                    @{
+                                        if(item.CategorysString != null)
+                                        {
+                                            var tempItem = item.CategorysString.Split(";");
+                                            for(var j = 0; j< tempItem.Length; j++)
+                                                {
+                                                    <a href="#" style="color:blue">@tempItem[j].ToString() </a> 
+                                                }
+                                            }
+                                        }
+                                       </td>
+                                        <td style="vertical-align: middle">@(item.Date != null ? item.Date : "")</td>
+                                        <td style="vertical-align: middle">@(item.customerCeo == null ? "": item.customerCeo.FirstName != null ?item.customerCeo.FirstName : "")  </td>
+                                        <td style="vertical-align: middle">
+                                            <div id="btnStatus_@item.Id">
+                                                @Html.Raw(item.Status == 0 ? "<span style='color:#2b6893;cursor: pointer;' onclick='UpdateStatus(" + @item.Id + ")'>Ẩn</span>" : "<span style='color:red;cursor: pointer;' onclick='UpdateStatus(" + @item.Id + ")'>Hiện</span>")
+                                            </div>
+                                        </td>
+                                        <td style="vertical-align: middle">
+                                            <a href="/Admin/Edit/@item.Id" class="btn btn-warning btn-bordered" title="sửa">
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                            </a>
+                                            <a onclick="confirm.BeforDelete('/Admin/DeleteListting/@item.Id')" class="btn btn-danger btn-bordered" title="xóa">
+                                                <i class="glyphicon glyphicon-trash"></i>
+                                            </a>
+                                        </td>
+                                        <td style="vertical-align: middle"><button data-toggle="modal" data-target="#dpmhModal" id="myBtn" onclick="getObjDuAn(@item.Id)">xem trước</button></td>
+                                    </tr>
+                                    i++;
+                                }
+                            </tbody>
+                        </table>
+                        <div class="bv_pagging">
+                            @if (Model.PageCount > 1)
+                            {
+                                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, TieuDe = ViewBag.TieuDe, FulName = ViewBag.FulName, CategoryID = ViewBag.CategoryID, fromdate = ViewBag.fromdate, todate = ViewBag.todate }))
+                            }
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+    </div>
+<div class="modal" role="dialog" id="addTagModal" style="background:transparent !important;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            @using (Html.BeginForm("AddTagName", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "addTagModalForm" }))
+            {
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                    <h4 class="modal-title">Thêm tag</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <input type="hidden" id="listtingId" name="listtingId" />
+                            <label>Từ khóa</label>
+                        </div>
+                        <div class="col-xs-9">
+                            <input type="text" name="tagName" id="tagName" class="form-control" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <button id="btnAccept" class="btn btn-primary">Đồng ý</button>
+                            <button id="btnCancel" class="btn btn-default pull-right" data-dismiss="modal">Hủy bỏ</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="c"></div>
+<div class="modal fade" id="dpmhModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content" style="width:978px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="text-align:center;color:red">Xem trước bài đăng</h4>
+            </div>
+            <div class="c"></div>
+            <div class="body">
+                <div id="DetailFaq">
+
+                </div>
+            </div>
+            <div class="c"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+ 
+
+<style>
+    .table tbody tr td {
+        vertical-align: middle;
+    }
+</style>

@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+  <!-- /.login-logo -->
+  <div class="card card-outline card-primary" style="background: #1170c0;width: 500px;">
+   
+    <div class="card-body" style="padding: 20px 100px;">
+      <p style="float: left;text-align: center;color: aliceblue;font-size: 30px;padding-left: 100px;">OneGate</p><span style="color:aliceblue">TM</span>
+       @using (Html.BeginForm("login", "User", FormMethod.Post, new { enctype = "multipart/form-data", id = "formlogin" }))
+                    {
+                        <div class="input-group mb-3">
+                          <input type="text" id="UserName" name="UserName" class="form-control" placeholder="Tên đăng nhập">
+                        </div>
+                        <div class="input-group mb-3">
+                          <input type="password" id="PassWord" name="PassWord" class="form-control" placeholder="Mật khẩu">
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <button  type="submit" class="btn btn-primary btn-block" style="text-transform: uppercase; font-family: inherit;">Đăng Nhập</button>
+                          </div>
+                             <div class="col-12" style="margin-top: 30px;">
+                            <div class="icheck-primary">
+                              <input type="checkbox" id="remember" name="RememberMe">
+                              <label for="remember" style="color:aliceblue;font-size: 13px;font-family: serif;">
+                                Nhớ mật khẩu
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                    }
+    </div>
+  </div>
+    <script src="~/BackEnd/Admin/Js/Validate/login.js"></script>
+<script>
+    $(document).ready(function () {
+        login.validateForm();
+       
+    })
+</script>
