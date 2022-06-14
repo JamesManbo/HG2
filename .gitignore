@@ -1,0 +1,8 @@
+.vs/
+HG.Data/bin/Debug/
+HG.Data/obj/
+HG.Entities/bin/Debug/
+HG.Entities/obj/Debug/
+HG.WebApp/bin/Debug/
+HG.WebApp/obj/
+HG.WebApp/HG.WebApp.csproj.user
