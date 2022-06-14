@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace HG.Entities
 {
-    [Table("dm_ho_so")]
-    public class Dm_Ho_So : BaseDanhMucModel
+    [Table("dm_so_ho_so")]
+    public class Dm_So_Ho_So : BaseDanhMucModel
     {
         [Key]
         public string ma_so { get; set; }

@@ -78,16 +78,19 @@
                             <div class="col-sm-8">
                                 <select class="select2 form-select form-control input-default" name="nguoi_dai_dien" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     <option selected="selected" value="00000000-0000-0000-0000-000000000000">---- Chọn người đại diện ----</option>
-                                    @foreach (var item in lst_nguoi_dung)
+                                    @if (lst_nguoi_dung != null)
                                     {
-                                        if (@Model.nguoi_dai_dien == item.id)
+                                        foreach (var item in lst_nguoi_dung)
                                         {
-                                            <option selected value="@item.id">@item.ten_nguoi_dung</option>
+                                            if (@Model.nguoi_dai_dien == item.id)
+                                            {
+                                                <option selected value="@item.id">@item.ten_nguoi_dung</option>
 
-                                        }
-                                        else
-                                        {
-                                            <option>@item.ten_nguoi_dung</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.id">@item.ten_nguoi_dung</option>
+                                            }
                                         }
                                     }
                                 </select>
@@ -128,8 +131,8 @@
                         @if (ViewBag.type_view == StatusAction.Edit.ToString())
                         {
                             <div class="text-center">
-                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add))">Lưu và Thêm</button>
-                                <button type="submit" class="btn btn-primary" name="type_view" value="@((StatusAction.View))">Lưu</button>
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
                                 <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMuc/XoaPhongBan?code=@Model.ma_phong_ban')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/PhongBan';">Đóng</button>
                             </div>
@@ -175,10 +178,14 @@
                         <div class="form-group">
                             <select onchange="getuser(this);" name="" id="ddlPhongBan1" class="form-control input-default">
                                 <option value="0">------------ Toàn bộ phòng ban ------------</option>
-                                @foreach (var item in lst_phong_ban)
+                                @if (lst_phong_ban != null)
                                 {
-                                    <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                    foreach (var item in lst_phong_ban)
+                                    {
+                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                    }
                                 }
+
                             </select>
                         </div>
                         <div class="form-group">

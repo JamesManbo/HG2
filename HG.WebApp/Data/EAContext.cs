@@ -33,7 +33,7 @@ namespace HG.WebApp.Data
 
         public virtual DbSet<Dm_Phong_Ban> Dm_Phong_Ban { get; set; }
         public virtual DbSet<Dm_Linh_Vuc> Dm_Linh_Vuc { get; set; }
-        public virtual DbSet<Dm_Ho_So> Dm_Ho_So { get; set; }
+        public virtual DbSet<Dm_So_Ho_So> Dm_So_Ho_So { get; set; }
         public virtual DbSet<Dm_Giay_To_Hop_Le> Dm_Giay_To_Hop_Le { get; set; }
         public virtual DbSet<Dm_Chuc_Vu> Dm_Chuc_Vu { get; set; }
         // END Danh mục

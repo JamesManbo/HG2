@@ -49,6 +49,10 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemPhongBan()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
             var modal = new Dm_Phong_Ban();
             var user = _danhmucDao.DanhSachNguoiDung("0");
             var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
@@ -150,7 +154,7 @@ namespace HG.WebApp.Controllers
             {
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return Json(new { error = 0, msg = "Xóa thành công!" });
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/PhongBan" });
         }
 
         public async Task<IActionResult> RenderViewPhongBan()
@@ -217,7 +221,6 @@ namespace HG.WebApp.Controllers
             }
             if (item.type_view == StatusAction.Add.ToString())
             {
-                var lstpb = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
                 return View("~/Views/DanhMuc/LinhVuc/ThemLinhVuc.cshtml", item);
             }
             if (item.type_view == StatusAction.View.ToString())
@@ -254,7 +257,6 @@ namespace HG.WebApp.Controllers
                 // Xử lý các thông báo lỗi tương ứng
                 ViewBag.error = 1;
                 ViewBag.msg = "cập nhật phòng ban lỗi";
-                var lstpb = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
                 return PartialView("~/Views/DanhMuc/LinhVuc/SuaLinhVuc.cshtml", item);
             }
             if (item.type_view == StatusAction.Add.ToString())
@@ -282,7 +284,7 @@ namespace HG.WebApp.Controllers
                 // Xử lý các thông báo lỗi tương ứng
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return Json(new { error = 0, msg = "Xóa thành công!" });
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/LinhVuc" });
         }
 
         public async Task<IActionResult> RenderViewLinhVuc()
@@ -298,6 +300,366 @@ namespace HG.WebApp.Controllers
 
         #endregion
 
+        #region Chức vụ
+        public IActionResult ChucVu()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var linhvuc = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/ChucVu/ChucVu.cshtml", linhvuc);
+
+        }
+
+        public IActionResult ThemChucVu()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return View("~/Views/DanhMuc/ChucVu/ThemChucVu.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemChucVu(Dm_Chuc_Vu item)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuChucVu(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "Tạo chức vụ lỗi!";
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return View("~/Views/DanhMuc/ChucVu/ThemChucVu.cshtml", item);
+            }
+            if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaChucVu", "DanhMuc", new { code = item.ma_chuc_vu, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+
+        public IActionResult SuaChucVu(string code, string type)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0 && n.ma_chuc_vu == code).FirstOrDefault();
+            ViewBag.type_view = type;
+            return View("~/Views/DanhMuc/ChucVu/SuaChucVu.cshtml", chucvu);
+        }
+
+        [HttpPost]
+        public IActionResult SuaChucVu(string code, string type, Dm_Chuc_Vu item)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuChucVu(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "cập nhật chức vụ!";
+                return PartialView("~/Views/DanhMuc/ChucVu/SuaChucVu.cshtml", item);
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemChucVu", "DanhMuc");
+            }
+            else if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaChucVu", "DanhMuc", new { code = item.ma_chuc_vu, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+        [HttpPost]
+        public IActionResult XoaChucVu(string code)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _danhmucDao.XoaChucVu(code, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/ChucVu" });
+        }
+
+        public async Task<IActionResult> RenderViewChucVu()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/ChucVu/ViewChucVu.cshtml", chucvu);
+            return Content(result);
+        }
+
+        #endregion
+
+        #region Giấy tờ hợp lệ
+        public IActionResult GiayTo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/GiayTo/GiayTo.cshtml", giayto);
+
+        }
+
+        public IActionResult ThemGiayTo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return View("~/Views/DanhMuc/GiayTo/ThemGiayTo.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemGiayTo(Dm_Giay_To_Hop_Le item)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuGiayTo(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "Tạo giấy tờ lỗi!";
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return View("~/Views/DanhMuc/GiayTo/ThemGiayTo.cshtml", item);
+            }
+            if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaGiayTo", "DanhMuc", new { code = item.ma_giay_to, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+
+        public IActionResult SuaGiayTo(string code, string type)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var chucvu = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0 && n.ma_giay_to == code).FirstOrDefault();
+            ViewBag.type_view = type;
+            return View("~/Views/DanhMuc/GiayTo/SuaGiayTo.cshtml", chucvu);
+        }
+
+        [HttpPost]
+        public IActionResult SuaGiayTo(string code, string type, Dm_Giay_To_Hop_Le item)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuGiayTo(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "cập giấy tờ lỗi!";
+                return PartialView("~/Views/DanhMuc/GiayTo/SuaGiayTo.cshtml", item);
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemGiayTo", "DanhMuc");
+            }
+            else if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaGiayTo", "DanhMuc", new { code = item.ma_giay_to, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+        [HttpPost]
+        public IActionResult XoaGiayTo(string code)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _danhmucDao.XoaGiayTo(code, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/GiayTo" });
+        }
+
+        public async Task<IActionResult> RenderViewGiayTo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/GiayTo/ViewGiayTo.cshtml", giayto);
+            return Content(result);
+        }
+
+        #endregion
+
+        #region Sổ hồ sơ
+        public IActionResult SoHoSo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var giayto = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/SoHoSo/SoHoSo.cshtml", giayto);
+
+        }
+
+        public IActionResult ThemSoHoSo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemSoHoSo(Dm_So_Ho_So item)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuSoHoSo(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "Tạo sổ hồ sơ lỗi!";
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml", item);
+            }
+            if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaSoHoSo", "DanhMuc", new { code = item.ma_so, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+
+        public IActionResult SuaSoHoSo(string code, string type)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0 && n.ma_so == code).FirstOrDefault();
+            ViewBag.type_view = type;
+            ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/SoHoSo/SuaSoHoSo.cshtml", hoso);
+        }
+
+        [HttpPost]
+        public IActionResult SuaSoHoSo(string code, string type, Dm_So_Ho_So item)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuSoHoSo(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "cập giấy tờ lỗi!";
+                ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                return PartialView("~/Views/DanhMuc/SoHoSo/SuaSoHoSo.cshtml", item);
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemSoHoSo", "DanhMuc");
+            }
+            else if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaSoHoSo", "DanhMuc", new { code = item.ma_so, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+        [HttpPost]
+        public IActionResult XoaSoHoSo(string code)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _danhmucDao.XoaSoHoSo(code, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/SoHoSo" });
+        }
+
+        public async Task<IActionResult> RenderViewSoHoSo()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/SoHoSo/ViewSoHoSo.cshtml", hoso);
+            return Content(result);
+        }
+
+        #endregion
 
     }
 }

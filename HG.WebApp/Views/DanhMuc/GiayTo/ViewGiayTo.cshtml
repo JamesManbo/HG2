@@ -1,0 +1,32 @@
+﻿@using HG.WebApp
+@model List<HG.Entities.Dm_Giay_To_Hop_Le>
+
+<div style="overflow-y: auto;">
+    <div id="pnlMain">
+        <div>
+            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                    <tr class="widgettitle">
+                        <th align="center" scope="col">CHỌN</th>
+                        <th scope="col">TÊN</th>
+                        <th scope="col">MÃ ĐƠN VỊ</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td align="center">
+                                <a href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                            </td>
+                            <td>
+                                @item.ten_giay_to
+                            </td>
+                            <td style="width: 25%;"></td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

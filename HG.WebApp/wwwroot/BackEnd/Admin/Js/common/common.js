@@ -81,7 +81,7 @@ confirm.BeforDeletePost = function (action) {
 					if (data.error > 0) {
 						alert(data.msg);
 					} else {
-						window.location.href = "/DanhMuc/PhongBan";
+						window.location.href = data.href;
 					}					
 				});
 			}
