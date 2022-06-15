@@ -1,0 +1,203 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Sổ Hồ Sơ";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
+<div class="card">
+    <div class="card-body">
+        <div class="pageheader">
+            <div class="searchbar">
+                <input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." name="keyword" />
+                <input type="submit" name="ctl08$BtnSearch" value="" onclick="return CheckSearch();" id="BtnSearch" hidden="hidden" />
+            </div>
+            <div class="pageicon"><span class="iconfa-table"></span></div>
+            <div class="pagetitle">
+                <h5>Danh sách</h5>
+                <h1>Thủ tục hành chính</h1>
+            </div>
+        </div>
+        <div class="maincontent">
+            <!-- Pills Tabs -->
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Quản lý thủ tục hành chính</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Quản lý biểu mẫu</button>
+                </li>
+            </ul>
+
+            <div class="tab-content pt-2" id="myTabContent">
+                @*TAB Quản lý thủ tục hành chính*@
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="home-tab">
+                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                        <input type="submit" name="" value="Thêm" id="" onclick="window.location.href = '/ThuTuc/ThemThuTuc';" class="btn btn-primary" style="width:100px;" />
+
+                        <input type="submit" name="" value="Xóa" onclick="" id=""class="btn btn-primary" style="width:100px;" />
+                    </p>
+                    <div class="widget">
+                        <h4 class="widgettitle">Lọc danh sách theo</h4>
+                        <div class="widgetcontent">
+                            <div class="form-group">
+                                <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban</label>
+                                <div class="col-md-10">
+                                    <select name="ctl08$ddlPhongBan" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl08$ddlPhongBan\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl08_ddlPhongBan" class="form-control input-default">
+                                        <option selected="selected" value="------- Chọn Phòng Ban -------">------- Chọn Ph&#242;ng Ban -------</option>
+                                        <option value="PTCKH">Ph&#242;ng T&#224;i ch&#237;nh - Kế hoạch</option>
+                                        <option value="PTNMT">Ph&#242;ng T&#224;i nguy&#234;n v&#224; M&#244;i trường</option>
+                                        <option value="PTP">Ph&#242;ng Tư ph&#225;p</option>
+                                        <option value="PNN">Ph&#242;ng N&#244;ng nghiệp v&#224; PTNT</option>
+                                        <option value="PNV">Ph&#242;ng Nội Vụ</option>
+                                        <option value="PQLDT">Ph&#242;ng QL Đ&#244; thị</option>
+                                        <option value="Văn thư">UBND_Văn thư</option>
+                                        <option value="VP">Văn ph&#242;ng UBND huyện</option>
+                                        <option value="VPDK">Văn ph&#242;ng Đăng k&#253; Đất đai</option>
+                                        <option value="PVH">Ph&#242;ng Văn h&#243;a v&#224; th&#244;ng tin</option>
+                                        <option value="PYT">Ph&#242;ng Y tế</option>
+                                        <option value="TTH">Thanh tra Huyện</option>
+                                        <option value="LD">L&#227;nh đạo UBND huyện</option>
+                                        <option value="LĐVP_UBND">UBND_L&#227;nh đạo văn ph&#242;ng</option>
+                                        <option value="NC_UBND">UBND_Ph&#242;ng Nội ch&#237;nh</option>
+                                        <option value="KGVX_UBND">UBND_Ph&#242;ng Khoa gi&#225;o văn x&#227;</option>
+                                        <option value="KTN_UBND">UBND_Ph&#242;ng Kinh tế ng&#224;nh</option>
+                                        <option value="KTTH_UBND">UBND_Ph&#242;ng Kinh tế Tổng hợp</option>
+                                        <option value="PKT">Ph&#242;ng Kinh tế</option>
+                                        <option value="PKTHT">Ph&#242;ng Kinh tế v&#224; Hạ tầng</option>
+                                        <option value="PLD">Ph&#242;ng Lao động - Thương binh v&#224; X&#227; hội</option>
+                                        <option value="PBT">PH&#210;NG BAN TEST</option>
+                                        <option value="PDT">Ph&#242;ng D&#226;n tộc</option>
+                                        <option value="PGD">Ph&#242;ng Gi&#225;o dục v&#224; Đ&#224;o tạo</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
+                        <div id="dyntable_length" class="dataTables_length">
+                            <label>
+                                Hiển thị
+                                <select size="1" name="dyntable_length" aria-controls="dyntable">
+                                    <option value="10">10</option>
+                                    <option value="25" selected="selected">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select> bản ghi
+                            </label>
+                        </div>
+                        <table class="table table-bordered responsive" id="dyntable">
+                            <colgroup>
+                                <col class="con0" style="width: 20px" />
+                                <col class="con1" style="width: 3%" />
+                                <col class="con0" />
+                                <col class="con1" style="width: 20%" />
+                                <col class="con0" style="width: 5%" />
+                                <col class="con1" style="width: 3%" />
+                                <col class="con0" style="width: 3%" />
+                                <col class="con1" style="width: 2%" />
+                                <col class="con0" style="width: 2%" />
+                                <col class="con1" style="width: 2%" />
+                            </colgroup>
+                            <thead class="widgettitle">
+                                <tr>
+                                    <th class="head0 nosort">
+                                        <input id="checkall" type="checkbox" name="ctl08$RepeaterTable$ctl00$checkall" />
+                                    </th>
+                                    <th class="head0">STT</th>
+                                    <th class="head1">TÊN</th>
+                                    <th class="head0">LĨNH VỰC</th>
+                                    <th class="head1">LUỒNG</th>
+                                    <th class="head0">OL</th>
+                                    <th class="head1">LT</th>
+                                    <th class="head0">#</th>
+                                    <th class="head1">#</th>
+                                    <th class="head0">#</th>
+                                </tr>
+                            </thead>
+
+                            <tr class="gradeX">
+                                <td class="aligncenter">
+                                    <input id="ctl08_RepeaterTable_ctl01_checkbox" type="checkbox" name="ctl08$RepeaterTable$ctl01$checkbox" />
+                                </td>
+                                <td>1<input type="hidden" name="ctl08$RepeaterTable$ctl01$HiddenID" id="ctl08_RepeaterTable_ctl01_HiddenID" value="q" /></td>
+
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q">sdcd</a>
+                                </td>
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q">Lĩnh vực Công thương</a>
+                                </td>
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink5" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q">Có</a>
+                                </td>
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q"></a>
+                                </td>
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q"></a>
+                                </td>
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_lnkviewRow" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="javascript:__doPostBack(&#39;ctl08$RepeaterTable$ctl01$lnkviewRow&#39;,&#39;&#39;)"><span class="glyphicon glyphicon-list-alt"></span></a>
+                                </td>
+                                <td>
+                                    <a id="ctl08_RepeaterTable_ctl01_lnkEdit" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="javascript:__doPostBack(&#39;ctl08$RepeaterTable$ctl01$lnkEdit&#39;,&#39;&#39;)"><span class="glyphicon glyphicon-edit"></span></a>
+                                </td>
+                                <td>
+                                    <a onclick="return confirm(&#39;Bạn có muốn xóa không?&#39;);" id="ctl08_RepeaterTable_ctl01_lnkDelRow" data-placement="top" data-toggle="tooltip" data-original-title="Xóa" href="javascript:__doPostBack(&#39;ctl08$RepeaterTable$ctl01$lnkDelRow&#39;,&#39;&#39;)"><span class="glyphicon glyphicon-trash"></span></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+                @*TAB Quản lý biểu mẫu*@
+                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                        <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                    </p>
+                    <table class="table table-bordered responsive">
+                        <thead class="widgettitle">
+                            <tr>
+                                <th class="head0">Sửa</th>
+                                <th class="head0">Xem biểu mãu HTML</th>
+                                <th class="head0">Đường dẫn</th>
+                                <th class="head0">Xem biểu mẫu</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td> <a href="#">Sửa</a></td>
+                            <td> <a href="#">fileNam</a></td>
+                            <td> <a href="#">UrlFile</a></td>
+                            <td> <a href="#">Xem</a></td>
+                        </tr>
+                    </table>
+                    <div class="row mb-3">
+                        <div class="col-sm-12">
+                            <textarea id="ckedit1" class="form-control input-default" placeholder="Mô tả" name="mo_ta"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-6" style="display: -webkit-inline-box;">
+                            <label for="stt" class="control-label" style="padding: 10px;">Tên file</label>
+                            <input type="text" class="form-control input-default" name="ten_file" value="" placeholder="Tên file">
+                            <button class="col-sm-1 control-label btn btn-primary" style="float:right">Lưu</button>
+                        </div>
+                        <div class="col-sm-6">
+                            <button class="control-label btn btn-primary" style="float:right">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+<script>
+
+    CKEDITOR.replace('ckedit1');
+
+</script>  
