@@ -6,11 +6,13 @@ using HG.WebApp.Entities;
 using HG.WebApp.Helper;
 using HG.WebApp.Models.DanhMuc;
 using HG.WebApp.Sercurity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HG.WebApp.Controllers
 {
+    [Authorize]
     public class DanhMucController : BaseController
     {
         private readonly ILogger<UserController> _logger;
@@ -37,10 +39,6 @@ namespace HG.WebApp.Controllers
         #region Phong Ban
         public IActionResult PhongBan()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var phongBan = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
             ViewBag.lst_phong_ban = phongBan;
             return View("~/Views/DanhMuc/Phongban/PhongBan.cshtml", phongBan);
@@ -49,10 +47,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemPhongBan()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var modal = new Dm_Phong_Ban();
             var user = _danhmucDao.DanhSachNguoiDung("0");
             var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
@@ -64,10 +58,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemPhongBan(Dm_Phong_Ban pb)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             pb.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             pb.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuPhongBan(pb);
@@ -76,7 +66,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = "Tạo phòng ban lỗi";
             }
-            if (pb.type_view == StatusAction.Add.ToString())
+            if (pb.type_view == StatusAction.Add.ToString() || _pb > 0)
             {
                 var user = _danhmucDao.DanhSachNguoiDung("0");
                 var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
@@ -97,10 +87,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaPhongBan(string code, string type)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var user = _danhmucDao.DanhSachNguoiDung("0");
             var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
             var pb = lstpb.Where(n => n.ma_phong_ban == code).FirstOrDefault();
@@ -113,10 +99,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult SuaPhongBan(string code, string type, Dm_Phong_Ban item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuPhongBan(item);
@@ -144,10 +126,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaPhongBan(string code)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaPhongBan(code, uid);
             if (_pb > 0)
@@ -159,10 +137,6 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewPhongBan()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var phongBan = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/Phongban/ViewPhongBan.cshtml", phongBan);
             return Content(result);
@@ -171,10 +145,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> RenderViewNguoiDung(string ma_phong_ban)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var ds_nguoi_dung = _danhmucDao.DanhSachNguoiDung(ma_phong_ban);
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/Phongban/ViewNguoiDung.cshtml", ds_nguoi_dung);
             return Content(result);
@@ -184,10 +154,6 @@ namespace HG.WebApp.Controllers
         #region Lĩnh vực
         public IActionResult LinhVuc()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/LinhVuc/LinhVuc.cshtml", linhvuc);
 
@@ -195,21 +161,12 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemLinhVuc()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             return View("~/Views/DanhMuc/LinhVuc/ThemLinhVuc.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemLinhVuc(Dm_Linh_Vuc item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuLinhVuc(item);
@@ -219,7 +176,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = "Tạo phòng ban lỗi";
             }
-            if (item.type_view == StatusAction.Add.ToString())
+            if (item.type_view == StatusAction.Add.ToString() || response > 0)
             {
                 return View("~/Views/DanhMuc/LinhVuc/ThemLinhVuc.cshtml", item);
             }
@@ -233,10 +190,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaLinhVuc(string code, string type)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/LinhVuc/SuaLinhVuc.cshtml", linhvuc);
@@ -245,10 +198,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult SuaLinhVuc(string code, string type, Dm_Linh_Vuc item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuLinhVuc(item);
@@ -273,10 +222,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaLinhVuc(string code)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaLinhVuc(code, uid);
             if (_pb > 0)
@@ -289,10 +234,6 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewLinhVuc()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/LinhVuc/ViewLinhVuc.cshtml", linhvuc);
             return Content(result);
@@ -303,10 +244,6 @@ namespace HG.WebApp.Controllers
         #region Chức vụ
         public IActionResult ChucVu()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var linhvuc = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/ChucVu/ChucVu.cshtml", linhvuc);
 
@@ -314,21 +251,12 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemChucVu()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             return View("~/Views/DanhMuc/ChucVu/ThemChucVu.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemChucVu(Dm_Chuc_Vu item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuChucVu(item);
@@ -338,7 +266,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = "Tạo chức vụ lỗi!";
             }
-            if (item.type_view == StatusAction.Add.ToString())
+            if (item.type_view == StatusAction.Add.ToString() || response > 0)
             {
                 return View("~/Views/DanhMuc/ChucVu/ThemChucVu.cshtml", item);
             }
@@ -352,10 +280,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaChucVu(string code, string type)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0 && n.ma_chuc_vu == code).FirstOrDefault();
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/ChucVu/SuaChucVu.cshtml", chucvu);
@@ -364,10 +288,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult SuaChucVu(string code, string type, Dm_Chuc_Vu item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuChucVu(item);
@@ -392,10 +312,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaChucVu(string code)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaChucVu(code, uid);
             if (_pb > 0)
@@ -408,10 +324,6 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewChucVu()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/ChucVu/ViewChucVu.cshtml", chucvu);
             return Content(result);
@@ -422,10 +334,6 @@ namespace HG.WebApp.Controllers
         #region Giấy tờ hợp lệ
         public IActionResult GiayTo()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/GiayTo/GiayTo.cshtml", giayto);
 
@@ -433,21 +341,12 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemGiayTo()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             return View("~/Views/DanhMuc/GiayTo/ThemGiayTo.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemGiayTo(Dm_Giay_To_Hop_Le item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuGiayTo(item);
@@ -457,7 +356,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = "Tạo giấy tờ lỗi!";
             }
-            if (item.type_view == StatusAction.Add.ToString())
+            if (item.type_view == StatusAction.Add.ToString() || response > 0)
             {
                 return View("~/Views/DanhMuc/GiayTo/ThemGiayTo.cshtml", item);
             }
@@ -471,10 +370,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaGiayTo(string code, string type)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var chucvu = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0 && n.ma_giay_to == code).FirstOrDefault();
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/GiayTo/SuaGiayTo.cshtml", chucvu);
@@ -483,10 +378,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult SuaGiayTo(string code, string type, Dm_Giay_To_Hop_Le item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuGiayTo(item);
@@ -511,10 +402,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaGiayTo(string code)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaGiayTo(code, uid);
             if (_pb > 0)
@@ -527,10 +414,6 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewGiayTo()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/GiayTo/ViewGiayTo.cshtml", giayto);
             return Content(result);
@@ -541,10 +424,6 @@ namespace HG.WebApp.Controllers
         #region Sổ hồ sơ
         public IActionResult SoHoSo()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var giayto = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/SoHoSo/SoHoSo.cshtml", giayto);
 
@@ -552,10 +431,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemSoHoSo()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml");
         }
@@ -563,11 +438,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemSoHoSo(Dm_So_Ho_So item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
-
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuSoHoSo(item);
@@ -577,7 +447,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = "Tạo sổ hồ sơ lỗi!";
             }
-            if (item.type_view == StatusAction.Add.ToString())
+            if (item.type_view == StatusAction.Add.ToString() || response > 0)
             {
                 ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
                 return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml", item);
@@ -592,10 +462,6 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaSoHoSo(string code, string type)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0 && n.ma_so == code).FirstOrDefault();
             ViewBag.type_view = type;
             ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
@@ -605,10 +471,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult SuaSoHoSo(string code, string type, Dm_So_Ho_So item)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuSoHoSo(item);
@@ -634,10 +496,6 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaSoHoSo(string code)
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaSoHoSo(code, uid);
             if (_pb > 0)
@@ -650,10 +508,6 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewSoHoSo()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "User");
-            }
             var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/SoHoSo/ViewSoHoSo.cshtml", hoso);
             return Content(result);

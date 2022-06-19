@@ -5,29 +5,30 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json.Serialization;
+using System.Net;
 
 namespace HG.WebAppApp
 {
-   
-        public class Startup
+
+    public class Startup
+    {
+        public Startup(IConfiguration configuration)
         {
-            public Startup(IConfiguration configuration)
-            {
-                Configuration = configuration;
-            }
+            Configuration = configuration;
+        }
 
-            public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
 
-            // This method gets called by the runtime. Use this method to add services to the container.
-            public void ConfigureServices(IServiceCollection services)
-            {
-            
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+
             services.AddDbContext<EAContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("EAContext")));
             services.AddIdentity<AspNetUsers, AspNetRoles>()
                .AddEntityFrameworkStores<EAContext>()
                .AddDefaultTokenProviders();
-           
+
             #region Public Transient
             //Cache
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -37,66 +38,78 @@ namespace HG.WebAppApp
             #endregion
             services.AddDistributedMemoryCache();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
-            services.AddSession(options => {
-                    options.IdleTimeout = TimeSpan.FromMinutes(10);//You can set Time   
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(10);//You can set Time   
             });
             services.AddResponseCompression();
             services.AddControllersWithViews();
             services.AddMvc(option => option.EnableEndpointRouting = false);
-                
+
 
         }
 
-            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void
-                Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void
+            Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
             {
-                if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
+            app.UseStatusCodePagesWithReExecute("/Home/Error");
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
                 {
-                    app.UseDeveloperExceptionPage();
+                    context.Request.Path = "/Home/Error/404";
+                    await next();
                 }
                 else
                 {
-                    app.UseExceptionHandler("/Home/Error");
-                }
-
-            app.UseStatusCodePagesWithReExecute("/Home/Error");
-                app.Use(async (context, next) =>
-                {
-                    await next();
-                    if (context.Response.StatusCode == 404)
+                    if (context.Response.StatusCode == 401)
                     {
-                        context.Request.Path = "/Home/Error/404";
+                        context.Request.Path = "/Home/Error/401";
                         await next();
                     }
-                    else
-                    {
-                        if (context.Response.StatusCode == 401)
-                        {
-                            context.Request.Path = "/Home/Error/401";
-                            await next();
-                        }
-                    }
-                });
-                
-                app.UseResponseCompression();
-                app.UseStaticFiles(new StaticFileOptions
+                }
+            });
+            app.UseSession();
+            app.UseAuthentication();
+            app.UseStatusCodePages(context =>
+            {
+                var response = context.HttpContext.Response;
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized ||
+                    response.StatusCode == (int)HttpStatusCode.Forbidden ||
+                    response.StatusCode == 404)
+                    response.Redirect("/User/Login");
+                return Task.CompletedTask;
+            });
+
+            app.UseResponseCompression();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = ctx =>
                 {
-                    OnPrepareResponse = ctx =>
-                    {
-                        const int durationInSeconds = 60 * 60;
-                        ctx.Context.Response.Headers[HeaderNames.CacheControl] =
-                            "public,max-age=" + durationInSeconds;
-                    }
-                });
+                    const int durationInSeconds = 60 * 60;
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                        "public,max-age=" + durationInSeconds;
+                }
+            });
 
 
-                app.UseHttpsRedirection();
-                app.UseRouting();
-                app.UseCors(option => option.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-                app.UseSession();
-                app.UseAuthentication();
-                app.UseAuthorization();
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseCors(option => option.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             //app.UseIdentityServer();    
 
@@ -142,7 +155,7 @@ namespace HG.WebAppApp
                      "AddListting",
                      "AddListting", // URL with parameters
                      new { controller = "Review", action = "AddListting" }
-                  ); 
+                  );
                     routes.MapRoute(
                      "LogoutClient",
                      "LogoutClient", // URL with parameters
@@ -157,6 +170,6 @@ namespace HG.WebAppApp
             //       template: "{controller=Admin}/{action=Index}/{id?}");
             //});
         }
-        }
     }
+}
 
