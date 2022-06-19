@@ -24,31 +24,13 @@ namespace HG.WebApp.Data
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<Asp_nhom> Asp_nhom { get; set; }
-
-
-
-
-
-        // Danh mục
-
         public virtual DbSet<Dm_Phong_Ban> Dm_Phong_Ban { get; set; }
         public virtual DbSet<Dm_Linh_Vuc> Dm_Linh_Vuc { get; set; }
         public virtual DbSet<Dm_So_Ho_So> Dm_So_Ho_So { get; set; }
         public virtual DbSet<Dm_Giay_To_Hop_Le> Dm_Giay_To_Hop_Le { get; set; }
         public virtual DbSet<Dm_Chuc_Vu> Dm_Chuc_Vu { get; set; }
         // END Danh mục
-        public virtual DbSet<Category> Categorys { get; set; }
-        public virtual DbSet<Listting> Listting { get; set; }
-        public virtual DbSet<CustomerCeo> CustomerCeos { get; set; }
-        public virtual DbSet<ListtingImage> ListtingImages { get; set; }
-        public virtual DbSet<Nation> Nations { get; set; }
-        public virtual DbSet<Tags> Tags { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<Reviews> Reviews { get; set; }
-        public virtual DbSet<Slider> Slider { get; set; }
-        public virtual DbSet<AspModule> AspModules { get; set; }
-        public virtual DbSet<Content> Contents { get; set; }
-        public virtual DbSet<ListtingDocumentTitle> ListtingDocumentTitle { get; set; }
+       
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

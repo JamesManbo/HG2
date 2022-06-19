@@ -1,0 +1,460 @@
+﻿@model HG.Entities.Entities.Asp_NguoiDung_Nhom
+@{
+    ViewData["Title"] = "Thêm mới";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+	var LstNhom = ViewBag.LstNhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
+}
+
+  <script src="/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
+ <script src="~/BackEnd/Admin/Js/Validate/NguoiDung.js"></script>
+ <script>
+		var Arr = [];
+		 $(document).ready(function () {
+		
+			 NguoiDung.validateForm();
+			$('.select2').select2({
+				closeOnSelect: false
+			});
+			$('#multiselect').on('select2:select', function(e) {
+				Arr.push(e.params.data.id);
+                $("#lstGroup").val(Arr.join(","));
+			});
+			$('#multiselect').on("select2:unselect", function (e) { 
+                Arr.pop(e.params.data.id);
+				$("#lstGroup").val(Arr.join(","));
+			});
+		});
+</script>
+			@if(Model.responseErr != null){
+				//m co the goi den msg cua t day
+				@Html.Raw("<script>alert('Change succesfully');</script>")
+			};
+			<ul class="breadcrumbs">
+                    <li><a href="Default.aspx"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+                    <li><span id="breadcrumbsParent">Nhóm Người dùng &amp; Vai trò</span>&nbsp;<span id="spanBr" class="separator"></span></li>
+                    <li><span id="breadcrumbsChird">Người dùng</span></li>
+                    
+
+                    <li class="right">
+                        <a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="iconsweets-chart4" data-placement="left" data-toggle="tooltip" data-original-title="Màu giao diện"></i>&nbsp;</a>
+                        <ul class="dropdown-menu pull-right skin-color">
+                            <li><a href="default">Mặc định</a></li>
+                            <li><a href="navyblue">Xanh nước biển</a></li>
+                            <li><a href="palegreen">Xanh nhạt</a></li>
+                            <li><a href="red">Đỏ</a></li>
+                            <li><a href="green">Xanh lá</a></li>
+                            <li><a href="brown">Nâu</a></li>
+                        </ul>
+                    </li>
+			</ul>
+<div class="card">
+		<div class="pageheader">
+
+			<div class="searchbar">
+				<input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter...">
+				<input type="submit" name="ctl08$BtnSearch" value="" onclick="return CheckSearch();" id="BtnSearch" hidden="hidden">
+			</div>
+			<div class="pageicon"><span class="iconfa-table"></span></div>
+			<div class="pagetitle">
+				<h5>Danh sách</h5>
+				<h1>Người dùng</h1>
+			</div>
+
+		</div>
+		<div class="maincontent">
+				<div class="maincontentinner">
+					<div class="widget">
+						<h4 class="widgettitle">Cập nhật thông tin người dùng</h4>
+						<form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/ThemMoi" method="post" enctype="multipart/form-data" >
+							<div class="form-horizontal">
+								<div class="form-group row">
+									<label class="col-md-2 control-label">
+										Tên đăng nhập
+									<span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+									<div class="col-md-10">
+										<input name="UserName" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
+										@*<span id="ctl08_ctl00_mk" style="color:Red;"></span>
+										<span id="ctl08_ctl00_RequiredFieldValidator1" class="error" style="color:Red;display:none;">Bạn cần nhập tên đăng nhập!</span>*@
+									</div>
+									<label class="col-md-1 control-label" hidden="hidden">
+										<a id="lnkFCode" data-toggle="modal" data-target="#myModal" class="btn btn-primary" onclick="myModalPopup(this.name);" name="GetData.aspx?urlcontrol=forms/users/enq_users.ascx&amp;controlID=FCode" style="display:inline-block;width:100%;">Chọn</a></label>
+
+								</div>
+
+
+								<div class="form-group" hidden="hidden" id="mkmd">
+									<label class="col-md-2 control-label">
+										Mật khẩu mặc định
+									</label>
+									<div class="col-md-10">
+										<input name="ctl08$ctl00$TextBox1" type="text" id="ctl08_ctl00_TextBox1" disabled="disabled" class="form-control input-default" placeholder="1">
+									</div>
+								</div>
+
+
+
+								<div class="form-group row">
+									<label class="col-md-2 control-label">
+										Họ đệm
+									<span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span></label>
+									<div class="col-md-10">
+										<input name="ho_dem" type="text" id="ho_dem" class="form-control input-default" placeholder="Họ đêm">
+										@*<span id="ctl08_ctl00_RequiredFieldValidator2" class="error" style="color:Red;display:none;">Bạn cần nhập họ đệm!</span>*@
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-md-2 control-label">
+										Tên 
+										<span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span></label>
+									<div class="col-md-10">
+										<input name="ten" type="text" id="ten" class="form-control input-default" placeholder="Tên">
+										@*<span id="ctl08_ctl00_RequiredFieldValidator3" style="color:Red;display:none;">Tên không được trống!</span>*@
+									</div>
+								</div>
+								<div class="form-group" hidden="hidden">
+									<label class="col-md-2 control-label">Bí danh</label>
+									<div class="col-md-10">
+										<input name="ctl08$ctl00$Bidanh" type="text" id="ctl08_ctl00_Bidanh" class="form-control input-default" placeholder="Bí danh">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Ngày sinh</label>
+									<div class="col-md-10">
+										<input name="ngay_sinh" type="text" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" placeholder="Ngày sinh">
+										@*<span id="ctl08_ctl00_CompareValidator2" style="color:Red;display:none;">Phải nhập dữ liệu kiểu ngày/tháng/năm!</span>*@
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Điện thoại</label>
+									<div class="col-md-10">
+										<input name="PhoneNumber" type="text" id="PhoneNumber" class="form-control input-default" placeholder="Số điện thoại">
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Email</label>
+									<div class="col-md-10">
+										<input name="Email" type="text" id="Email" class="form-control input-default" placeholder="Số điện thoại">
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Phòng ban</label>
+									<div class="col-md-10">
+										<select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
+											<option selected="selected" value="">----------------Chọn-----------------</option>
+											<option value="LD">Lãnh đạo UBND huyện</option>
+											<option value="PBT">PHÒNG BAN TEST</option>
+											<option value="PDT">Phòng Dân tộc</option>
+											<option value="PGD">Phòng Giáo dục và Đào tạo</option>
+											<option value="PKT">Phòng Kinh tế</option>
+											<option value="PKTHT">Phòng Kinh tế và Hạ tầng</option>
+											<option value="PLD">Phòng Lao động - Thương binh và Xã hội</option>
+											<option value="PNV">Phòng Nội Vụ</option>
+											<option value="PNN">Phòng Nông nghiệp và PTNT</option>
+											<option value="PQLDT">Phòng QL Đô thị</option>
+											<option value="PTCKH">Phòng Tài chính - Kế hoạch</option>
+											<option value="PTNMT">Phòng Tài nguyên và Môi trường</option>
+											<option value="PTP">Phòng Tư pháp</option>
+											<option value="PVH">Phòng Văn hóa và thông tin</option>
+											<option value="PYT">Phòng Y tế</option>
+											<option value="TTH">Thanh tra Huyện</option>
+											<option value="LĐVP_UBND">UBND_Lãnh đạo văn phòng</option>
+											<option value="KGVX_UBND">UBND_Phòng Khoa giáo văn xã</option>
+											<option value="KTN_UBND">UBND_Phòng Kinh tế ngành</option>
+											<option value="KTTH_UBND">UBND_Phòng Kinh tế Tổng hợp</option>
+											<option value="NC_UBND">UBND_Phòng Nội chính</option>
+											<option value="Văn thư">UBND_Văn thư</option>
+											<option value="VPDK">Văn phòng Đăng ký Đất đai</option>
+											<option value="VP">Văn phòng UBND huyện</option>
+
+										</select>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Chức vụ 1</label>
+									<div class="col-md-3" style="padding-right: 0px">
+                                
+										<select name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
+											<option value="">----------------Chọn-----------------</option>
+											<option value="CBMC"> Cán bộ một cửa</option>
+											<option value="cb">Cán bộ</option>
+											<option value="ctt">Chánh thanh tra</option>
+											<option value="CVP">Chánh văn phòng</option>
+											<option value="cct">Chi cục trưởng</option>
+											<option value="ct">Chủ tịch UBND</option>
+											<option value="CV">Chuyên viên</option>
+											<option value="GD">Giám đốc</option>
+											<option value="GDTT">Giám đốc trung tâm</option>
+											<option value="nv">Nhân viên</option>
+											<option value="pctt">Phó Chánh thanh tra</option>
+											<option value="PCVP">Phó Chánh văn phòng</option>
+											<option value="pct">Phó Chủ tịch UBND</option>
+											<option value="PGĐ">Phó Giám đốc</option>
+											<option value="ptb">Phó Trưởng ban</option>
+											<option value="PTP">Phó Trưởng phòng</option>
+											<option value="qt">Quản trị hệ thống</option>
+											<option value="tb">Trưởng ban</option>
+											<option value="TP">Trưởng phòng</option>
+
+										</select>
+									</div>
+                            
+							
+								</div>
+		
+
+
+								<div class="form-group row" hidden="hidden">
+									<label class="col-md-2 control-label">Danh mục</label>
+									<div class="col-md-10">
+										<select name="ctl08$ctl00$Menu" id="ctl08_ctl00_Menu" class="form-control input-default" placeholder="Danh mục">
+											<option value="">----------------Chọn-----------------</option>
+											<option value="BcChiTietHSTheoNgXL">Báo cáo chi tiết hồ sơ theo người xử lý</option>
+											<option value="BcChiTietHSTheoSoLuong">Báo cáo danh sách hồ sơ theo số lượng</option>
+											<option value="MENU.BCHSLOAI">Báo cáo hồ sơ bị loại</option>
+											<option value="BCHSMUCDOBA">Báo cáo hồ sơ mức độ 3</option>
+											<option value="MENU.T.TKBC.THSL">Báo cáo số lượng hồ sơ</option>
+											<option value="MENU.T.TKBC.THDV">Báo cáo theo dịch vụ</option>
+											<option value="MENU.BCTDTDXL">Báo cáo theo dõi tiến độ xử lý</option>
+											<option value="MENU.T.TKBC.THN">Báo cáo theo năm</option>
+											<option value="MENU.T.TKBC.THNXL">Báo cáo theo người xử lý</option>
+											<option value="MENU.T.TKBC.THQ">Báo cáo theo quý</option>
+											<option value="MENU.T.TKBC.THT">Báo cáo theo tháng</option>
+											<option value="MENU.T.TKBC.BCTH">Báo cáo tổng hợp</option>
+											<option value="MENU.T.TKBC.TH">Báo cáo tổng hợp</option>
+											<option value="MENU.T.TKBC.BCTHHS">Báo cáo tổng hợp hồ sơ</option>
+											<option value="MENU.BCTDTDNLP">Báo cáo tổng hợp lệ phí</option>
+											<option value="BTH">Bước thực hiện</option>
+											<option value="MENU.FUN.BUOCXL">Bước xử lý</option>
+											<option value="BUOCXULY">Bước xử lý</option>
+											<option value="MENU.FUN.CAPDIABAN">Cấp địa bàn</option>
+											<option value="CAPDIABAN">Cấp địa bàn</option>
+											<option value="FORMS_CAU_HINH">Cấu hình</option>
+											<option value="GRID.WS.LIST">Cấu hình đơn vị liên thông</option>
+											<option value="MENU.CAUHINH">Cấu hình hệ thống</option>
+											<option value="MENU.FUN.CHUCVU">Chức vụ</option>
+											<option value="CHUCVU">Chức vụ</option>
+											<option value="MENU.FUN.CNC">Chuyên mục chính</option>
+											<option value="MENU.FUN.CMC">Chuyên mục con</option>
+											<option value="MENU.FUN.DM.DANTOC">Dân tộc</option>
+											<option value="DANTOC">Dân tộc</option>
+											<option value="MENU.FUN.OL.QLHS.DKDV">Đăng ký dịch vụ</option>
+											<option value="MENU.FULL.OL.QLHS.DKDV">Đăng ký dịch vụ</option>
+											<option value="KHAOSAT_DANHGIA">Đánh giá</option>
+											<option value="MENU.DM.C">Danh mục chung</option>
+											<option value="MENU.FUN.DB">Danh mục địa bàn</option>
+											<option value="MENU.DMDB">Danh mục địa bàn</option>
+											<option value="MENU.DV">Danh mục đơn vị</option>
+											<option value="MENU.FUN.LXL">Danh mục luồng xử lý</option>
+											<option value="MENU.T.TCTK.HS">Danh sách hồ sơ</option>
+											<option value="TRACUUTIMKIEM.M">DANH SÁCH HỒ SƠ</option>
+											<option value="DIABAN">Địa bàn</option>
+											<option value="MENU.FUN.DIABAN">Địa bàn</option>
+											<option value="DICHVU">Dịch vụ</option>
+											<option value="MENU.FUN.DM.DINHKEM">Đính kèm</option>
+											<option value="DINHKEM">Đính kèm</option>
+											<option value="MENU.FUN.OL.QLTK.DMK">Đổi mật khẩu</option>
+											<option value="CHANGEPASS">Đổi mật khẩu</option>
+											<option value="MENU.FULL.OL.QLTK.DMK">Đổi mật khẩu</option>
+											<option value="MENU.FULL.OL.QLTK.DTT">Đổi thông tin</option>
+											<option value="MENU.DONG.BO.DATA">Đồng bộ dữ liệu</option>
+											<option value="GANLUONG">Gán luồng</option>
+											<option value="GIAYTOHOPLE">Giấy tờ hợp lệ</option>
+											<option value="GIOITINH">Giới tính</option>
+											<option value="MENU.FUN.DM.GIOITINH">Giới tính</option>
+											<option value="MENU.FUN.OL.QLHS.HSCANCEL">Hồ sơ bị loại/bổ sung</option>
+											<option value="MENU.FULL.OL.QLHS.HSCANCEL">Hồ sơ bị trả lại</option>
+											<option value="MENU.TN.BS">Hồ sơ chờ bổ sung</option>
+											<option value="GRID_HSCHOKY">Hồ sơ chờ ký</option>
+											<option value="MENU.T.TCTK.HS.CKD">Hồ sơ chờ ký duyệt</option>
+											<option value="MENU.T.TCTK.HS.M.KD">Hồ sơ chờ ký duyệt</option>
+											<option value="GRID_HSCHOTRA">Hồ sơ chờ trả kết quả</option>
+											<option value="MENU.T.TCTK.HS.CKQ">Hồ sơ chờ trả kết quả</option>
+											<option value="MENU.T.TCTK.HS.M.CT">Hồ sơ chờ trả kết quả</option>
+											<option value="MENU.FUN.OL.QLHS.HSSEND">Hồ sơ chờ xử lý</option>
+											<option value="GRID_CHOXL">Hồ sơ chờ xử lý</option>
+											<option value="MENU.HSCBS">Hồ sơ chưa bổ sung</option>
+											<option value="GRID_HOSO_TN_Temp">Hồ sơ chưa chính thức</option>
+											<option value="GRID_HSDAXL">Hồ sơ chuyển đã xử lý</option>
+											<option value="GRID_DACHUYENXL">Hồ sơ đã chuyển xử lý</option>
+											<option value="MENU.FULL.OL.QLHS.HSSEND">Hồ sơ đã gửi</option>
+											<option value="MENU.T.TCTK.HS.HUY">Hồ sơ đã hủy</option>
+											<option value="GRID_HSDAKY">Hồ sơ đã ký</option>
+											<option value="MENU.FUN.OL.QLHS.KQ">Hồ sơ đã nhận kết quả</option>
+											<option value="GRID_HSDAPHXL">Hồ sơ đã phối hợp</option>
+											<option value="GRID_HSDATRAKQ">Hồ sơ đã trả kết quả</option>
+											<option value="MENU.T.TCTK.HS.DTKQ">Hồ sơ đã trả kết quả</option>
+											<option value="MENU.T.TCTK.HS.M.DT">Hồ sơ đã trả kết quả</option>
+											<option value="MENU.FUN.OL.QLHS.HSNEW">Hồ sơ đang soạn</option>
+											<option value="MENU.FULL.OL.QLHS.HSNEW">Hồ sơ đang soạn</option>
+											<option value="MENU.T.TCTK.HS.DTN">Hồ sơ đang tiếp nhận</option>
+											<option value="MENU.T.TCTK.HS.M.TN">Hồ sơ đang tiếp nhận</option>
+											<option value="GRID_HOSO">Hồ sơ đang tiếp nhận</option>
+											<option value="MENU.FULL.OL.QLHS.DANGXL">Hồ sơ đang xử lý</option>
+											<option value="MENU.FUN.OL.QLHS.HSDXL">Hồ sơ đang xử lý</option>
+											<option value="MENU.T.TCTK.HS.DXL">Hồ sơ đang xử lý</option>
+											<option value="MENU.T.TCTK.HS.M.XL">Hồ sơ đang xử lý</option>
+											<option value="GRID.DSHSDXL">Hồ sơ đang xử lý</option>
+											<option value="HS_LT">Hồ sơ gửi liên thông</option>
+											<option value="MENU.FUN.OL.QLHS.HSDAXL">Hồ sơ hoàn thành xử lý</option>
+											<option value="MENU.T.TCTK.HS.KHL">Hồ sơ không hợp lệ</option>
+											<option value="TNHS_LT">Hồ sơ liên thông</option>
+											<option value="GRID_HSDANGPH">Hồ sơ phối hợp</option>
+											<option value="MENU.XL.TDDD">Hồ sơ theo dõi đôn đốc</option>
+											<option value="HO.OL.CHOTIEPNHAN">Hồ sơ trực tuyến</option>
+											<option value="MENU.KYCHUACHUYEN">HS chờ chuyển một cửa</option>
+											<option value="MENU.TN.CHOTNGD2">HS chờ tiếp nhận GĐ2</option>
+											<option value="GRID_HSHOANTHANHKQ">HS chưa đến nhận KQ</option>
+											<option value="GRID.DSHSCXL">HS chuyển chưa xử lý</option>
+											<option value="PHATTC_VNPost">HS chuyển phát thành công</option>
+											<option value="MENU.TN.KQGD1">HS có kết quả GĐ1</option>
+											<option value="MENU.HSGDH">HS gần đến hạn, quá hạn</option>
+											<option value="HS_LT_TC">HS liên thông bị từ chối</option>
+											<option value="CHOTAODON_VNPost">HSĐK nhận KQ bưu chính</option>
+											<option value="Grid_inphieu">In phiếu</option>
+											<option value="MENU.INPHIEU">In sổ &amp; phiếu</option>
+											<option value="MENU.FUN.DVC">Khai báo dịch vụ công</option>
+											<option value="LUONGXL">Khai báo luồng xử lý</option>
+											<option value="QL_HISTORY">Lịch sử bản ghi</option>
+											<option value="LINHVUC">Lĩnh vực</option>
+											<option value="MENU.FUN.DVC.LINHVUC">Lĩnh vực</option>
+											<option value="MENU.LUONGXL">Luồng xử lý</option>
+											<option value="MENU.FUN.LUONG">Luồng xử lý</option>
+											<option value="NGAYNGHI">Ngày nghỉ</option>
+											<option value="MENU.FUN.DM.NGAYNGHI">Ngày nghỉ</option>
+											<option value="MENU.FUN.ND">Người dùng</option>
+											<option value="DICHVU_USER">Người dùng dịch vụ</option>
+											<option value="NDONLINE">Người dùng online</option>
+											<option value="MENU.FUN.OL.ONLINE">người dùng online</option>
+											<option value="GROUPS">Nhóm</option>
+											<option value="MENU.G.P">Nhóm &amp; Quyền</option>
+											<option value="MENU.SEC">Nhóm Người dùng &amp; Vai trò</option>
+											<option value="ROLEASSIGNMENT">Phân quyền</option>
+											<option value="PHANQUYEN1">Phân quyền</option>
+											<option value="MENU.FUN.DM.PHIMTAT">Phím tắt</option>
+											<option value="PHIMTAT">Phím tắt</option>
+											<option value="PHXL">Phối hợp xử lý</option>
+											<option value="PHONGBAN">Phòng ban</option>
+											<option value="MENU.FUN.PB">Phòng ban</option>
+											<option value="MENU.PAGES">Quản lý các trang</option>
+											<option value="MENU.FUN.CN">Quản lý chức năng</option>
+											<option value="MENU.MENU">Quản lý chuyên mục</option>
+											<option value="MENU.MNG">Quản lý chuyên mục</option>
+											<option value="MENU.MAIN">Quản lý chuyên mục chính</option>
+											<option value="DM_CHUNG">Quản lý danh mục</option>
+											<option value="MENU.FUN.DV">Quản lý danh mục đơn vị</option>
+											<option value="MENU.FUN.OL.QLHS">Quản lý hồ sơ</option>
+											<option value="MENU.FULL.OL.QLHS">Quản lý hồ sơ</option>
+											<option value="MENU.QL.FUN">Quản lý Menu</option>
+											<option value="MENU.USERS">Quản lý người dùng</option>
+											<option value="NHOMQUYEN">Quản lý nhóm &amp; Vai trò</option>
+											<option value="QL_PHIEUHEN">Quản lý phiếu hẹn</option>
+											<option value="MENU.FULL.OL.QLTK">Quản lý tài khoản</option>
+											<option value="MENU.FUN.OL.QLTK">Quản lý tài khoản</option>
+											<option value="SUPER_ADMIN">Quản trị</option>
+											<option value="MENU.DMC">Quản trị danh mục</option>
+											<option value="USER.MNG">Quản trị người dùng</option>
+											<option value="QUOCTICH">Quốc tịch</option>
+											<option value="MENU.FUN.DM.QT">Quốc tịch</option>
+											<option value="PERMISSIONS">Quyền</option>
+											<option value="SOHS">Sổ hồ sơ</option>
+											<option value="MENU.SOTHEODOIHS">Sổ theo dõi hồ sơ</option>
+											<option value="FORM-SOTIEPNHANHS">Sổ tiếp nhận hồ sơ</option>
+											<option value="MENU.SOTKQ">Sổ trả kết quả</option>
+											<option value="MENU.FUN.DVC.THUTUC">Thành phần hồ sơ</option>
+											<option value="THUTUC">Thành phần hồ sơ</option>
+											<option value="GROUPS_USERS">Thêm người dùng vào Nhóm</option>
+											<option value="GROUPS_ROLES">Thêm vai trò vào Nhóm</option>
+											<option value="MENU.FUN.OL.QLHS.THONGBAO">Thông báo từ một cửa</option>
+											<option value="MENU.T.TKBC.BCDN">Thống kê truy cập</option>
+											<option value="TRANG.THONGTIN">Thông tin cá nhân</option>
+											<option value="MENU.FUN.OL.QLTK.DTT">Thông tin cá nhân</option>
+											<option value="TrangAn">Thông tin quá trình xử lý hồ sơ</option>
+											<option value="MENU.DVC">Thủ tục hành chính</option>
+											<option value="MENU.FUN.DVC.DICHVU">Thủ tục hành chính</option>
+											<option value="MENU.TN">Tiếp nhận</option>
+											<option value="MENU.FUN.HOSO.FULL">Tiếp nhận hồ sơ</option>
+											<option value="MENU.TN.HS">Tiếp nhận hồ sơ mới</option>
+											<option value="MENU.T.TCTK.HS.TH">Tìm kiếm hồ sơ</option>
+											<option value="TC_HSLT">Tìm kiếm hồ sơ liên thông</option>
+											<option value="MENU.T.TCTK.HS.M.TH">Tìm kiếm tổng hợp</option>
+											<option value="MENU.T.TCTK.HS.TK">Toàn bộ hồ sơ</option>
+											<option value="MENU.FUN.DM.TONGIAO">Tôn giáo</option>
+											<option value="TONGIAO">Tôn giáo</option>
+											<option value="QUANLY_HOSO">Tool Quản trị</option>
+											<option value="MENU.T.TCTK.HS.NEW">Tra cứu &amp; Tìm kiếm</option>
+											<option value="MENU.T.TCTK.HS.M.TK">Tra cứu hồ sơ</option>
+											<option value="MENU.T.TCTK.HS.M">Tra cứu và tìm kiếm</option>
+											<option value="MENU.TKQ.HS">Trả kết quả</option>
+											<option value="MENU.FUN.PAGS">Trang chuyên mục</option>
+											<option value="TrangLoi">Trang lỗi</option>
+											<option value="MENU.FUN.TTXL">Trình tự xử lý</option>
+											<option value="TRINHTUXL">Trình tự xử lý</option>
+											<option value="MENU.TRUYEN.NHAN.DATA">Truyền nhận dữ liệu</option>
+											<option value="UYQUYENXULY_ADMIN">Ủy quyền xử lý</option>
+											<option value="MENU.UQXL">Ủy quyền xử lý</option>
+											<option value="ROLE">Vai trò</option>
+											<option value="MENU.FUN.HOSO">Xử lý hồ sơ</option>
+											<option value="MENU.HS">Xử lý hồ sơ</option>
+											<option value="MENU.XLT">Xử lý thay</option>
+
+					</select>
+									</div>
+
+								</div>
+								<div class="form-group row">
+									<label class="col-md-2 control-label ">Thêm người vào nhóm</label>
+									<div class="col-md-10">
+										<select id="multiselect"class="select2 form-select form-control input-default" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
+											@if(LstNhom != null)
+											{
+													foreach(var item in LstNhom)
+													{
+														<option value="@item.ma_nhom" >	@item.ten_nhom</option>
+													}
+										
+											}
+										</select>
+										<input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" hidden>
+								@*<div id="Nhom_chzn" class="chzn-container chzn-container-multi" style="width: 845px;" title=""><ul class="chzn-choices"><li class="search-field"><input type="text" value="Chọn nhóm ..." class="default" autocomplete="off" style="width: 100px;"></li></ul><div class="chzn-drop" style="left: -9000px; width: 843px; top: 33px;"><ul class="chzn-results"><li id="Nhom_chzn_o_0" class="active-result" style="">	Nhóm lãnh đạo cơ quan</li><li id="Nhom_chzn_o_1" class="active-result" style="">	Nhóm lãnh đạo có quyền ký hồ sơ</li><li id="Nhom_chzn_o_2" class="active-result" style="">	Nhóm Quản lý bộ phận một cửa</li><li id="Nhom_chzn_o_3" class="active-result" style="">Nhóm Cán bộ một cửa</li><li id="Nhom_chzn_o_4" class="active-result" style="">Nhóm Cán bộ TN Giai đoạn 2</li><li id="Nhom_chzn_o_5" class="active-result" style="">Nhóm Chuyên viên</li><li id="Nhom_chzn_o_6" class="active-result" style="">Nhóm kiểm soát thủ tục hành chính</li><li id="Nhom_chzn_o_7" class="active-result" style="">Nhóm lãnh đạo phòng ban</li><li id="Nhom_chzn_o_8" class="active-result" style="">Nhóm lãnh đạo văn phòng</li><li id="Nhom_chzn_o_9" class="active-result" style="">Nhóm Quản trị danh mục</li><li id="Nhom_chzn_o_10" class="active-result" style="">Nhóm Quản trị hệ thống</li><li id="Nhom_chzn_o_11" class="active-result" style="">Nhóm Ủy quyền xử lý</li><li id="Nhom_chzn_o_12" class="active-result" style="">Nhóm Xử lý thay</li></ul></div></div>
+									</div>*@
+
+								</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Thứ tự</label>
+									<div class="col-md-10">
+										<input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự">
+										@*<span id="ctl08_ctl00_RegularExpressionValidator1" class="error" style="color:Red;display:none;">Bạn phải nhập số !</span>*@
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label class="col-md-2 control-label">Khóa tài khoản</label>
+									<div class="col-md-10">
+										<input id="ctl08_ctl00_LockUser" type="checkbox" name="ctl08$ctl00$LockUser">
+									</div>
+								</div>
+
+								
+
+								
+
+								<div class="form-group row">
+									<label class="col-md-2 control-label"></label>
+									<div class="col-md-10">
+										<input type="submit" name="ctl08$ctl00$BtbLuuThem" value="Lưu và Thêm" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$ctl00$BtbLuuThem&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="BtbLuuThem" class="btn btn-primary">
+										<input type="submit" name="ctl08$ctl00$BtbSave" value="Lưu" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$ctl00$BtbSave&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="BtbSave" accesskey="S" title="Alt+S" class="btn btn-primary">
+										<input type="submit" name="ctl08$ctl00$BtnClose" value="Đóng" id="BtnClose" accesskey="Q" title="Alt+Q" class="btn btn-primary">
+									</div>
+								</div>
+
+							</div>
+						</form>
+					</div>
+
+				<div class="modal fade" id="myModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header widgettitle"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h4 class="modal-title">Danh sách</h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button></div></div></div></div></div>
+		</div>
+
+</div>

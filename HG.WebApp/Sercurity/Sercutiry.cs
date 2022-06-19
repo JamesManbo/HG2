@@ -15,8 +15,8 @@ namespace HG.WebApp.Sercurity
 
                 var lstIdModuleByRole = db.AspNetRoleModules.Where(n => n.RoleId == item.RoleId).Select(n => n.ModuleId).ToArray();
                 if (lstIdModuleByRole == null) return false;
-                var lstRole = db.AspModules.Where(n => lstIdModuleByRole.Contains(n.Id)).Select(n => n.link).ToArray();
-                if (lstRole == null) { return false; } else { if (lstRole.Contains(url)) return true; }
+                //var lstRole = db.AspModules.Where(n => lstIdModuleByRole.Contains(n.Id)).Select(n => n.link).ToArray();
+                //if (lstRole == null) { return false; } else { if (lstRole.Contains(url)) return true; }
 
             }
             return false;

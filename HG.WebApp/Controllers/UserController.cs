@@ -297,16 +297,17 @@ namespace HG.WebApp.Controllers
         {
             AspNetUsers applicationUser = await userManager.GetUserAsync(User);
             var lstIdModuleByRole = eAContext.AspNetRoleModules.Where(n => n.RoleId == applicationUser.RoleId).Select(n=>n.ModuleId).ToArray();
-            if(lstIdModuleByRole != null)
-            {
-                return PartialView(eAContext.AspModules.Where(n => lstIdModuleByRole.Contains(n.Id)).ToList());
-            }
+            //if(lstIdModuleByRole != null)
+            //{
+            //    return PartialView(eAContext.AspModules.Where(n => lstIdModuleByRole.Contains(n.Id)).ToList());
+            //}
             return PartialView(new AspModule());
         }
         public IActionResult ListFunction(int page = 1)
         {
-            var query = eAContext.AspModules.Where(n => n.isEF == 2).ToList();
-            return PartialView(query.ToPagedList(page, 10));
+            //var query = eAContext.AspModules.Where(n => n.isEF == 2).ToList();
+            //return PartialView(query.ToPagedList(page, 10));
+            return View();
         }
         public async Task<IActionResult> AddRoleAsync(RoleDTO item)
         {
