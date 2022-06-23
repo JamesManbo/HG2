@@ -69,7 +69,7 @@
                             <div class="">
                                 <div class="form-horizontal">
                                     <!-- Horizontal Form -->
-                                    <form id="form_pb" action="/DanhMuc/ThemChucVu" method="post" enctype="multipart/form-data">
+                                    <form id="form_pb" action="/ThuTuc/ThemMoi" method="post" enctype="multipart/form-data">
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Mã luồng xử lý</label>
                                             <div class="col-sm-8">
@@ -80,7 +80,7 @@
                                         <div class="row mb-3">
                                             <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" name="ma_chuc_vu" value="">
+                                                <input type="text" class="form-control input-default" name="ma_thu_tuc">
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -107,13 +107,13 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Mã quôc gia</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" name="ten_chuc_vu" value="">
+                                                <input type="text" class="form-control input-default" name="ma_quoc_gia" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Tên thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" name="ten_chuc_vu" value="">
+                                                <input type="text" class="form-control input-default" name="ten_thu_tuc" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -123,19 +123,19 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label"></label>
+                                            <label for="nop_online" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-2">
-                                                <input id="cbonline" type="checkbox" name="" onclick="">
+                                                <input type="checkbox" name="nop_online">
                                                 <label for="cbonline">Nộp Online</label>
 
                                             </div>
                                             <div class="col-sm-2">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input  type="checkbox" name="hd_online">
                                                 <label for="cbonline">Hướng dẫn Online</label>
 
                                             </div>
                                             <div class="col-sm-2">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input  type="checkbox" name="tthcc">
                                                 <label for="cbonline">TN tại TTHCC</label>
 
                                             </div>
@@ -152,7 +152,7 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Phòng Ban <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="ma_linh_vuc">
+                                                <select class="form-select form-control input-default" name="ma_phong_ban">
                                                     <option selected="selected" value="">---- Chọn phòng ban ----</option>
                                                     <option value="">Pb1</option>
                                                 </select>
@@ -161,37 +161,37 @@
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Số ngày xử lý</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" name="stt" value="">
+                                                <input type="number" class="form-control input-default" name="so_ngay_xl" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Lệ phí</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" name="stt" value="">
+                                                <input type="number" class="form-control input-default" name="le_phi" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Số bộ hồ sơ</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" name="stt" value="">
+                                                <input type="number" class="form-control input-default" name="so_bo_hs" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Đường dẫn phôi KQ</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" name="ten_chuc_vu" value="">
+                                                <input type="text" class="form-control input-default" name="duong_dan_kq" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Thông tin mở rộng</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" name="ten_chuc_vu" value="">
+                                                <input type="text" class="form-control input-default" name="thong_tin_mo_rong" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Nội dung hướng dẫn</label>
                                             <div class="col-sm-8">
-                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Mô tả" name="mo_ta"></textarea>
+                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Mô tả" name="noi_dung_hd"></textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -201,66 +201,68 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label"></label>
+                                            <label for="thu_le_phi_knhs" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input type="checkbox" name="thu_le_phi_knhs">
                                                 <label for="cbonline">Thu lệ phí khi nhận hồ sơ</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input type="checkbox" name="thuc_hien_hai_gd" >
                                                 <label for="cbonline">Thực hiện hai giai đoạn</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input type="checkbox" name="tra_kq_ktn">
                                                 <label for="cbonline">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="nguoi_sua" class="col-sm-2 control-label">Cho phép liên thông</label>
+                                            <label for="cho_phep_lien_thong" class="col-sm-2 control-label">Cho phép liên thông</label>
                                             <div class="col-sm-8">
-                                                <input type="checkbox" class="" value="">
+                                                <input type="checkbox" name="cho_phep_lien_thong" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input id="cbonline" type="checkbox" name="" onclick="">
+                                                <input id="cho_phep_gui_lien_thong" type="checkbox" name="cho_phep_gui_lien_thong" onclick="">
                                                 <label for="cbonline">Cho phép gửi liên thông</label>
                                             </div>
                                             <div class="col-sm-3">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input id="" type="checkbox" name="cho_phep_nhan_lien_thong" onclick="">
                                                 <label for="cbonline">Cho phép nhận liên thông</label>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="nguoi_sua" class="col-sm-2 control-label">Đơn vị liên thông XL</label>
+                                            <label for="ma_dvlt_xl" class="col-sm-2 control-label">Đơn vị liên thông XL</label>
                                             <div class="col-sm-8">
-                                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                <select name="ma_dvlt_xl" id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                                     <option value="DV1">DV1</option>
                                                     <option value="DV2">DV2</option>
                                                 </select>
+                                                   <input name="lst_ma_dvlt_xl" type="text" id="lst_ma_dvlt_xl" class="form-control input-default" hidden>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="nguoi_sua" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
+                                            <label for="ma_dvlt_ph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
                                             <div class="col-sm-8">
-                                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                <select id="multiselect2"  name="ma_dvlt_ph" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                                     <option value="DVLT1">DVLT1</option>
                                                     <option value="DVLT2">DVLT2</option>
                                                 </select>
+                                                  <input name="lst_ma_dvlt_ph" type="text" id="lst_ma_dvlt_ph" class="form-control input-default" hidden>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input id="cbonline" type="checkbox" name="" onclick="">
+                                                <input id="gui_lt_kem_kq_xl" type="checkbox" name="gui_lt_kem_kq_xl" >
                                                 <label for="cbonline">Gửi liên thông kèm kết quả xử lý</label>
                                             </div>
                                             <div class="col-sm-5">
-                                                <input id="" type="checkbox" name="" onclick="">
+                                                <input  type="checkbox" name="chi_tra_kq_kckqlt">
                                                 <label for="cbonline">Chỉ trả kết quả khi có kết quả liên thông</label>
                                             </div>
                                         </div>
@@ -268,7 +270,7 @@
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMuc/ChucVu';">Đóng</button>
+                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Thutuc/ThemMoi';">Đóng</button>
                                         </div>
                                     </form><!-- End Horizontal Form -->
                                 </div>

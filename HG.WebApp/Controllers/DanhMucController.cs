@@ -17,20 +17,18 @@ namespace HG.WebApp.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly IConfiguration _config;
-        private EAContext eAContext = new EAContext();
+        //private EAContext eAContext = new EAContext();
         private readonly UserManager<AspNetUsers> userManager;
-        private readonly SignInManager<AspNetUsers> signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         Sercutiry sercutiry = new Sercutiry();
         private readonly DanhMucDao _danhmucDao;
 
         //extend sys identity
-        public DanhMucController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, SignInManager<AspNetUsers> signInManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public DanhMucController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
         {
             _logger = logger;
             this.userManager = userManager;
-            this.signInManager = signInManager;
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _danhmucDao = new DanhMucDao(DbProvider);
@@ -39,7 +37,11 @@ namespace HG.WebApp.Controllers
         #region Phong Ban
         public IActionResult PhongBan()
         {
-            var phongBan = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            var phongBan = new List<Dm_Phong_Ban>();
+            using (var db = new EAContext())
+            {
+                phongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            }
             ViewBag.lst_phong_ban = phongBan;
             return View("~/Views/DanhMuc/Phongban/PhongBan.cshtml", phongBan);
 
@@ -49,7 +51,11 @@ namespace HG.WebApp.Controllers
         {
             var modal = new Dm_Phong_Ban();
             var user = _danhmucDao.DanhSachNguoiDung("0");
-            var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            var lstpb = new List<Dm_Phong_Ban>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            }
             ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_phong_ban = lstpb;
             return View("~/Views/DanhMuc/Phongban/ThemPhongBan.cshtml", modal);
@@ -69,7 +75,11 @@ namespace HG.WebApp.Controllers
             if (pb.type_view == StatusAction.Add.ToString() || _pb > 0)
             {
                 var user = _danhmucDao.DanhSachNguoiDung("0");
-                var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                var lstpb = new List<Dm_Phong_Ban>();
+                using (var db = new EAContext())
+                {
+                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                }
                 ViewBag.lst_nguoi_dung = user;
                 ViewBag.lst_phong_ban = lstpb;
                 return View("~/Views/DanhMuc/Phongban/ThemPhongBan.cshtml", pb);
@@ -88,7 +98,11 @@ namespace HG.WebApp.Controllers
         public IActionResult SuaPhongBan(string code, string type)
         {
             var user = _danhmucDao.DanhSachNguoiDung("0");
-            var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            var lstpb = new List<Dm_Phong_Ban>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            }
             var pb = lstpb.Where(n => n.ma_phong_ban == code).FirstOrDefault();
             ViewBag.lst_phong_ban = lstpb;
             ViewBag.lst_nguoi_dung = user;
@@ -107,7 +121,11 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = "cập nhật phòng ban lỗi";
                 var user = _danhmucDao.DanhSachNguoiDung("0");
-                var lstpb = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                var lstpb = new List<Dm_Phong_Ban>();
+                using (var db = new EAContext())
+                {
+                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                }
                 ViewBag.lst_phong_ban = lstpb;
                 ViewBag.lst_nguoi_dung = user;
                 return PartialView("~/Views/DanhMuc/Phongban/SuaPhongBan.cshtml", item);
@@ -137,8 +155,12 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewPhongBan()
         {
-            var phongBan = eAContext.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/Phongban/ViewPhongBan.cshtml", phongBan);
+            var lstpb = new List<Dm_Phong_Ban>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+            }
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/Phongban/ViewPhongBan.cshtml", lstpb);
             return Content(result);
         }
 
@@ -154,7 +176,12 @@ namespace HG.WebApp.Controllers
         #region Lĩnh vực
         public IActionResult LinhVuc()
         {
-            var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            var linhvuc = new List<Dm_Linh_Vuc>();
+            using (var db = new EAContext())
+            {
+                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/LinhVuc/LinhVuc.cshtml", linhvuc);
 
         }
@@ -190,7 +217,12 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaLinhVuc(string code, string type)
         {
-            var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
+            var linhvuc = new Dm_Linh_Vuc();
+            using (var db = new EAContext())
+            {
+                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/LinhVuc/SuaLinhVuc.cshtml", linhvuc);
         }
@@ -234,7 +266,12 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewLinhVuc()
         {
-            var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            var linhvuc = new Dm_Linh_Vuc();
+            using (var db = new EAContext())
+            {
+                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).FirstOrDefault();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/LinhVuc/ViewLinhVuc.cshtml", linhvuc);
             return Content(result);
         }
@@ -244,8 +281,13 @@ namespace HG.WebApp.Controllers
         #region Chức vụ
         public IActionResult ChucVu()
         {
-            var linhvuc = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
-            return View("~/Views/DanhMuc/ChucVu/ChucVu.cshtml", linhvuc);
+            var chucvu = new List<Dm_Chuc_Vu>();
+            using (var db = new EAContext())
+            {
+                chucvu = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+            }
+            // var linhvuc = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/ChucVu/ChucVu.cshtml", chucvu);
 
         }
 
@@ -280,7 +322,11 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaChucVu(string code, string type)
         {
-            var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0 && n.ma_chuc_vu == code).FirstOrDefault();
+            var chucvu = new Dm_Chuc_Vu();
+            using (var db = new EAContext())
+            {
+                chucvu = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0 && n.ma_chuc_vu == code).FirstOrDefault();
+            }
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/ChucVu/SuaChucVu.cshtml", chucvu);
         }
@@ -324,7 +370,12 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewChucVu()
         {
-            var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+            var chucvu = new List<Dm_Chuc_Vu>();
+            using (var db = new EAContext())
+            {
+                chucvu = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+            }
+            // var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/ChucVu/ViewChucVu.cshtml", chucvu);
             return Content(result);
         }
@@ -334,7 +385,12 @@ namespace HG.WebApp.Controllers
         #region Giấy tờ hợp lệ
         public IActionResult GiayTo()
         {
-            var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+            var giayto = new List<Dm_Giay_To_Hop_Le>();
+            using (var db = new EAContext())
+            {
+                giayto = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+            }
+            // var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/GiayTo/GiayTo.cshtml", giayto);
 
         }
@@ -370,9 +426,14 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaGiayTo(string code, string type)
         {
-            var chucvu = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0 && n.ma_giay_to == code).FirstOrDefault();
+            var giayto = new Dm_Giay_To_Hop_Le();
+            using (var db = new EAContext())
+            {
+                giayto = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0 && n.ma_giay_to == code).FirstOrDefault();
+            }
+            //var chucvu = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0 && n.ma_giay_to == code).FirstOrDefault();
             ViewBag.type_view = type;
-            return View("~/Views/DanhMuc/GiayTo/SuaGiayTo.cshtml", chucvu);
+            return View("~/Views/DanhMuc/GiayTo/SuaGiayTo.cshtml", giayto);
         }
 
         [HttpPost]
@@ -414,7 +475,12 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewGiayTo()
         {
-            var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+            var giayto = new List<Dm_Giay_To_Hop_Le>();
+            using (var db = new EAContext())
+            {
+                giayto = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+            }
+            //var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/GiayTo/ViewGiayTo.cshtml", giayto);
             return Content(result);
         }
@@ -424,14 +490,24 @@ namespace HG.WebApp.Controllers
         #region Sổ hồ sơ
         public IActionResult SoHoSo()
         {
-            var giayto = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
-            return View("~/Views/DanhMuc/SoHoSo/SoHoSo.cshtml", giayto);
+            var hoso = new List<Dm_So_Ho_So>();
+            using (var db = new EAContext())
+            {
+                hoso = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+            }
+            //var giayto = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+            return View("~/Views/DanhMuc/SoHoSo/SoHoSo.cshtml", hoso);
 
         }
 
         public IActionResult ThemSoHoSo()
         {
-            ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+
+            using (var db = new EAContext())
+            {
+                ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            }
+            // ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml");
         }
 
@@ -449,7 +525,11 @@ namespace HG.WebApp.Controllers
             }
             if (item.type_view == StatusAction.Add.ToString() || response > 0)
             {
-                ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                using (var db = new EAContext())
+                {
+                    ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                }
+                // ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
                 return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml", item);
             }
             if (item.type_view == StatusAction.View.ToString())
@@ -462,9 +542,17 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaSoHoSo(string code, string type)
         {
-            var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0 && n.ma_so == code).FirstOrDefault();
+            var hoso = new Dm_So_Ho_So();
+            using (var db = new EAContext())
+            {
+                hoso = db.Dm_So_Ho_So.Where(n => n.Deleted == 0 && n.ma_so == code).FirstOrDefault();
+            }
+            //var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0 && n.ma_so == code).FirstOrDefault();
             ViewBag.type_view = type;
-            ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            using (var db = new EAContext())
+            {
+                ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            }
             return View("~/Views/DanhMuc/SoHoSo/SuaSoHoSo.cshtml", hoso);
         }
 
@@ -479,7 +567,10 @@ namespace HG.WebApp.Controllers
                 // Xử lý các thông báo lỗi tương ứng
                 ViewBag.error = 1;
                 ViewBag.msg = "cập giấy tờ lỗi!";
-                ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                using (var db = new EAContext())
+                {
+                    ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                }
                 return PartialView("~/Views/DanhMuc/SoHoSo/SuaSoHoSo.cshtml", item);
             }
             if (item.type_view == StatusAction.Add.ToString())
@@ -508,17 +599,45 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewSoHoSo()
         {
-            var hoso = eAContext.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+            var hoso = new List<Dm_So_Ho_So>();
+            using (var db = new EAContext())
+            {
+                hoso = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+            }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/SoHoSo/ViewSoHoSo.cshtml", hoso);
             return Content(result);
         }
 
         #endregion
 
-        public ActionResult PhongBanPaging(int CurrentPage)
+        #region Ngày nghỉ
+        public IActionResult NgayNghi(string type = "View")
         {
-            return PartialView();
-        }
+            var ngay_nghi = new Dm_Ngay_Nghi();
+            using (var db = new EAContext())
+            {
+                ngay_nghi = db.Dm_Ngay_Nghi.Where(n => n.Deleted == 0).OrderByDescending(n => n.nam).FirstOrDefault();
+                ViewBag.type_view = type;
+            }
+            return View("~/Views/DanhMuc/NgayNghi/NgayNghi.cshtml", ngay_nghi);
 
+        }
+        [HttpPost]
+        public IActionResult NgayNghi(Dm_Ngay_Nghi item, string type)
+        {
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuNgayNghi(item);
+            ViewBag.type_view = item.type_view;
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "Cập nhật ngày nghỉ lỗi!";
+            }
+            return RedirectToAction("NgayNghi", "DanhMuc");
+           // return PartialView("~/Views/DanhMuc/NgayNghi/NgayNghi.cshtml", item);
+        }
+        #endregion
     }
 }

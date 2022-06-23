@@ -201,5 +201,37 @@ namespace HG.Data.Business.DanhMuc
             return ma_loi;
         }
         #endregion
+
+        #region Ngày nghỉ
+        public int LuuNgayNghi(Dm_Ngay_Nghi item)
+        {
+            DbProvider.SetCommandText2("dm_them_sua_ngay_nghi", CommandType.StoredProcedure);
+            DbProvider.AddParameter("nam", item.nam, SqlDbType.Int);
+            DbProvider.AddParameter("ten_ngay_nghi", item.ten_ngay_nghi, SqlDbType.NVarChar);
+            DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+            DbProvider.AddParameter("ngay_nghi_trong_tuan", item.ngay_nghi_trong_tuan, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang1", item.thang1, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang2", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang3", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang4", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang5", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang6", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang7", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang8", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang9", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang10", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang11", item.thang2, SqlDbType.VarChar);
+            DbProvider.AddParameter("thang12", item.thang2, SqlDbType.VarChar);    
+            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);         
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            DbProvider.ExecuteNonQuery();
+            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
+
+       
+        #endregion
     }
 }

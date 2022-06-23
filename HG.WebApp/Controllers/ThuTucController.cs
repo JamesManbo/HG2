@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HG.Entities.Entities.ThuTuc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HG.WebApp.Controllers
 {
@@ -9,7 +10,13 @@ namespace HG.WebApp.Controllers
             return View();
         }
 
+
         public IActionResult ThemThuTuc()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ThemThuTuc(ThuTuc item)
         {
             return View();
         }

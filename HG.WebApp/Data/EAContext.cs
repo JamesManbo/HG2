@@ -29,8 +29,10 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_So_Ho_So> Dm_So_Ho_So { get; set; }
         public virtual DbSet<Dm_Giay_To_Hop_Le> Dm_Giay_To_Hop_Le { get; set; }
         public virtual DbSet<Dm_Chuc_Vu> Dm_Chuc_Vu { get; set; }
+        public virtual DbSet<Dm_Ngay_Nghi> Dm_Ngay_Nghi { get; set; }
+        public virtual DbSet<Dm_menu> Dm_menu { get; set; }
         // END Danh mục
-       
+
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

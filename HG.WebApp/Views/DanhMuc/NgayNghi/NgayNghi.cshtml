@@ -1,0 +1,161 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+@model HG.Entities.Dm_Ngay_Nghi
+
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Ngày nghỉ</h1>
+        </div>
+    </div>
+
+
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin ngày nghỉ</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_pb" action="/DanhMuc/NgayNghi" method="post" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Năm<span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" name="nam" placeholder="Năm" value="@(Model==null?0:Model.nam)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên ngày nghỉ <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Tên ngày nghỉ" name="ten_ngay_nghi" value="@(Model==null ? "" : Model.ten_ngay_nghi)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@(Model==null ? "" : Model.mo_ta)</textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Ngày nghỉ trong tuần</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="ngày nghỉ trong tuần" name="ngay_nghi_trong_tuan" value="@(Model==null ? "" : Model.ngay_nghi_trong_tuan)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 1</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 1" name="thang1" value="@(Model==null ? "" : Model.thang1)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 2</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 2" name="thang2" value="@(Model==null ? "" : Model.thang2)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 3</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 3" name="thang3" value="@(Model==null ? "" : Model.thang3)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 4</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 4" name="thang4" value="@(Model==null ? "" : Model.thang4)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 5</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 5" name="thang1" value="@(Model==null ? "" : Model.thang5)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 6</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 6" name="thang6" value="@(Model==null ? "" : Model.thang6)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 7</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 7" name="thang7" value="@(Model==null ? "" : Model.thang7)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 8</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 8" name="thang8" value="@(Model==null ? "" : Model.thang8)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 9</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 9" name="thang9" value="@(Model==null ? "" : Model.thang9)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 10</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 10" name="thang10" value="@(Model==null ? "" : Model.thang10)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 11</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 11" name="thang11" value="@(Model==null ? "" : Model.thang11)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Tháng 12</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Ngày nghỉ tháng 12" name="thang12" value="@(Model==null ? "" : Model.thang12)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" placeholder="người sửa" value="@(Model==null ? "" : Model.UidName)">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" placeholder="ngày sửa" value="@(Model==null ? "" : Model.UpdatedDateUtc)">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" placeholder="ngày tạo"  value="@(Model==null ? "" : Model.CreatedDateUtc)">
+                            </div>
+                        </div>
+                        @if (ViewBag.type_view == StatusAction.View.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/NgayNghi?type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/';">Đóng</button>
+                            </div>
+                        }
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/';">Đóng</button>
+                            </div>
+                        }
+
+                    </form><!-- End Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
