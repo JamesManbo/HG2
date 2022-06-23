@@ -27,7 +27,7 @@
                 <input hidden id="lstCode" />
             </p>
 
-            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="datatable">
 
                 <div class="dataTables_length">
                     <label>
@@ -97,7 +97,8 @@
                             }
                         </tbody>
                     </table>
-                </div><div class="dataTable-bottom">
+                </div>
+                <div class="dataTable-bottom">
                     <div class="dataTable-info">Showing 1 to 5 of 5 entries</div>
                     <nav class="dataTable-pagination">
                         <ul class="dataTable-pagination-list"></ul>
@@ -112,6 +113,18 @@
     </div>
 </div>
 <script>
+    function GetListByCurrentPage(id) {
+          $.ajax({
+                 type: "GET",
+                 url: "../DanhMuc/PhongBanPaging?CurrentPage="+id,
+                 data: "",
+                 contentType: 'application/json; charset=utf-8',
+                 success: function(data) {
+                        $("#datatable").html(data);
+                       }
+                 });                                                              
+    }
+
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/DanhMuc/XoaChucVu?code=' + listData)

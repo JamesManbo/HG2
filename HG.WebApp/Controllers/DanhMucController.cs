@@ -515,5 +515,10 @@ namespace HG.WebApp.Controllers
 
         #endregion
 
+        public ActionResult PhongBanPaging(int CurrentPage)
+        {
+            return PartialView();
+        }
+
     }
 }

@@ -35,6 +35,8 @@ namespace HG.WebApp.Controllers
         public IActionResult ViewNhom()
         {
             EAContext eAContext = new EAContext();
+            ViewBag.TotalPage = 10;
+            ViewBag.CurrentPage = 1;
             return View(eAContext.Asp_nhom.Where(n=>n.Deleted == 0).ToList());
         }
 

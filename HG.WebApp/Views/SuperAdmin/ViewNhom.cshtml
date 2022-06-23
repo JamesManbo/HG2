@@ -5,7 +5,7 @@
 }
 @model List<HG.Entities.Entities.Nhom.Asp_nhom>
 
-<div class="col-lg-12">
+<div class="card">
     <div class="pageheader">
         <div class="searchbar">
             <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
@@ -27,7 +27,7 @@
                 <input hidden id="lstCode" />
             </p>
 
-            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="dataTable">
 
                 <div class="dataTables_length">
                     <label>
@@ -97,20 +97,59 @@
                             }
                         </tbody>
                     </table>
-                </div><div class="dataTable-bottom">
-                    <div class="dataTable-info">Showing 1 to 10 of 10 entries</div>
-                    <nav class="dataTable-pagination">
-                        <ul class="dataTable-pagination-list"></ul>
-                    </nav>
+                </div> 
+                <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 25 của 99 bản ghi</div>
+                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                            @{
+                                var TotalPage = (int)ViewBag.TotalPage;
+                                var CurrentPage = (int)ViewBag.CurrentPage;
+                                if (TotalPage> 5)
+                                {
+					                    if(CurrentPage > CurrentPage + 2 ){
+						                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
+                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        };
+                                        if(CurrentPage > 3)
+                                        {
+                                             for(int i = CurrentPage -2; i< CurrentPage+2; i++){
+						                                if(i == CurrentPage){
+							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@CurrentPage - 1)" >@i</a></span>  
+						                                }else{
+							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@CurrentPage - 1)" >@i</a></span>  
+						                                } 
+					                                }
+                                        }else{
+                                                    for(int i = 1 ; i <= 5; i++){
+						                                if(i == CurrentPage){
+							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@CurrentPage - 1)" >@i</a></span>  
+						                                }else{
+							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@CurrentPage - 1)" >@i</a></span>  
+						                                } 
+					                                }
+
+                                        }
+                           
+					                    if(CurrentPage < CurrentPage + 2 ){
+					                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
+					                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
+					                    };
+                                }else{
+					                    for(int i = CurrentPage -2; i< CurrentPage+2; i++){
+						                    if(i == CurrentPage){
+							                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(CurrentPage - 1)" >@i</a></span>  
+						                    }else{
+							                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(CurrentPage - 1)" >@i</a></span>   
+						                    } 
+					                    }
+			                    }
+                            }
                 </div>
-
-                <!-- End Table with stripped rows -->
-
             </div>
+
         </div>
+    </div>
 
     </div>
-</div>
 <script>
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
