@@ -42,105 +42,63 @@ namespace HG.Data.Business.Nhom
             catch(Exception e) {
                 return new Asp_nhom_paging();  }
         }
-        //public string ThemMoiNhom(NguoiDungModels item, Guid guid)
-        //{
-        //    try
-        //    {
-        //        DbProvider.SetCommandText2("sp_qt_BE_User_Add", CommandType.StoredProcedure);
-        //        // Input params
-        //        DbProvider.AddParameter("UserName", item.UserName, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("Email", item.Email, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("PhoneNumber", item.PhoneNumber, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("ho_dem", item.ho_dem, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("ten", item.ten, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("anh_dai_dien", item.anh_dai_dien, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("tinh_trang_hon_nhan", item.tinh_trang_hon_nhan, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("ma_chuc_vu", item.ma_chuc_vu, SqlDbType.NVarChar);
-        //        DbProvider.AddParameter("stt", item.stt, SqlDbType.Int);
-        //        DbProvider.AddParameter("ngay_sinh", item.ngay_sinh, SqlDbType.DateTime);
-        //        // Output params
-        //        DbProvider.AddParameter("ma_nguoi_dung_moi", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
-        //        // Lấy về danh sách các người dung
-        //        var obj = DbProvider.ExecuteNonQuery();
-        //        var NewId = DbProvider.Command.Parameters["ma_nguoi_dung_moi"].Value.ToString();
-        //        return NewId == null ? "" : NewId;
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        return "";
-        //    }
-           
-        //}
-        public void ThemMoi_Nhom(Guid ma_nguoi_dung, string asp_nhom_ma, Guid CreatedUid)
+        public Response ThemMoiNhom(NhomModel item, Guid guid)
         {
             try
             {
-                DbProvider.SetCommandText2("[dbo].[themmoi$nguoidung$nhom]", CommandType.StoredProcedure);
+                Response response = new Response();
+                DbProvider.SetCommandText2("nhom$themmoi", CommandType.StoredProcedure);
                 // Input params
-                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.UniqueIdentifier);
-                DbProvider.AddParameter("asp_nhom_ma", asp_nhom_ma, SqlDbType.NVarChar);
-                DbProvider.AddParameter("CreatedUid", CreatedUid, SqlDbType.UniqueIdentifier);
-                // Lấy về danh sách các người dung
-                var obj = DbProvider.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-             
-            }
-        }
-
-        public Response XoaNhom(Guid UserId)
-		{
-            try
-            {
-                Response result = new Response();
-                DbProvider.SetCommandText2("[nguoidung$Xoa]", CommandType.StoredProcedure);
-
-                // Input params
-                DbProvider.AddParameter("UserId", UserId, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("ma_nhom", item.ma_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ten_nhom", item.ten_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+                DbProvider.AddParameter("stt", item.stt, SqlDbType.Int);
+                DbProvider.AddParameter("userId", guid, SqlDbType.UniqueIdentifier);
+       
                 // Output params
                 DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar,1000, ParameterDirection.Output);
-
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
                 // Lấy về danh sách các người dung
                 DbProvider.ExecuteNonQuery();
-                result.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
-                result.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
-                return result;
+                response.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                response.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                return response;
             }
             catch (Exception e)
             {
-                return new Response();
+                return new Response() { ErrorCode = 1, ReturnMsg = "Lỗi hệ thống" };
             }
+
         }
-        public Asp_NguoiDung_Nhom LayNhomId(Guid UserId)
+
+
+        public int XoaNhom(string ma_phong_ban, Guid uid)
+        {
+            DbProvider.SetCommandText2("nhom$xoa", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_nhom", ma_phong_ban, SqlDbType.VarChar);
+            DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+            var ma_loi = Convert.ToInt32(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
+
+        public NhomModel LayNhomId(Guid NhomId)
         {
             try
             {
-                Asp_NguoiDung_Nhom result = new Asp_NguoiDung_Nhom();
-                result.responseErr = new Response();
-                DbProvider.SetCommandText2("[nguoidung$danhsach$id]", CommandType.StoredProcedure);
-
+                NhomModel result = new NhomModel();
+                DbProvider.SetCommandText2("[nhom$danhsach$id]", CommandType.StoredProcedure);
                 // Input params
-                DbProvider.AddParameter("UserId", UserId, SqlDbType.UniqueIdentifier);
-                // Output params
-                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 1000, ParameterDirection.Output);
-                DbProvider.ExecuteReader_ToMyReader();
-                // Lấy về danh sách các người dung
-                result.aspNetUsersModel = DbProvider.ExecuteReader_frmMyReader<AspNetUsersModel2>();
-                //Lấy về danh sách nhóm
-                DbProvider.ExecuteReader_NextResult();
-                result.asp_nhom = DbProvider.ExecuteReader_frmMyReader<Asp_nhom>();
-                DbProvider.ExecuteReader_Close();
-                result.responseErr.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
-                result.responseErr.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                DbProvider.AddParameter("NhomId", NhomId, SqlDbType.UniqueIdentifier);
+                result = DbProvider.ExecuteObject<NhomModel>();
                 return result;
             }
             catch (Exception e)
             {
-                return new Asp_NguoiDung_Nhom();
+                return new NhomModel();
             }
         }
 

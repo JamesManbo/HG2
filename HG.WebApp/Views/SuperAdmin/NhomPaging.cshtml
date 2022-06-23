@@ -110,11 +110,11 @@
                                                 <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
 					                    };
                                 }else{
-					                    for(int i = CurrentPage -2; i< CurrentPage+2; i++){
+					                    for(int i = 1; i <= TotalPage; i++){
 						                    if(i == CurrentPage){
-                                                       <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+							                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                    }else{
-                                                      <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
+							                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
 						                    } 
 					                    }
 			                    }
@@ -139,7 +139,7 @@
         }
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
-        confirm.BeforDeletePost('/DanhMuc/XoaChucVu?code=' + listData)
+        confirm.BeforDeletePost('/SuperAdmin/XoaNhom?code=' + listData)
     }
 
     $(function() {

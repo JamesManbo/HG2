@@ -6,6 +6,7 @@ using HG.Data.Business.DanhMuc;
 using HG.WebApp.Data;
 using HG.Entities.SearchModels;
 using HG.Data.Business.Nhom;
+using HG.Entities.Entities;
 
 namespace HG.WebApp.Controllers
 {
@@ -45,27 +46,70 @@ namespace HG.WebApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult SuaNhom(string code, string type)
+        public async Task<IActionResult> SuaNhom(string code, string type)
         {
-            return View();
+            if(type == StatusAction.Edit.ToString())
+            {
+                var UserUpdate = "";
+                ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
+                var obj = _nhomDao.LayNhomId(Guid.Parse(code));
+                if (obj.UpdatedUid != null)
+                {
+                    UserUpdate = await userManager.GetUserNameAsync(await userManager.FindByIdAsync(obj.UpdatedUid.ToString()));
+                }
+                ViewBag.UserUpdate = UserUpdate;
+                return View(obj);
+            }
+            else
+            {
+                return View();
+            }
+          
         }
         [HttpPost]
         public IActionResult SuaNhom(Asp_nhom item)
         {
+            ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
+            item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+            //var ObjId = _nhomDao.ThemMoiNhom(item, uid);
             return View();
         }
 
         [HttpGet]
         public IActionResult ThemNhom()
         {
+            var ds = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100});
+            ViewBag.ListNhom = ds.asp_Nhoms;
             return View();
         }
+
         [HttpPost]
-        public IActionResult ThemNhom(Asp_nhom item)
+        public IActionResult ThemNhom(NhomModel item)
         {
             var uid = Guid.Parse(userManager.GetUserId(User));
+            var ObjId = _nhomDao.ThemMoiNhom(item, uid);
+            ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
+            if (ObjId.ErrorCode == 0 )
+            {
+                if (item.type_view == StatusAction.Add.ToString())
+                {
+                    return RedirectToAction("ThemNhom", "SuperAdmin");
+                }
+                else if (item.type_view == StatusAction.View.ToString())
+                {
+                    return RedirectToAction("SuaNhom", "SuperAdmin", new { code = item.ma_nhom, type = StatusAction.View.ToString() });
+                }
+            }
+            else
+            {
+                ViewBag.ErrorCode = ObjId.ErrorCode;
+                ViewBag.ErrorMsg = ObjId.ReturnMsg;
+                return View(item);
+            }
             return View();
         }
+
+
 
         public IActionResult XoaNhom(string code, string type, Asp_nhom item)
         {
@@ -74,7 +118,7 @@ namespace HG.WebApp.Controllers
                 return RedirectToAction("Login", "User");
             }
             var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _danhmucDao.XoaPhongBan(code, uid);
+            var _pb = _nhomDao.XoaNhom(code, uid);
             if (_pb > 0)
             {
                 return Json(new { error = 1, msg = "Xóa lỗi" });
