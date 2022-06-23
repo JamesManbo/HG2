@@ -1,31 +1,7 @@
 ﻿@using HG.WebApp
-@{
-    ViewData["Title"] = "Danh sách nhóm";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-}
-@model List<HG.Entities.Entities.Nhom.Asp_nhom>
+@model HG.Entities.Entities.Nhom.Asp_nhom_paging
 
-<div class="card">
-    <div class="pageheader">
-        <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-            <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
-        </div>
-        <div class="pageicon"><span class="iconfa-table"></span></div>
-        <div class="pagetitle">
-            <h5>Danh sách</h5>
-            <h1>Nhóm</h1>
-        </div>
-    </div>
-    <div class="maincontent">
-        <div class="maincontentinner">
-            <!-- Table with stripped rows -->
-            <p class="stdformbutton" style="margin-bottom: 10px;">
-                <input type="button" value="Thêm" onclick="window.location.href = '/SuperAdmin/Nhom';" class="btn btn-primary" style="width:100px;" />
 
-                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
-                <input hidden id="lstCode" />
-            </p>
 
             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="dataTable">
 
@@ -57,10 +33,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model != null)
+                            @if (Model.asp_Nhoms != null)
                             {
                                 var stt = 1;
-                                foreach (var item in Model)
+                                foreach (var item in Model.asp_Nhoms)
                                 {
                                     <tr>
                                         <td><input type="checkbox" class="ads_Checkbox" value="@item.ten_nhom" /></td>
@@ -101,44 +77,44 @@
                 <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 25 của 99 bản ghi</div>
                 <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
-                                var TotalPage = (int) ViewBag.TotalPage;
-                                var CurrentPage = (int)ViewBag.CurrentPage;
+                                var TotalPage = (int)(Model.Pagelist.TotalRecords/10) + 1;
+                                var CurrentPage = (int)Model.Pagelist.CurrentPage;
                                 if (TotalPage> 5)
                                 {
 					                    if(CurrentPage > CurrentPage + 2 ){
-						                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
-                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if(CurrentPage > 3)
                                         {
-                                             for(int i = CurrentPage -2; i< CurrentPage+2; i++){
+                                                 for(int i = CurrentPage -2; i< CurrentPage+2; i++){
 						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                   <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
                                         }else{
                                                     for(int i = 1 ; i <= 5; i++){
 						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                   <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
 
                                         }
                            
 					                    if(CurrentPage < CurrentPage + 2 ){
-					                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
-					                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@(CurrentPage + 1))" >Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
 					                    };
                                 }else{
 					                    for(int i = CurrentPage -2; i< CurrentPage+2; i++){
 						                    if(i == CurrentPage){
-							                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@CurrentPage - 1)" >@i</a></span>  
+                                                       <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                    }else{
-							                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@CurrentPage - 1)" >@i</a></span>   
+                                                      <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
 						                    } 
 					                    }
 			                    }
@@ -146,15 +122,13 @@
                 </div>
             </div>
 
-        </div>
-    </div>
 
-    </div>
 <script>
-    function GetListByCurrentPage(id) {
+        function GetListByCurrentPage(id) {
+            var tu_khoa = $('#Search').val();
                $.ajax({
                    type: "GET",
-                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=",
+                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=" + tu_khoa,
                    data: "",
                    contentType: 'application/json; charset=utf-8',
                    success: function(data) {
@@ -162,7 +136,7 @@
                        $("#dataTable").html(data);
                    }
                });                             
-     }
+        }
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/DanhMuc/XoaChucVu?code=' + listData)

@@ -12,6 +12,7 @@ namespace HG
 
         public int RecordsPerPage { get; set; }
 
-        public int TotalRecords { get; set; }
+        public int TotalRecords { get; set; } = 0;
+        public int CurrentPage { get; set; } = 0;
     }
 }

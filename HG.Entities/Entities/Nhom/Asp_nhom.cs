@@ -14,4 +14,10 @@ namespace HG.Entities.Entities.Nhom
         public string? ten_nhom { get; set; }
         public string? mo_ta { get; set; }
     }
+
+    public class Asp_nhom_paging : BaseModel
+    {
+        public List<Asp_nhom>? asp_Nhoms { get; set; }
+        public Pagelist Pagelist { get; set; } = new Pagelist();
+    }
 }

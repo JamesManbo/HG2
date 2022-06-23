@@ -4,6 +4,8 @@ using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Identity;
 using HG.Data.Business.DanhMuc;
 using HG.WebApp.Data;
+using HG.Entities.SearchModels;
+using HG.Data.Business.Nhom;
 
 namespace HG.WebApp.Controllers
 {
@@ -16,6 +18,7 @@ namespace HG.WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         Sercutiry sercutiry = new Sercutiry();
         private readonly DanhMucDao _danhmucDao;
+        private readonly NhomDao _nhomDao;
 
         //extend sys identity
         public SuperAdminController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, SignInManager<AspNetUsers> signInManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -27,15 +30,16 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _danhmucDao = new DanhMucDao(DbProvider);
+            _nhomDao = new NhomDao(DbProvider);
         }
 
 
         #region Nhom
         [HttpGet]
-        public IActionResult ViewNhom()
+        public IActionResult ViewNhom(NhomSearchItem item)
         {
             EAContext eAContext = new EAContext();
-            ViewBag.TotalPage = 10;
+            ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count()/10;
             ViewBag.CurrentPage = 1;
             return View(eAContext.Asp_nhom.Where(n=>n.Deleted == 0).ToList());
         }
@@ -59,6 +63,7 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemNhom(Asp_nhom item)
         {
+            var uid = Guid.Parse(userManager.GetUserId(User));
             return View();
         }
 
@@ -77,7 +82,14 @@ namespace HG.WebApp.Controllers
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/SuperAdmin/ViewNhom" });
         }
 
-
+        public async Task<IActionResult> NhomPaging(int currentPage = 0, string tu_khoa = "")
+        {
+            NhomSearchItem nhomSearchItem = new NhomSearchItem() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = 10 };
+            var ds = _nhomDao.LayDsNhomPhanTrang(nhomSearchItem);
+            ds.Pagelist.CurrentPage = currentPage;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/nhomPaging.cshtml", ds);
+            return Content(result);
+        }
         #endregion
 
         public IActionResult Quyen()
