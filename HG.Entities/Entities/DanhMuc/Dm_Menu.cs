@@ -19,4 +19,10 @@ namespace HG.Entities
         public string? ma_trang_cha { get; set; }
         public int level { get; set; }
     }
+
+    public class Dm_menu_paging : BaseDanhMucModel
+    {
+        public List<Dm_menu>? lstMenu { get; set; }
+        public Pagelist Pagelist { get; set; } = new Pagelist();
+    }
 }

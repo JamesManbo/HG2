@@ -1,7 +1,7 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục lĩnh vực"; 
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml"; 
+    ViewData["Title"] = "Danh mục chính";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <div class="col-lg-12">
@@ -9,20 +9,20 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-             <h1>Lĩnh vực</h1>
+            <h1>Trang</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin lĩnh vực</h4>
+            <h4 class="widgettitle">Cập nhật thông tin trang</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_pb" action="/DanhMuc/ThemLinhVuc" method="post" enctype="multipart/form-data">
+                    <form id="form_pb" action="/menu/ThemChuyenMuc" method="post" enctype="multipart/form-data">
                         <div class="row mb-3">
-                            <label for="ma_pb" class="col-sm-2 control-label">Mã lĩnh vực <span style="color:red">(*)</span></label>
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã trang <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ma_linh_vuc" value="">
+                                <input type="text" class="form-control input-default" maxlength="25" name="ma_trang" value="">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -33,7 +33,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../DanhMuc/RenderViewLinhVuc",
+                                            url: "../Menu/RenderViewChuyenMuc",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {
@@ -47,23 +47,23 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Tên lĩnh vực <span style="color:red">(*)</span></label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên trang <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ten_linh_vuc" value="">
+                                <input type="text" class="form-control input-default" maxlength="100" name="ten_trang" value="">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta"></textarea>
+                                <textarea class="form-control input-default" maxlength="500" placeholder="Mô tả" name="mo_ta"></textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" name="stt" value="">
+                                <input type="number" class="form-control input-default" max="10" name="stt" value="">
                             </div>
-                        </div>                
+                        </div>
                         <div class="row mb-3">
                             <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
                             <div class="col-sm-8">
@@ -86,7 +86,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMuc/LinhVuc';">Đóng</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Menu/ChuyenMuc';">Đóng</button>
                         </div>
                     </form><!-- End Horizontal Form -->
                 </div>
@@ -115,18 +115,18 @@
 </div><!-- End Basic Modal-->
 
 <script>
-    $(document).ready(function() {    
-       
+    $(document).ready(function() {
+
         $('#form_pb').validate({
             rules: {
-                ma_linh_vuc: "required",
-                ten_linh_vuc: "required"
+                ma_trang: "required",
+                ten_trang: "required"
             },
             messages: {
-                ma_linh_vuc: "Bạn cần nhập mã lĩnh vực!",
-                ten_linh_vuc: "Bạn cần nhập tên lĩnh vực!"
+                ma_trang: "Bạn cần nhập mã trang!",
+                ten_trang: "Bạn cần nhập tên trang!"
             }
-        });     
+        });
 
     });
 

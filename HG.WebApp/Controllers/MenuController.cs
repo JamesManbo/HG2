@@ -1,6 +1,7 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Entities;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
 using HG.WebApp.Entities;
 using HG.WebApp.Helper;
@@ -9,6 +10,7 @@ using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace HG.WebApp.Controllers
 {
@@ -23,6 +25,9 @@ namespace HG.WebApp.Controllers
         Sercutiry sercutiry = new Sercutiry();
         private readonly DanhMucMenuDao _danhmucDao;
 
+
+
+
         //extend sys identity
         public MenuController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -35,18 +40,31 @@ namespace HG.WebApp.Controllers
         }
 
         #region Menu
-        public IActionResult TrangChinh()
+        public IActionResult ChuyenMuc()
         {
-            var menu = new List<Dm_menu>();
-            using (var db = new EAContext())
-            {
-                menu = db.Dm_menu.Where(n => n.Deleted == 0 && n.level == 0).ToList();
-            }
-            return View("~/Views/Menu/MenuChinh/Menu.cshtml", menu);
-
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 0, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhMenu(nhomSearchItem);
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            return View("~/Views/Menu/MenuChinh/Menu.cshtml", ds);
         }
-
-        public IActionResult ThemTrangChinh()
+        public async Task<IActionResult> ChuyenMucPaging(int currentPage = 0, string tu_khoa = "")
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 0, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhMenu(nhomSearchItem);
+            ds.Pagelist.CurrentPage = currentPage;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;  
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Menu/MenuChinh/MenuPaging.cshtml", ds);
+            return Content(result);
+        }
+        public IActionResult ThemChuyenMuc()
         {
             using (var db = new EAContext())
             {
@@ -56,7 +74,7 @@ namespace HG.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult ThemTrangChinh(Dm_menu item)
+        public IActionResult ThemChuyenMuc(Dm_menu item)
         {
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
@@ -64,7 +82,7 @@ namespace HG.WebApp.Controllers
             if (_pb > 0)
             {
                 ViewBag.error = 1;
-                ViewBag.msg = "Tạo phòng ban lỗi";
+                ViewBag.msg = "Tạo menu lỗi";
             }
             if (item.type_view == StatusAction.Add.ToString() || _pb > 0)
             {
@@ -77,7 +95,7 @@ namespace HG.WebApp.Controllers
             }
             if (item.type_view == StatusAction.View.ToString())
             {
-                return RedirectToAction("SuaTrangChinh", "Menu", new { code = item.ma_trang, type = StatusAction.View.ToString() });
+                return RedirectToAction("SuaChuyenMuc", "Menu", new { code = item.ma_trang, type = StatusAction.View.ToString() });
             }
             else
             {
@@ -86,7 +104,7 @@ namespace HG.WebApp.Controllers
 
         }
 
-        public IActionResult SuaTrangChinh(string code, string type)
+        public IActionResult SuaChuyenMuc(string code, string type)
         {
             var menu = new Dm_menu();
             using (var db = new EAContext())
@@ -103,7 +121,7 @@ namespace HG.WebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult SuaTrangChinh(string code, string type, Dm_menu item)
+        public IActionResult SuaChuyenMuc(string code, string type, Dm_menu item)
         {
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
@@ -121,17 +139,17 @@ namespace HG.WebApp.Controllers
             }
             if (item.type_view == StatusAction.Add.ToString())
             {
-                return RedirectToAction("ThemTrangChinh", "Menu");
+                return RedirectToAction("ThemChuyenMuc", "Menu");
             }
             else if (item.type_view == StatusAction.View.ToString())
             {
-                return RedirectToAction("SuaTrangChinh", "Menu", new { code = item.ma_trang, type = StatusAction.View.ToString() });
+                return RedirectToAction("SuaChuyenMuc", "Menu", new { code = item.ma_trang, type = StatusAction.View.ToString() });
             }
             return BadRequest();
 
         }
         [HttpPost]
-        public IActionResult XoaTrangChinh(string code)
+        public IActionResult XoaChuyenMuc(string code)
         {
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaMenu(code, uid);
@@ -139,10 +157,10 @@ namespace HG.WebApp.Controllers
             {
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return Json(new { error = 0, msg = "Xóa thành công!", href = "/Menu/TrangChinh" });
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/Menu/ChuyenMuc" });
         }
 
-        public async Task<IActionResult> RenderViewTrangChinh()
+        public async Task<IActionResult> RenderViewChuyenMuc()
         {
             var lstpb = new List<Dm_menu>();
             using (var db = new EAContext())

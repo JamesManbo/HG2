@@ -1,0 +1,143 @@
+﻿@using HG.WebApp
+@using HG.Entities
+@model Dm_menu_paging
+
+
+
+<div class="dataTables_length">
+    <label>
+        Hiển thị
+        <select class="dataTable-selector">
+            <option value="5">5</option>
+            <option value="10" selected="">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="25">25</option>
+        </select> bản ghi
+    </label>
+</div>
+<div class="dataTable-container">
+    <table class="table table-bordered responsive">
+        <thead class="widgettitle">
+            <tr>
+                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                    <input type="checkbox" name="" id="selectAll" />
+                </th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.lstMenu != null)
+            {
+                var stt = 1;
+                foreach (var item in Model.lstMenu)
+                {
+                    <tr>
+                        <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_trang" /></td>
+                        <td scope="row">
+                            @stt
+                            <input type="hidden" name="" id="" value="@item.ma_trang" />
+                        </td>
+                        <td><a href="/Menu/ChuyenMuc?code=@item.ma_trang&type=@(StatusAction.View.ToString())">@item.ten_trang</a></td>
+
+                        <td>@item.mo_ta</td>
+                        <td>
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Menu/SuaChuyenMuc?code=@item.ma_trang&type=@(StatusAction.View.ToString())">
+                                <span class="glyphicon glyphicon-list-alt">Xem</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Menu/SuaChuyenMuc?code=@item.ma_trang&type=@(StatusAction.Edit.ToString())">
+                                <span class="glyphicon glyphicon-edit">Sửa</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a onclick="confirm.BeforDeletePost('/Menu/XoaChuyenMuc?code=@item.ma_trang')"
+                       title=""
+                       data-placement="top"
+                       data-toggle="tooltip"
+                       data-original-title="Xóa"
+                       href="#">
+                                <span class="glyphicon glyphicon-trash">Xóa</span>
+                            </a>
+                        </td>
+                    </tr>
+                    stt++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
+<div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+    @{
+        var TotalPage = (int)ViewBag.TotalPage;
+        var CurrentPage = (int)ViewBag.CurrentPage;
+        if (TotalPage > 5)
+        {
+            if (CurrentPage > CurrentPage + 2)
+            {
+                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+            };
+            if (CurrentPage > 3)
+            {
+                for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                {
+                    if (i == CurrentPage)
+                    {
+                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                    else
+                    {
+                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i <= 5; i++)
+                {
+                    if (i == CurrentPage)
+                    {
+                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                    else
+                    {
+                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                }
+
+            }
+
+            if (CurrentPage < CurrentPage + 2)
+            {
+                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+            };
+        }
+        else
+        {
+            for (int i = 1; i <= TotalPage; i++)
+            {
+                if (i == CurrentPage)
+                {
+                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                }
+                else
+                {
+                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                }
+            }
+        }
+    }
+</div>
+
+<!-- End Table with stripped rows -->
+

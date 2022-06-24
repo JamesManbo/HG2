@@ -1,5 +1,5 @@
 ﻿@using HG.WebApp
-@model List<HG.Entities.Dm_Linh_Vuc>
+@model List<HG.Entities.Dm_menu>
 
 <div style="overflow-y: auto;">
     <div id="pnlMain">
@@ -14,17 +14,17 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                        <td align="center">
-                            <a href="/DanhMuc/SuaLinhVuc?code=@item.ma_linh_vuc&type=@(StatusAction.Edit.ToString())">Chọn</a>
-                        </td>
-                        <td>
-                            @item.ten_linh_vuc
-                        </td>
-                        <td style="width: 25%;"></td>
-                    </tr>
+                            <td align="center">
+                                <a href="/Menu/SuaChuyenMuc?code=@item.ma_trang&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                            </td>
+                            <td>
+                                @item.ten_trang
+                            </td>
+                            <td style="width: 25%;"></td>
+                        </tr>
                     }
-                    
-               
+
+
                 </tbody>
             </table>
         </div>

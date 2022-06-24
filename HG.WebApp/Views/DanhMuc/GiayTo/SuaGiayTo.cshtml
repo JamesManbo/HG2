@@ -30,7 +30,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã giấy tờ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="text" class="form-control input-default" name="ma_giay_to" value="@Model.ma_giay_to">
+                                <input class="form-control input-default" name="ma_giay_to" maxlength="25" value="@Model.ma_giay_to" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="text">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -57,19 +57,19 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên giấy tờ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="text" class="form-control input-default" name="ten_giay_to" value="@Model.ten_giay_to">
+                                <input type="text" class="form-control input-default" name="ten_giay_to" maxlength="200" value="@Model.ten_giay_to" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
-                                <input @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="number" class="form-control input-default" name="stt" id="stt" value="@Model.Stt">
+                                <input type="number" class="form-control input-default" name="stt" id="stt" maxlength="10" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -95,7 +95,7 @@
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemGiayTo';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaGiayTo?code=@Model.ma_giay_to&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/User/XoaGiayTo?code=@Model.ma_giay_to')">Xóa</button>
+                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaGiayTo?code=@Model.ma_giay_to')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/GiayTo';">Đóng</button>
                             </div>
                         }
@@ -141,12 +141,12 @@
     $(document).ready(function() {
 
         $('#form_pb').validate({
-            rules: {    
-                ma_giay_to : "required",
+            rules: {
+                ma_giay_to: "required",
                 ten_giay_to: "required"
             },
-            messages: {       
-                ma_giay_to : "Bạn cần nhập mã giấy tờ!",
+            messages: {
+                ma_giay_to: "Bạn cần nhập mã giấy tờ!",
                 ten_giay_to: "Bạn cần nhập tên giấy tờ!"
             }
         });

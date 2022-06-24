@@ -1,6 +1,7 @@
 ﻿using HG.Data.SqlService;
 using HG.Entities;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,6 +20,31 @@ namespace HG.Data.Business.DanhMuc
 
         #region Menu chính      
 
+        public Dm_menu_paging DanhSanhMenu(MenuModel item)
+        {
+            try
+            {
+                Dm_menu_paging menu = new Dm_menu_paging();
+                menu.Pagelist = new Pagelist();
+                DbProvider.SetCommandText2("dm_danh_sach_menu", CommandType.StoredProcedure);
+                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("level", item.level, SqlDbType.Int);
+                // Input params
+                DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
+                DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                menu.lstMenu = DbProvider.ExecuteListObject<Dm_menu>();
+                menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new Dm_menu_paging();
+            }
+        }
         public int LuuMenu(Dm_menu item)
         {
             DbProvider.SetCommandText2("dm_them_sua_menu", CommandType.StoredProcedure);
