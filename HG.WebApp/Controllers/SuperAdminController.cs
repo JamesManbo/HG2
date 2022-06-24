@@ -40,6 +40,7 @@ namespace HG.WebApp.Controllers
         public IActionResult ViewNhom(NhomSearchItem item)
         {
             EAContext eAContext = new EAContext();
+            ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count();
             ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count()/10;
             ViewBag.CurrentPage = 1;
             return View(eAContext.Asp_nhom.Where(n=>n.Deleted == 0).ToList());
@@ -67,12 +68,21 @@ namespace HG.WebApp.Controllers
           
         }
         [HttpPost]
-        public IActionResult SuaNhom(Asp_nhom item)
+        public IActionResult SuaNhom(NhomModel item)
         {
             ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
             item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
-            //var ObjId = _nhomDao.ThemMoiNhom(item, uid);
-            return View();
+            var ObjId = _nhomDao.ChinhSuaNhom(item);
+            if (ObjId.ErrorCode == 0)
+            {
+                return RedirectToAction("ViewNhom", "SuperAdmin");
+            }
+            else
+            {
+                ViewBag.ErrorCode = ObjId.ErrorCode;
+                ViewBag.ErrorMsg = ObjId.ReturnMsg;
+                return View(item);
+            }
         }
 
         [HttpGet]

@@ -21,6 +21,11 @@ namespace HG.Entities.Entities
         public bool? khoa { get; set; }
 
     }
+    public class ds_nguoi_dung_paging : BaseModel
+    {
+        public List<ds_nguoi_dung>? asp_Nhoms { get; set; }
+        public Pagelist Pagelist { get; set; } = new Pagelist();
+    }
     public class NguoiDungModels : IdentityUser<Guid>
     {
         public string? ho_dem { get; set; }
@@ -36,6 +41,9 @@ namespace HG.Entities.Entities
         public string? lstGroup { get; set; }
 
         public Response? responseErr { get; set; }
+
+        public string? type_view { get; set; }
+
     }
 
     public class Asp_NguoiDung_Nhom{

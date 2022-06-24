@@ -5,8 +5,9 @@
     var LstNhom = ViewBag.LstNhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
     var lst_chuc_vu = ViewBag.lst_chuc_vu as List<HG.Entities.Dm_Chuc_Vu>;
+    var lst_nguoi_dung = ViewBag.ListNguoiDung as HG.Entities.Entities.ds_nguoi_dung_paging;
 }
-
+@using HG.WebApp
 <script src="/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
 <script src="~/BackEnd/Admin/Js/Validate/NguoiDung.js"></script>
 <script>
@@ -77,11 +78,6 @@
 </ul>
 <div class="card">
     <div class="pageheader">
-
-        <div class="searchbar">
-            <input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter...">
-            <input type="submit" name="ctl08$BtnSearch" value="" onclick="return CheckSearch();" id="BtnSearch" hidden="hidden">
-        </div>
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
             <h5>Danh sách</h5>
@@ -100,14 +96,14 @@
                                 Tên đăng nhập
                                 <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
                             </label>
-                            <div class="col-md-10">
-                                <input name="UserName" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
-                                @*<span id="ctl08_ctl00_mk" style="color:Red;"></span>
-                                <span id="ctl08_ctl00_RequiredFieldValidator1" class="error" style="color:Red;display:none;">Bạn cần nhập tên đăng nhập!</span>*@
+                            <div class="col-md-9">
+                                <input name="UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
                             </div>
-                            <label class="col-md-1 control-label" hidden="hidden">
-                                <a id="lnkFCode" data-toggle="modal" data-target="#myModal" class="btn btn-primary" onclick="myModalPopup(this.name);" name="GetData.aspx?urlcontrol=forms/users/enq_users.ascx&amp;controlID=FCode" style="display:inline-block;width:100%;">Chọn</a>
-                            </label>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Chọn
+                                </button>
+                            </div>
 
                         </div>
 
@@ -129,7 +125,7 @@
                                 <span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-10">
-                                <input name="ho_dem" type="text" id="ho_dem" class="form-control input-default" placeholder="Họ đêm">
+                                <input name="ho_dem" type="text" id="ho_dem" maxlength="50" class="form-control input-default" placeholder="Họ đêm">
                                 @*<span id="ctl08_ctl00_RequiredFieldValidator2" class="error" style="color:Red;display:none;">Bạn cần nhập họ đệm!</span>*@
                             </div>
                         </div>
@@ -139,14 +135,14 @@
                                 <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-10">
-                                <input name="ten" type="text" id="ten" class="form-control input-default" placeholder="Tên">
+                                <input name="ten" type="text" id="ten" maxlength="50" class="form-control input-default" placeholder="Tên">
                                 @*<span id="ctl08_ctl00_RequiredFieldValidator3" style="color:Red;display:none;">Tên không được trống!</span>*@
                             </div>
                         </div>
                         <div class="form-group" hidden="hidden">
                             <label class="col-md-2 control-label">Bí danh</label>
                             <div class="col-md-10">
-                                <input name="ctl08$ctl00$Bidanh" type="text" id="ctl08_ctl00_Bidanh" class="form-control input-default" placeholder="Bí danh">
+                                <input name="ctl08$ctl00$Bidanh" type="text" maxlength="50" class="form-control input-default" placeholder="Bí danh">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -160,13 +156,13 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Điện thoại</label>
                             <div class="col-md-10">
-                                <input name="PhoneNumber" type="text" id="PhoneNumber" class="form-control input-default" placeholder="Số điện thoại">
+                                <input name="PhoneNumber" type="text" id="PhoneNumber" maxlength="12" class="form-control input-default" placeholder="Số điện thoại">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Email</label>
                             <div class="col-md-10">
-                                <input name="Email" type="text" id="Email" class="form-control input-default" placeholder="Số điện thoại">
+                                <input name="Email" type="text" id="Email" class="form-control input-default" maxlength="50" placeholder="Email">
                             </div>
                         </div>
 
@@ -175,10 +171,14 @@
                             <div class="col-md-10">
                                 <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Toàn bộ phòng ban ------------</option>
-                                    @foreach (var item in lst_phong_ban)
+                                    @if(lst_phong_ban != null)
                                     {
-                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                         foreach (var item in lst_phong_ban)
+                                         {
+                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                         }   
                                     }
+                                    
                                 </select>
                             </div>
                         </div>
@@ -188,9 +188,12 @@
 
                                 <select name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
                                     <option value="">----------------Chọn-----------------</option>
-                                    @foreach (var item in lst_chuc_vu)
+                                    @if(lst_chuc_vu != null)
                                     {
-                                        <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                        foreach (var item in lst_chuc_vu)
+                                        {
+                                            <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                        }
                                     }
                                 </select>
                             </div>
@@ -417,31 +420,73 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Thứ tự</label>
                             <div class="col-md-10">
-                                <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự">
+                                <input name="stt" type="text" id="stt" maxlength="10" class="form-control input-default" placeholder="Số thứ tự">
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                       @* <div class="form-group row">
                             <label class="col-md-2 control-label">Khóa tài khoản</label>
                             <div class="col-md-10">
                                 <input id="ctl08_ctl00_LockUser" type="checkbox" name="ctl08$ctl00$LockUser">
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 control-label"></label>
-                            <div class="col-md-10">
-                                <input type="submit" name="ctl08$ctl00$BtbLuuThem" value="Lưu và Thêm" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$ctl00$BtbLuuThem&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="BtbLuuThem" class="btn btn-primary">
-                                <input type="submit" name="ctl08$ctl00$BtbSave" value="Lưu" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$ctl00$BtbSave&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="BtbSave" accesskey="S" title="Alt+S" class="btn btn-primary">
-                                <input type="submit" name="ctl08$ctl00$BtnClose" value="Đóng" id="BtnClose" accesskey="Q" title="Alt+Q" class="btn btn-primary">
-                            </div>
+                        </div>*@
+                         <div class="text-center">
+                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/PhongBan';">Đóng</button>
                         </div>
 
                     </div>
                 </form>
             </div>
 
-            <div class="modal fade" id="myModal"><div class="modal-dialog"><div class="modal-content"><div class="modal-header widgettitle"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h4 class="modal-title">Danh sách</h4></div><div class="modal-body"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button></div></div></div></div>
+           
         </div>
     </div>
 
+</div>
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div style="overflow-y: auto;">
+                        <div id="pnlMain">
+                            <div>
+                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                                    <tbody>
+                                        <tr class="widgettitle">
+                                            <th align="center" scope="col">CHỌN</th>
+                                            <th scope="col">Tên đăng nhập</th>
+                                            <th scope="col">Tên đầy đủ</th>
+                                        </tr>
+                                        @if(lst_nguoi_dung.asp_Nhoms != null)
+                                        {
+                                             foreach (var item in lst_nguoi_dung.asp_Nhoms)
+                                            {
+                                                <tr>
+                                                <td align="center">
+                                                     <a href="/QTNguoiDung/SuaNguoiDung?Id=@item.Id&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                                </td>
+                                                <td>
+                                                    @item.ten_dang_nhap
+                                                </td>
+                                                <td style="width: 25%;"> @(item.ho_dem+ " " +item.ten)</td>
+                                            </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

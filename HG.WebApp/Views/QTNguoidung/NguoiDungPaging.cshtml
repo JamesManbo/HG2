@@ -1,98 +1,7 @@
-﻿
-@model List<HG.Entities.Entities.ds_nguoi_dung>
-@{
-    ViewData["Title"] = "Danh sách người dùng";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    var list_phong_ban = ViewBag.ListPhongBan as List<HG.Entities.Dm_Phong_Ban>;
-}
+﻿@using HG.WebApp
+@model HG.Entities.Entities.ds_nguoi_dung_paging
 
-<script>
-    function NguoiDungAutoComplete(){
-        var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
-        var trang_thai = 0;
-        var da_xoa = 0;
-       if ($('input[name=Status]:checked').length > 0) {
-           trang_thai = 1;
-        };
-       if ($('input[name=Deleted]:checked').length > 0) {
-           da_xoa = 1;
-        };
-        window.location.href = "/QTNguoiDung/ListNguoiDung?ma_phong_ban=" + ma_phong_ban + "&trang_thai=" + trang_thai + "&da_xoa=" + da_xoa;
-
-    }
-</script>
-
-
-
-<div class="card">
-
-   <div class="pageheader">
-
-			<div class="searchbar">
-				<input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter...">
-				<input type="submit" name="ctl08$BtnSearch" value="" onclick="return CheckSearch();" id="BtnSearch" hidden="hidden">
-			</div>
-			<div class="pageicon"><span class="iconfa-table"></span></div>
-			<div class="pagetitle">
-				<h5>Danh sách</h5>
-				<h1>Người dùng</h1>
-			</div>
-
-		</div>
-
-    <div class="maincontent">
-        <div class="maincontentinner">
-            <p class="stdformbutton" style="margin-bottom: 10px;">
-                 <input type="button" value="Thêm" onclick="window.location.href = '/QTNguoiDung/ThemNguoiDung';" class="btn btn-primary" style="width:100px;" />
-
-                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
-                <input hidden id="lstCode" />
-            </p>
-            <div class="widget">
-                <h4 class="widgettitle">Lọc danh sách theo</h4>
-                <div class="widgetcontent">
-                    <div class="form-group row">
-                        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban</label>
-                        <div class="col-md-6">
-                                <select name="ma_phong_ban_sl" id="ma_phong_ban_sl" onchange="NguoiDungAutoComplete()" class="form-select form-control input-default">
-			                    <option value="" >----------------Chọn-----------------</option>
-                                @if(list_phong_ban != null)
-                                {
-                                    foreach (var item in list_phong_ban)
-                                    {
-                                        if(item.ma_phong_ban == ViewBag.ma_phong_ban)
-                                        {
-                                            <option value="@item.ma_phong_ban" selected> @item.ten_phong_ban</option>
-                                        }
-                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
-                                    }
-                                }
-
-		                    </select>
-                            
-                            <script>
-                                $("select#my-select option")
-                                     .each(function() { this.selected = (this.text == myVal); });
-                             </script>
-                        </div>
-                        <div class="col-md-4">
-                            <div>
-                                  <span class="cssrbCode" style="margin-right :12px;">
-                                      <input id="Status" type="radio" name="Status" value="rbDangHoatDong" checked="checked" onclick="NguoiDungAutoComplete()">
-                                      <label for="ctl08_rbDangHoatDong">&nbsp;&nbsp;Đang hoạt động</label>
-                                  </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                  <span class="cssrbCode">
-                                      <input id="Deleted" type="radio" name="Deleted" value="rbDaXoa" onclick="NguoiDungAutoComplete()">
-                                      <label for="ctl08_rbDaXoa">&nbsp;&nbsp;Đã xoá</label>
-                                  </span>                  
-		                    </div>
-
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
+<div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
                 <table class="table table-bordered responsive dataTable" id="dyntable" aria-describedby="dyntable_info">
                         <colgroup>
                             <col class="con0" style="width: 20px">
@@ -116,7 +25,7 @@
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐẦY ĐỦ: activate to sort column ascending" style="width: 302px;">TÊN ĐẦY ĐỦ</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="CHỨC VỤ: activate to sort column ascending" style="width: 222px;">CHỨC VỤ</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="PHÒNG BAN: activate to sort column ascending" style="width: 494px;">PHÒNG BAN</th>
-                                    @*<th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="KHÓA: activate to sort column ascending" style="width: 62px;">KHÓA</th>*@
+                                    <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="KHÓA: activate to sort column ascending" style="width: 62px;">KHÓA</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="Khôi phục: activate to sort column ascending" style="width: 33px;">Khôi phục</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 14px;">#</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 14px;">#</th>
@@ -124,9 +33,9 @@
                         </thead>
                 
                         <tbody role="alert" aria-live="polite" aria-relevant="all">
-                            @if(Model != null){
+                            @if(Model.asp_Nhoms != null){
                             var stt = 1;
-                            foreach(var item in Model)
+                            foreach(var item in Model.asp_Nhoms)
                                 {
                                         <tr class="gradeX odd">
                                             <td class="aligncenter  sorting_2">
@@ -146,15 +55,15 @@
                                                 <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="./?uid=55&amp;Action=view&amp;FCode=nctham.qba">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
                                             <td style="text-align: center;" class=" ">
                                                 </td>
-                                            @* <td style="text-align: center;" class=" ">
-                                                </td>*@
+                                             <td style="text-align: center;" class=" ">
+                                                </td>
                        
                                             <td class=" ">
-                                                <a  title="" data-placement="top" data-toggle="tooltip" href="/QTNguoiDung/ViewNguoiDung/@item.Id"  data-original-title="Xem">View</a></td>
+                                                <a  title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="">View</a></td>
                                             <td class=" ">
-                                                <a data-original-title="Sửa" href="/QTNguoiDung/SuaNguoiDung/@item.Id">Edit</a></td>
+                                                <a data-original-title="Sửa" href="/QTNguoiDung/EditNguoiDung/@item.Id">Edit</a></td>
                                             <td class=" ">
-                                                <button onclick="confirm.BeforDelete('/QTNguoiDung/XoaNnguoiDung/@item.Id')"  value="Xóa">Delete</button></td>
+                                                <button onclick="confirm.BeforDelete('/QTNguoiDung/Xoa/@item.Id')"  value="Xóa">Delete</button></td>
                                         </tr>
                                 }
                             }
@@ -165,8 +74,8 @@
                     <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 10 của @(ViewBag.TotalPage*10) bản ghi</div>
                         <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
-                                var TotalPage = (int) ViewBag.TotalPage;
-                                var CurrentPage = (int)ViewBag.CurrentPage;
+                                var TotalPage = (int)(Model.Pagelist.TotalRecords/3) + 1;
+                                var CurrentPage = (int)Model.Pagelist.CurrentPage;
                                 if (TotalPage> 5)
                                 {
 					                    if(CurrentPage > CurrentPage + 2 ){
@@ -208,14 +117,13 @@
 			                    }
                             }
                 </div>
-            </div>
-        </div>
-    </div>
-
 </div>
 <script>
+    
+</script>
+<script>
     function GetListByCurrentPage(id) {
-              var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
+                var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
                 var trang_thai = 0;
                 var da_xoa = 0;
                if ($('input[name=Status]:checked').length > 0) {
@@ -237,7 +145,7 @@
      }
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
-        confirm.BeforDeletePost('/QTNguoiDung/XoaNnguoiDung?code=' + listData)
+        confirm.BeforDeletePost('/SuperAdmin/XoaNhom?code=' + listData)
     }
 
     $(function() {

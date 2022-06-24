@@ -71,7 +71,34 @@ namespace HG.Data.Business.Nhom
 
         }
 
+        public Response ChinhSuaNhom(NhomModel item)
+        {
+            try
+            {
+                Response response = new Response();
+                DbProvider.SetCommandText2("nhom$chinhsua", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("ma_nhom", item.ma_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ten_nhom", item.ten_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+                DbProvider.AddParameter("stt", item.stt, SqlDbType.Int);
+                DbProvider.AddParameter("userId", item.UpdatedUid, SqlDbType.UniqueIdentifier);
 
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
+                // Lấy về danh sách các người dung
+                DbProvider.ExecuteNonQuery();
+                response.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                response.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new Response() { ErrorCode = 1, ReturnMsg = "Lỗi hệ thống" };
+            }
+
+        }
         public int XoaNhom(string ma_phong_ban, Guid uid)
         {
             DbProvider.SetCommandText2("nhom$xoa", CommandType.StoredProcedure);

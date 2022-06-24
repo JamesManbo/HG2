@@ -130,19 +130,22 @@
                                             <th scope="col">TÊN</th>
                                             <th scope="col">MÔ TẢ</th>
                                         </tr>
-                                        @foreach (var item in lst_nhom)
+                                    @if(lst_nhom != null)
+                                    {
+                                        foreach (var item in lst_nhom)
                                         {
                                             <tr>
-                                            <td align="center">
-                                                 @*<a href="/SuperAdmin/SuaNhom?code=@item.ma_nhom&type=@(StatusAction.Edit.ToString())">Chọn</a>*@
-                                                 <a href="#">Chọn</a>
-                                            </td>
-                                            <td>
-                                                @item.ten_nhom
-                                            </td>
-                                            <td style="width: 25%;">@item.mo_ta</td>
-                                        </tr>
+                                                <td align="center">
+                                                     <a href="/SuperAdmin/SuaNhom?code=@item.ma_nhom&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                                </td>
+                                                <td>
+                                                    @item.ten_nhom
+                                                </td>
+                                                <td style="width: 25%;">@item.mo_ta</td>
+                                            </tr>
                                         }
+                                    }
+                                  
                                     </tbody>
                                 </table>
                             </div>

@@ -42,6 +42,30 @@ namespace HG.Data.Business.NguoiDung
             catch(Exception e) {
                 Totalrecords = 0;
                 return new List<ds_nguoi_dung>();  }
+        } 
+        public ds_nguoi_dung_paging LayDsNguoiDungPhanTrang2(NguoiDungSearchItem item)
+        {
+            try
+            {
+                ds_nguoi_dung_paging ds_Nguoi_Dung_Paging = new ds_nguoi_dung_paging();
+                DbProvider.SetCommandText2("nguoidung$danhsanh$phantrang", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("StartingRow", item.CurrentPage, SqlDbType.Int);
+                DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
+                DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.NVarChar);
+                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("trang_thai", 0, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                ds_Nguoi_Dung_Paging.asp_Nhoms = DbProvider.ExecuteListObject<ds_nguoi_dung>();
+                ds_Nguoi_Dung_Paging.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return ds_Nguoi_Dung_Paging;
+            }
+            catch(Exception e) {
+                return new  ds_nguoi_dung_paging();  }
         }
         public string ThemMoi(NguoiDungModels item, Guid guid)
         {
@@ -73,6 +97,40 @@ namespace HG.Data.Business.NguoiDung
             }
            
         }
+        public Response SuaNguoiDung(NguoiDungModels item, Guid guid)
+        {
+            try
+            {
+                Response response = new Response();
+                DbProvider.SetCommandText2("nguoidung$chinhsua", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("Ma_nguoi_dung", item.Id, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("UserName", item.UserName, SqlDbType.NVarChar);
+                DbProvider.AddParameter("Email", item.Email, SqlDbType.NVarChar);
+                DbProvider.AddParameter("PhoneNumber", item.PhoneNumber, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ho_dem", item.ho_dem, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ten", item.ten, SqlDbType.NVarChar);
+                DbProvider.AddParameter("anh_dai_dien", item.anh_dai_dien, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_chuc_vu", item.ma_chuc_vu, SqlDbType.NVarChar);
+                DbProvider.AddParameter("stt", item.stt, SqlDbType.Int);
+                DbProvider.AddParameter("ngay_sinh", item.ngay_sinh, SqlDbType.DateTime);
+                DbProvider.AddParameter("UserId", guid, SqlDbType.UniqueIdentifier);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
+                // Lấy về danh sách các người dung
+                DbProvider.ExecuteNonQuery();
+                response.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                response.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                return response;
+            }
+            catch(Exception e)
+            {
+                return new Response();
+            }
+           
+        }
         public void ThemMoi_NguoiDung_Nhom(Guid ma_nguoi_dung, string asp_nhom_ma, Guid CreatedUid)
         {
             try
@@ -91,28 +149,23 @@ namespace HG.Data.Business.NguoiDung
             }
         }
 
-        public Response Xoa(Guid UserId)
-		{
+        public int Xoa(string ma_nguoi_dung, Guid uid)
+        {
             try
             {
-                Response result = new Response();
-                DbProvider.SetCommandText2("[nguoidung$Xoa]", CommandType.StoredProcedure);
 
-                // Input params
-                DbProvider.AddParameter("UserId", UserId, SqlDbType.UniqueIdentifier);
-                // Output params
-                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar,1000, ParameterDirection.Output);
-
-                // Lấy về danh sách các người dung
-                DbProvider.ExecuteNonQuery();
-                result.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
-                result.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
-                return result;
+                DbProvider.SetCommandText2("nguoidung$Xoa", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.VarChar);
+                DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteNonQuery();
+                var ma_loi = Convert.ToInt32(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+                return ma_loi;
             }
             catch (Exception e)
             {
-                return new Response();
+                return 1;
             }
         }
         public Asp_NguoiDung_Nhom LayNguoiDungBoiId(Guid UserId)
