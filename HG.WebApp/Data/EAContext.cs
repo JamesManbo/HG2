@@ -31,6 +31,10 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Chuc_Vu> Dm_Chuc_Vu { get; set; }
         public virtual DbSet<Dm_Ngay_Nghi> Dm_Ngay_Nghi { get; set; }
         public virtual DbSet<Dm_menu> Dm_menu { get; set; }
+        public virtual DbSet<Dm_Dan_Toc> Dm_Dan_Toc { get; set; }
+        public virtual DbSet<Dm_Gioi_Tinh> Dm_Gioi_Tinh { get; set; }
+        public virtual DbSet<Dm_Quoc_Tich> Dm_Quoc_Tich { get; set; }
+        public virtual DbSet<Dm_Ton_Giao> Dm_Ton_Giao { get; set; }
         // END Danh mục
 
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }

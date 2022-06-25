@@ -53,6 +53,7 @@ namespace HG.Data.Business.DanhMuc
             DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
             DbProvider.AddParameter("ma_trang_cha", item.ma_trang_cha, SqlDbType.VarChar);
             DbProvider.AddParameter("level", item.level, SqlDbType.Int);
+            DbProvider.AddParameter("url", item.url, SqlDbType.NVarChar);
             DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
             DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
@@ -66,7 +67,7 @@ namespace HG.Data.Business.DanhMuc
         public int XoaMenu(string ma_trang, Guid uid)
         {
             DbProvider.SetCommandText2("dm_xoa_menu", CommandType.StoredProcedure);
-            DbProvider.AddParameter("ma_phong_ban", ma_trang, SqlDbType.VarChar);
+            DbProvider.AddParameter("ma_trang", ma_trang, SqlDbType.VarChar);
             DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
             // Lấy về danh sách các trường học

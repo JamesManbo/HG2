@@ -1,6 +1,6 @@
 ﻿@using HG.WebApp
-@using HG.Entities
-@model Dm_menu_paging
+@model List<HG.Entities.Dm_So_Ho_So>
+
 
 <div class="dataTable-container">
     <table class="table table-bordered responsive">
@@ -10,40 +10,41 @@
                     <input type="checkbox" name="" id="selectAll" />
                 </th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 25%;">TÊN</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 25%;">LĨNH VỰC</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 25%;">HOẠT ĐỘNG</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
             </tr>
         </thead>
         <tbody>
-            @if (Model.lstMenu != null)
+            @if (Model != null)
             {
                 var stt = 1;
-                foreach (var item in Model.lstMenu)
+                foreach (var item in Model)
                 {
                     <tr>
-                        <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_trang" /></td>
+                        <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_so" /></td>
                         <td scope="row">
                             @stt
-                            <input type="hidden" name="" id="" value="@item.ma_trang" />
+                            <input type="hidden" name="" id="" value="@item.ma_so" />
                         </td>
-                        <td><a href="/Menu/ChuyenMuc?code=@item.ma_trang&type=@(StatusAction.View.ToString())">@item.ten_trang</a></td>
+                        <td><a href="/DanhMuc/SuaSoHoSo?code=@item.ma_so&type=@(StatusAction.View.ToString())">@item.ten_so</a></td>
 
                         <td>@item.mo_ta</td>
                         <td>
-                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Menu/SuaChuyenMuc?code=@item.ma_trang&type=@(StatusAction.View.ToString())">
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaSoHoSo?code=@item.ma_so&type=@(StatusAction.View.ToString())">
                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
                             </a>
                         </td>
                         <td>
-                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Menu/SuaChuyenMuc?code=@item.ma_trang&type=@(StatusAction.Edit.ToString())">
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaSoHoSo?code=@item.ma_so&type=@(StatusAction.Edit.ToString())">
                                 <span class="glyphicon glyphicon-edit">Sửa</span>
                             </a>
                         </td>
                         <td>
-                            <a onclick="confirm.BeforDeletePost('/Menu/XoaChuyenMuc?code=@item.ma_trang')"
+                            <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaSoHoSo?code=@item.ma_so')"
                        title=""
                        data-placement="top"
                        data-toggle="tooltip"
@@ -59,8 +60,7 @@
         </tbody>
     </table>
 </div>
-
-<div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
+<div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
 <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
     @{
         var TotalPage = (int)ViewBag.TotalPage;
@@ -124,6 +124,4 @@
         }
     }
 </div>
-
 <!-- End Table with stripped rows -->
-

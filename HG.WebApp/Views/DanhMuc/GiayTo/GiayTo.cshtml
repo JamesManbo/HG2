@@ -32,7 +32,7 @@
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
-                        <select class="dataTable-selector">
+                        <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
                             <option value="5">5</option>
                             <option value="10" selected="">10</option>
                             <option value="15">15</option>
@@ -41,77 +41,162 @@
                         </select> bản ghi
                     </label>
                 </div>
-                <div class="dataTable-container">
-                    <table class="table table-bordered responsive">
-                        <thead class="widgettitle">
-                            <tr>
-                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                    <input type="checkbox" name="" id="selectAll" />
-                                </th>
-                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null)
-                            {
-                                var stt = 1;
-                                foreach (var item in Model)
+                  <div id="dataTable">
+                    <div class="dataTable-container">
+                        <table class="table table-bordered responsive">
+                            <thead class="widgettitle">
+                                <tr>
+                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                        <input type="checkbox" name="" id="selectAll" />
+                                    </th>
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
                                 {
-                                    <tr>
-                                        <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_giay_to" /></td>
-                                        <td scope="row">
-                                            @stt
-                                            <input type="hidden" name="" id="" value="@item.ma_giay_to" />
-                                        </td>
-                                        <td><a href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.View.ToString())">@item.ten_giay_to</a></td>
+                                    var stt = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_giay_to" /></td>
+                                            <td scope="row">
+                                                @stt
+                                                <input type="hidden" name="" id="" value="@item.ma_giay_to" />
+                                            </td>
+                                            <td><a href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.View.ToString())">@item.ten_giay_to</a></td>
 
-                                        <td>@item.mo_ta</td>
-                                        <td>
-                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.View.ToString())">
-                                                <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.Edit.ToString())">
-                                                <span class="glyphicon glyphicon-edit">Sửa</span>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaGiayTo?code=@item.ma_giay_to')"
-                                       title=""
-                                       data-placement="top"
-                                       data-toggle="tooltip"
-                                       data-original-title="Xóa"
-                                       href="#">
-                                                <span class="glyphicon glyphicon-trash">Xóa</span>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    stt++;
+                                            <td>@item.mo_ta</td>
+                                            <td>
+                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.View.ToString())">
+                                                    <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaGiayTo?code=@item.ma_giay_to&type=@(StatusAction.Edit.ToString())">
+                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaGiayTo?code=@item.ma_giay_to')"
+                                           title=""
+                                           data-placement="top"
+                                           data-toggle="tooltip"
+                                           data-original-title="Xóa"
+                                           href="#">
+                                                    <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                        @{
+                            var TotalPage = (int)ViewBag.TotalPage;
+                            var CurrentPage = (int)ViewBag.CurrentPage;
+                            if (TotalPage > 5)
+                            {
+                                if (CurrentPage > CurrentPage + 2)
+                                {
+                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                };
+                                if (CurrentPage > 3)
+                                {
+                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                    {
+                                        if (i == CurrentPage)
+                                        {
+                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                        else
+                                        {
+                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i == CurrentPage)
+                                        {
+                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                        else
+                                        {
+                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                    }
+
+                                }
+
+                                if (CurrentPage < CurrentPage + 2)
+                                {
+                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                };
+                            }
+                            else
+                            {
+                                for (int i = 1; i <= TotalPage; i++)
+                                {
+                                    if (i == CurrentPage)
+                                    {
+                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                    }
+                                    else
+                                    {
+                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                    }
                                 }
                             }
-                        </tbody>
-                    </table>
-                </div><div class="dataTable-bottom">
-                    <div class="dataTable-info">Showing 1 to 5 of 5 entries</div>
-                    <nav class="dataTable-pagination">
-                        <ul class="dataTable-pagination-list"></ul>
-                    </nav>
+                        }
+                    </div>
                 </div>
-
                 <!-- End Table with stripped rows -->
-
             </div>
         </div>
-
     </div>
 </div>
 <script>
+      function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
+        $.ajax({
+            type: "GET",
+            url: "../DanhMuc/GiayToPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function changePageSize(data) {
+        $("#lstPageSize").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../DanhMuc/GiayToPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/DanhMuc/XoaGiayTo?code=' + listData)

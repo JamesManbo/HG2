@@ -1,7 +1,9 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục chính";
+    ViewData["Title"] = "Danh mục menu con";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var MenuCha = ViewBag.MenuCha as List<HG.Entities.Dm_menu>;
+    var MenuCon = ViewBag.MenuCon as List<HG.Entities.Dm_menu>;
 }
 
 <div class="col-lg-12">
@@ -9,16 +11,16 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Trang</h1>
+            <h1>Danh mục con</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin trang</h4>
+            <h4 class="widgettitle">Cập nhật thông tin danh mục</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_pb" action="/menu/ThemChuyenMuc" method="post" enctype="multipart/form-data">
+                    <form id="form_pb" action="/menu/ThemChuyenMucCap2" method="post" enctype="multipart/form-data">
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã trang <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
@@ -33,7 +35,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../Menu/RenderViewChuyenMuc",
+                                            url: "../Menu/RenderViewChuyenMucCap2",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {
@@ -56,6 +58,38 @@
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
                                 <textarea class="form-control input-default" maxlength="500" placeholder="Mô tả" name="mo_ta"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Danh mục chính </label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" name="ma_trang_level1">
+                                    <option selected="selected" value="">---- Chọn Danh mục chính ----</option>
+                                    @if (MenuCha != null)
+                                        foreach (var item in MenuCha)
+                                        {
+                                            <option value="@item.ma_trang">@item.ten_trang</option>
+                                        }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Danh mục cha </label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" name="ma_trang_level2">
+                                    <option selected="selected" value="">---- Chọn danh mục cha ----</option>
+                                    @if (MenuCon != null)
+                                        foreach (var item in MenuCon)
+                                        {
+                                            <option value="@item.ma_trang">@item.ten_trang</option>
+                                        }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Link </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" name="url" maxlength="100">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -86,7 +120,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Menu/ChuyenMuc';">Đóng</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Menu/ChuyenMucCap2';">Đóng</button>
                         </div>
                     </form><!-- End Horizontal Form -->
                 </div>
