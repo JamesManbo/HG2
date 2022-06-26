@@ -23,7 +23,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã sổ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ma_so" value="@Model.ma_so" maxlength="25" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Mã sổ" name="ma_so" value="@Model.ma_so" maxlength="25" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -50,13 +50,13 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên Sổ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ten_chuc_vu" value="@Model.ten_so" maxlength="200" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Tên sổ" name="ten_chuc_vu" value="@Model.ten_so" maxlength="200" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Quyển <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ten_chuc_vu" value="@Model.quyen" maxlength="50" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Quyển" name="ten_chuc_vu" value="@Model.quyen" maxlength="50" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -89,13 +89,13 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Quyển <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-control input-default" name="hoat_dong" value="@Model.hoat_dong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="checkbox" class="form-control input-default" placeholder="Hoạt động" name="hoat_dong" value="@Model.hoat_dong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" name="stt" maxlength="10" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="stt" maxlength="10" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">

@@ -14,7 +14,7 @@
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin giấy tờ hợp lệ</h4>
+            <h4 class="widgettitle">Cập nhật thông tin chức vụ</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
@@ -22,7 +22,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã chức vụ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ma_chuc_vu" maxlength="25" value="@Model.ma_chuc_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Mã chức vụ" name="ma_chuc_vu" maxlength="25" value="@Model.ma_chuc_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -49,7 +49,7 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên chức vụ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" name="ten_chuc_vu" maxlength="200" value="@Model.ten_chuc_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Tên chức vụ" name="ten_chuc_vu" maxlength="200" value="@Model.ten_chuc_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -61,7 +61,7 @@
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" name="stt" value="@Model.Stt" maxlength="10" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="stt" value="@Model.Stt" maxlength="10" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">

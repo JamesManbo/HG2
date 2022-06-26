@@ -1,9 +1,9 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục giấy tờ";
+    ViewData["Title"] = "Danh mục giới tính";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-@model HG.Entities.Dm_Giay_To_Hop_Le
+@model HG.Entities.Dm_Gioi_Tinh
 
 
 <div></div>
@@ -12,7 +12,7 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Giấy tờ hợp lệ</h1>
+            <h1>Giới tính</h1>
         </div>
     </div>
     @if (ViewBag.error > 0)
@@ -21,16 +21,16 @@
     }
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin giấy tờ hợp lệ</h4>
+            <h4 class="widgettitle">Cập nhật thông tin giới tính</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_pb" action="/DanhMuc/SuaGiayTo?code=@Model.ma_giay_to&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                    <form id="form_pb" action="/DanhMucChung/SuaGioiTinh?code=@Model.ma_gioi_tinh&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
                         >
                         <div class="row mb-3">
-                            <label for="ma_pb" class="col-sm-2 control-label">Mã giấy tờ <span style="color:red">(*)</span></label>
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã quốc tịch <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input class="form-control input-default" placeholder="Mã giấy tờ" name="ma_giay_to" maxlength="25" value="@Model.ma_giay_to" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="text">
+                                <input type="text" class="form-control input-default" placeholder="mã giới tính" name="ma_gioi_tinh" maxlength="25" value="@Model.ma_gioi_tinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -41,7 +41,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../DanhMuc/RenderViewGiayTo",
+                                            url: "../DanhMucChung/RenderViewGioiTinh",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {
@@ -55,15 +55,15 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Tên giấy tờ <span style="color:red">(*)</span></label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên giới tính <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tên giấy tờ" name="ten_giay_to" maxlength="200" value="@Model.ten_giay_to" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" name="ten_gioi_tinh" maxlength="200" value="@Model.ten_gioi_tinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -93,10 +93,10 @@
                         @if (ViewBag.type_view == StatusAction.View.ToString())
                         {
                             <div class="text-center">
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemGiayTo';">Thêm</button>
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaGiayTo?code=@Model.ma_giay_to&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaGiayTo?code=@Model.ma_giay_to')">Xóa</button>
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/GiayTo';">Đóng</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/DanhMucChung/ThemGioiTinh';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/DanhMucChung/SuaGioiTinh?code=@Model.ma_gioi_tinh&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMucChung/XoaGioiTinh?code=@Model.ma_gioi_tinh')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMucChung/GioiTinh';">Đóng</button>
                             </div>
                         }
                         @if (ViewBag.type_view == StatusAction.Edit.ToString())
@@ -104,8 +104,8 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMuc/XoaGiayTo?code=@Model.ma_giay_to')">Xóa</button>
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/GiayTo';">Đóng</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMucChung/XoaGioiTinh?code=@Model.ma_gioi_tinh')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMucChung/GioiTinh';">Đóng</button>
                             </div>
                         }
                         <input name="type_view" hidden value="@ViewBag.type_view" />
@@ -142,12 +142,12 @@
 
         $('#form_pb').validate({
             rules: {
-                ma_giay_to: "required",
-                ten_giay_to: "required"
+                ma_gioi_tinh: "required",
+                ten_gioi_tinh: "required"
             },
             messages: {
-                ma_giay_to: "Bạn cần nhập mã giấy tờ!",
-                ten_giay_to: "Bạn cần nhập tên giấy tờ!"
+                ma_gioi_tinh: "Bạn cần nhập mã giới tính!",
+                ten_gioi_tinh: "Bạn cần nhập tên giới tính!"
             }
         });
     });
