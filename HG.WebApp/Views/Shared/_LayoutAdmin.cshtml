@@ -36,12 +36,12 @@
     <script src="/BackEnd/assets/vendor/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="/BackEnd/Admin/plugin/select2/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.3/bootbox.min.js"></script>
-   <script src="/BackEnd/Admin/Js/common/common.js"></script>
+    <script src="/BackEnd/Admin/Js/common/common.js"></script>
 
-   <style>
-    .dataTable-wrapper {
-        position: relative;
-    }
+    <style>
+        .dataTable-wrapper {
+            position: relative;
+        }
     </style>
 
 </head>
@@ -294,7 +294,7 @@
                 </ul>
             </li><!-- End Components Nav -->
 
-            
+
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#PhongBan-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-menu-button-wide"></i><span>Quản trị danh mục</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -331,8 +331,53 @@
                         </a>
                     </li>
                     <li>
+                        <a href="/DanhMuc/NgayNghi">
+                            <i class="bi bi-circle"></i><span>Ngày nghỉ</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="/DanhMuc/SoHoSo">
                             <i class="bi bi-circle"></i><span>Sổ hồ sơ</span>
+                        </a>
+                    </li>
+
+                    @*Danh mục chung*@
+                    <li>
+                        <a href="/DanhMucChung/QuocTich">
+                            <i class="bi bi-circle"></i><span>Quốc tịch</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/DanhMucChung/GioiTinh">
+                            <i class="bi bi-circle"></i><span>Giới tính</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/DanhMucChung/TonGiao">
+                            <i class="bi bi-circle"></i><span>Tôn giáo</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/DanhMucChung/DanToc">
+                            <i class="bi bi-circle"></i><span>Dân tộc</span>
+                        </a>
+                    </li>
+                    @*Menu*@
+                    <li>
+                        <a href="/Menu/ChuyenMuc">
+                            <i class="bi bi-circle"></i><span>Chuyên mục chính</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/Menu/ChuyenMucCap2">
+                            <i class="bi bi-circle"></i><span>Chuyên mục con</span>
+                        </a>
+                    </li>
+
+                    @*Luồng xử lý*@
+                      <li>
+                        <a href="/Luong/LuongXuLy">
+                            <i class="bi bi-circle"></i><span>Luồng xử lý</span>
                         </a>
                     </li>
                 </ul>
@@ -378,37 +423,37 @@
                     </li>
                 </ul>
             </li><!-- End Forms Nav -->
-             <li class="nav-item">
+            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#SuperAdmin-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-journal-text"></i><span>SuperAdmin</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="SuperAdmin-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                   <li>
-                                <a href="/SuperAdmin/Quyen">
-                                    <i class="bi bi-circle"></i><span>Quyền</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/SuperAdmin/VaiTro">
-                                    <i class="bi bi-circle"></i><span>Vai trò</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/SuperAdmin/LichSuBanGhi">
-                                    <i class="bi bi-circle"></i><span>Lịch sử bản ghi</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/SuperAdmin/ViewNhom">
-                                    <i class="bi bi-circle"></i><span>Nhóm</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/SuperAdmin/PhanQuyen">
-                                    <i class="bi bi-circle"></i><span>Phân quyền</span>
-                                </a>
-                            </li>
-                    
+                    <li>
+                        <a href="/SuperAdmin/Quyen">
+                            <i class="bi bi-circle"></i><span>Quyền</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/SuperAdmin/VaiTro">
+                            <i class="bi bi-circle"></i><span>Vai trò</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/SuperAdmin/LichSuBanGhi">
+                            <i class="bi bi-circle"></i><span>Lịch sử bản ghi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/SuperAdmin/ViewNhom">
+                            <i class="bi bi-circle"></i><span>Nhóm</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/SuperAdmin/PhanQuyen">
+                            <i class="bi bi-circle"></i><span>Phân quyền</span>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
         </ul>
