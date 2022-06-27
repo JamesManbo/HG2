@@ -1,0 +1,435 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Quy trình xử lý";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model List<HG.Entities.Entities.Luong.QuyTrinhXuLy>
+<style>
+       .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+        float: left;
+        position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+
+
+    }
+</style>
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-table"></span></div>
+        <div class="pagetitle">
+            <h5>Danh sách</h5>
+            <h1>Quy trình xử lý</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <div>
+                <span class="label label-success" style="font-size:14px;">Luồng lĩnh vực Địa giới hành chính XDCQCS Phòng Nội vụ thủ tục không có thời hạn giải quyết	</span>
+            </div>
+            <!-- Table with stripped rows -->
+            <div class="tab-primary" style="border: 2px solid #0866c6;overflow: hidden;">
+                <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ds-buoc" role="tab" aria-controls="ds-buoc" aria-selected="true">Danh sách bước</button>
+                    </li>
+                    <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#nhanh" role="tab" aria-controls="nhanh" aria-selected="false">Nhánh</button>
+                    </li>
+                    <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#tt-buoc" role="tab" aria-controls="tt-buoc" aria-selected="false">Thông tin bước</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent" style="padding: 15px;">
+                    @*Danh sách bước*@
+                    <div class="tab-pane fade show active" id="ds-buoc" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row" style="padding: 15px;">
+                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: 0 ngày/TTHC: 0 ngày </span>
+                            <div class="col-sm-6" align="right">
+                                <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$BtnAdd" value="Thêm bước" id="ctl08_ctl00_grid_trinh_tu_xl_BtnAdd" class="btn btn-primary">
+                                <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$Button1" value="Quy trình đồ họa" id="ctl08_ctl00_grid_trinh_tu_xl_Button1" class="btn btn-primary button" data-toggle="modal" data-target="#myModalLuongXuLy">
+                                <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$btnClose" value="Đóng" id="ctl08_ctl00_grid_trinh_tu_xl_btnClose" class="btn btn-primary button">
+
+                            </div>
+                        </div>
+                        <div id="dataTable">
+                            <div class="dataTable-container">
+                                <table class="table table-bordered responsive">
+                                    <thead class="widgettitle">
+                                        <tr>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 32%;">TÊN BƯỚC</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 8%;">NGƯỜI XỬ LÝ </th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">THỨ TỰ </th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">SỐ NGÀY</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 7%;">MÃ NHÁNH</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 3%;">#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            var stt = 1;
+                                            foreach (var item in Model)
+                                            {
+                                                <tr>
+                                                    <td scope="row">
+                                                        @stt
+                                                    </td>
+                                                    <td><a href="#">@item.ten_buoc</a></td>
+
+                                                    <td>@item.nguoi_co_the_xl</td>
+                                                    <td>@item.stt</td>
+                                                    <td>@item.so_ngay_xl</td>
+                                                    <td>@item.ma_nhanh</td>
+                                                    <td>
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Luong/SuaQuyTrinh?code=@item.ma_luong&type=@(StatusAction.Edit.ToString())">
+                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                stt++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                @{
+                                    var TotalPage = (int)ViewBag.TotalPage;
+                                    var CurrentPage = (int)ViewBag.CurrentPage;
+                                    if (TotalPage > 5)
+                                    {
+                                        if (CurrentPage > CurrentPage + 2)
+                                        {
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        };
+                                        if (CurrentPage > 3)
+                                        {
+                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                            {
+                                                if (i == CurrentPage)
+                                                {
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                                else
+                                                {
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i == CurrentPage)
+                                                {
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                                else
+                                                {
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                            }
+
+                                        }
+
+                                        if (CurrentPage < CurrentPage + 2)
+                                        {
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                        };
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i <= TotalPage; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @*Nhánh *@
+                    <div class="tab-pane fade" id="nhanh" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                            <label class="col-sm-1 control-label">
+                                Mã nhánh
+                            </label>
+                            <div class="col-sm-2">
+                                <input name="ctl08$ctl00$txtMaNhanh" type="text" id="txtMaNhanh" class="form-control input-default-sm" placeholder="Nhập mã nhánh">
+                            </div>
+                            <label class="col-sm-1 control-label">
+                                Tên nhánh
+                            </label>
+                            <div class="col-sm-5">
+                                <input name="ctl08$ctl00$txtTenNhanh" type="text" id="txtTenNhanh" class="form-control input-default-sm" placeholder="Nhập tên nhánh">
+                            </div>
+                            <div class="col-sm-2">
+                                <input type="submit" name="ctl08$ctl00$btnThemNhanh" value="Thêm nhánh" id="btnThemNhanh" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </div>
+                    @*Thông tin bước *@
+                    <div class="tab-pane fade" id="tt-buoc" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="form-horizontal">
+
+                            <div class="row" style="padding-bottom: 10px">
+                                <label class="col-md-2 control-label">
+                                    Tên bước thực hiện
+                                </label>
+                                <input type="hidden" name="ctl08$ctl00$BuocXL" id="BuocXL" value="TN">
+                                <div class="col-md-3">
+                                    <input name="ctl08$ctl00$TenBuocThucHien" type="text" value="Tiếp nhận hồ sơ" id="TenBuocThucHien" class="form-control input-default-sm" placeholder="Nhập tên bước thực hiện">
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="submit" name="ctl08$ctl00$Button1" value="Chọn" id="Button1" class="btn btn-primary" data-toggle="modal" data-target="#myModalBuocTH" style="width:100%;">
+                                </div>
+                                <label class="col-md-2 control-label">
+                                    Người mặc định XL
+                                </label>
+                                <div class="col-md-3">
+                                    <select name="" id="NguoiMacDinhXL" data-placeholder="Chọn người mặc định xử lý" class="form-control" style="width: 100%;">
+                                        <option value="">---- Chọn người mặc định xử lý ----</option>
+                                        <option value="nctham.qba">Nguyễn Chí Thâm</option>
+                                        <option value="thuyan">Nguyễn Thụy An</option>
+                                        <option value="stlong.qba">Sèn Thăng Long</option>
+                                        <option value="hdthanh.qba">Hạng Dương Thành</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="submit" name="" value="Chọn" id="btnNguoiMacDinhXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiMacDinhXL" style="width:100%;">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <label class="col-md-2 control-label">
+                                    Số ngày xử lý
+                                </label>
+                                <div class="col-md-3">
+                                    <input name="ctl08$ctl00$ThoiGianXL" type="text" value="0" id="ThoiGianXL" class="form-control input-default-sm" placeholder="Nhập số ngày xử lý">
+                                </div>
+                                <div class="col-md-1"></div>
+                                <label class="col-md-2 control-label">Người có thể XL</label>
+                                <div class="col-md-3">
+                                    <select name="" id="NguoiCoTheXL" data-placeholder="Chọn người có thể xử lý" class="chzn-select form-control input-default-sm chzn-done">
+                                        <option value="nctham.qba">Nguyễn Chí Thâm</option>
+                                        <option value="thuyan">Nguyễn Thụy An</option>
+                                        <option value="stlong.qba">Sèn Thăng Long</option>
+                                        <option value="hdthanh.qba">Hạng Dương Thành</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <input type="submit" name="ctl08$ctl00$btnNguoiCoTheXL" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label class="col-md-12">Các chức năng được sử dụng:</label>
+                            </div>
+
+                            <div id="ctl08_ctl00_pnlChucNang">
+
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_YEUCAUBS" type="checkbox" name="ctl08$ctl00$YEUCAUBS" disabled="disabled"><label for="ctl08_ctl00_YEUCAUBS">&nbsp;Yêu cầu bổ sung hồ sơ</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_LOAIHS" type="checkbox" name="ctl08$ctl00$LOAIHS" disabled="disabled"><label for="ctl08_ctl00_LOAIHS">&nbsp;Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <input id="ctl08_ctl00_THUHOIHS" type="checkbox" name="ctl08$ctl00$THUHOIHS" checked="checked"><label for="ctl08_ctl00_THUHOIHS">&nbsp;Thu hồi hồ sơ đã chuyển</label>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_TRALAIHS" type="checkbox" name="ctl08$ctl00$TRALAIHS" disabled="disabled"><label for="ctl08_ctl00_TRALAIHS">&nbsp;Trả lại hồ sơ cho người chuyển</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_KYHS" type="checkbox" name="ctl08$ctl00$KYHS" disabled="disabled"><label for="ctl08_ctl00_KYHS">&nbsp;Ký duyệt hồ sơ</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_CMC" type="checkbox" name="ctl08$ctl00$CMC" disabled="disabled"><label for="ctl08_ctl00_CMC">&nbsp;Chuyển hồ sơ ra một cửa để trả KQ xử lý</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <input id="ctl08_ctl00_GUIHSLT" type="checkbox" name="ctl08$ctl00$GUIHSLT"><label for="ctl08_ctl00_GUIHSLT">&nbsp;Gửi liên thông hồ sơ</label>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_KTXL" type="checkbox" name="ctl08$ctl00$KTXL" disabled="disabled"><label for="ctl08_ctl00_KTXL">&nbsp;Hồ sơ không phải xử lý (Kết thúc xử lý)</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_INPHOIKQ" type="checkbox" name="ctl08$ctl00$INPHOIKQ" disabled="disabled"><label for="ctl08_ctl00_INPHOIKQ">&nbsp;In phôi kết quả xử lý</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_GUIKQLT" type="checkbox" name="ctl08$ctl00$GUIKQLT" disabled="disabled"><label for="ctl08_ctl00_GUIKQLT">&nbsp;Gửi hồi đáp kết quả xử lý cho đơn vị gửi liên thông</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <input id="ctl08_ctl00_THONGBAOCD" type="checkbox" name="ctl08$ctl00$THONGBAOCD"><label for="ctl08_ctl00_THONGBAOCD">&nbsp;Thông báo email cho công dân</label>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_TRATB" type="checkbox" name="ctl08$ctl00$TRATB" disabled="disabled"><label for="ctl08_ctl00_TRATB">&nbsp;Trả thông báo</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <span disabled="disabled"><input id="ctl08_ctl00_GIAHAN" type="checkbox" name="ctl08$ctl00$GIAHAN" disabled="disabled"><label for="ctl08_ctl00_GIAHAN">&nbsp;Gia hạn xử lý</label></span>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <div class="col-md-5">
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-4">
+                                    <input type="submit" name="ctl08$ctl00$btnAdd" value="Thêm mới" id="btnAdd" class="btn btn-primary">
+                                    <input type="submit" name="ctl08$ctl00$btnSave" value="Lưu" onclick="return checkSave();" id="btnSave" class="btn btn-primary process">
+
+                                    <input type="submit" name="ctl08$ctl00$btnClose" value="Đóng" id="btnClose" class="btn btn-primary">
+                                </div>
+                                <div class="col-md-5">
+
+                                    <br>
+                                    <span id="ctl08_ctl00_TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: 0 Ngày</span>
+                                    <br>
+                                    <span id="ctl08_ctl00_TongSoNgayXL" style="color:Blue;">Tổng số ngày của quy trình: 0 Ngày</span>
+                                    <br>
+
+                                    <br>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>
+    function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
+        $.ajax({
+            type: "GET",
+            url: "../Luong/LuongXuLyPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function changePageSize(data) {
+        $("#lstPageSize").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../Luong/LuongXuLyPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=' + listData)
+    }
+
+    $(function() {
+        $('#selectAll').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $(':checkbox:checked').each(function(i) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $(':checkbox:checked').each(function(i) {
+                if ($('#selectAll').is(':checked')) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                } else {
+                    val[i] = $(this).val();
+                }
+
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+</script>

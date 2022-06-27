@@ -21,18 +21,27 @@ namespace HG.Data.Business.DanhMuc
 
         public int LuuQuocTich(Dm_Quoc_Tich item)
         {
-            DbProvider.SetCommandText2("dm_them_sua_quoc_tich", CommandType.StoredProcedure);
-            DbProvider.AddParameter("ma_quoc_tich", item.ma_quoc_tich, SqlDbType.VarChar);
-            DbProvider.AddParameter("ten_quoc_tich", item.ten_quoc_tich, SqlDbType.NVarChar);
-            DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);         
-            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
-            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
-            DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
-            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-            // Lấy về danh sách các trường học
-            var obj = DbProvider.ExecuteNonQuery();
-            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
-            return ma_loi;
+            try
+            {
+                DbProvider.SetCommandText2("dm_them_sua_quoc_tich", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_quoc_tich", item.ma_quoc_tich, SqlDbType.VarChar);
+                DbProvider.AddParameter("ten_quoc_tich", item.ten_quoc_tich, SqlDbType.NVarChar);
+                DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+                DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
+                DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
+                DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteNonQuery();
+                var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+                return ma_loi;
+            }
+            catch (Exception)
+            {
+
+                return -1;
+            }
+
         }
 
         public int XoaQuocTich(string ma_quoc_tich, Guid uid)

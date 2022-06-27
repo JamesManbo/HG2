@@ -1,6 +1,7 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Entities;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.Luong;
 using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
 using HG.WebApp.Entities;
@@ -35,7 +36,7 @@ namespace HG.WebApp.Controllers
             _danhmucDao = new LuongXuLyDao(DbProvider);
         }
 
-        #region Quốc tịch
+        #region Khai báo luồng xử lý 
         public IActionResult LuongXuLy()
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
@@ -64,7 +65,7 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemLuongXuLy()
         {
-            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();            
+            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
             return View("~/Views/Luong/LuongXuLy/ThemLuongXuLy.cshtml");
         }
 
@@ -155,5 +156,19 @@ namespace HG.WebApp.Controllers
 
         #endregion
 
+        #region Quy trình xử lý 
+        public IActionResult QuyTrinhXuLy()
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = new List<QuyTrinhXuLy>();
+            ViewBag.TotalPage = (ds.Count() / pageSize) + ((ds.Count() % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Count() : pageSize;
+            return View("~/Views/Luong/QuyTrinh/QuyTrinhXuLy.cshtml", ds);
+        }
+
+        #endregion
     }
 }

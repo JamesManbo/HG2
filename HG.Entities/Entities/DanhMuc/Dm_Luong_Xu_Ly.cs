@@ -17,8 +17,11 @@ namespace HG.Entities
         public string ten_luong { get; set; }
         public string? mo_ta { get; set; }
         public bool tt_hai_gd { get; set; }
-        public string file_excel { get; set; }
-        public string ma_thu_tuc { get; set; }
+        public string? file_excel { get; set; }
+        public string? ma_thu_tuc { get; set; }
+
+        [NotMapped]
+        public string? lst_thu_tuc { get; set; }
 
         [NotMapped]
         public string buoc_xl_chinh { get; set; }

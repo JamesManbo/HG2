@@ -1,5 +1,5 @@
 ﻿@using HG.WebApp
-@model List<HG.Entities.Dm_Quoc_Tich>
+@model List<HG.Entities.Dm_Luong_Xu_Ly>
 
 <div style="overflow-y: auto;">
     <div id="pnlMain">
@@ -15,16 +15,14 @@
                     {
                         <tr>
                             <td align="center">
-                                <a href="/DanhMucChung/SuaQuocTich?code=@item.ma_quoc_tich&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                <a href="/Luong/SualuongXuLy?code=@item.ma_luong&type=@(StatusAction.Edit.ToString())">Chọn</a>
                             </td>
                             <td>
-                                @item.ten_quoc_tich
+                                @item.ten_luong
                             </td>
                             <td style="width: 25%;"></td>
                         </tr>
                     }
-
-
                 </tbody>
             </table>
         </div>

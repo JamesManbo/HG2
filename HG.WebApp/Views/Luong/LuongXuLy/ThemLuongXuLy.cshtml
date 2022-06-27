@@ -4,7 +4,42 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var ThuTuc = ViewBag.ThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
 }
+<script>
+    var Arr = [];
+    $(document).ready(function() {
+        $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
+        $('#tt_hai_gd').change(function() {
+            $('#tt_hai_gd').val($(this).is(':checked'));
+        });
+
+        $('.select2').select2({
+            closeOnSelect: false
+        });
+
+        $('#multiselect').on('select2:select', function(e) {
+            Arr.push(e.params.data.id);
+            $("#ma_thu_tuc").val(Arr.join(","));
+        });
+
+        $('#multiselect').on("select2:unselect", function(e) {
+            Arr.pop(e.params.data.id);
+            $("#ma_thu_tuc").val(Arr.join(","));
+        });
+
+        $('#form_pb').validate({
+            rules: {
+                ma_luong: "required",
+                ten_luong: "required"
+            },
+            messages: {
+                ma_luong: "Bạn cần nhập mã luồng!",
+                ten_luong: "Bạn cần nhập tên luồng!"
+            }
+        });
+    });
+
+</script>
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
@@ -19,7 +54,7 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_pb" action="/DanhMucChung/ThemQuocTich" method="post" enctype="multipart/form-data">
+                    <form id="form_pb" action="/Luong/ThemLuongXuLy" method="post" enctype="multipart/form-data">
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã luồng <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
@@ -62,13 +97,13 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">TT hai giai đoạn </label>
                             <div class="col-sm-8">
-                                <input type="checkbox" name="tt_hai_gd" maxlength="200">
+                                <input type="checkbox" id="tt_hai_gd" name="tt_hai_gd" maxlength="200">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC</label>
                             <div class="col-sm-8">
-                                <select name="ma_dvlt_xl" id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                     @if (ThuTuc != null)
                                     {
                                         foreach (var item in ThuTuc)
@@ -77,7 +112,7 @@
                                         }
                                     }
                                 </select>
-                                <input name="lst_ma_dvlt_xl" type="text" id="lst_ma_dvlt_xl" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -114,7 +149,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMucChung/QuocTich';">Đóng</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
                         </div>
                     </form><!-- End Horizontal Form -->
                 </div>
@@ -141,26 +176,3 @@
         </div>
     </div>
 </div><!-- End Basic Modal-->
-
-<script>
-    $(document).ready(function() {
-        
-        $('.select2').select2({
-            closeOnSelect: false
-        });
-        $('#form_pb').validate({
-            rules: {
-                ma_quoc_tich: "required",
-                ten_quoc_tich: "required"
-            },
-            messages: {
-                ma_quoc_tich: "Bạn cần nhập mã quốc tịch!",
-                ten_quoc_tich: "Bạn cần nhập tên quốc tịch!"
-            }
-        });
-    });
-
-</script>
-
-
-
