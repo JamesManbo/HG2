@@ -2,17 +2,18 @@
 @{
     ViewData["Title"] = "Quy trình xử lý";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var NguoiDung = ViewBag.NguoiDung as List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>;
+    var PhongBan = ViewBag.PhongBan as List<HG.Entities.Dm_Phong_Ban>;
+    var NhanhXuLy = ViewBag.NhanhXuLy as List<HG.Entities.Dm_Nhanh_Xu_Ly>;
 }
-@model List<HG.Entities.Entities.Luong.QuyTrinhXuLy>
+@model HG.Entities.Entities.Luong.QuyTrinhXuLy_paging
 <style>
-       .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
+    .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
         float: left;
         position: relative;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
-
-
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
     }
 </style>
 <div class="col-lg-12">
@@ -69,10 +70,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model != null)
+                                        @if (Model.lstQuyTrinhXuLy != null)
                                         {
                                             var stt = 1;
-                                            foreach (var item in Model)
+                                            foreach (var item in Model.lstQuyTrinhXuLy)
                                             {
                                                 <tr>
                                                     <td scope="row">
@@ -191,24 +192,44 @@
                                 <label class="col-md-2 control-label">
                                     Tên bước thực hiện
                                 </label>
-                                <input type="hidden" name="ctl08$ctl00$BuocXL" id="BuocXL" value="TN">
+                                <input type="hidden" name="ma_buoc_xu_ly" id="ma_buoc_xu_ly" value="TN">
                                 <div class="col-md-3">
-                                    <input name="ctl08$ctl00$TenBuocThucHien" type="text" value="Tiếp nhận hồ sơ" id="TenBuocThucHien" class="form-control input-default-sm" placeholder="Nhập tên bước thực hiện">
+                                    <input name="ten_buoc_xu_ly" id="ten_buoc_xu_ly" type="text" value="" class="form-control input-default-sm" placeholder="Nhập tên bước thực hiện">
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="submit" name="ctl08$ctl00$Button1" value="Chọn" id="Button1" class="btn btn-primary" data-toggle="modal" data-target="#myModalBuocTH" style="width:100%;">
+                                    <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#ModalBXL">
+                                        Chọn
+                                    </button>
+                                    <script>
+                                        function myModalPopup() {
+                                            $.ajax({
+                                                type: "GET",
+                                                url: "../Luong/RenderViewBuocXuLy?type=1",
+                                                data: "",
+                                                contentType: 'application/json; charset=utf-8',
+                                                success: function(data) {
+                                                    console.log(data);
+                                                    $("#ModalBXL .modal-body").html(data);
+                                                }
+                                            });
+                                        }
+                                    </script>
                                 </div>
                                 <label class="col-md-2 control-label">
                                     Người mặc định XL
                                 </label>
                                 <div class="col-md-3">
-                                    <select name="" id="NguoiMacDinhXL" data-placeholder="Chọn người mặc định xử lý" class="form-control" style="width: 100%;">
-                                        <option value="">---- Chọn người mặc định xử lý ----</option>
-                                        <option value="nctham.qba">Nguyễn Chí Thâm</option>
-                                        <option value="thuyan">Nguyễn Thụy An</option>
-                                        <option value="stlong.qba">Sèn Thăng Long</option>
-                                        <option value="hdthanh.qba">Hạng Dương Thành</option>
+                                    <select style="width: 100%;" class="select2 form-select form-control input-default" name="nguoi_xl_mac_dinh" id="nguoi_xl_mac_dinh">
+                                        <option selected="selected" value="00000000-0000-0000-0000-000000000000">---- Chọn người đại diện ----</option>
+                                        @if (NguoiDung != null)
+                                        {
+                                            foreach (var item in NguoiDung)
+                                            {
 
+                                                <option value="@item.id">@item.ten_nguoi_dung</option>
+
+                                            }
+                                        }
                                     </select>
                                 </div>
                                 <div class="col-md-1">
@@ -226,20 +247,83 @@
                                 <div class="col-md-1"></div>
                                 <label class="col-md-2 control-label">Người có thể XL</label>
                                 <div class="col-md-3">
-                                    <select name="" id="NguoiCoTheXL" data-placeholder="Chọn người có thể xử lý" class="chzn-select form-control input-default-sm chzn-done">
-                                        <option value="nctham.qba">Nguyễn Chí Thâm</option>
-                                        <option value="thuyan">Nguyễn Thụy An</option>
-                                        <option value="stlong.qba">Sèn Thăng Long</option>
-                                        <option value="hdthanh.qba">Hạng Dương Thành</option>
 
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        @if (NguoiDung != null)
+                                        {
+                                            foreach (var item in NguoiDung)
+                                            {
+                                                <option value="@item.id">@item.ten_nguoi_dung</option>
+                                            }
+                                        }
                                     </select>
+                                    <input id="nguoi_co_the_xl" type="text" name="nguoi_co_the_xl" class="form-control input-default" hidden>
+
                                 </div>
                                 <div class="col-md-1">
                                     <input type="submit" name="ctl08$ctl00$btnNguoiCoTheXL" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
                                 </div>
                             </div>
 
+                            <div id="ctl08_ctl00_pnlNoTNTKQ">
 
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" name="buoc_xl_chinh">
+                                        <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <label class="col-md-2 control-label">Người phối hợp XL</label>
+                                    <div class="col-md-3">
+                                        <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                            @if (NguoiDung != null)
+                                            {
+                                                foreach (var item in NguoiDung)
+                                                {
+                                                    <option value="@item.id">@item.ten_nguoi_dung</option>
+                                                }
+                                            }
+                                        </select>
+                                        <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <input type="submit" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div id="ctl08_ctl00_ctl02">
+
+                                        <label class="col-md-2 control-label">Nhánh</label>
+                                        <div class="col-md-3">
+                                            <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
+                                                <option selected="selected" value="">------ Gốc ------</option>
+                                                @if (NhanhXuLy != null)
+                                                {
+                                                    foreach (var item in NhanhXuLy)
+                                                    {
+                                                        <option value="@item.ma_nhanh">@item.ten_nhanh</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <label class="col-md-2 control-label">Thứ tự bước</label>
+                                        <div class="col-md-3">
+                                            @if (Model.Pagelist.TotalRecords > 1)
+                                            {
+                                                <select name="stt" id="FIndex" class="form-control input-default-sm">
+                                                    @for (int i = 2; i < Model.Pagelist.TotalRecords + 1; i++)
+                                                    {
+                                                        <option value="i">i</option>
+                                                    }
+                                                </select>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <label class="col-md-12">Các chức năng được sử dụng:</label>
@@ -251,11 +335,14 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label"></label>
                                     <div class="col-md-3">
-                                        <span disabled="disabled"><input id="ctl08_ctl00_YEUCAUBS" type="checkbox" name="ctl08$ctl00$YEUCAUBS" disabled="disabled"><label for="ctl08_ctl00_YEUCAUBS">&nbsp;Yêu cầu bổ sung hồ sơ</label></span>
+                                        <span><input type="checkbox" name=""><label for="">Yêu cầu bổ sung hồ sơ</label></span>
                                     </div>
                                     <div class="col-md-1"></div>
                                     <div class="col-md-5">
-                                        <span disabled="disabled"><input id="ctl08_ctl00_LOAIHS" type="checkbox" name="ctl08$ctl00$LOAIHS" disabled="disabled"><label for="ctl08_ctl00_LOAIHS">&nbsp;Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label></span>
+                                        <span>
+                                            <input id="" type="checkbox" name="" disabled="disabled">
+                                            <label for="">&nbsp;Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label>
+                                        </span>
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>
@@ -263,11 +350,14 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label"></label>
                                     <div class="col-md-3">
-                                        <input id="ctl08_ctl00_THUHOIHS" type="checkbox" name="ctl08$ctl00$THUHOIHS" checked="checked"><label for="ctl08_ctl00_THUHOIHS">&nbsp;Thu hồi hồ sơ đã chuyển</label>
+                                        <input id="" type="checkbox" name="" checked="checked"><label for="THUHOIHS">Thu hồi hồ sơ đã chuyển</label>
                                     </div>
                                     <div class="col-md-1"></div>
                                     <div class="col-md-5">
-                                        <span disabled="disabled"><input id="ctl08_ctl00_TRALAIHS" type="checkbox" name="ctl08$ctl00$TRALAIHS" disabled="disabled"><label for="ctl08_ctl00_TRALAIHS">&nbsp;Trả lại hồ sơ cho người chuyển</label></span>
+                                        <span disabled="disabled">
+                                            <input id="TRALAIHS" type="checkbox" name="TRALAIHS">
+                                            <label for="TRALAIHS">&nbsp;Trả lại hồ sơ cho người chuyển</label>
+                                        </span>
                                     </div>
                                     <div class="col-md-1"></div>
                                 </div>
@@ -364,6 +454,64 @@
 
 </div>
 
+<div class="modal fade" id="ModalBXL" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách bước xử lý</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+
+
+<div class="modal fade" id="myModalUser">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0;">
+                <div class="widget">
+                    <h4 class="widgettitle">Chọn cán bộ</h4>
+                    <div class="widgetcontent">
+                        <div class="form-group">
+                            <select onchange="getUserByPb(this);" name="" id="ddlPhongBan1" class="form-control input-default">
+                                <option value="0">------------ Toàn bộ phòng ban ------------</option>
+                                @if (PhongBan != null)
+                                {
+                                    foreach (var item in PhongBan)
+                                    {
+                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span id="singleselect" class="">
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <script>
     function GetListByCurrentPage(id) {
         var pageSize = $("#lstPageSize").val();
@@ -431,5 +579,11 @@
             $("#lstCode").val(val);
         });
 
+    });
+
+    $(document).ready(function() {
+        $('.select2').select2({
+            closeOnSelect: false
+        });
     });
 </script>

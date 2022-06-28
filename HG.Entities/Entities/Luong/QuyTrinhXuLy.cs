@@ -18,7 +18,19 @@ namespace HG.Entities.Entities.Luong
         public string ma_nhanh { get; set; }
         public string nguoi_co_the_xl { get; set; }
         public string ten_nhanh { get; set; }
-        public string nguoi_phoi_hop_xl { get; set; }       
+        public string nguoi_phoi_hop_xl { get; set; }
 
+    }
+
+    public class NhanhXuLy
+    {
+        public string ma_nhanh { get; set; }
+        public string ten_nhanh { get; set; }
+    }
+    public class QuyTrinhXuLy_paging
+    {
+        public List<QuyTrinhXuLy>? lstQuyTrinhXuLy { get; set; }
+        public List<NhanhXuLy>? lstNhanhXuLy { get; set; }
+        public Pagelist Pagelist { get; set; } = new Pagelist();
     }
 }

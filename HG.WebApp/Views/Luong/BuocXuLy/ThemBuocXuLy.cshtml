@@ -1,0 +1,135 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục bước xử lý";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Bước xử lý</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin bước xử lý</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_pb" action="/Luong/ThemBuocXuLy" method="post" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã bước xử lý <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã bước xử lý" name="ma_buoc_xu_ly" maxlength="25" value="">
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Chọn
+                                </button>
+
+                                <script>
+                                    function myModalPopup() {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "../Luong/RenderViewBuocXuLy",
+                                            data: "",
+                                            contentType: 'application/json; charset=utf-8',
+                                            success: function(data) {
+                                                console.log(data);
+                                                $("#basicModal .modal-body").html(data);
+                                            }
+                                        });
+                                    }
+
+                                </script>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên bước xử lý <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Tên bước xử lý" name="ten_buoc_xu_ly" value="" maxlength="200">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" maxlength="500"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="stt" value="" maxlength="10">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="">
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/BuocXuLy';">Đóng</button>
+                        </div>
+                    </form><!-- End Horizontal Form -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+
+<script>
+    $(document).ready(function() {
+
+        $('#form_pb').validate({
+            rules: {
+                ma_buoc_xu_ly: "required",
+                ten_buoc_xu_ly: "required"
+            },
+            messages: {
+                ma_buoc_xu_ly: "Bạn cần nhập mã bước xử lý!",
+                ten_buoc_xu_ly: "Bạn cần nhập tên bước xử lý!"
+            }
+        });
+    });
+
+</script>
+
+
+

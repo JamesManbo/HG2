@@ -16,4 +16,10 @@ namespace HG.Entities.Entities.Model
     {
         public string? tu_khoa { get; set; }       
     }
+
+    public class QuyTrinhModel : Pagelist
+    {
+        public string? tu_khoa { get; set; }
+        public string? ma_luong { get; set; }
+    }
 }

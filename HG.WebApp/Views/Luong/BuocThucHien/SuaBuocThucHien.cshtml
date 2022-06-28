@@ -1,0 +1,163 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục bước thực hiện";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Dm_Buoc_Thuc_Hien
+
+
+<div></div>
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Bước thực hiện</h1>
+        </div>
+    </div>
+    @if (ViewBag.error > 0)
+    {
+        <div>@ViewBag.msg</div>
+    }
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin bước thực hiện</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_pb" action="/luong/SuaBuocThucHien?code=@Model.ma_buoc&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                        >
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã bước <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã bước thực hiện" name="ma_buoc" maxlength="25" value="@Model.ma_buoc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Chọn
+                                </button>
+
+                                <script>
+                                    function myModalPopup() {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "../Luong/RenderViewBuocThucHien",
+                                            data: "",
+                                            contentType: 'application/json; charset=utf-8',
+                                            success: function(data) {
+                                                $("#basicModal .modal-body").html(data);
+                                            }
+                                        });
+                                    }
+
+                                </script>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên bước <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" name="ten_buoc" placeholder="Tên bước thực hiện" maxlength="200" value="@Model.ten_buoc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
+                            </div>
+                        </div>
+                         <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Số ngày</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" name="so_ngay"  placeholder="Số ngày" maxlength="10" value="@Model.so_ngay" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-default" name="stt" id="stt" placeholder="Số thứ tự" maxlength="10" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="nguoi_sua" value="@Model.UidName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
+                            </div>
+                        </div>
+                        @if (ViewBag.type_view == StatusAction.View.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ThemBuocThucHien';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/SuaBuocThucHien?code=@Model.ma_buoc&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaBuocThucHien?code=@Model.ma_buoc')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/BuocThucHien';">Đóng</button>
+                            </div>
+                        }
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaBuocThucHien?code=@Model.ma_buoc')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/BuocThucHien';">Đóng</button>
+                            </div>
+                        }
+                        <input name="type_view" hidden value="@ViewBag.type_view" />
+                    </form><!-- End Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+<!-- /.modal -->
+
+
+<script>
+    $(document).ready(function() {
+
+        $('#form_pb').validate({
+            rules: {
+                ma_buoc: "required",
+                ten_buoc: "required"
+            },
+            messages: {
+                ma_buoc: "Bạn cần nhập mã bước thực hiện!",
+                ten_buoc: "Bạn cần nhập tên bước thực hiện!"
+            }
+        });
+    });
+
+</script>
+
+
+

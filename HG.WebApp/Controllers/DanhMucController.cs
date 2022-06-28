@@ -326,10 +326,10 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewLinhVuc()
         {
-            var linhvuc = new Dm_Linh_Vuc();
+            var linhvuc = new List<Dm_Linh_Vuc>();
             using (var db = new EAContext())
             {
-                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).FirstOrDefault();
+                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             }
             //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/LinhVuc/ViewLinhVuc.cshtml", linhvuc);

@@ -1,6 +1,7 @@
 ﻿using HG.Data.SqlService;
 using HG.Entities;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.Luong;
 using HG.Entities.Entities.Model;
 using System;
 using System.Collections.Generic;
@@ -92,8 +93,100 @@ namespace HG.Data.Business.DanhMuc
         }
         #endregion
 
+        #region Bước xử lý
+        public int LuuBuocXuLy(Dm_Buoc_Xu_Ly item)
+        {
+            DbProvider.SetCommandText2("dm_them_sua_buoc_xu_ly", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_buoc_xu_ly", item.ma_buoc_xu_ly, SqlDbType.VarChar);
+            DbProvider.AddParameter("ten_buoc_xu_ly", item.ten_buoc_xu_ly, SqlDbType.NVarChar);
+            DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
+            DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
 
+        public int XoaBuocXuLy(string ma_buoc_xu_ly, Guid uid)
+        {
+            DbProvider.SetCommandText2("dm_xoa_buoc_xu_ly", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_buoc_xu_ly", ma_buoc_xu_ly, SqlDbType.VarChar);
+            DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
+        #endregion
 
+        #region Quy trình xử lý
+        public QuyTrinhXuLy_paging DanhSanhQuyTrinhXuLy(QuyTrinhModel item)
+        {
+            try
+            {
+                QuyTrinhXuLy_paging menu = new QuyTrinhXuLy_paging();
+                menu.Pagelist = new Pagelist();
+                DbProvider.SetCommandText2("dm_danh_sach_quy_trinh_xu_ly", CommandType.StoredProcedure);
+                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_luong", item.ma_luong, SqlDbType.VarChar);
+                // Input params
+                DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
+                DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                DbProvider.ExecuteReader_ToMyReader();
+                // Lấy về danh sách các người dung
+                menu.lstQuyTrinhXuLy = DbProvider.ExecuteReader_frmMyReader<QuyTrinhXuLy>();
 
+                DbProvider.ExecuteReader_NextResult();
+                menu.lstNhanhXuLy = DbProvider.ExecuteReader_frmMyReader<NhanhXuLy>();
+                DbProvider.ExecuteReader_Close();
+
+                menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new QuyTrinhXuLy_paging();
+            }
+        }
+        #endregion
+
+        #region Bước thực hiện
+        public int LuuBuocThucHien(Dm_Buoc_Thuc_Hien item)
+        {
+            DbProvider.SetCommandText2("dm_them_sua_buoc_thuc_hien", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_buoc", item.ma_buoc, SqlDbType.VarChar);
+            DbProvider.AddParameter("ten_buoc", item.ten_buoc, SqlDbType.NVarChar);
+            DbProvider.AddParameter("so_ngay", item.so_ngay, SqlDbType.Float);
+            DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
+            DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
+
+        public int XoaBuocThucHien(string ma_buoc, Guid uid)
+        {
+            DbProvider.SetCommandText2("dm_xoa_buoc_thuc_hien", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_buoc", ma_buoc, SqlDbType.VarChar);
+            DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
+        #endregion
     }
 }

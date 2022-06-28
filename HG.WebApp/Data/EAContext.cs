@@ -37,7 +37,10 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Quoc_Tich> Dm_Quoc_Tich { get; set; }
         public virtual DbSet<Dm_Luong_Xu_Ly> Dm_Luong_Xu_Ly { get; set; }
         public virtual DbSet<Dm_Ton_Giao> Dm_Ton_Giao { get; set; }
-        
+        public virtual DbSet<Dm_Buoc_Xu_Ly> Dm_Buoc_Xu_Ly { get; set; }
+        public virtual DbSet<Dm_Nhanh_Xu_Ly> Dm_Nhanh_Xu_Ly { get; set; }
+        public virtual DbSet<Dm_Buoc_Thuc_Hien> Dm_Buoc_Thuc_Hien { get; set; }
+
         // END Danh mục
 
         //TuanTA
