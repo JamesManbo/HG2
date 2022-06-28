@@ -7,4 +7,8 @@
         public string? ma_chuc_nang { get; set; }
         public string? ds_quyen_da_chon { get; set; }
     }
+    public class Root
+    {
+        public List<ObjVaitroChucNangQuyen> objVaitroChucNangQuyen { get; set; }
+    }
 }

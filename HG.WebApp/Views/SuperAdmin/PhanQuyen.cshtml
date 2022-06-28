@@ -28,14 +28,13 @@
         var lst_chuc_nang_da_chon = $("#lstCode").val().split(",");
             for (var j = 0; j < lst_chuc_nang_da_chon.length; j++) {
                 objVaitroChucNangQuyen.push(JSON.parse(localStorage.getItem(lst_chuc_nang_da_chon[j])));
+                localStorage.removeItem(lst_chuc_nang_da_chon[j]);
             }
-        console.log(objVaitroChucNangQuyen);
         var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
         var items = JSON.stringify({ "objVaitroChucNangQuyen":objVaitroChucNangQuyen });
-        console.log(items);
         $.ajax({
-            url: "../SuperAdmin/LuuPhanQuyen",
-            type: "POST",
+            url: "/SuperAdmin/LuuPhanQuyen?objVaitroChucNangQuyen="+items,
+            type: "GET",
             cache: false,
             data:items,
             contentType: 'application/json; charset=utf-8',

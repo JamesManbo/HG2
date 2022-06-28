@@ -12,6 +12,7 @@ using HG.Entities.Entities.Model;
 using HG.WebApp.Models.DanhMuc;
 using HG.Entities.Entities.SuperAdmin;
 using HG.WebApp.Models;
+using Newtonsoft.Json;
 
 namespace HG.WebApp.Controllers
 {
@@ -280,31 +281,38 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/PhanQuyenChinhSua.cshtml", phanQuyenModel);
             return Content(result);
         }
-        [HttpPost]
-        public IActionResult LuuPhanQuyen([FromBody]List<ObjVaitroChucNangQuyen> objVaitroChucNangQuyen)
+        public IActionResult LuuPhanQuyen(string objVaitroChucNangQuyen)
         {
+            var result = JsonConvert.DeserializeObject<Root>(objVaitroChucNangQuyen);
             EAContext db = new EAContext();
-            Asp_vaitro_quyen item = new Asp_vaitro_quyen();
-            //var obj = db.Asp_vaitro_quyen.Where(n => n.ma_vai_tro == ma_vai_tro && n.Deleted == 1).FirstOrDefault();
-            var obj = db.Asp_vaitro_quyen.Where(n => n.Deleted == 1).FirstOrDefault();
-            if (obj != null)
+            if (result != null)
             {
-                //Lawpj lstCode
-                //obj.ma_chuc_nang = objVaitroChucNangQuyen.;
-                //obj.ds_ma_quyen = lstRole;
-                db.Attach(obj);
-                db.Entry(obj).Property(p => p.Id).IsModified = true;
-                db.SaveChanges();
-               return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = 1});
-            }
-            else
-            {
-                //foreach by chuc nang
-                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_vaitro_quyen> _role = db.Asp_vaitro_quyen.Add(item);
-                db.SaveChanges();
-            }
-            return View();
-            //return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = ma_vai_tro });
+                foreach (var item in result.objVaitroChucNangQuyen)
+                {
+                    if (item != null) { 
+                            var obj = db.Asp_vaitro_quyen.Where(n => n.ma_vai_tro == item.ma_vai_tro && n.Deleted == 0 && n.ma_chuc_nang == item.ma_chuc_nang).FirstOrDefault();
+                            if (obj != null)
+                            {
+                                obj.ds_ma_quyen = item.ds_quyen_da_chon == null ? "" : item.ds_quyen_da_chon;
+                                obj.UpdatedDateUtc = DateTime.Now;
+                                db.Entry(obj).State = EntityState.Modified;
+                                db.SaveChanges();
+                                //db.Attach(obj);
+                                //db.Entry(obj).Property(p => p.Id).IsModified = true;
+                                //db.SaveChanges();
+                            }
+                            else
+                            {
+                                Asp_vaitro_quyen asp_Vaitro_Quyen = new Asp_vaitro_quyen() { ma_vai_tro = item.ma_vai_tro, ma_chuc_nang = item.ma_chuc_nang, ds_ma_quyen = item.ds_quyen_da_chon, CreatedDateUtc = DateTime.Now, Deleted = 0 };
+                                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_vaitro_quyen> _role = db.Asp_vaitro_quyen.Add(asp_Vaitro_Quyen);
+                                 db.SaveChanges();
+                            }
+                    };
+                }
+
+            };
+            var ds_ma_vai_tro = result.objVaitroChucNangQuyen.FirstOrDefault();
+            return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = (ds_ma_vai_tro == null)? "" : ds_ma_vai_tro.ma_vai_tro });
         }
         [HttpGet]
         public async Task<IActionResult> ChucNangQuyenPartial(string ma_trang = "", string ma_vai_tro = "")
