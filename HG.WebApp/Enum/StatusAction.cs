@@ -9,7 +9,8 @@ namespace HG.WebApp
         None,
         Add,
         Edit,
-        View
+        View,
+        Role
     }
 
     public enum ActionSave

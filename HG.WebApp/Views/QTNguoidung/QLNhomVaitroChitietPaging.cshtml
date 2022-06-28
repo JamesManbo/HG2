@@ -1,0 +1,138 @@
+﻿@using HG.WebApp
+@{
+    var lst_nhom = ViewBag.lst_nhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
+    var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.WebApp.AspNetUsers>;
+    var lst_nhom_nguoi_dung = ViewBag.lst_nhom_nguoi_dung as HG.Entities.Entities.phong_ban_nhom_nguoi_dung;
+    var lst_vaitro = ViewBag.ls_vai_tro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro> ;
+}
+
+
+<div class="tab-content pt-2" id="myTabContent">
+                    <form class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab" action="/QTNguoiDung/QLNhomVaitroChitiet" method="post">
+                       <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Nhóm</label>
+                                <div class="col-md-8">
+                                    <select  name="ma_nhom" id="ma_nhom" class="form-select form-control input-default " data-placeholder="Chọn một nhóm" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        @if (lst_nhom != null)
+                                        {
+                                            foreach (var item in lst_nhom)
+                                            {
+                                                if(item.ma_nhom == ViewBag.ma_nhom)
+                                                {
+                                                    <option value="@item.ma_nhom" selected>	@item.ten_nhom</option>
+                                                }
+                                                <option value="@item.ma_nhom">	@item.ten_nhom</option>
+                                            }
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <script>
+                                function PhongbanComplete(){
+                                    var ma_phong_ban = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
+                                    $.ajax({
+                                       type: "GET",
+                                       url: "../QTNguoidung/QLNhomVaitroChitietPaging?Code=" + ma_phong_ban,
+                                       data: "",
+                                       contentType: 'application/json; charset=utf-8',
+                                       success: function(data) {
+                                           console.log(data);
+                                           $("#myTabContent").html(data);
+                                       }
+                                   });           
+                                }
+                                function SaveNhomVaitro(){
+                                    var ma_phong_ban = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
+                                     $.ajax({
+                                       type: "GET",
+                                       url: "../QTNguoidung/ThemNhomVaitro?code=" + ma_phong_ban + "&lstvaitro="+ $("#lstCode").val(),
+                                       data: "",
+                                       contentType: 'application/json; charset=utf-8',
+                                       success: function(data) {
+                                           console.log(data);
+                                           $("#myTabContent").html(data);
+                                       }
+                                   });           
+                                }
+                            </script>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Thêm người vào nhóm</label>
+                                <div class="col-md-8">
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        @if (lst_nguoi_dung != null)
+                                        {
+                                            foreach (var item in lst_nguoi_dung)
+                                            {
+                                                <option value="@item.Id">	@item.UserName</option>
+                                            }
+
+                                        }
+                                    </select>
+                                    <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" hidden>
+                                </div>
+                            </div>
+                             <div class="text-center">
+                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu</button>
+                                @*<button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Edit.ToString())">Sửa</button>*@
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Vai trò</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/QLNhomVaitro';">Đóng</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <!-- Table with stripped rows -->
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="dataTable">
+                                    <input hidden id="lstCode" />
+                                    <div class="dataTables_length">
+                                        <label>
+                                            Hiển thị
+                                            <select class="dataTable-selector">
+                                                <option value="5">5</option>
+                                                <option value="10" selected="">10</option>
+                                                <option value="15">15</option>
+                                                <option value="20">20</option>
+                                                <option value="25">25</option>
+                                            </select> bản ghi
+                                        </label>
+                                    </div>
+                                    <div class="dataTable-container">
+                                        <table class="table table-bordered responsive">
+                                            <thead class="widgettitle">
+                                                <tr>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                        <input type="checkbox" name="" id="selectAll" />
+                                                    </th>
+                              
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (lst_vaitro != null)
+                                                {
+                                                    var stt = 1;
+                                                    foreach (var item in lst_vaitro)
+                                                    {
+                                                        <tr>
+                                                        
+                                
+                                                            <td><a href="#">@item.ten_vai_tro</a></td>
+
+                                                            <td><a href="#">@item.mo_ta</a></td>
+                                                             <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_vai_tro" /></td>
+                                       
+                                                        </tr>
+                                                        stt++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div> 
+                                    <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())" onclick="SaveNhomVaitro()">Lưu</button>
+                                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/QLNhomVaitro';">Đóng</button>
+                                </div>
+
+                    </div>
+                  </div>

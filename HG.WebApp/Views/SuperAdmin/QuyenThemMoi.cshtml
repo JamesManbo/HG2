@@ -1,0 +1,137 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Quyền"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    
+}
+@model HG.WebApp.AspNetRoles
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @ViewBag.ErrorMsg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ErrorCode > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+<div class="card">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Quyền</h1>
+        </div>
+    </div>
+
+
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin Quyền</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_quyen" action="/SuperAdmin/QuyenThemMoi" method="post" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã quyền <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" maxlength="50" name="ma_quyen" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") value="@(Model.ma_quyen == null?"":Model.ma_quyen)">
+                            </div>
+                       
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên Quyền <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" maxlength="250" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") name="Name" value="@(Model.Name == null ? "" : Model.Name)">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control  input-default" maxlength="250" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") placeholder="Mô tả" value="@(Model.Description == null ? "" : Model.Description)" name="Description">@(Model.Description == null ? "" : Model.Description)</textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") name="Stt" value="@(Model.Stt == null ? "" : Model.Stt)"  >
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="@ViewBag.UidName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="@(Model.UpdatedDateUtc == null ? "" : Model.UpdatedDateUtc)">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="@(Model.CreatedDateUtc == null ? "" : Model.CreatedDateUtc)">
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/SuperAdmin/QuyenDanhSach';">Đóng</button>
+                        </div>
+                    </form><!-- End Horizontal Form -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#form_quyen').validate({
+            rules: {
+                ma_quyen: "required",
+                Name: "required"
+            },
+            messages: {
+                ma_quyen: "Bạn cần nhập mã quyền!",
+                Name: "Bạn cần nhập tên quyền!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+    });
+
+</script>
+
+
+

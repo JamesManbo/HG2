@@ -182,8 +182,96 @@ namespace HG.WebApp.Controllers
         #region Nhom vai trò
         public IActionResult QLNhomVaitro()
         {
+            EAContext eAContext = new EAContext();
+            ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count();
+            ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count() / 10;
+            ViewBag.CurrentPage = 1;
+            return View(eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList());
+        }
+
+        public IActionResult QLNhomVaitroChitiet(string code)
+        {
+            ViewBag.Status = "";
+            EAContext eAContext = new EAContext();
+            ViewBag.ma_nhom = code;
+            ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
+            ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
+            ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
+            ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
+            //lấy vai trò theo mã nhóm
+            ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
+            if (lst_nhom_nguoi_dung != null)
+            {
+                if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "") { ViewBag.Status = "View"; }
+            }
             return View();
         }
+
+       
+        [HttpPost]
+        public IActionResult QLNhomVaitroChitiet(phong_ban_nhom_nguoi_dung item)
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            item.CreatedUid = UserId;
+            EAContext eAContext = new EAContext();
+            ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
+            ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
+            if (item.type_view == "Edit")
+            {
+                //lấy vai trò theo nhóm
+                ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(item.ma_nhom);
+                ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
+                ViewBag.Status = "";
+                return View();
+            }
+            else
+            {
+                var obj = _nguoiDungDao.ThemMoiNhomNguoiDung(item);
+                ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
+                if (obj.ErrorCode == 0)
+                {
+                    item.type_view = StatusAction.View.ToString();
+                }
+                else
+                {
+                    item.type_view = StatusAction.Edit.ToString();
+                }
+                return View(item);
+            }
+        }
+        public IActionResult QLNhomVaitroChitietPaging(string code)
+        {
+            EAContext eAContext = new EAContext();
+            ViewBag.ma_nhom = code;
+            ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
+            ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
+            ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
+            return PartialView();
+        }
+        public async Task<IActionResult> ThemNhomVaitro(string code, string lstvaitro = "")
+        {
+            VaitroModel vaitroModel = new VaitroModel();
+            EAContext eAContext = new EAContext();
+            ViewBag.ma_nhom = code;
+            ViewBag.lst_nhom_vaitro = lstvaitro;
+            vaitroModel.asp_Dm_Vai_Tro = eAContext.Asp_dm_vai_tro.ToList();
+            vaitroModel.danh_sach_nhom_vai_tro = lstvaitro;
+            var res = _nguoiDungDao.ThemNhomVaitro(code, lstvaitro);
+            if(res.ErrorCode == 0)
+            {
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/ThemNhomVaitro.cshtml", vaitroModel);
+                return Content(result);
+            }
+            else
+            {
+                return View();
+            }
+
+        }
+
         #endregion
         #region Thống kê truy cập
         public IActionResult ThongKeTruyCap()

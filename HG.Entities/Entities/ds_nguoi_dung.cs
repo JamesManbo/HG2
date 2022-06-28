@@ -45,7 +45,12 @@ namespace HG.Entities.Entities
         public string? type_view { get; set; }
 
     }
-
+    public class phong_ban_nhom_nguoi_dung : BaseDanhMucModel
+    {
+        public string? ma_nhom { get; set; }
+        public string? lst_ma_nguoi_dung { get; set; }
+        public string? lstGroup { get; set; }
+    }
     public class Asp_NguoiDung_Nhom{
         public List<AspNetUsersModel2>  aspNetUsersModel { get; set; }
         public List<Asp_nhom> asp_nhom { get; set; }
@@ -64,10 +69,12 @@ namespace HG.Entities.Entities
         public int? stt { get; set; }
         public DateTime? ngay_sinh { get; set; }
         public int? Deleted { get; set; }
-
-       
-
     }
 
+    public class Nhom_Vaitro
+    {
+        public string ma_nhom { get; set; } = "";
+        public string ma_vai_tro { get; set; } = "";
+    }
 
 }

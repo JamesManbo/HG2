@@ -197,7 +197,103 @@ namespace HG.Data.Business.NguoiDung
                 return new Asp_NguoiDung_Nhom();
             }
         }
+        public Response ThemMoiNhomNguoiDung(phong_ban_nhom_nguoi_dung item)
+        {
+            try
+            {
+                Response result = new Response();
+                DbProvider.SetCommandText2("[nhom$dsnguoidung]", CommandType.StoredProcedure);
 
+                // Input params
+                DbProvider.AddParameter("ma_nhom", item.ma_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("lst_ma_nguoi_dung", item.lstGroup, SqlDbType.NVarChar);
+                DbProvider.AddParameter("userId", item.CreatedUid, SqlDbType.UniqueIdentifier);
+                // Output params
+                DbProvider.AddParameter("NewId", DBNull.Value, SqlDbType.UniqueIdentifier, ParameterDirection.Output);
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 1000, ParameterDirection.Output);
+                DbProvider.ExecuteNonQuery();
+                // Lấy về danh sách các người dung
+                result.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                result.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                var guiID = DbProvider.Command.Parameters["NewId"].Value.ToString();
+                result.NewId = Guid.Parse(guiID == null ? "": guiID);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new Response();
+            }
+        }
+        public phong_ban_nhom_nguoi_dung GetNhomNguoiDungByMaNhom(string ma_nhom)
+        {
+            try
+            {
+                phong_ban_nhom_nguoi_dung result = new phong_ban_nhom_nguoi_dung();
+                DbProvider.SetCommandText2("[nhom$dsnguoidung$ma_nhom]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("ma_nhom", ma_nhom, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 1000, ParameterDirection.Output);
+                result = DbProvider.ExecuteObject<phong_ban_nhom_nguoi_dung>();
+                // Lấy về danh sách các người dung
+                var ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                var ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new phong_ban_nhom_nguoi_dung();
+            }
+        }
+
+        public Response ThemNhomVaitro(string ma_nhom, string danhsachvaitro)
+        {
+            try
+            {
+                Response result = new Response();
+                DbProvider.SetCommandText2("[nhom$vaitro$themmoi]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("ma_nhom", ma_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_vai_tro", danhsachvaitro, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 1000, ParameterDirection.Output);
+                DbProvider.ExecuteNonQuery();
+                // Lấy về danh sách các người dung
+                var ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                var ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new Response();
+            }
+        }
+        public Nhom_Vaitro LayVaitroThemMaNhom(string ma_nhom)
+        {
+            try
+            {
+                Nhom_Vaitro result = new Nhom_Vaitro();
+                DbProvider.SetCommandText2("[nhom$vaitro$Laytheomanhom]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("ma_nhom", ma_nhom, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                result = DbProvider.ExecuteObject<Nhom_Vaitro>();
+                // Lấy về danh sách các người dung
+                var ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new Nhom_Vaitro();
+            }
+        }
 
     }
 }

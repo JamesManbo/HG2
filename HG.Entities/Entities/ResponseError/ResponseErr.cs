@@ -11,5 +11,6 @@ namespace HG.Entities
         public int ErrorCode { get; set; }
         public string? ErrorMsg { get; set; }
         public string? ReturnMsg { get; set; }
+        public Guid NewId { get; set; }
     }
 }

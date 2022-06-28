@@ -5,6 +5,7 @@ using HG.WebApp.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using HG.Entities.Entities.SuperAdmin;
 
 namespace HG.WebApp.Data
 {
@@ -35,9 +36,14 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Gioi_Tinh> Dm_Gioi_Tinh { get; set; }
         public virtual DbSet<Dm_Quoc_Tich> Dm_Quoc_Tich { get; set; }
         public virtual DbSet<Dm_Luong_Xu_Ly> Dm_Luong_Xu_Ly { get; set; }
-        public virtual DbSet<Dm_Ton_Giao> Dm_Ton_Giao { get; set; }       
+        public virtual DbSet<Dm_Ton_Giao> Dm_Ton_Giao { get; set; }
+        
         // END Danh mục
 
+        //TuanTA
+        public virtual DbSet<Asp_dm_vai_tro> Asp_dm_vai_tro { get; set; }
+        public virtual DbSet<Asp_vaitro_quyen> Asp_vaitro_quyen { get; set; }
+        //End TuanTA
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

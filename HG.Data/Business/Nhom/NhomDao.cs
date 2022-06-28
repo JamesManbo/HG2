@@ -129,6 +129,17 @@ namespace HG.Data.Business.Nhom
             }
         }
 
-
+        public int XoaQuyen(string maquyen, Guid uid)
+        {
+            DbProvider.SetCommandText2("quyen$xoaquyen", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_quyen", maquyen, SqlDbType.VarChar);
+            DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+            var ma_loi = Convert.ToInt32(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
+        }
     }
 }

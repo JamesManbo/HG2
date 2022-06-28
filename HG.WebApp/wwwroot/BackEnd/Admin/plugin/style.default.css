@@ -429,3 +429,20 @@ element.style {
 	vertical-align: top;
 	border-top: 1px solid #dddddd;
 }
+.tab-primary.ui-tabs {
+	border-color: #0866c6;
+}
+
+
+
+.ui-tabs {
+	border: 2px solid #bbb;
+	background: #fcfcfc;
+	overflow: hidden;
+	line-height: 21px;
+}
+.nav-tabs {
+	background-color: #0866c6;
+	border-bottom: 0;
+	height: 42px;
+}
