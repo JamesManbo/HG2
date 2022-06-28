@@ -1,5 +1,212 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using HG.WebApp
 @{
+    ViewData["Title"] = "Cấu Hình";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    //var lst_nhom = ViewBag.lst_nhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
+    //var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.WebApp.AspNetUsers>;
+    //var lst_nhom_nguoi_dung = ViewBag.lst_nhom_nguoi_dung as HG.Entities.Entities.phong_ban_nhom_nguoi_dung;
+    //var lst_vaitro = ViewBag.ls_vai_tro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro> ;
+    //var lst_nhom_vai_tro = ViewBag.lst_nhom_vaitro as HG.Entities.Entities.Nhom_Vaitro;
 }
+@model HG.Entities.Entities.phong_ban_nhom_nguoi_dung
+@* <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>*@
+<script src="https://cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
+<script>
+     CKEDITOR.replace('bottom_footer');
+    //ClassicEditor
+    // .create( document.querySelector('#bottom_footer') )
+    // .then( editor => {
+    //       console.log( editor );
+    // } )
+    // .catch( error => {
+    //      console.log( error );
+    // });
+</script>
+<div class="card">
+    <div class="pageheader">
+
+        <div class="pageicon"><span class="iconfa-table"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Cấu hình</h1>
+        </div>
+    </div>
+   
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <div class="tabbedwidget tab-primary ui-tabs ui-widget ui-widget-content ui-corner-all">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="CauHinh-tab" data-bs-toggle="tab" data-bs-target="#CauHinh" type="button" role="tab" aria-controls="CauHinh" aria-selected="true">Cấu hình</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="XoaNguoiCTXL-tab" data-bs-toggle="tab" data-bs-target="#XoaNguoiCTXL" type="button" role="tab" aria-controls="XoaNguoiCTXL" aria-selected="false">Xóa người CTXL</button>
+                    </li>
+                       <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="DoiNguoiXL-tab" data-bs-toggle="tab" data-bs-target="#DoiNguoiXL" type="button" role="tab" aria-controls="DoiNguoiXL" aria-selected="false">Đổi người XL</button>
+                    </li>
+                       <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="DoiNguoiXLTL-tab" data-bs-toggle="tab" data-bs-target="#DoiNguoiXLTL" type="button" role="tab" aria-controls="DoiNguoiXLTL" aria-selected="false">Đổi người XL theo luồng</button>
+                    </li>
+                       <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="ThemNguoiXLVB-tab" data-bs-toggle="tab" data-bs-target="#ThemNguoiXLVB" type="button" role="tab" aria-controls="ThemNguoiXLVB" aria-selected="false">Thêm người XL vào bước</button>
+                         <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="TTKN-tab" data-bs-toggle="tab" data-bs-target="#TTKN" type="button" role="tab" aria-controls="TTKN" aria-selected="false">TT kết nôi</button>
+                    </li>
+                  </ul>
+                  <div class="tab-content pt-2" id="myTabContent">
+                    <form class="tab-pane fade show active" id="CauHinh" role="tabpanel" aria-labelledby="CauHinh-tab" action="/QTNguoiDung/QLNhomVaitroChitiet" method="post">
+                       <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Mã cơ quan<span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                                
+                                <div class="col-md-8">
+                                    <input name="ma_co_quan" type="text" maxlength="50" id="ma_co_quan" class="form-control input-default" placeholder="Mã cơ quan">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Mã định danh <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                                
+                                    <div class="col-md-8">
+                                        <input name="ma_dinh_danh" type="text" maxlength="50" id="ma_dinh_danh" class="form-control input-default" placeholder="Mã định danh">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Tên đơn vị sử dụng  <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                               
+                                    <div class="col-md-8">
+                                        <input name="ten_dv_su_dung" type="text" maxlength="150" id="ten_dv_su_dung" class="form-control input-default" placeholder="Tên đơn vị sử dụng">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Tên đơn vị chủ quản <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                                
+                                    <div class="col-md-8">
+                                        <input name="ten_dv_chu_quan" type="text" maxlength="150" id="ten_dv_chu_quan" class="form-control input-default" placeholder="Tên đơn vị chủ quản">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Source POST VNPost</label>
+                                    <div class="col-md-8">
+                                        <input name="source_post_vnpost" type="text" maxlength="50" id="source_post_vnpost" class="form-control input-default" placeholder="Source post vnpost">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Source GET VNPost</label>
+                                    <div class="col-md-8">
+                                        <input name="source_get_vnpost" type="text" maxlength="50" id="source_get_vnpost" class="form-control input-default" placeholder="source get vnpost">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Mã khách hàng VNPost</label>
+                                    <div class="col-md-8">
+                                        <input name="ma_kh_VNPost" type="text" maxlength="50" id="ma_kh_VNPost" class="form-control input-default" placeholder="Mã khách hàng VNPost">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Token VNPost</label>
+                                    <div class="col-md-8">
+                                        <input name="Token_VNPost" type="text" maxlength="150" id="Token_VNPost" class="form-control input-default" placeholder="Token VNPost">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Hotline</label>
+                                    <div class="col-md-8">
+                                        <input name="ma_dinh_danh" type="text" maxlength="50" id="ma_dinh_danh" class="form-control input-default" placeholder="Mã định danh">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">TTTC HS qua mạng</label>
+                                    <div class="col-md-8">
+                                        <input name="tttc_hs_qua_mang" type="text" maxlength="50" id="tttc_hs_qua_mang" class="form-control input-default" placeholder="TTTC HS qua mạng">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Left footer</label>
+                                    <div class="col-md-8">
+                                        <input name="left_footer" type="text" maxlength="50" id="left_footer" class="form-control input-default" placeholder="Left footer">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Cấu hình gửi mail</label>
+                                    <div class="col-md-8">
+                                        <input name="cau_hinh_gui_mail" type="checkbox" maxlength="50" id="cau_hinh_gui_mail" placeholder="Cấu hình gửi mail">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Máy chủ SMTP</label>
+                                    <div class="col-md-8">
+                                        <input name="may_chu_smtp" type="text" maxlength="50" id="may_chu_smtp" class="form-control input-default" placeholder="Máy chủ SMTP">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Cổng SMTP</label>
+                                    <div class="col-md-8">
+                                        <input name="cong_smtp" type="text" maxlength="50" id="cong_smtp" class="form-control input-default" placeholder="Cổng SMTP">
+                                    </div>
+                            </div>
+                          
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Tài khoản đăng nhập</label>
+                                    <div class="col-md-8">
+                                        <input name="tai_khoan_dang_nhap" type="text" maxlength="50" id="tai_khoan_dang_nhap" class="form-control input-default" placeholder="Tài khoản đăng nhập">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Mật khẩu đăng nhập</label>
+                                    <div class="col-md-8">
+                                        <input name="mat_khau_dang_nhap" type="text" maxlength="50" id="mat_khau_dang_nhap" class="form-control input-default" placeholder="Mật khẩu đăng nhập">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">ID VNPT Pay</label>
+                                    <div class="col-md-8">
+                                        <input name="id_vnpt_pay" type="text" maxlength="50" id="id_vnpt_pay" class="form-control input-default" placeholder="ID VNPT Pay">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Tài khoản nhận tiền</label>
+                                    <div class="col-md-8">
+                                        <input name="cong_smtp" type="text" maxlength="50" id="tai_khoan_nhan_tien" class="form-control input-default" placeholder="Tài khoản nhận tiền">
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Bottom footer</label>
+                                    <div class="col-md-8">
+                                        <textarea name="bottom_footer" type="text" maxlength="50" id="bottom_footer" class="form-control input-default" placeholder="Bottom footer"> </textarea>
+                                    </div>
+                            </div>
+                            <div class="form-group row">
+                            <label class="col-md-2 control-label ">Ghi chú</label>
+                                    <div class="col-md-8">
+                                        <input name="ghi_chu" type="text" maxlength="150" id="ghi_chu" class="form-control input-default" placeholder="Ghi chú">
+                                    </div>
+                            </div>
+                             <div class="text-center">
+                                   <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu</button>
+                                   <button id="profile-tab" class="btn btn-primary"  data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" >Vai trò</button>
+                                   <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/QLNhomVaitro';">Đóng</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="tab-pane fade" id="XoaNguoiCTXL" role="tabpanel" aria-labelledby="XoaNguoiCTXL-tab">
+                        @Html.RenderAction("XoaNguoiCTXL", "CauHinh")
+                    </div>
+                    <div class="tab-pane fade" id="DoiNguoiXL" role="tabpanel" aria-labelledby="DoiNguoiXL-tab">
+                        @Html.RenderAction("DoiNguoiXL", "CauHinh")
+                    </div>
+                    <div class="tab-pane fade" id="DoiNguoiXLTL" role="tabpanel" aria-labelledby="DoiNguoiXLTL-tab">
+                        @Html.RenderAction("DoiNguoiXLTL", "CauHinh")
+                    </div>
+                    <div class="tab-pane fade" id="ThemNguoiXLVB" role="tabpanel" aria-labelledby="ThemNguoiXLVB-tab">
+                        @Html.RenderAction("ThemNguoiXLVB", "CauHinh")
+                    </div>
+                     <div class="tab-pane fade" id="TTKN" role="tabpanel" aria-labelledby="TTKN-tab">
+                         @Html.RenderAction("TTKN", "CauHinh")
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
