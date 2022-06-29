@@ -52,7 +52,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã nhóm <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" readonly maxlength="50" name="ma_nhom" value="@Model.ma_nhom">
+                                <input type="text" class="form-control input-default" readonly maxlength="50" name="ma_nhom" value="@Model.ma_nhom" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -63,38 +63,38 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên nhóm <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" maxlength="250" class="form-control input-default" name="ten_nhom" value="@Model.ten_nhom">
+                                <input type="text" maxlength="250" class="form-control input-default" name="ten_nhom" value="@Model.ten_nhom" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control  input-default" maxlength="250" placeholder="Mô tả" name="mo_ta">@Model.mo_ta</textarea>
+                                <textarea class="form-control  input-default" maxlength="250" placeholder="Mô tả" name="mo_ta" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" name="stt" value="@Model.stt">
+                                <input type="number" class="form-control input-default" name="stt" value="@Model.stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                         </div>
                         
                         <div class="row mb-3">
                             <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="@ViewBag.UserUpdate">
+                                <input disabled type="text" class="form-control input-default" value="@ViewBag.UserUpdate" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") > 
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="@Model.UpdatedDateUtc">
+                                <input disabled type="text" class="form-control input-default" value="@Model.UpdatedDateUtc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="@Model.CreatedDateUtc">
+                                <input disabled type="text" class="form-control input-default" value="@Model.CreatedDateUtc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                         </div>
 
@@ -135,7 +135,7 @@
                                         {
                                             <tr>
                                             <td align="center">
-                                                 <a href="/SuperAdmin/SuaNhom?code=@item.ma_nhom&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                                 <a href="/SuperAdmin/SuaNhom?code=@item.Id&type=@(StatusAction.Edit.ToString())">Chọn</a>
                                                  @*<a href="#">Chọn</a>*@
                                             </td>
                                             <td>

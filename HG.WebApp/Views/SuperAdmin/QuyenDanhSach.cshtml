@@ -70,11 +70,11 @@
                                             @stt
                                             <input type="hidden" name="" id="" value="@item.Id" />
                                         </td>
-                                        <td><a href="/SuperAdmin/QuyenChinhSua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.Name</a></td>
+                                        <td><a href="/SuperAdmin/QuyenChinhSua?code=@item.ma_quyen&type=@(StatusAction.View.ToString())">@item.Name</a></td>
 
                                         <td>@item.Description</td>
                                         <td>
-                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/SuperAdmin/ViewQuyen?code=@item.ma_quyen&type=@(StatusAction.View.ToString())">
+                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/SuperAdmin/QuyenChinhSua?code=@item.ma_quyen&type=@(StatusAction.View.ToString())">
                                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
                                             </a>
                                         </td>

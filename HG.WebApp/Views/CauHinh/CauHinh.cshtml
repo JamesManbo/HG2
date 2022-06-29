@@ -11,17 +11,7 @@
 @model HG.Entities.Entities.phong_ban_nhom_nguoi_dung
 @* <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>*@
 <script src="https://cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
-<script>
-     CKEDITOR.replace('bottom_footer');
-    //ClassicEditor
-    // .create( document.querySelector('#bottom_footer') )
-    // .then( editor => {
-    //       console.log( editor );
-    // } )
-    // .catch( error => {
-    //      console.log( error );
-    // });
-</script>
+
 <div class="card">
     <div class="pageheader">
 
@@ -191,22 +181,33 @@
                         </div>
                     </form>
                     <div class="tab-pane fade" id="XoaNguoiCTXL" role="tabpanel" aria-labelledby="XoaNguoiCTXL-tab">
-                        @Html.RenderAction("XoaNguoiCTXL", "CauHinh")
+                        @*@Html.RenderAction("XoaNguoiCTXL", "CauHinh")*@
                     </div>
                     <div class="tab-pane fade" id="DoiNguoiXL" role="tabpanel" aria-labelledby="DoiNguoiXL-tab">
-                        @Html.RenderAction("DoiNguoiXL", "CauHinh")
+                        @*@Html.RenderAction("DoiNguoiXL", "CauHinh")*@
                     </div>
                     <div class="tab-pane fade" id="DoiNguoiXLTL" role="tabpanel" aria-labelledby="DoiNguoiXLTL-tab">
-                        @Html.RenderAction("DoiNguoiXLTL", "CauHinh")
+                        @*@Html.RenderAction("DoiNguoiXLTL", "CauHinh")*@
                     </div>
                     <div class="tab-pane fade" id="ThemNguoiXLVB" role="tabpanel" aria-labelledby="ThemNguoiXLVB-tab">
-                        @Html.RenderAction("ThemNguoiXLVB", "CauHinh")
+                        @*@Html.RenderAction("ThemNguoiXLVB", "CauHinh")*@
                     </div>
                      <div class="tab-pane fade" id="TTKN" role="tabpanel" aria-labelledby="TTKN-tab">
-                         @Html.RenderAction("TTKN", "CauHinh")
+                         @*@Html.RenderAction("TTKN", "CauHinh")*@
                     </div>
                   </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+     CKEDITOR.replace('bottom_footer');
+    //ClassicEditor
+    // .create( document.querySelector('#bottom_footer') )
+    // .then( editor => {
+    //       console.log( editor );
+    // } )
+    // .catch( error => {
+    //      console.log( error );
+    // });
+</script>

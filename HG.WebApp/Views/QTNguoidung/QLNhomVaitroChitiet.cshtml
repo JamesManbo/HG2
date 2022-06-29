@@ -217,7 +217,7 @@
                                                             <td><a href="#">@item.ten_vai_tro</a></td>
 
                                                             <td><a href="#">@item.mo_ta</a></td>
-                                                             <td><input type="checkbox" class="ads_Checkbox" @(lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "checked": "") value="@item.ma_vai_tro" /></td>
+                                                             <td><input type="checkbox" class="ads_Checkbox" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "checked": "") value="@item.ma_vai_tro" /></td>
                                        
                                                         </tr>
                                                         stt++;

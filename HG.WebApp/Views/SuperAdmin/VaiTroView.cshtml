@@ -1,0 +1,75 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục lĩnh vực";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Entities.Nhom.Asp_dm_vai_tro
+
+
+<div></div>
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Lĩnh vực</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin lĩnh vực</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_pb" action="#" method="post" enctype="multipart/form-data" id="filterForm">
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã Vai trò <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã Vai trò" name="ma_linh_vuc" maxlength="25" value="@Model.ma_vai_tro" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên Vai trò <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Tên lĩnh vực" name="ten_linh_vuc" maxlength="200" value="@Model.ma_vai_tro" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
+                            </div>
+                        </div>
+                     
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="nguoi_sua" value="@ViewBag.UidName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
+                            </div>
+                        </div>
+                         <button type="button" class="btn btn-secondary" onclick="window.location.href='/SuperAdmin/VaiTro';">Đóng</button>
+                        <input name="type_view" hidden value="@ViewBag.type_view" />
+                    </form><!-- End Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+
+
+

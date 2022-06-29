@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using HG.Entities.Entities.SuperAdmin;
+using HG.Entities.DanhMuc.DonVi;
 
 namespace HG.WebApp.Data
 {
@@ -44,6 +45,7 @@ namespace HG.WebApp.Data
         // END Danh mục
 
         //TuanTA
+        public virtual DbSet<dm_don_vi> dm_don_vi { get; set; }
         public virtual DbSet<Asp_dm_vai_tro> Asp_dm_vai_tro { get; set; }
         public virtual DbSet<Asp_vaitro_quyen> Asp_vaitro_quyen { get; set; }
         //End TuanTA
