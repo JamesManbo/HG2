@@ -87,19 +87,39 @@
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Cấp cơ quan <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text"  class="form-control input-default" name="ma_cap_co_quan" value="@Model.ma_cap_co_quan" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="GetCoQuanChaTheoID(this)" class="form-control input-default">
+				                    <option value="001">Tỉnh/Thành phố</option>
+				                    <option value="003">Quận/Huyện/TP/Thị Xã</option>
+				                    <option value="004">Phường/Xã/Thị Trấn</option>
+				                    <option value="002">Sở/Ban/Ngành</option>
+			                    </select>
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <label for="stt" class="col-sm-2 control-label">Cấp đơn vị cha <span style="color:red">(*)</span></label>
-                            <div class="col-sm-8">
-                                <input type="number" readonly  class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                        <script>
+                                function GetCoQuanChaTheoID(obj){
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/DonVi/LayDanhSachDiaBanTheoMa?ma_cap_co_quan=" + obj.value ,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#chitietmacoquan").html(data);
+                                        }
+                                    });
+                                }
+                        </script>
+                        <div id="chitietmacoquan">
+                            <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Cấp đơn vị cha <span style="color:red">(*)</span></label>
+                                <div class="col-sm-8">
+                                    <input type="number" readonly  class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                </div>
                             </div>
-                        </div>
-                           <div class="row mb-3">
-                            <label for="stt" class="col-sm-2 control-label">Cấp đơn vị con <span style="color:red">(*)</span></label>
-                            <div class="col-sm-8">
-                                <input type="number" readonly class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                               <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Cấp đơn vị con <span style="color:red">(*)</span></label>
+                                <div class="col-sm-8">
+                                    <input type="number" readonly class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">

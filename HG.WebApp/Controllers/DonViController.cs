@@ -204,19 +204,26 @@ namespace HG.WebApp.Controllers
 
             return Content(result);
         }
-        public IActionResult DeleteTag(int id)
+        public async Task<IActionResult> LayDanhSachDiaBanTheoMaAsync(string macoquan)
         {
-            ////Tags obj = new Tags();
-            //var obj = db.Tags.Find(id);
-            //if (obj != null)
-            //{
-            //    db.Tags.Attach(obj);
-            //    db.Tags.Remove(obj);
-            //    db.SaveChanges();
-            //}
-            //db.Entry(obj).State = EntityState.Modified;
-            //db.SaveChanges();
-            return RedirectToAction("Index", "Admin");
+            if (macoquan == "002")
+            {
+                //lay cac ubnd co trong he thong
+            }
+            else if(macoquan == "001")
+            {
+                //lay cac tinh, tp
+            }
+            else if (macoquan == "003")
+            {
+                //lay cac tinh, tp, = >huyen
+            }
+            else
+            {
+                //lay cac tinh, tp, huyen => xa
+            }
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMaAsync.cshtml");
+            return Content(result);
         }
     }
 }
