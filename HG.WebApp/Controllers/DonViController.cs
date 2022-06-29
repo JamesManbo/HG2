@@ -100,16 +100,27 @@ namespace HG.WebApp.Controllers
                 return View(item);
             }
         }
-        public async Task<IActionResult> ChinhSuaDonVi(string code)
+        public async Task<IActionResult> ChinhSuaDonVi(string code, string type)
         {
-            EAContext eAContext = new EAContext();
-            ViewBag.type_view = StatusAction.Edit.ToString();
-            var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
-            if (obj != null && obj.CreatedUid != null)
+           
+            if (type == StatusAction.Edit.ToString())
             {
-                ViewBag.CreateUserName =await userManager.GetUserNameAsync(await userManager.FindByIdAsync(obj.CreatedUid.ToString()));
+                EAContext eAContext = new EAContext();
+                ViewBag.type_view = StatusAction.Edit.ToString();
+                var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
+                if (obj != null && obj.CreatedUid != null)
+                {
+                    ViewBag.CreateUserName = await userManager.GetUserNameAsync(await userManager.FindByIdAsync(obj.CreatedUid.ToString()));
+                }
+                return View(obj);
             }
-            return View(obj);
+            else
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.type_view = StatusAction.View.ToString();
+                var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
+                return View(obj);
+            }
         }
         [HttpPost]
         public IActionResult ChinhSuaDonVi(dm_don_vi item)
@@ -152,6 +163,46 @@ namespace HG.WebApp.Controllers
 
             }
             return RedirectToAction("DonVi");
+        }
+
+        public async Task<IActionResult> DonViPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        {
+            var totalRecored = 0;
+            var result = "";
+            if (string.IsNullOrEmpty(tu_khoa))
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.dm_don_vi.Where(n => n.Deleted == 0).ToList();
+                    var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                    ViewBag.TotalRecored = totalRecored;
+                    ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                    ViewBag.CurrentPage = currentPage;
+                    ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+                    ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                    result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/DonViPaging.cshtml", datapage);
+
+                }
+            }
+            else
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.dm_don_vi.Where(n => n.Deleted == 0 && (n.ten_don_vi ?? "").Contains(tu_khoa)).ToList();
+                    var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                    ViewBag.TotalRecored = totalRecored;
+                    ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                    ViewBag.CurrentPage = currentPage;
+                    ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+                    ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                    result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/DonViPaging.cshtml", datapage);
+
+                }
+            }
+
+            return Content(result);
         }
         public IActionResult DeleteTag(int id)
         {
