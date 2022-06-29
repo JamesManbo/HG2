@@ -1,0 +1,250 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Thêm Địa Bàn"; 
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @ViewBag.ErrorMsg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.ErrorCode > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+<div class="card">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Địa Bàn</h1>
+        </div>
+    </div>
+
+
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin Địa Bàn</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_nhom" action="/DonVi/DiaBanThem" method="post" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã địa bàn <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" readonly maxlength="50" name="ma_dia_ban" value="@Model.ma_dia_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Chọn
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên địa bàn <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" maxlength="250" class="form-control input-default" name="ten_dia_ban" value="@Model.ten_dia_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control  input-default" maxlength="250" placeholder="Mô tả" name="mo_ta" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta_dia_ban</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Cấp địa bàn</label>
+                            <div class="col-md-8">
+                                   <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="GetCoQuanChaTheoID(this)" class="form-control input-default">
+				                        <option value="">Chọn cấp địa bàn</option> 
+                                       <option value="001">Tỉnh/Thành phố</option>
+				                        <option value="003">Quận/Huyện/TP/Thị Xã</option>
+				                        <option value="004">Phường/Xã/Thị Trấn</option>
+				                        <option value="002">Sở/Ban/Ngành</option>
+			                        </select>
+                            </div>
+                        </div>
+                        <script>
+                                function GetCoQuanChaTheoID(obj){
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/DonVi/LayDanhSachDiaBanTheoMa?ma_cap_co_quan=" + obj.value ,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#chitietmacoquan").html(data);
+                                        }
+                                    });
+                                }
+                                 function LayHuyenTheoTinh(obj){
+                                       $.ajax({
+                                             type: "GET",           
+                                             url: "/DonVi/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value ,           
+                                             data: "",           
+                                             contentType: 'application/json; charset=utf-8',           
+                                             success: function(data) {           
+                                                 $("#slHuyen").html(data);           
+                                             }           
+                                        });           
+                                }
+                        </script>
+                        <div id="chitietmacoquan">
+                            <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Tỉnh</label>
+                                <div class="col-sm-8">
+                                    <input type="number" readonly  class="form-control input-default" name="stt">
+                                </div>
+                            </div>
+                               <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Huyện</label>
+                                <div class="col-sm-8">
+                                    <input type="number" readonly class="form-control input-default" name="stt">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Đang Hoạt động</label>
+                            <div class="col-sm-8">
+                                <input type="checkbox" @(Model.trang_thai == 1 ? "checked" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                            </div>
+                        </div>
+                          <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
+                            <div class="col-sm-8">
+                                <input type="number" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") class="form-control input-default" value="@Model.stt">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="@ViewBag.UserUpdate" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") > 
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="@Model.UpdatedDateUtc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" value="@Model.CreatedDateUtc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            @*<button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>*@
+                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Edit.ToString())">Lưu</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/SuperAdmin/ViewNhom';">Đóng</button>
+                        </div>
+                    </form><!-- End Horizontal Form -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div style="overflow-y: auto;">
+                        <div id="pnlMain">
+                            <div>
+                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                                    <tbody>
+                                        <tr class="widgettitle">
+                                            <th align="center" scope="col">CHỌN</th>
+                                            <th scope="col">TÊN</th>
+                                            <th scope="col">MÔ TẢ</th>
+                                        </tr>
+                                      @*  @foreach (var item in lst_nhom)
+                                        {
+                                            <tr>
+                                            <td align="center">
+                                                 <a href="/SuperAdmin/SuaNhom?code=@item.Id&type=@(StatusAction.Edit.ToString())">Chọn</a>
+       
+                                            </td>
+                                            <td>
+                                                @item.ten_nhom
+                                            </td>
+                                            <td style="width: 25%;">@item.mo_ta</td>
+                                        </tr>
+                                        }*@
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+
+
+
+
+<script>
+    $(document).ready(function() {
+      
+
+        $('#form_nhom').validate({
+            rules: {
+                ma_nhom: "required",
+                ten_nhom: "required"
+            },
+            messages: {
+                ma_phong_ban: "Bạn cần nhập mã nhóm!",
+                ten_phong_ban: "Bạn cần nhập tên nhóm!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+    });
+
+</script>
+
+
+

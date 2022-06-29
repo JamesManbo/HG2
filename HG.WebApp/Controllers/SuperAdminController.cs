@@ -308,9 +308,6 @@ namespace HG.WebApp.Controllers
                                 obj.UpdatedDateUtc = DateTime.Now;
                                 db.Entry(obj).State = EntityState.Modified;
                                 db.SaveChanges();
-                                //db.Attach(obj);
-                                //db.Entry(obj).Property(p => p.Id).IsModified = true;
-                                //db.SaveChanges();
                             }
                             else
                             {

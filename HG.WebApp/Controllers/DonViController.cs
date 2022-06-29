@@ -1,4 +1,5 @@
 ﻿using HG.Entities.DanhMuc.DonVi;
+using HG.Entities.Entities.DanhMuc.DonVi;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -204,26 +205,96 @@ namespace HG.WebApp.Controllers
 
             return Content(result);
         }
-        public async Task<IActionResult> LayDanhSachDiaBanTheoMaAsync(string macoquan)
+        public async Task<IActionResult> LayDanhSachDiaBanTheoMa(string ma_cap_co_quan, string matinh)
         {
-            if (macoquan == "002")
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null).ToList();
+            ViewBag.CapCoQuan = ma_cap_co_quan;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMa.cshtml", LstDiaBan);
+            return Content(result);
+        } 
+        public async Task<IActionResult> LayHuyenTheoTinh(string ma_dia_ban_cha, string matinh)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMaTinh.cshtml", LstDiaBan);
+            return Content(result);
+        }
+
+
+        #region Cấp địa bàn
+        public IActionResult DiaBan(string txtSearch)
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var currentPage = 1;
+            var totalRecored = 0;
+            var dsObj = new List<dm_dia_ban>();
+            if (!string.IsNullOrEmpty(txtSearch))
             {
-                //lay cac ubnd co trong he thong
-            }
-            else if(macoquan == "001")
-            {
-                //lay cac tinh, tp
-            }
-            else if (macoquan == "003")
-            {
-                //lay cac tinh, tp, = >huyen
+                using (var db = new EAContext())
+                {
+                    var ds = db.dm_dia_ban.Where(n => n.Deleted == 0 && (n.ten_dia_ban ?? "").Contains(txtSearch)).ToList();
+                    dsObj = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
             }
             else
             {
-                //lay cac tinh, tp, huyen => xa
+                using (var db = new EAContext())
+                {
+                    var ds = db.dm_dia_ban.Where(n => n.Deleted == 0 && (n.ten_dia_ban ?? "").Contains(txtSearch)).ToList();
+                    dsObj = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
             }
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMaAsync.cshtml");
-            return Content(result);
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            return View(dsObj);
         }
+        public IActionResult DiaBanThem()
+        {
+            return View(new dm_dia_ban());
+        }
+
+        [HttpPost]
+        public IActionResult DiaBanThem(dm_dia_ban item)
+        {
+            try
+            {
+                EAContext eAContext = new EAContext();
+                item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                ViewBag.UidName = User.Identity.Name;
+                item.Deleted = 0;
+                item.CreatedDateUtc = DateTime.Now;
+                var obj = eAContext.dm_dia_ban.Where(n => n.ten_dia_ban == item.ten_dia_ban).Count();
+                if (obj > 0)
+                {
+                    ViewBag.ErrorCode = 1;
+                    ViewBag.ErrorMsg = "Tên đã tồn tại trong hệ thống";
+                    return View(item);
+                };
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<dm_dia_ban> _role = eAContext.dm_dia_ban.Add(item);
+                eAContext.SaveChanges();
+                var roleid = _role.Entity.Id;
+                if (!string.IsNullOrEmpty(roleid.ToString()))
+                {
+                    ViewBag.type_view = StatusAction.View.ToString();
+                    return View(item);
+                }
+                return View(item);
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Lỗi dữ liệu";
+                return View(item);
+            }
+        }
+        #endregion  
     }
 }
