@@ -416,26 +416,36 @@ namespace HG.WebApp.Controllers
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/luong/BuocThucHien" });
         }
 
-        public async Task<IActionResult> RenderViewBuocThucHien()
+        public async Task<IActionResult> RenderViewBuocThucHien(int type = 0)
         {
 
             var buocThucHien = new List<Dm_Buoc_Thuc_Hien>();
+            var Views = "";
             using (var db = new EAContext())
             {
                 buocThucHien = db.Dm_Buoc_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/BuocThucHien/ViewBuocThucHien.cshtml", buocThucHien);
+            if (type == 1)
+            {
+                Views = "~/Views/Luong/QuyTrinh/ViewBuocThucHien.cshtml";
+            }
+            else
+            {
+                Views = "~/Views/Luong/BuocThucHien/ViewBuocThucHien.cshtml";
+            }
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, Views, buocThucHien);
             return Content(result);
         }
 
         #endregion
 
         #region Quy trình xử lý 
-        public IActionResult QuyTrinhXuLy(string ma_luong)
+        public IActionResult QuyTrinhXuLy(string code)
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = ma_luong, tu_khoa = "", RecordsPerPage = pageSize };
+            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
+            ds.ma_luong = code;
             var user = _dmDao.DanhSachNguoiDung("0");
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
@@ -454,6 +464,57 @@ namespace HG.WebApp.Controllers
             return View("~/Views/Luong/QuyTrinh/QuyTrinhXuLy.cshtml", ds);
         }
 
+        public IActionResult SuaQuyTrinhXuLy(string code, string step)
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
+            ds.ma_luong = code;
+            ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.Where(n => n.ma_buoc == step).FirstOrDefault();
+            var user = _dmDao.DanhSachNguoiDung("0");
+            var lstpb = new List<Dm_Phong_Ban>();
+            var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                nhanhXuLy = db.Dm_Nhanh_Xu_Ly.Where(n => n.Deleted == 0).ToList();
+            }
+            ViewBag.NguoiDung = user;
+            ViewBag.NhanhXuLy = nhanhXuLy;
+            ViewBag.PhongBan = lstpb;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            return View("~/Views/Luong/QuyTrinh/QuyTrinhXuLy.cshtml", ds);
+        }
+
+        public IActionResult ThemQuyTrinhXuLy()
+        {
+            return View("~/Views/Luong/QuyTrinh/ThemQuyTrinhXuLy.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemQuyTrinhXuLy(QuyTrinhXuLy item)
+        {
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuQuyTrinhXuLy(item);
+            if (response.ErrorCode > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = response.ErrorMsg;
+            }
+            if (response.ErrorCode > 0)
+            {
+                return View("~/Views/Luong/QuyTrinh/ThemQuyTrinhXuLy.cshtml", item);
+            }
+            else
+            {
+                return RedirectToAction("QuyTrinhXuLy", "Luong", new { code = item.ma_luong });
+            }
+        }
         #endregion
     }
 }

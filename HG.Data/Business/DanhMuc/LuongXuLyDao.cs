@@ -155,6 +155,32 @@ namespace HG.Data.Business.DanhMuc
                 return new QuyTrinhXuLy_paging();
             }
         }
+
+        public Response LuuQuyTrinhXuLy(QuyTrinhXuLy item)
+        {
+            var result = new Response();
+            DbProvider.SetCommandText2("dm_them_sua_quy_trinh_xu_ly", CommandType.StoredProcedure);
+            DbProvider.AddParameter("id", item.Id, SqlDbType.Int);
+            DbProvider.AddParameter("ma_luong", item.ma_luong, SqlDbType.VarChar);
+            DbProvider.AddParameter("ma_buoc", item.ma_buoc, SqlDbType.VarChar);
+            DbProvider.AddParameter("ten_buoc", item.ten_buoc, SqlDbType.NVarChar);
+            DbProvider.AddParameter("ma_nhanh", item.ma_nhanh, SqlDbType.VarChar);
+            DbProvider.AddParameter("so_ngay_xl", item.so_ngay_xl, SqlDbType.Float);
+            DbProvider.AddParameter("buoc_xl_chinh", item.buoc_xl_chinh, SqlDbType.Bit);
+            DbProvider.AddParameter("chuc_nang", item.chuc_nang, SqlDbType.NVarChar);
+            DbProvider.AddParameter("nguoi_co_the_xl", item.nguoi_co_the_xl, SqlDbType.NVarChar);
+            DbProvider.AddParameter("nguoi_phoi_hop_xl", item.nguoi_phoi_hop_xl, SqlDbType.NVarChar);
+            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
+            DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            DbProvider.AddParameter("ten_loi", DBNull.Value, SqlDbType.NVarChar,100, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            result.ErrorCode = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            result.ErrorMsg = DbProvider.Command.Parameters["ten_loi"].Value.ToString();
+            return result;
+        }
         #endregion
 
         #region Bước thực hiện

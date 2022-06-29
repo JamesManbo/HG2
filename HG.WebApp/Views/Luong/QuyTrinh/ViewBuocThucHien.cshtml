@@ -1,5 +1,5 @@
 ﻿@using HG.WebApp
-@model List<HG.Entities.Dm_Buoc_Xu_Ly>
+@model List<HG.Entities.Dm_Buoc_Thuc_Hien>
 
 <div style="overflow-y: auto;">
     <div id="pnlMain">
@@ -14,10 +14,10 @@
                     {
                         <tr>
                             <td align="center">
-                                <a href="#" onclick="SetDataBXL('@item.ma_buoc_xu_ly','@item.ten_buoc_xu_ly')">Chọn</a>
+                                <a href="#" onclick="SetDataBXL('@item.ma_buoc','@item.ten_buoc','@item.so_ngay')">Chọn</a>
                             </td>
                             <td>
-                                @item.ten_buoc_xu_ly
+                                @item.ten_buoc
                             </td>
                         </tr>
                     }
@@ -27,9 +27,10 @@
     </div>
 </div>
 <script>
-    function SetDataBXL(code, name) {
-        $("#ma_buoc_xu_ly").val(code);
-        $("#ten_buoc_xu_ly").val(name);
+    function SetDataBXL(code, name, day) {
+        $("#ma_buoc").val(code);
+        $("#ten_buoc").val(name);
+         $("#so_ngay").val(day);
         $('#ModalBXL').modal("hide");
     }
 </script>

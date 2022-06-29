@@ -16,7 +16,7 @@ namespace HG.Entities
         public string ma_buoc { get; set; }
         public string ten_buoc { get; set; }
         public string? mo_ta { get; set; }
-        public float? so_ngay { get; set; }
+        public double? so_ngay { get; set; }
     }
   
 }
