@@ -168,6 +168,7 @@ namespace HG.Data.Business.DanhMuc
             DbProvider.AddParameter("so_ngay_xl", item.so_ngay_xl, SqlDbType.Float);
             DbProvider.AddParameter("buoc_xl_chinh", item.buoc_xl_chinh, SqlDbType.Bit);
             DbProvider.AddParameter("chuc_nang", item.chuc_nang, SqlDbType.NVarChar);
+            DbProvider.AddParameter("nguoi_xl_mac_dinh", item.nguoi_xl_mac_dinh, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("nguoi_co_the_xl", item.nguoi_co_the_xl, SqlDbType.NVarChar);
             DbProvider.AddParameter("nguoi_phoi_hop_xl", item.nguoi_phoi_hop_xl, SqlDbType.NVarChar);
             DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
