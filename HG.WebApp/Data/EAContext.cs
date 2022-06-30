@@ -48,6 +48,7 @@ namespace HG.WebApp.Data
         //TuanTA
         public virtual DbSet<dm_don_vi> dm_don_vi { get; set; }
         public virtual DbSet<dm_dia_ban> dm_dia_ban { get; set; }
+        public virtual DbSet<dm_cap_dia_ban> dm_cap_dia_ban { get; set; }
         public virtual DbSet<Asp_dm_vai_tro> Asp_dm_vai_tro { get; set; }
         public virtual DbSet<Asp_vaitro_quyen> Asp_vaitro_quyen { get; set; }
         //End TuanTA
