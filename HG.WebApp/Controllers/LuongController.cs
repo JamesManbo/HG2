@@ -440,7 +440,7 @@ namespace HG.WebApp.Controllers
         #endregion
 
         #region Quy trình xử lý 
-        public IActionResult QuyTrinhXuLy(string code)
+        public IActionResult QuyTrinhXuLy(string code, string views = "View")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
@@ -461,16 +461,17 @@ namespace HG.WebApp.Controllers
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            ViewBag.Views = views;
             return View("~/Views/Luong/QuyTrinh/QuyTrinhXuLy.cshtml", ds);
         }
 
-        public IActionResult SuaQuyTrinhXuLy(string code, string step)
+        public IActionResult SuaQuyTrinhXuLy(string code, int step)
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
             ds.ma_luong = code;
-            ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.Where(n => n.ma_buoc == step).FirstOrDefault();
+            ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.FirstOrDefault(n => n.Id == step);
             var user = _dmDao.DanhSachNguoiDung("0");
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
@@ -486,12 +487,7 @@ namespace HG.WebApp.Controllers
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
-            return View("~/Views/Luong/QuyTrinh/QuyTrinhXuLy.cshtml", ds);
-        }
-
-        public IActionResult ThemQuyTrinhXuLy()
-        {
-            return View("~/Views/Luong/QuyTrinh/ThemQuyTrinhXuLy.cshtml");
+            return View("~/Views/Luong/QuyTrinh/SuaQuyTrinhXuLy.cshtml", ds);
         }
 
         [HttpPost]
@@ -514,6 +510,18 @@ namespace HG.WebApp.Controllers
             {
                 return RedirectToAction("QuyTrinhXuLy", "Luong", new { code = item.ma_luong });
             }
+        }
+
+        public IActionResult XoaQuyTrinhXuLy(int id, string code)
+        {
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _danhmucDao.XoaQuyTrinhXuLy(id, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/luong/QuyTrinhXuLy?code=" + code });
         }
         #endregion
     }

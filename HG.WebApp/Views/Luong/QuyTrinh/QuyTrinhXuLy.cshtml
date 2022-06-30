@@ -33,19 +33,19 @@
             <div class="tab-primary" style="border: 2px solid #0866c6;overflow: hidden;">
                 <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ds-buoc" role="tab" aria-controls="ds-buoc" aria-selected="true">Danh sách bước</button>
+                        <button class="nav-link @(ViewBag.Views.Contains(StatusAction.View.ToString())?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ds-buoc" role="tab" aria-controls="ds-buoc" aria-selected="true">Danh sách bước</button>
                     </li>
                     <li class="nav-item ui-state-default ui-corner-top" role="presentation">
                         <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#nhanh" role="tab" aria-controls="nhanh" aria-selected="false">Nhánh</button>
                     </li>
                     <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#tt-buoc" role="tab" aria-controls="tt-buoc" aria-selected="false">Thông tin bước</button>
+                        <button class="nav-link @(ViewBag.Views.Contains(StatusAction.Add.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#tt-buoc" role="tab" aria-controls="tt-buoc" aria-selected="false">Thông tin bước</button>
                     </li>
                 </ul>
 
                 <div class="tab-content" id="myTabContent" style="padding: 15px;">
                     @*Danh sách bước*@
-                    <div class="tab-pane fade show active" id="ds-buoc" role="tabpanel" aria-labelledby="home-tab">
+                    <div class="tab-pane fade @(ViewBag.Views.Contains(StatusAction.View.ToString())?"show active":"")" id="ds-buoc" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row" style="padding: 15px;">
                             <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: 0 ngày/TTHC: 0 ngày </span>
                             <div class="col-sm-6" align="right">
@@ -86,7 +86,7 @@
                                                     <td>@item.so_ngay_xl</td>
                                                     <td>@item.ma_nhanh</td>
                                                     <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Luong/SuaQuyTrinh?code=@item.ma_luong&type=@(StatusAction.Edit.ToString())">
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Luong/SuaQuyTrinhXuLy?code=@item.ma_luong&step=@item.Id">
                                                             <span class="glyphicon glyphicon-edit">Sửa</span>
                                                         </a>
                                                     </td>
@@ -185,10 +185,10 @@
                         </div>
                     </div>
                     @*Thông tin bước *@
-                    <div class="tab-pane fade" id="tt-buoc" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade @(ViewBag.Views.Contains(StatusAction.Add.ToString())?"show active":"")" id="tt-buoc" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="form-horizontal">
                             <form id="form_pb" action="/Luong/ThemQuyTrinhXuLy" method="post" enctype="multipart/form-data">
-                                <input name="ma_luong" value="@Model.ma_luong">
+                                <input type="hidden" name="ma_luong" value="@Model.ma_luong">
                                 <div class="row" style="padding-bottom: 10px">
                                     <label class="col-md-2 control-label">
                                         Tên bước thực hiện
@@ -243,7 +243,7 @@
                                         Số ngày xử lý
                                     </label>
                                     <div class="col-md-3">
-                                        <input name="so_ngay" type="text" value="0" id="so_ngay" class="form-control input-default-sm" placeholder="Nhập số ngày xử lý">
+                                        <input name="so_ngay_xl" type="text" value="0" id="so_ngay_xl" class="form-control input-default-sm" placeholder="Nhập số ngày xử lý">
                                     </div>
                                     <div class="col-md-1"></div>
                                     <label class="col-md-2 control-label">Người có thể XL</label>
@@ -262,7 +262,7 @@
 
                                     </div>
                                     <div class="col-md-1">
-                                        <input type="submit" name="ctl08$ctl00$btnNguoiCoTheXL" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
+                                        <input type="button" name="" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
                                     </div>
                                 </div>
 
@@ -289,7 +289,7 @@
                                             <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="submit" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
+                                            <input type="button" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
                                         </div>
                                     </div>
 
@@ -315,9 +315,9 @@
                                                 @if (Model.Pagelist.TotalRecords > 1)
                                                 {
                                                     <select name="stt" id="FIndex" class="form-control input-default-sm">
-                                                        @for (int i = 2; i < Model.Pagelist.TotalRecords + 1; i++)
+                                                        @for (int i = 2; i < Model.Pagelist.TotalRecords + 2; i++)
                                                         {
-                                                            <option value="i">i</option>
+                                                            <option value="@i">@i</option>
                                                         }
                                                     </select>
                                                 }
@@ -331,7 +331,7 @@
                                 </div>
 
                                 <div id="ctl08_ctl00_pnlChucNang">
-                                    <input name="chuc_nang" id="chuc_nang">
+                                    <input type="hidden" name="chuc_nang" id="chuc_nang">
 
                                     <div class="form-group">
                                         <label class="col-md-2 control-label"></label>
@@ -454,10 +454,8 @@
                                 <div class="form-group">
                                     <div class="col-md-3"></div>
                                     <div class="col-md-4">
-                                        <input type="submit" name="ctl08$ctl00$btnAdd" value="Thêm mới" id="btnAdd" class="btn btn-primary">
-                                        <input type="submit" name="ctl08$ctl00$btnSave" value="Lưu" onclick="return checkSave();" id="btnSave" class="btn btn-primary process">
-
-                                        <input type="submit" name="ctl08$ctl00$btnClose" value="Đóng" id="btnClose" class="btn btn-primary">
+                                        <input type="submit" name="" value="Lưu" onclick="return checkSave();" id="btnSave" class="btn btn-primary process">
+                                        <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong>
                                     </div>
                                     <div class="col-md-5">
                                         <br>

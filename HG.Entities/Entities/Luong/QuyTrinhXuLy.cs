@@ -15,7 +15,7 @@ namespace HG.Entities.Entities.Luong
         public float so_ngay_xl { get; set; }
         public bool buoc_xl_chinh { get; set; }
         public string? chuc_nang { get; set; }
-        public string nguoi_xl_mac_dinh { get; set; }
+        public Guid nguoi_xl_mac_dinh { get; set; }
         public int? stt { get; set; }
         public string? ma_nhanh { get; set; }
         public string? nguoi_co_the_xl { get; set; }
