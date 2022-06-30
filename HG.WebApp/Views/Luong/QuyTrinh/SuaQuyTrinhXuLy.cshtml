@@ -469,7 +469,7 @@
                                         <input type="button" name="" value="Thêm mới" id="btnAdd" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&action=@StatusAction.Add.ToString()';">
                                         <input type="submit" name="" value="Lưu" id="btnSave" class="btn btn-primary process">
                                         <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
-                                        <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong>
+                                        <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong'">
                                     </div>
                                     <div class="col-md-5">
                                         <br>
@@ -614,9 +614,15 @@
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
+
         $('.select2').select2({
             closeOnSelect: false
         });
+        var val = [];
+        $(':checkbox:checked').each(function(i) {
+            val[i] = $(this).val();
+        });
+        $("#chuc_nang").val(val);
 
         $("#buoc_xl_chinh").val($("#buoc_xl_chinh").is(':checked'));
 
@@ -630,22 +636,20 @@
             arrNgctxl.forEach(function(i) {
                 console.log(i);
                 Arr.push(i);
+                $("#nguoi_co_the_xl").val(Arr.join(","));
             });
         }
-
         $("#multiselect").val(arrNgctxl).trigger('change');
 
 
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
             $("#nguoi_co_the_xl").val(Arr.join(","));
-            console.log(Arr);
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
             Arr.pop(e.params.data.id);
             $("#nguoi_co_the_xl").val(Arr.join(","));
-            console.log(Arr);
         });
 
 
@@ -654,6 +658,7 @@
         if (arrNgphxl != "") {
             arrNgphxl.forEach(function(i) {
                 Arr2.push(i);
+                $("#nguoi_phoi_hop_xl").val(Arr2.join(","));
             });
         }
         $("#multiselect2").val(arrNgphxl).trigger('change');
