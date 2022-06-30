@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Thêm mới đơn vị"; 
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+   var ListCapDiaBan = ViewBag.ListCapDiaBan as List<HG.Entities.Entities.DanhMuc.DonVi.dm_cap_dia_ban>;
 }
 @model HG.Entities.DanhMuc.DonVi.dm_don_vi;
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -88,10 +89,15 @@
                             <label for="stt" class="col-sm-2 control-label">Cấp cơ quan <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="GetCoQuanChaTheoID(this)" class="form-control input-default">
-				                    <option value="001">Tỉnh/Thành phố</option>
-				                    <option value="003">Quận/Huyện/TP/Thị Xã</option>
-				                    <option value="004">Phường/Xã/Thị Trấn</option>
-				                    <option value="002">Sở/Ban/Ngành</option>
+				                     <option value="">Chọn cấp địa bàn</option> 
+                                    @if(ListCapDiaBan != null)
+                                    {
+                                        foreach (var item in ListCapDiaBan)
+                                        {
+                                            <option value="@item.ma_cap">@item.ten_cap</option> 
+                                        }
+                                    }
+                                    
 			                    </select>
                             </div>
                         </div>
@@ -106,6 +112,17 @@
                                             $("#chitietmacoquan").html(data);
                                         }
                                     });
+                                }
+                                function LayHuyenTheoTinh(obj){
+                                       $.ajax({
+                                             type: "GET",           
+                                             url: "/DonVi/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value ,           
+                                             data: "",           
+                                             contentType: 'application/json; charset=utf-8',           
+                                             success: function(data) {           
+                                                 $("#slHuyen").html(data);           
+                                             }           
+                                        });           
                                 }
                         </script>
                         <div id="chitietmacoquan">

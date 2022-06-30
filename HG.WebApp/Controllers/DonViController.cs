@@ -63,6 +63,9 @@ namespace HG.WebApp.Controllers
         [HttpGet] 
         public IActionResult DonViThem()
         {
+            EAContext db = new EAContext();
+            ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
+            //ViewBag.ListDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null && n.ma_cap == obj.ma_cap).ToList();
             return View(new dm_don_vi());
         }
 
@@ -107,6 +110,8 @@ namespace HG.WebApp.Controllers
             if (type == StatusAction.Edit.ToString())
             {
                 EAContext eAContext = new EAContext();
+                ViewBag.ListCapDiaBan = eAContext.dm_cap_dia_ban.ToList();
+                ViewBag.ListDiaBan = eAContext.dm_dia_ban.Where(n => n.Deleted == 0).ToList();
                 ViewBag.type_view = StatusAction.Edit.ToString();
                 var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
                 if (obj != null && obj.CreatedUid != null)
@@ -119,6 +124,7 @@ namespace HG.WebApp.Controllers
             {
                 EAContext eAContext = new EAContext();
                 ViewBag.type_view = StatusAction.View.ToString();
+                ViewBag.ListCapDiaBan = eAContext.dm_cap_dia_ban.ToList();
                 var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
                 return View(obj);
             }
@@ -208,7 +214,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayDanhSachDiaBanTheoMa(string ma_cap_co_quan, string matinh)
         {
             EAContext db = new EAContext();
-            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null).ToList();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == null).ToList();
             ViewBag.CapCoQuan = ma_cap_co_quan;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMa.cshtml", LstDiaBan);
             return Content(result);
@@ -216,7 +222,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayHuyenTheoTinh(string ma_dia_ban_cha, string matinh)
         {
             EAContext db = new EAContext();
-            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == ma_dia_ban_cha).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMaTinh.cshtml", LstDiaBan);
             return Content(result);
         }
@@ -242,7 +248,7 @@ namespace HG.WebApp.Controllers
             {
                 using (var db = new EAContext())
                 {
-                    var ds = db.dm_dia_ban.Where(n => n.Deleted == 0 && (n.ten_dia_ban ?? "").Contains(txtSearch)).ToList();
+                    var ds = db.dm_dia_ban.Where(n => n.Deleted == 0).ToList();
                     dsObj = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                     totalRecored = ds.Count();
                 }
@@ -294,6 +300,68 @@ namespace HG.WebApp.Controllers
                 ViewBag.ErrorMsg = "Lỗi dữ liệu";
                 return View(item);
             }
+        }
+        public IActionResult SuaDiaBan(int code, string type)
+        {
+            if (type == StatusAction.Edit.ToString())
+            {
+                EAContext db = new EAContext();
+                var obj = db.dm_dia_ban.Where(n => n.Id == code).FirstOrDefault();
+                ViewBag.type_view = StatusAction.Edit.ToString();
+                ViewBag.UserCreate = User.Identity.Name;
+                ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
+                ViewBag.ListDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == null && n.ma_cap == obj.ma_cap).ToList();
+                return View(obj);
+            }
+            else
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.type_view = StatusAction.View.ToString();
+                return View(eAContext.dm_dia_ban.Where(n => n.Id == code).FirstOrDefault());
+            }
+        }
+        [HttpPost]
+        public IActionResult SuaDiaBan(dm_dia_ban item)
+        {
+            try
+            {
+                item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                item.UpdatedDateUtc = DateTime.Now;
+                EAContext db = new EAContext();
+                db.Entry(item).State = EntityState.Modified;
+                db.SaveChanges();
+                ViewBag.type_view = StatusAction.View.ToString();
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMsg = "Có lỗi xảy ra!";
+                ViewBag.ErrorCode = 1;
+                return View(item);
+            }
+        }
+        public IActionResult XoaDiaBan(string code)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            foreach (var item in code.Split(""))
+            {
+                EAContext db = new EAContext();
+                var obj = db.dm_dia_ban.Where(n => n.Id == Convert.ToInt32(item)).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.Deleted = 1;
+                    obj.UpdatedDateUtc = DateTime.Now;
+                    obj.UpdatedUid = uid;
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+            }
+            return RedirectToAction("DiaBan");
         }
         #endregion  
     }

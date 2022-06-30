@@ -1,0 +1,439 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="/BackEnd/Admin/plugin/style.css" rel="stylesheet">
+  <link href="/BackEnd/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet">
+  <title>Document</title>
+</head>
+
+<body>
+  <section class="banner-box">
+    <div class="banner-top">
+      <a class="logo" href="/">
+        <img src="~/BackEnd/assets/img/logo3.png" class="img-fluid" alt="logo" style="float: left;">
+      </a>
+      <div class="title-logo">
+        <p class="title">CỔNG DỊCH VỤ CÔNG TỈNH HÀ GIANG</p>
+        <br>
+        <p class="link">dichvucong.hagiang.gov.vn</p>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </section>
+  <!-- Thanh navbar -->
+  <section>
+    <nav class="navbar navbar-expand-lg navbar-dark py-0">
+      <a class="navbar-brand" href="#"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+        aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mx-auto mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/view/trang-chu.html">TRANG CHỦ <span class="sr-only"></span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/view/thu-tuc.html">THỦ TỤC HÀNH CHÍNH <span class="sr-only"></span></a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link link-toggle" href="/view/gui-hs-thpt.html">GỬI HỒ SƠ</a>
+            <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false"></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">TRA CỨU HỒ SƠ</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">ĐÁNH GIÁ</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link link-toggle" href="#">BÁO CÁO - THỐNG KÊ</a>
+            <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false"></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Báo cáo tỏng hợp</a>
+              <a class="dropdown-item" href="#">Thống kê tổng hợp</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">GÓP Ý</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">PHẢN ÁNH KIẾN NGHỊ</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link link-toggle" href="#">TRỢ GIÚP</a>
+            <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false"></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item" href="#">Item 1</a>
+              <a class="dropdown-item" href="#">Item 2</a>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">THANH TOÁN</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">LIÊN KẾT</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </section>
+  <!-- Quảng cáo -->
+  <div class="container-fluid">
+    <section class="n-content">
+      <div class="row">
+        <div class="col-xs-4 col-md-6">
+          <a href="#">
+            <img class="img-ad" src="~/BackEnd/assets/img/sample_img.png" /></a>
+          <a href="#">
+            <img class="img-ad" src="~/BackEnd/assets/img/sample_img.png" /></a>
+        </div>
+        <div class="col-md-12 col-xs-8">
+          <div id="slideshow">
+            <div id="slideshowWindow"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Đăng nhập/ Đăng ký -->
+    <section class="main-content pt-1">
+      <div class="row">
+        <div class="column-left col-xs-12 col-sm-4 col-lg-3">
+          <div class="login-box w-100">
+            <div class="login-box-title top-title-frame">
+              ĐĂNG NHẬP / ĐĂNG KÝ
+            </div>
+            <div class="login-box-inner">
+              <div class="content">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text h-100" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Tài khoản" aria-label="Tài khoản"
+                    aria-describedby="basic-addon1" />
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text h-100" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Mật khẩu" aria-label="Mật khẩu"
+                    aria-describedby="basic-addon1" />
+                </div>
+                <label class="checkbox-inline">
+                  <input class="form-check-input" id="checkbox-remember" type="checkbox" />
+                  Lưu thông tin đăng nhập
+                </label>
+                <div class="button-wrapper text-center my-2">
+                  <button type="button" class="btn-common btn-login">
+                    Đăng nhập
+                  </button>
+                  <button type="button" class="btn-common btn-register">
+                    Đăng ký
+                  </button>
+                </div>
+                <div class="lg-chucnang">
+                  <div class="lg-more">
+                    <i class="fa-solid fa-circle-info login-icon"></i>
+                    <a class="other_login_method" href="#">Đăng nhập bằng cổng DVC Quốc Gia</a>
+                  </div>
+                  <div class="lg-forgotpw">
+                    <i class="fa-solid fa-key login-icon"></i>
+                    <a class="other_login_method" href="#">Quên mật khẩu</a>
+                  </div>
+                  <div class="lg-activate">
+                    <i class="fa-solid fa-envelope-circle-check login-icon"></i>
+                    <a class="other_login_method" href="#">Gửi email kích họat</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-lg-9">
+          <div class="about">
+            <div class="about-title top-title-frame">
+              <p>GIỚI THIỆU VỀ CỔNG DỊCH VỤ CÔNG TỈNH HÀ GIANG</p>
+            </div>
+            <div class="about-content content-frame">
+              <img class="box-right-img" src="https://dichvucong.hagiang.gov.vn/Image/anh-gt2.png" />
+              <p class="text-justify">
+                <b class="text-justify">“ CỔNG DỊCH VỤ CÔNG TỈNH HÀ GIANG ”</b>
+              </p>
+              <p class="text-justify">
+                xây dựng nhằm tạo điều kiện thuận lợi cho khách hàng có nhu
+                cầu giải quyết các thủ tục hành chính một cách nhanh chóng,
+                thuận tiện tại một địa chỉ duy nhất. Hệ thống cung cấp thông
+                tin tự động và trực tuyến về tình trạng giải quyết thủ tục
+                hành chính cho khách hàng. Khách hàng có thể kiểm tra, giám
+                sát về tình trạng giải quyết hồ sơ qua mạng internet. Hệ thống
+                cung cấp một nền tảng ứng dụng tích hợp để từng bước cho phép
+                các cơ quan hành chính nhà nước phối hợp giải quyết thủ tục
+                hành chính trên môi trường mạng một cách minh bạch, hiệu quả
+                và nhất quán theo cơ chế <b>“một cửa liên thông”.</b>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Danh sách tin mới nhất -->
+        <div class="column-left col-xs-12 col-sm-4 col-lg-3 my-3">
+          <div class="news-title top-title-frame">
+            <p>DANH SÁCH TIN MỚI NHẤT</p>
+          </div>
+          <div class="news-list">
+            <ul class="list_news_ul">
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+              <li class="list_news_li">
+                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
+                  dolor sit ameted consectetur adipisicing elit.
+                </a>
+              </li>
+            </ul>
+            <a class="view-more-news" href="#" title="Xem danh sách tin đầy đủ">
+              <img src="~/BackEnd/assets/img/viewmore-hover.png" /></a>
+          </div>
+
+          <div class="box-stastistic">
+            <div class="statistic-title top-title-frame">
+              <p>THỐNG KÊ TRUY CẬP</p>
+            </div>
+            <div class="statistic-inner">
+              <table cellpadding="0" cellspacing="0" width="100%">
+                <tbody>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Đang online:</td>
+                    <td style="width:50%">
+                      2766</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Hôm nay:</td>
+                    <td style="width:50%">
+                      8,783</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Hôm qua:</td>
+                    <td style="width:50%">
+                      6,347</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Tuần này:</td>
+                    <td style="width:50%">
+                      38,744</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Tuần trước:</td>
+                    <td style="width:50%">
+                      40,535</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Tháng này:</td>
+                    <td style="width:50%">
+                      116,478</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Tháng trước:</td>
+                    <td style="width:50%">
+                      97,107</td>
+                  </tr>
+                  <tr>
+                    <td style="width:50%; padding-left:10px">
+                      Tất cả:</td>
+                    <td style="width:50%">
+                      400,387</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- NỘi DUNG TIN -->
+        <div class="col-xs-12 col-sm-8 col-lg-9 my-3">
+          <div class="news-content top-title-frame">
+            <p>NỘI DUNG TIN</p>
+          </div>
+          @RenderBody()
+          <div class="news-content-inner">
+            <div class="news-category">
+              <span class="align-middle">THỦ TỤC HÀNH CHÍNH</span>
+            </div>
+            <div class="news-detail">
+              <span class="news-datetime">Ngày 15/06/2022</span><br /><br />
+              <h4>Hội thảo báo cáo tư vấn cải thiện dịch vụ công trực tuyến</h4><br />
+              <p class="news-summary text-justify"><b>
+                  Sáng ngày 19/01, Học viện Chính trị Quốc gia Hồ Chí Minh phối
+                  hợp tổ chức Hội nghị tư vấn “Cải thiện dịch vụ công trực
+                  tuyến” cho tỉnh Hà Giang, Gia Lai và Trà Vinh. PGS.TS Lê Văn
+                  Lợi - Phó Giám đốc Học viện Chính trị Quốc gia Hồ Chí Minh chủ
+                  trì hội nghị. Dự tại điểm cầu tỉnh Hà Giang có đồng chí Trần
+                  Đức Quý, Tỉnh uỷ viên, Phó Chủ tịch UBND tỉnh cùng lãnh đạo
+                  sở, ngành liên quan trên địa bàn tỉnh.</b>
+              </p>
+              <img alt=""
+                src="https://dichvucong.hagiang.gov.vn/forms/tintuc/images/22119%20%C4%90%E1%BB%93ng%20ch%C3%AD%20Tr%E1%BA%A7n%20%C4%90%E1%BB%A9c%20Qu%C3%BD%2C%20Ph%C3%B3%20Ch%E1%BB%A7%20t%E1%BB%8Bch%20UBND%20t%E1%BB%89nh%20%C4%91%C6%B0a%20ra%20m%E1%BB%99t%20s%E1%BB%91%20gi%E1%BA%A3i%20ph%C3%A1p%20c%E1%BA%A3i%20thi%E1%BB%87n%20d%E1%BB%8Bch%20v%E1%BB%A5%20c%C3%B4ng%20tr%E1%BB%B1c%20tuy%E1%BA%BFn.jpg"
+                style="height: 300px; width: 500px" /><br />
+              <i>Toà​n cảnh hội nghị trực tuyến tại điểm cầu tỉnh Hà Giang</i></br>
+              <p class="text-justify">
+                Qua nghiên cứu, khảo sát thực địa tại tỉnh Hà Giang và làm
+                việc với các đơn vị cấp sở của tỉnh như Sở Nội vụ, Sở Tài
+                nguyên và Môi trường, Công an tỉnh, Bảo hiểm xã hội tỉnh,…
+                đồng thời tập trung tìm hiểu hoạt động cung cấp hai dịch vụ
+                công ở huyện Bắc Quang, Thị trấn Việt Quang, xã Tân Quang, xã
+                Tân Lập thuộc huyện Bắc Quang từ ngày 20 đến ngày 23/10/2021
+                về 2 loại dịch vụ công trực tuyến là: (i) Cấp giấy khai sinh,
+                đăng ký thường trú và cấp thẻ bảo hiểm y tế cho trẻ em dưới 6
+                tuổi (thủ tục “3 trong 1”), (ii) Cấp giấy chứng nhận quyền sử
+                dụng đất và quyền sở hữu tài sản gắn liền với đất. Nhóm nghiên
+                cứu nhận định, mặc dù chính quyền tỉnh Hà Giang đã đầu tư
+                nhiều nguồn lực cho việc cung ứng dịch vụ công trực tuyến
+                nhưng số hồ sơ giải quyết trực tuyến còn thấp, thủ tục còn
+                rườm rà, quy định pháp lý lạc hậu, dịch vụ công trực tuyến mới
+                ở mức độ 2, thói quen và điều kiện vật chất của người dân còn
+                thấp là những thách thức lớn trong việc đưa người dân đến với
+                dịch vụ công trực tuyến.
+              </p>
+              <img alt=""
+                src="https://dichvucong.hagiang.gov.vn/forms/tintuc/images/22119%20C%C3%A1c%20%C4%91%E1%BA%A1i%20bi%E1%BB%83u%20%C4%91i%E1%BB%83m%20c%E1%BA%A7u%20t%E1%BB%89nh%20nghe%20b%C3%A1o%20c%C3%A1o%20%C4%91%E1%BB%81%20d%E1%BA%ABn%20c%E1%BB%A7a%20l%C3%A3nh%20%C4%91%E1%BA%A1o%20H%E1%BB%8Dc%20vi%E1%BB%87n%20Ch%C3%ADnh%20tr%E1%BB%8B%20Qu%E1%BB%91c%20gia%20H%E1%BB%93%20Ch%C3%AD%20Minh.jpg"
+                style="height: 300px; width: 500px" /><br /></br>
+              <p class="text-justify">
+                Đồng chí Trần Đức Quý, Phó Chủ tịch UBND tỉnh đưa ra một số
+                giải pháp cải thiện dịch vụ công trự c tuyến. Phát biểu tại
+                hội thảo, Phó Chủ tịch UBND tỉnh Trần Đức Quý nhấn mạnh, với
+                mục tiêu hướng tới không để ai bị bỏ lại phía sau trong tiến
+                trình phát triển chính quyền điện tử, chuyển đổi số ở các tỉnh
+                có đông dân cư là đồng bào dân tộc thiểu số thì cần có sự phối
+                hợp vào cuộc của các cấp, các ngành; làm từ dễ đến khó, từ địa
+                phương có điều kinh tế tốt đến các nơi có điều kiện kinh tế
+                thấp hơn. Về giải pháp cải thiện dịch vụ công trực tuyến, đồng
+                chí đề nghị cần nâng cấp, quan tâm các điều kiện về cơ sở hạ
+                tầng; tập trung vào nâng cấp hệ thống đường truyền, máy tính,
+                trang thiết bị, nâng cao công tác truyền thông trong nhân dân,
+                đồng thời phải cải cách giảm bớt các thủ tục hành chính tại
+                địa phương. Đồng chí cũng mong muốn học viên Chính trị Quốc
+                gia Hồ Chí Minh và nhóm nghiên cứu sẽ tiếp tục ủng hộ, phối
+                hợp với tỉnh cải thiện dịch vụ công trực tuyến trong thời gian
+                tiếp theo, không chỉ ở các thành phố lớn mà ở cả vùng sâu vùng
+                xa, vùng đặc biệt khó khăn, góp phần phát triển kinh tế - xã
+                hội của tỉnh Hà Giang. <br /><br />
+                Tại hội nghị, các đại biểu được nghe
+                Báo cáo đề dẫn của Lãnh đạo học viện Chính trị Quốc gia Hồ Chí
+                Minh; Báo cáo kết quả nghiên cứu dịch vụ công trực tuyến của
+                tỉnh Hà Giang, Gia Lai và Trà Vinh và trao đổi thảo luận về
+                thực trạng, đề xuất giải pháp cải thiện dịch vụ công trực
+                tuyến trong thời gian tiếp theo. </br></br>
+                <b>Tác giả: Hoàng Huyền
+                  https://hagiang.gov.vn/pages/provincenews.aspx?ItemID=8149</b>​​
+              </p>
+              <div>Các tin tức khác</div>
+              <div class="other-news-line">
+                <div style="float: left; width: 116px; height: 2px; background: red;"></div>
+              </div>
+              <ul class="other-news">
+                <li><a href="#">TÀI KHOẢN ĐỊNH DANH ĐIỆN TỬ VÌ LỢI ÍCH QUỐC GIA, DÂN TỘC VÀ QUYỀN LỢI CỦA NGƯỜI DÂN
+                    HƯỚNG TỚI MỤC TIÊU CHUYỂN ĐỔI SỐ QUỐC GIA</a></li>
+                <li><a href="#">Hà Giang nằm trong top đầu cả nước về chất lượng đội ngũ cán bộ bộ phận “một cửa”</a>
+                </li>
+                <li><a href="#">Những quy định mới về đánh giá tác động của thủ tục hành chính trong lập đề nghị xây
+                    dựng văn bản quy phạm pháp luật và soạn thảo dự án, dự thảo văn bản quy phạm pháp luật</a></li>
+                <li><a href="#">Hội nghị, tập huấn triển khai văn bản pháp luật về tổ chức cán bộ, thi đua khen thưởng
+                    và cải cách hành chính năm 2021
+                    Lễ kỷ niệm 130 năm thành lập tỉnh, 30 năm tái lập tỉnh và 60 năm Bác Hồ lên thăm Hà Giang</a></li>
+                <li><a href="#">Trực tuyến toàn quốc tập huấn thực hiện báo cáo điện tử</a></li>
+                <li><a href="#">THÔNG BÁO (Về việc tư vấn, hướng dẫn, tiếp nhận và trả kết quả hồ sơ thủ tục hành chính
+                    tại Trung tâm Phục vụ hành chính công tỉnh Hà Giang)</a></li>
+                <li><a href="#">Công an tỉnh Hà Giang xếp thứ 6/63 Công an các tỉnh, thành về chỉ số cải cách hành
+                    chính</a></li>
+                <li><a href="#">Trao đổi, chia sẻ kinh nghiệm về phân cấp trong giải quyết thủ tục hành chính</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Toolbox -->
+  <div class="tool_box">
+    <div class="box-new box4 text-center" style="margin-bottom: 5px!important">
+      <img src="~/BackEnd/assets/img/1.png">
+    </div>
+    <div class="box-new box4 text-center" style="margin-bottom: 5px!important">
+
+      <img src="~/BackEnd/assets/img/2.png">
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="web-fter container">
+      <h5>CỔNG DỊCH VỤ CÔNG TỈNH HÀ GIANG</h5>
+      <p>CƠ QUAN CHỦ QUẢN: VĂN PHÒNG UBND TỈNH HÀ GIANG</p>
+      <p>Email: vpubnd@hagiang.gov.vn</p>
+    </div>
+  </footer>
+  <!-- Back to top button -->
+  <button type="button" class="btn btn-danger btn-floating btn-lg" id="btn-back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <!-- JS -->
+   <script src="/BackEnd/assets/vendor/jquery/jquery-3.3.1.slim.min.js" type="text/javascript"></script>
+   <script src="/BackEnd/assets/vendor/jquery/popper.min.js" type="text/javascript"></script>
+  <script src="/BackEnd/assets/vendor/bootstrap/js/bootstrap.js" type="text/javascript"></script>
+  <script src="https://kit.fontawesome.com/d4f4e734fe.js" crossorigin="anonymous"></script>
+ <script src="/BackEnd/assets/js/backToTop.js" type="text/javascript"></script>
+</body>
+
+</html>
