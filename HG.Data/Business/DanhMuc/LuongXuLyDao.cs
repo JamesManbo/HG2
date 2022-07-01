@@ -138,7 +138,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
                 DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
                 // Output params
-                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 DbProvider.ExecuteReader_ToMyReader();
                 // Lấy về danh sách các người dung
                 menu.lstQuyTrinhXuLy = DbProvider.ExecuteReader_frmMyReader<QuyTrinhXuLy>();

@@ -16,7 +16,7 @@ namespace HG.WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult ThemThuTuc(ThuTuc item)
+        public IActionResult ThemThuTuc(DmThuTuc item)
         {
             return View();
         }

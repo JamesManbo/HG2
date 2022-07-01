@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace HG.Entities.Entities.ThuTuc
 {
-    public class ThuTuc
+    public class DmThuTuc
     {
+        public int ma_thu_tuc_old { get; set; }
         public string ma_thu_tuc { get; set; }
         public string ma_quoc_gia { get; set; }
         public string ten_thu_tuc { get; set; }
@@ -15,10 +16,12 @@ namespace HG.Entities.Entities.ThuTuc
         public bool nop_online { get; set; }
         public bool hd_online { get; set; }
         public bool tthcc { get; set; }
+        public bool tthtks { get; set; }
         public string ma_linh_vuc { get; set; }
         public string ma_phong_ban { get; set; }
         public int so_ngay_xl { get; set; }
-        public decimal le_phi { get; set; }
+        public decimal le_phi_truoc { get; set; }
+        public decimal le_phi_sau { get; set; }
         public int so_bo_hs { get; set; }
         public string duong_dan_kq { get; set; }
         public string thong_tin_mo_rong { get; set; }
@@ -37,7 +40,76 @@ namespace HG.Entities.Entities.ThuTuc
         public string lst_ma_dvlt_ph { get; set; }
         public bool gui_lt_kem_kq_xl { get; set; }
         public bool chi_tra_kq_kckqlt { get; set; }
-        
+        public string thuc_hien { get; set; }
+        public string don_vi_ltxl { get; set; }
+        public string don_vi_ltph { get; set; }
+        public bool thu_le_phi_kckq { get; set; }
+        public Guid? uid { get; set; }
+    }
 
+    public class ThanhPhan
+    {
+        public string ma_thu_tuc { get; set; }
+        public string ma_thanh_phan { get; set; }
+        public string ten_thanh_phan { get; set; }
+        public string? mo_ta { get; set; }
+        public bool bat_buoc { get; set; }
+        public string? file_dinh_kem { get; set; }
+        public bool bieu_mau { get; set; }
+        public string? ten_form_nhap { get; set; }
+        public string? duong_dan_form_nhap { get; set; }
+        public int? ban_goc { get; set; }
+        public int? ban_sao { get; set; }
+        public int? ban_pho_to { get; set; }
+        public int? Stt { get; set; }
+        public DateTime? ngay_bat_dau { get; set; }
+
+        public DateTime? ngay_ket_thuc { get; set; }
+    }
+
+    public class NhomTP
+    {
+        public string ma_thu_tuc { get; set; }
+        public string ma_van_ban { get; set; }
+        public string ten_van_ban { get; set; }
+        public string? mo_ta { get; set; }
+        public string? file_dinh_kem { get; set; }
+        public int? stt { get; set; }
+    }
+
+    public class VanBanLQ
+    {
+        public string ma_thu_tuc { get; set; }
+        public string ma_van_ban { get; set; }
+        public string ten_van_ban { get; set; }
+        public string? mo_ta { get; set; }
+        public string? file_dinh_kem { get; set; }
+        public int? stt { get; set; }
+    }
+    public class ThanhPhanKQXL
+    {
+        public string ma_thu_tuc { get; set; }
+        public string ma_tp_kq { get; set; }
+        public string ten_tp_kq { get; set; }
+        public string? mo_ta { get; set; }
+        public int? stt { get; set; }
+    }
+
+    public class ThuTucPaging
+    {
+        public List<DmThuTuc> lstThuTuc { get; set; }
+        public Pagelist Pagelist { get; set; } = new Pagelist();
+    }
+    public class ThuTucModel
+    {
+        public DmThuTuc thuTuc { get; set; }
+        public List<ThanhPhan> lstThanhPhan { get; set; }
+        public Pagelist PagelistThanhPhan { get; set; } = new Pagelist();
+        public List<VanBanLQ> lstVanBanLQ { get; set; }
+        public Pagelist PagelistVanBanLQ { get; set; } = new Pagelist();
+        public List<NhomTP> lstNhomTP { get; set; }
+        public Pagelist PagelistNhomTP { get; set; } = new Pagelist();
+        public List<ThanhPhanKQXL> lstThanhPhanKQXL { get; set; }
+        public Pagelist PagelisthanhPhanKQXL { get; set; } = new Pagelist();
     }
 }

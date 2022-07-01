@@ -5,20 +5,20 @@
 }
 <script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 <style>
-         .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-               background: #fff;
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background: #fff;
         border-bottom: 1px solid #fff;
         color: #333;
-        }
+    }
 
-         .nav-pills .nav-link, .nav-pills .show>.nav-link {
-         background: rgba(255,255,255,0.1);
-    color: #fff;
-    border: 0;
-        }
+    .nav-pills .nav-link, .nav-pills .show > .nav-link {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 0;
+    }
 
 
-        .nav-pills .nav-link {
+    .nav-pills .nav-link {
         background: 0 0;
         border: 0;
         border-radius: 0;
@@ -56,16 +56,25 @@
                 <div class="tab-primary" style="border: 2px solid #0866c6;">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Thủ tục hành chính</button>
+                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tthc" role="tab" aria-controls="pills-home" aria-selected="true">Thủ tục hành chính</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Thành Phần</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false">Văn bản liên quan</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false">Nhóm thành phần</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần xử lý kết quả</button>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="myTabContent" style="padding: 15px;">
                         @*TAB Thủ tục hành chính*@
-                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade show active" id="pills-tthc" role="tabpanel" aria-labelledby="home-tab">
                             <div class="">
                                 <div class="form-horizontal">
                                     <!-- Horizontal Form -->
@@ -130,12 +139,12 @@
 
                                             </div>
                                             <div class="col-sm-2">
-                                                <input  type="checkbox" name="hd_online">
+                                                <input type="checkbox" name="hd_online">
                                                 <label for="cbonline">Hướng dẫn Online</label>
 
                                             </div>
                                             <div class="col-sm-2">
-                                                <input  type="checkbox" name="tthcc">
+                                                <input type="checkbox" name="tthcc">
                                                 <label for="cbonline">TN tại TTHCC</label>
 
                                             </div>
@@ -208,7 +217,7 @@
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" name="thuc_hien_hai_gd" >
+                                                <input type="checkbox" name="thuc_hien_hai_gd">
                                                 <label for="cbonline">Thực hiện hai giai đoạn</label>
 
                                             </div>
@@ -242,27 +251,27 @@
                                                     <option value="DV1">DV1</option>
                                                     <option value="DV2">DV2</option>
                                                 </select>
-                                                   <input name="lst_ma_dvlt_xl" type="text" id="lst_ma_dvlt_xl" class="form-control input-default" hidden>
+                                                <input name="lst_ma_dvlt_xl" type="text" id="lst_ma_dvlt_xl" class="form-control input-default" hidden>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ma_dvlt_ph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
                                             <div class="col-sm-8">
-                                                <select id="multiselect2"  name="ma_dvlt_ph" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                <select id="multiselect2" name="ma_dvlt_ph" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                                     <option value="DVLT1">DVLT1</option>
                                                     <option value="DVLT2">DVLT2</option>
                                                 </select>
-                                                  <input name="lst_ma_dvlt_ph" type="text" id="lst_ma_dvlt_ph" class="form-control input-default" hidden>
+                                                <input name="lst_ma_dvlt_ph" type="text" id="lst_ma_dvlt_ph" class="form-control input-default" hidden>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input id="gui_lt_kem_kq_xl" type="checkbox" name="gui_lt_kem_kq_xl" >
+                                                <input id="gui_lt_kem_kq_xl" type="checkbox" name="gui_lt_kem_kq_xl">
                                                 <label for="cbonline">Gửi liên thông kèm kết quả xử lý</label>
                                             </div>
                                             <div class="col-sm-5">
-                                                <input  type="checkbox" name="chi_tra_kq_kckqlt">
+                                                <input type="checkbox" name="chi_tra_kq_kckqlt">
                                                 <label for="cbonline">Chỉ trả kết quả khi có kết quả liên thông</label>
                                             </div>
                                         </div>
@@ -276,10 +285,256 @@
                                 </div>
                             </div>
                         </div>
-
-
                         @*TAB thành phần *@
-                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
+                            <p class="stdformbutton" style="margin-bottom: 10px;">
+                                <input type="button" name="" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
+                            </p>
+                            <select name="ctl08$ctl00$ctl02$MaNhomTT" onchange="javascript:setTimeout('__doPostBack(\'ctl08$ctl00$ctl02$MaNhomTT\',\'\')', 0)" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
+                                <option selected="selected" value="0">------------- Chọn nhóm thành phần hồ sơ -------------</option>
+                            </select>
+                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                <div class="dataTables_length">
+                                    <label>
+                                        Hiển thị
+                                        <select class="dataTable-selector">
+                                            <option value="5">5</option>
+                                            <option value="10" selected="">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                            <option value="25">25</option>
+                                        </select> bản ghi
+                                    </label>
+                                </div>
+                                <div class="dataTable-container">
+                                    <table class="table table-bordered responsive">
+                                        <thead class="widgettitle">
+                                            <tr>
+                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                    <input type="checkbox" name="" id="selectAll" />
+                                                </th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td><input type="checkbox" class="ads_Checkbox" value="" /></td>
+                                                <td scope="row">
+                                                    1
+                                                    <input type="hidden" name="" id="" value="" />
+                                                </td>
+                                                <td><a href="#">Test</a></td>
+
+                                                <td>mo_ta</td>
+                                                <td>
+                                                    <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
+                                                        <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
+                                                        <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a onclick=""
+                                                       title=""
+                                                       data-placement="top"
+                                                       data-toggle="tooltip"
+                                                       data-original-title="Xóa"
+                                                       href="#">
+                                                        <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="dataTable-bottom">
+                                    <div class="dataTable-info">Showing 1 to 5 of 5 entries</div>
+                                    <nav class="dataTable-pagination">
+                                        <ul class="dataTable-pagination-list"></ul>
+                                    </nav>
+                                </div>
+
+                                <!-- End Table with stripped rows -->
+
+                            </div>
+                        </div>
+                        @*TAB Văn bản liên quan *@
+                        <div class="tab-pane fade" id="pills-vblq" role="tabpanel" aria-labelledby="profile-tab">
+                            <p class="stdformbutton" style="margin-bottom: 10px;">
+                                <input type="submit" name="" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                                <input type="submit" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
+                            </p>
+                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                                <div class="dataTables_length">
+                                    <label>
+                                        Hiển thị
+                                        <select class="dataTable-selector">
+                                            <option value="5">5</option>
+                                            <option value="10" selected="">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                            <option value="25">25</option>
+                                        </select> bản ghi
+                                    </label>
+                                </div>
+                                <div class="dataTable-container">
+                                    <table class="table table-bordered responsive">
+                                        <thead class="widgettitle">
+                                            <tr>
+                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                    <input type="checkbox" name="" id="selectAll" />
+                                                </th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 45%;">TÊN</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td><input type="checkbox" class="ads_Checkbox" value="" /></td>
+                                                <td scope="row">
+                                                    1
+                                                    <input type="hidden" name="" id="" value="" />
+                                                </td>
+                                                <td><a href="#">Test</a></td>
+
+                                                <td>file</td>
+                                                <td>
+                                                    <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
+                                                        <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
+                                                        <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a onclick=""
+                                                       title=""
+                                                       data-placement="top"
+                                                       data-toggle="tooltip"
+                                                       data-original-title="Xóa"
+                                                       href="#">
+                                                        <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="dataTable-bottom">
+                                    <div class="dataTable-info">Showing 1 to 5 of 5 entries</div>
+                                    <nav class="dataTable-pagination">
+                                        <ul class="dataTable-pagination-list"></ul>
+                                    </nav>
+                                </div>
+
+                                <!-- End Table with stripped rows -->
+
+                            </div>
+                        </div>
+                        @*TAB Nhóm thành phần *@
+                        <div class="tab-pane fade" id="pills-ntp" role="tabpanel" aria-labelledby="profile-tab">
+                            <p class="stdformbutton" style="margin-bottom: 10px;">
+                                <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                                <input type="submit" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
+                            </p>
+                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                                <div class="dataTables_length">
+                                    <label>
+                                        Hiển thị
+                                        <select class="dataTable-selector">
+                                            <option value="5">5</option>
+                                            <option value="10" selected="">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                            <option value="25">25</option>
+                                        </select> bản ghi
+                                    </label>
+                                </div>
+                                <div class="dataTable-container">
+                                    <table class="table table-bordered responsive">
+                                        <thead class="widgettitle">
+                                            <tr>
+                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                    <input type="checkbox" name="" id="selectAll" />
+                                                </th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 30%;">TÊN</th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 10%;">LĨNH VỰC</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">OL</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">LT</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <tr>
+                                                <td><input type="checkbox" class="ads_Checkbox" value="" /></td>
+                                                <td scope="row">
+                                                    1
+                                                    <input type="hidden" name="" id="" value="" />
+                                                </td>
+                                                <td><a href="#">Test</a></td>
+
+                                                <td>thu tuc</td>
+                                                <td>ol</td>
+                                                <td>lt</td>
+                                                <td>
+                                                    <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
+                                                        <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
+                                                        <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a onclick=""
+                                                       title=""
+                                                       data-placement="top"
+                                                       data-toggle="tooltip"
+                                                       data-original-title="Xóa"
+                                                       href="#">
+                                                        <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div><div class="dataTable-bottom">
+                                    <div class="dataTable-info">Showing 1 to 5 of 5 entries</div>
+                                    <nav class="dataTable-pagination">
+                                        <ul class="dataTable-pagination-list"></ul>
+                                    </nav>
+                                </div>
+
+                                <!-- End Table with stripped rows -->
+
+                            </div>
+                        </div>
+                        @*TAB Thành phần kết quả xử lý *@
+                        <div class="tab-pane fade" id="pills-tpxlkq" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
                                 <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
                                 <input type="submit" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
