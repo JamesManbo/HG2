@@ -1,1 +1,50 @@
-﻿
+﻿            @{
+                var danhSachNguoiDung = ViewBag.DanhSachNguoiDung as List<HG.WebApp.AspNetUsers>;
+            } 
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                            <label class="col-md-12 control-label" style="text-align: center; color: red">Chức năng này sẽ xóa Người có thể xử lý ở tất cả các luồng đã khai báo!!! </label>
+                </div>
+                <div class="form-group row">
+                            <label class="col-sm-2 control-label">
+                                Họ tên:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name="ma_nguoi_dung" id="ma_phong_ban" class="form-control input-default form-select" onchange="XoaNguoiCTXLList(this)" placeholder="Chọn người dùng">
+                                    <option value="0">------------ Toàn bộ người dùng ------------</option>
+                                    @if(danhSachNguoiDung != null)
+                                    {
+                                         foreach (var item in danhSachNguoiDung)
+                                         {
+                                            if(item.Id.ToString() == ViewBag.ma_nguoi_dung)
+                                            {
+                                                <option value="@item.Id" selected>@(item.ho_dem + " " +item.ten )</option>
+                                            }
+                                            <option value="@item.Id">@(item.ho_dem + " " +item.ten )</option>
+                                         }   
+                                    }
+                                </select>
+                            </div>
+                </div>
+             </div>
+             <script>
+                        function XoaNguoiCTXLList(obj){
+                              $.ajax({
+                                        type: "GET",
+                                        url: "/CauHinh/XoaNguoiCTXLList?ma_nguoi_dung=" + obj.value ,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                               });      
+                        }
+             </script>
+             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                 <div id="dataTable">
+                    
+               
+                </div>
+                <!-- End Table with stripped rows -->
+            </div>

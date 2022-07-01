@@ -410,8 +410,10 @@
                                     {
                                         foreach (var item in LstNhom)
                                         {
-                                            //{selected: true, disabled: false, text: "India", id: "101", title: "", …} 
-                                            <option value="@item.ma_nhom">	@item.ten_nhom</option>
+                                            if(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()).Contains(item.ma_nhom)){
+                                                <option value="@item.ma_nhom" selected>	@item.ten_nhom</option>
+                                            }
+                                              <option value="@item.ma_nhom">	@item.ten_nhom</option>                      
                                         }
 
                                     }

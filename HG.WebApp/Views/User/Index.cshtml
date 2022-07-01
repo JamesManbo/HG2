@@ -5,7 +5,6 @@
 }
 @using X.PagedList
 @using X.PagedList.Mvc.Core
-@model IPagedList<HG.WebApp.Dto.UserDTO>
 @{
     var ListRole = ViewBag.ListRole as List<HG.WebApp.AspNetRoles>;
 }
@@ -29,11 +28,11 @@
                                     <th>Quyền</th>
                                     <th>Thao tác</th>
                                 </tr>
-                                @foreach (var item in Model.ToList())
+                              @*  @foreach (var item in Model.ToList())
                                 {
                                     <tr>
                                      
-                                        @*<td style="vertical-align: middle">@item.Id</td>*@
+           
                                         <td style="vertical-align: middle">@item.</td>
                                         <td style="vertical-align: middle">
                                                   @item.PhoneNumber
@@ -61,14 +60,14 @@
                                      
                                     </tr>
                                     i++;
-                                }
+                                }*@
                             </tbody>
                         </table>
                         <div class="bv_pagging">
-                            @if (Model.PageCount > 1)
+                           @* @if (Model.PageCount > 1)
                             {
                                 @Html.PagedListPager(Model, page => Url.Action("Index", new { page, status = ViewBag.status }))
-                            }
+                            }*@
                         </div>
                     </div>
                     <!-- /.box-body -->

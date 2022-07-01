@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using HG.Entities.Entities.SuperAdmin;
 using HG.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.DanhMuc.DonVi;
+using HG.Entities.CauHinh;
 
 namespace HG.WebApp.Data
 {
@@ -51,6 +52,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<dm_cap_dia_ban> dm_cap_dia_ban { get; set; }
         public virtual DbSet<Asp_dm_vai_tro> Asp_dm_vai_tro { get; set; }
         public virtual DbSet<Asp_vaitro_quyen> Asp_vaitro_quyen { get; set; }
+        public virtual DbSet<Asp_cau_hinh> Asp_cau_hinh { get; set; }
         //End TuanTA
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

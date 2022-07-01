@@ -1,0 +1,73 @@
+﻿            @model List<HG.Entities.Entities.Nguoi_PHXLModel>                    
+                <input id="ma_nguoi_dung" value="@ViewBag.ma_nguoi_dung" hidden/>
+                <div class="dataTable-container">
+                        <table class="table table-bordered responsive">
+                            <thead class="widgettitle">
+                                <tr>
+                                   
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN LUỒNG</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">NGƯỜI XỬ LÝ</th>
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">NGƯỜI CÓ THỂ XỬ LÝ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    var stt = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td scope="row">
+                                                @stt
+                                                <input type="hidden" name="" id="" value="@item.ma_luong" />
+                                            </td>
+                                            <td><a href="/Luong/QuyTrinhXuLy?code=@item.ma_luong">@item.ten_luong</a></td>
+
+                                            <td>@(string.IsNullOrEmpty(item.nguoi_xl_mac_dinh) ? "X" : "V" )</td>
+                                               
+                                             <td>@(string.IsNullOrEmpty(item.nguoi_co_the_xl) ? "X" : "V" )</td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+            </div>
+            <div class="text-center" style="padding: 5px;">
+                      <input type="button" class="btn btn-primary" name="type_view" value="Xóa người xử lý" onclick="XoaNguoiXuLy()" />
+            </div>
+            <script>
+                    function XoaNguoiXuLy() {
+                        var xoa_nguoi_xu_ly = $("#ma_nguoi_dung").val();
+                       
+                        $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/XoaNguoiXuLy?ma_nguoi_dung="+ma_nguoi_dung,
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                           success: function(data) {
+                              $("#CheckHostId").html(data);
+                              $("#XoaNguoiXuLy").modal("show");   
+                         });
+                    }
+                    
+            </script>
+            <div class="modal fade" id="XoaNguoiXuLy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="CheckHostId">Xóa thành công</span>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>

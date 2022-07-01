@@ -8,7 +8,7 @@
     //var lst_vaitro = ViewBag.ls_vai_tro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro> ;
     //var lst_nhom_vai_tro = ViewBag.lst_nhom_vaitro as HG.Entities.Entities.Nhom_Vaitro;
 }
-@model HG.Entities.Entities.phong_ban_nhom_nguoi_dung
+@model HG.Entities.CauHinh.Asp_cau_hinh
 @* <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>*@
 <script src="https://cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
 
@@ -45,146 +45,185 @@
                     </li>
                   </ul>
                   <div class="tab-content pt-2" id="myTabContent">
-                    <form class="tab-pane fade show active" id="CauHinh" role="tabpanel" aria-labelledby="CauHinh-tab" action="/QTNguoiDung/QLNhomVaitroChitiet" method="post">
+                    <form class="tab-pane fade show active" id="CauHinh" role="tabpanel" aria-labelledby="CauHinh-tab" action="/CauHinh/CauHinh" method="post">
                        <div class="form-horizontal">
+                           <input name="Id" value="@Model.Id" hidden/>
                             <div class="form-group row">
-                                <label class="col-md-2 control-label">Mã cơ quan<span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                                <label class="col-md-2 control-label">Mã cơ quan<span id="ma_co_quan" style="color:Red;">(*)</span></label>
                                 
                                 <div class="col-md-8">
-                                    <input name="ma_co_quan" type="text" maxlength="50" id="ma_co_quan" class="form-control input-default" placeholder="Mã cơ quan">
+                                    <input name="ma_co_quan" type="text" maxlength="50" id="ma_co_quan" value="@Model.ma_co_quan" class="form-control input-default" placeholder="Mã cơ quan" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                 </div>
                             </div>
                             
                             <div class="form-group row">
-                            <label class="col-md-2 control-label ">Mã định danh <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                            <label class="col-md-2 control-label ">Mã định danh <span id="ma_dinh_danh" style="color:Red;">(*)</span></label>
                                 
                                     <div class="col-md-8">
-                                        <input name="ma_dinh_danh" type="text" maxlength="50" id="ma_dinh_danh" class="form-control input-default" placeholder="Mã định danh">
+                                        <input name="ma_dinh_danh" type="text" maxlength="50" id="ma_dinh_danh" value="@Model.ma_dinh_danh" class="form-control input-default" placeholder="Mã định danh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
-                            <label class="col-md-2 control-label ">Tên đơn vị sử dụng  <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                            <label class="col-md-2 control-label ">Tên đơn vị sử dụng  <span id="ten_dv_su_dung" style="color:Red;">(*)</span></label>
                                
                                     <div class="col-md-8">
-                                        <input name="ten_dv_su_dung" type="text" maxlength="150" id="ten_dv_su_dung" class="form-control input-default" placeholder="Tên đơn vị sử dụng">
+                                        <input name="ten_dv_su_dung" type="text" maxlength="150" value="@Model.ten_dv_su_dung" id="ten_dv_su_dung" class="form-control input-default" placeholder="Tên đơn vị sử dụng" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
-                            <label class="col-md-2 control-label ">Tên đơn vị chủ quản <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span></label>
+                            <label class="col-md-2 control-label ">Tên đơn vị chủ quản </label>
                                 
                                     <div class="col-md-8">
-                                        <input name="ten_dv_chu_quan" type="text" maxlength="150" id="ten_dv_chu_quan" class="form-control input-default" placeholder="Tên đơn vị chủ quản">
+                                        <input name="ten_dv_chu_quan" type="text" maxlength="150" value="@Model.ten_dv_chu_quan" id="ten_dv_chu_quan" class="form-control input-default" placeholder="Tên đơn vị chủ quản" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Source POST VNPost</label>
                                     <div class="col-md-8">
-                                        <input name="source_post_vnpost" type="text" maxlength="50" id="source_post_vnpost" class="form-control input-default" placeholder="Source post vnpost">
+                                        <input name="source_post_vnpost" type="text" maxlength="50" value="@Model.source_post_vnpost" id="source_post_vnpost" class="form-control input-default" placeholder="Source post vnpost" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Source GET VNPost</label>
                                     <div class="col-md-8">
-                                        <input name="source_get_vnpost" type="text" maxlength="50" id="source_get_vnpost" class="form-control input-default" placeholder="source get vnpost">
+                                        <input name="source_get_vnpost" type="text" maxlength="50" value="@Model.source_get_vnpost" id="source_get_vnpost" class="form-control input-default" placeholder="source get vnpost" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Mã khách hàng VNPost</label>
                                     <div class="col-md-8">
-                                        <input name="ma_kh_VNPost" type="text" maxlength="50" id="ma_kh_VNPost" class="form-control input-default" placeholder="Mã khách hàng VNPost">
+                                        <input name="ma_kh_VNPost" type="text" maxlength="50" value="@Model.ma_kh_VNPost" id="ma_kh_VNPost" class="form-control input-default" placeholder="Mã khách hàng VNPost" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Token VNPost</label>
                                     <div class="col-md-8">
-                                        <input name="Token_VNPost" type="text" maxlength="150" id="Token_VNPost" class="form-control input-default" placeholder="Token VNPost">
+                                        <input name="Token_VNPost" type="text" maxlength="500" id="Token_VNPost" value="@Model.Token_VNPost" class="form-control input-default" placeholder="Token VNPost" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
-                            <label class="col-md-2 control-label ">Hotline</label>
+                            <label class="col-md-2 control-label ">Hot Line</label>
                                     <div class="col-md-8">
-                                        <input name="ma_dinh_danh" type="text" maxlength="50" id="ma_dinh_danh" class="form-control input-default" placeholder="Mã định danh">
+                                        <input name="hotline" type="text" maxlength="11" id="hotline" value="@Model.hotline" class="form-control input-default" placeholder="Nhập số hotline" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">TTTC HS qua mạng</label>
                                     <div class="col-md-8">
-                                        <input name="tttc_hs_qua_mang" type="text" maxlength="50" id="tttc_hs_qua_mang" class="form-control input-default" placeholder="TTTC HS qua mạng">
+                                        <input name="tttc_hs_qua_mang" type="text" maxlength="50" id="tttc_hs_qua_mang" value="@Model.tttc_hs_qua_mang" class="form-control input-default" placeholder="TTTC HS qua mạng" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Left footer</label>
                                     <div class="col-md-8">
-                                        <input name="left_footer" type="text" maxlength="50" id="left_footer" class="form-control input-default" placeholder="Left footer">
+                                        <input name="left_footer" type="text" maxlength="50" id="left_footer" value="@Model.left_footer" class="form-control input-default" placeholder="Left footer" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Cấu hình gửi mail</label>
-                                    <div class="col-md-8">
-                                        <input name="cau_hinh_gui_mail" type="checkbox" maxlength="50" id="cau_hinh_gui_mail" placeholder="Cấu hình gửi mail">
+                                    <div class="col-md-2">
+                                        <input name="cau_hinh_gui_mail" @(Model.cau_hinh_gui_email == 1 ? "checked" : "") type="checkbox" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
+                                    <div class="col-md-2">
+                                        <input onclick="KiemTraCauHinhMail()" type="button" value="Kiểm tra cấu hình mail" class="btn btn-primary" @(Model.cau_hinh_gui_email == 1 ? "disabled" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "")/>
+                                    </div>
+                                    <script>
+                                        function KiemTraCauHinhMail(){
+                                            $.ajax({
+                                                type: "GET",
+                                                url: "/CauHinh/CheckHostMail",
+                                                data: "",
+                                                contentType: 'application/json; charset=utf-8',
+                                                success: function(data) {
+                                                    $("#CheckHostId").html(data);
+                                                    if (data.toString() == "SMTP, tài khoản email và đã được xác thực") {
+                                                        $("#cau_hinh_gui_mail").val(1);
+                                                        $("#cau_hinh_gui_mail" ).prop( "checked", true)
+                                                    }
+                                                    $("#exampleModal").modal("show");
+                                                }
+                                            });
+                                        }
+                                    </script>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Máy chủ SMTP</label>
                                     <div class="col-md-8">
-                                        <input name="may_chu_smtp" type="text" maxlength="50" id="may_chu_smtp" class="form-control input-default" placeholder="Máy chủ SMTP">
+                                        <input name="may_chu_smtp" type="text" maxlength="50" value="@Model.may_chu_smtp" id="may_chu_smtp" class="form-control input-default" placeholder="Máy chủ SMTP" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Cổng SMTP</label>
                                     <div class="col-md-8">
-                                        <input name="cong_smtp" type="text" maxlength="50" id="cong_smtp" class="form-control input-default" placeholder="Cổng SMTP">
+                                        <input name="cong_smtp" type="text" maxlength="50" value="@Model.cong_smtp" id="cong_smtp" class="form-control input-default" placeholder="Cổng SMTP" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                           
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Tài khoản đăng nhập</label>
                                     <div class="col-md-8">
-                                        <input name="tai_khoan_dang_nhap" type="text" maxlength="50" id="tai_khoan_dang_nhap" class="form-control input-default" placeholder="Tài khoản đăng nhập">
+                                        <input name="tai_khoan_dang_nhap" type="text" maxlength="50" value="@Model.tai_khoan_dang_nhap" id="tai_khoan_dang_nhap" class="form-control input-default" placeholder="Tài khoản đăng nhập" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Mật khẩu đăng nhập</label>
                                     <div class="col-md-8">
-                                        <input name="mat_khau_dang_nhap" type="text" maxlength="50" id="mat_khau_dang_nhap" class="form-control input-default" placeholder="Mật khẩu đăng nhập">
+                                        <input name="mat_khau_dang_nhap" type="password" maxlength="150" value="@Model.mat_khau_dang_nhap" id="mat_khau_dang_nhap" class="form-control input-default" placeholder="Mật khẩu đăng nhập" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">ID VNPT Pay</label>
                                     <div class="col-md-8">
-                                        <input name="id_vnpt_pay" type="text" maxlength="50" id="id_vnpt_pay" class="form-control input-default" placeholder="ID VNPT Pay">
+                                        <input name="id_vnpt_pay" type="text" maxlength="50" value="@Model.id_vnpt_pay" id="id_vnpt_pay" class="form-control input-default" placeholder="ID VNPT Pay" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Tài khoản nhận tiền</label>
                                     <div class="col-md-8">
-                                        <input name="cong_smtp" type="text" maxlength="50" id="tai_khoan_nhan_tien" class="form-control input-default" placeholder="Tài khoản nhận tiền">
+                                        <input name="tai_khoan_nhan_tien" type="text" maxlength="50" value="@Model.tai_khoan_nhan_tien" id="tai_khoan_nhan_tien" class="form-control input-default" placeholder="Tài khoản nhận tiền" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Bottom footer</label>
                                     <div class="col-md-8">
-                                        <textarea name="bottom_footer" type="text" maxlength="50" id="bottom_footer" class="form-control input-default" placeholder="Bottom footer"> </textarea>
+                                        <textarea name="bottom_footer" type="text" maxlength="50" value="" id="bottom_footer" class="form-control input-default" placeholder="Bottom footer" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.bottom_footer </textarea>
                                     </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Ghi chú</label>
                                     <div class="col-md-8">
-                                        <input name="ghi_chu" type="text" maxlength="150" id="ghi_chu" class="form-control input-default" placeholder="Ghi chú">
+                                        <input name="ghi_chu" type="text" maxlength="150" value="@Model.ghi_chu" id="ghi_chu" class="form-control input-default" placeholder="Ghi chú" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    </div>
+                            </div>     
+                            <div class="form-group row">
+                                    <label class="col-md-3 control-label ">Trả kết quả khi tiếp nhận</label>
+                                    <div class="col-md-2">
+                                        <input name="tra_kq_khi_tiep_nhan" id="tra_kq_khi_tiep_nhan" class="clsCheck" type="checkbox" onclick="HandleRoleClick(this.checked)" @(Model.tra_kq_khi_tiep_nhan == 1 ? "checked" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    </div>
+                                    <label class="col-md-2 control-label ">Sử dụng trang online chung</label>
+                                    <div class="col-md-2">
+                                        <input name="su_dung_trang_online_chung" @(Model.su_dung_trang_online_chung == 1 ? "checked" : "") class="clsCheck" onclick="HandleRoleClick(this.checked)" type="checkbox" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                             </div>
+                            <div class="form-group row">
+                                    <label class="col-md-3 control-label ">Kiểm duyệt kết quả hồ sơ</label>
+                                    <div class="col-md-2">
+                                        <input name="kiem_duyet_kq_ho_so" @(Model.kiem_duyet_kq_ho_so == 1 ? "checked" : "") class="clsCheck" type="checkbox" onclick="HandleRoleClick(this.checked)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    </div>
+                                  
+                            </div>
                              <div class="text-center">
-                                   <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu</button>
-                                   <button id="profile-tab" class="btn btn-primary"  data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false" >Vai trò</button>
-                                   <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/QLNhomVaitro';">Đóng</button>
+                                   <button type="submit" class="btn btn-primary" name="type_view" @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "") value="@(StatusAction.Add.ToString())">Lưu</button>
+                                   <button type="submit" class="btn btn-primary" name="type_view" @(ViewBag.type_view == StatusAction.Add.ToString() ? "hidden" : "") value="@(StatusAction.Edit.ToString())">Sửa</button>
+                                   <button type="button" class="btn btn-secondary" onclick="window.location.href='/CauHinh/CauHinh';">Đóng</button>
                             </div>
                         </div>
                     </form>
                     <div class="tab-pane fade" id="XoaNguoiCTXL" role="tabpanel" aria-labelledby="XoaNguoiCTXL-tab">
-                        @*@Html.RenderAction("XoaNguoiCTXL", "CauHinh")*@
+                        @Html.RenderAction("XoaNguoiCTXLPartial", "CauHinh")
                     </div>
                     <div class="tab-pane fade" id="DoiNguoiXL" role="tabpanel" aria-labelledby="DoiNguoiXL-tab">
-                        @*@Html.RenderAction("DoiNguoiXL", "CauHinh")*@
+                        @Html.RenderAction("DoiNguoiXLPartial", "CauHinh")
                     </div>
                     <div class="tab-pane fade" id="DoiNguoiXLTL" role="tabpanel" aria-labelledby="DoiNguoiXLTL-tab">
                         @*@Html.RenderAction("DoiNguoiXLTL", "CauHinh")*@
@@ -202,12 +241,53 @@
 </div>
 <script>
      CKEDITOR.replace('bottom_footer');
-    //ClassicEditor
-    // .create( document.querySelector('#bottom_footer') )
-    // .then( editor => {
-    //       console.log( editor );
-    // } )
-    // .catch( error => {
-    //      console.log( error );
-    // });
+     $(document).ready(function() {
+        $('#CauHinh').validate({
+            rules: {
+                ma_co_quan: "required",
+                ma_dinh_danh: "required",
+                ten_dv_su_dung: "required"
+            },
+            messages: {
+                ma_co_quan: "Bạn cần nhập mã cơ quan!",
+                ma_dinh_danh: "Bạn cần nhập mã định danh!",
+                ten_dv_su_dung: "bạn cần nhập tên đơn vị sử dụng!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+    });
+    function HandleRoleClick(isChecked){
+     //get full
+        $('.clsCheck:checkbox:checked').map(function() {
+           $(this).val(1)
+       });
+                                        
+ }             
 </script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <span id="CheckHostId">bạn đang thực hiện kiểm tra cấu hình mail</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,44 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+                var danhSachNguoiDung = ViewBag.DanhSachNguoiDung as List<HG.WebApp.AspNetUsers>;
 }
+
+        <div class="form-horizontal">
+                <div class="form-group">
+                            <label class="col-md-12 control-label" style="text-align: center; color: red">Khi thực hiện thay thế, toàn bộ các bước khai báo trong luồng xử lý do Người xử lý hiện tại đảm nhận sẽ được thay bằng Người được chọn thay thế!!! </label>
+                </div>
+                <div class="form-group row">
+                            <label class="col-sm-2 control-label">
+                                Người xử lý hiện tại:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name="ma_nguoi_dung_hien_tai" id="ma_nguoi_dung_hien_tai" class="form-control input-default form-select"  placeholder="Chọn người dùng hiện tại">
+                                    <option value="0">------------ Chọn người dùng hiện tại ------------</option>
+                                    @if(danhSachNguoiDung != null)
+                                    {
+                                         foreach (var item in danhSachNguoiDung)
+                                         {
+                                            <option value="@item.Id">@(item.ho_dem + " " +item.ten )</option>
+                                         }   
+                                    }
+                                </select>
+                            </div>
+                </div>
+                <div class="form-group row">
+                            <label class="col-sm-2 control-label">
+                                Người xử lý thay thế:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name="ma_nguoi_dung" id="ma_phong_ban" class="form-control input-default form-select" onchange="XoaNguoiCTXLList(this)" placeholder="Chọn người dùng thay thế">
+                                    <option value="0">------------ Chọn người dùng thay thế ------------</option>
+                                    @if(danhSachNguoiDung != null)
+                                    {
+                                         foreach (var item in danhSachNguoiDung)
+                                         {
+                                            <option value="@item.Id">@(item.ho_dem + " " +item.ten )</option>
+                                         }   
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-2"><input type="button" class="btn btn-primary" value="Thay thế"/></div>
+                </div>
+        </div>
