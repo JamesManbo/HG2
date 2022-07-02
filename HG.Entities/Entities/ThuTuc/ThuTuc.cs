@@ -18,6 +18,7 @@ namespace HG.Entities.Entities.ThuTuc
         public bool tthcc { get; set; }
         public bool tthtks { get; set; }
         public string ma_linh_vuc { get; set; }
+        public string ten_linh_vuc { get; set; }
         public string ma_phong_ban { get; set; }
         public int so_ngay_xl { get; set; }
         public decimal le_phi_truoc { get; set; }
@@ -34,17 +35,16 @@ namespace HG.Entities.Entities.ThuTuc
 
         public bool cho_phep_gui_lien_thong { get; set; }
         public bool cho_phep_nhan_lien_thong { get; set; }
-
-        public string lst_ma_dvlt_xl { get; set; }
-
-        public string lst_ma_dvlt_ph { get; set; }
+       
         public bool gui_lt_kem_kq_xl { get; set; }
         public bool chi_tra_kq_kckqlt { get; set; }
         public string thuc_hien { get; set; }
         public string don_vi_ltxl { get; set; }
         public string don_vi_ltph { get; set; }
         public bool thu_le_phi_kckq { get; set; }
-        public Guid? uid { get; set; }
+        public Guid? CreatedUid { get; set; }
+        public bool luong { get; set; }
+        public string UidName { get; set; }
     }
 
     public class ThanhPhan
@@ -70,8 +70,8 @@ namespace HG.Entities.Entities.ThuTuc
     public class NhomTP
     {
         public string ma_thu_tuc { get; set; }
-        public string ma_van_ban { get; set; }
-        public string ten_van_ban { get; set; }
+        public string ma_mhom { get; set; }
+        public string ten_nhom { get; set; }
         public string? mo_ta { get; set; }
         public string? file_dinh_kem { get; set; }
         public int? stt { get; set; }
@@ -104,12 +104,12 @@ namespace HG.Entities.Entities.ThuTuc
     {
         public DmThuTuc thuTuc { get; set; }
         public List<ThanhPhan> lstThanhPhan { get; set; }
-        public Pagelist PagelistThanhPhan { get; set; } = new Pagelist();
+        public PagelistMain PagelistThanhPhan { get; set; } = new PagelistMain();
         public List<VanBanLQ> lstVanBanLQ { get; set; }
-        public Pagelist PagelistVanBanLQ { get; set; } = new Pagelist();
+        public PagelistMain PagelistVanBanLQ { get; set; } = new PagelistMain();
         public List<NhomTP> lstNhomTP { get; set; }
-        public Pagelist PagelistNhomTP { get; set; } = new Pagelist();
+        public PagelistMain PagelistNhomTP { get; set; } = new PagelistMain();
         public List<ThanhPhanKQXL> lstThanhPhanKQXL { get; set; }
-        public Pagelist PagelisthanhPhanKQXL { get; set; } = new Pagelist();
+        public PagelistMain PagelisthanhPhanKQXL { get; set; } = new PagelistMain();
     }
 }

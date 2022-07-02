@@ -108,6 +108,15 @@
             $('#chi_tra_kq_kckqlt').val($(this).is(':checked'));
         });
 
+        var ngctxl = "@Model.thuTuc.don_vi_ltxl";
+        var arrNgctxl = ngctxl.split(",");
+        if (arrNgctxl != "") {
+            arrNgctxl.forEach(function(i) {
+                Arr.push(i);
+                $("#don_vi_ltxl").val(Arr.join(","));
+            });
+        }
+        $("#multiselect").val(arrNgctxl).trigger('change');
 
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
@@ -118,6 +127,15 @@
             Arr.pop(e.params.data.id);
             $("#don_vi_ltxl").val(Arr.join(","));
         });
+
+        var ngphxl = "@Model.thuTuc.don_vi_ltph";
+        var arrNgphxl = ngphxl.split(",");
+        if (arrNgphxl != "") {
+            arrNgphxl.forEach(function(i) {
+                Arr2.push(i);
+                $("#don_vi_ltph").val(Arr2.join(","));
+            });
+        }
 
         $('#multiselect2').on('select2:select', function(e) {
             Arr2.push(e.params.data.id);
@@ -168,6 +186,7 @@
                                 <div class="form-horizontal">
                                     <!-- Horizontal Form -->
                                     <form id="form_pb" action="/ThuTuc/ThemThuTuc" method="post" enctype="multipart/form-data">
+                                        <input name="ma_thu_tuc_old" value="@Model.thuTuc.ma_thu_tuc_old" />
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Mã luồng xử lý</label>
                                             <div class="col-sm-8">
@@ -178,7 +197,7 @@
                                         <div class="row mb-3">
                                             <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc">
+                                                <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -205,30 +224,30 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Mã chuẩn quốc gia" name="ma_quoc_gia" value="">
+                                                <input type="text" class="form-control input-default" placeholder="Mã chuẩn quốc gia" name="ma_quoc_gia" value="@Model.thuTuc.ma_quoc_gia" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Tên thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Tên thủ tục" name="ten_thu_tuc" value="">
+                                                <input type="text" class="form-control input-default" placeholder="Tên thủ tục" name="ten_thu_tuc" value="@Model.thuTuc.ten_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                                             <div class="col-sm-8">
-                                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta"></textarea>
+                                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.thuTuc.mo_ta</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="nop_online" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-2">
-                                                <input type="checkbox" id="nop_online" name="nop_online" value="0">
+                                                <input type="checkbox" id="nop_online" name="nop_online" value="@Model.thuTuc.nop_online" @(Model.thuTuc.nop_online==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Nộp Online</label>
 
                                             </div>
                                             <div class="col-sm-2">
-                                                <input type="checkbox" id="hd_online" name="hd_online" value="0">
+                                                <input type="checkbox" id="hd_online" name="hd_online" value="@Model.thuTuc.hd_online" @(Model.thuTuc.hd_online==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Hướng dẫn Online</label>
 
                                             </div>
@@ -236,12 +255,12 @@
                                         <div class="row mb-3">
                                             <label for="nop_online" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-2">
-                                                <input type="checkbox" id="tthcc" name="tthcc" value="0">
+                                                <input type="checkbox" id="tthcc" name="tthcc" value="@Model.thuTuc.tthcc" @(Model.thuTuc.tthcc==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">TN tại TTHCC</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tthtks" name="tthtks" value="0">
+                                                <input type="checkbox" id="tthtks" name="tthtks" value="@Model.thuTuc.tthtks" @(Model.thuTuc.tthtks==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Thủ tục hộ tịch khai sinh</label>
 
                                             </div>
@@ -249,7 +268,7 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Bước thực hiện <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="thuc_hien">
+                                                <select class="form-select form-control input-default" name="thuc_hien" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <option selected="selected" value="">---- Chọn mức độ thực hiện ----</option>
                                                     <option value="MD3">Thực hiện mức độ 3</option>
                                                     <option value="MD4">Thực hiện mức độ 4</option>
@@ -259,13 +278,21 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Lĩnh vực <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="ma_linh_vuc">
+                                                <select class="form-select form-control input-default" name="ma_linh_vuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <option selected="selected" value="">---- Chọn lĩnh vực ----</option>
                                                     @if (LstLinhVuc != null)
                                                     {
                                                         foreach (var item in LstLinhVuc)
                                                         {
-                                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                            if (item.ma_linh_vuc == Model.thuTuc.ma_linh_vuc)
+                                                            {
+                                                                <option selected value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                            }
+
                                                         }
                                                     }
 
@@ -275,13 +302,21 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Phòng Ban <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="ma_phong_ban">
+                                                <select class="form-select form-control input-default" name="ma_phong_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <option selected="selected" value="">---- Chọn phòng ban ----</option>
                                                     @if (LstPhongBan != null)
                                                     {
                                                         foreach (var item in LstPhongBan)
                                                         {
-                                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                            if (item.ma_phong_ban == Model.thuTuc.ma_phong_ban)
+                                                            {
+                                                                <option selected value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                            }
+
                                                         }
                                                     }
                                                 </select>
@@ -290,60 +325,60 @@
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Số ngày xử lý</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Số ngày xử lý" name="so_ngay_xl" value="">
+                                                <input type="number" class="form-control input-default" name="so_ngay_xl" placeholder="Số ngày xử lý" value="@Model.thuTuc.so_ngay_xl" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Lệ phí trước</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_truoc" value="">
+                                                <input type="number" class="form-control input-default" name="le_phi_truoc" placeholder="Lệ phí" value="@Model.thuTuc.le_phi_truoc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Lệ phí sau</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_sau" value="">
+                                                <input type="number" class="form-control input-default" name="le_phi_sau" placeholder="Lệ phí" value="@Model.thuTuc.le_phi_sau" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Số bộ hồ sơ</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Số bộ hồ sơ" name="so_bo_hs" value="">
+                                                <input type="number" class="form-control input-default" name="so_bo_hs" placeholder="Số bộ hồ sơ" value="@Model.thuTuc.so_bo_hs" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Đường dẫn phôi KQ</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Đường dẫn phôi kết quả" name="duong_dan_kq" value="">
+                                                <input type="text" class="form-control input-default" name="duong_dan_kq" placeholder="Đường dẫn phôi kết quả" value="@Model.thuTuc.duong_dan_kq" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Thông tin mở rộng</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Thông tin mở rộng" name="thong_tin_mo_rong" value="">
+                                                <input type="text" class="form-control input-default" name="thong_tin_mo_rong" placeholder="Thông tin mở rộng" value="@Model.thuTuc.thong_tin_mo_rong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Nội dung hướng dẫn</label>
                                             <div class="col-sm-8">
-                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung hướng dẫn" placeholder="Mô tả" name="noi_dung_hd"></textarea>
+                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung hướng dẫn" name="noi_dung_hd" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Html.Raw(Model.thuTuc.noi_dung_hd)</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Thứ thự" name="stt" value="">
+                                                <input type="number" class="form-control input-default" name="stt" value="@Model.thuTuc.stt" placeholder="Thứ thự" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="thu_le_phi_knhs" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="thu_le_phi_knhs" name="thu_le_phi_knhs" value="0">
+                                                <input type="checkbox" id="thu_le_phi_knhs" name="thu_le_phi_knhs" value="@Model.thuTuc.thu_le_phi_knhs" @(Model.thuTuc.thu_le_phi_knhs==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Thu lệ phí khi nhận hồ sơ</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="thu_le_phi_kckq" name="thu_le_phi_kckq" value="0">
+                                                <input type="checkbox" id="thu_le_phi_kckq" name="thu_le_phi_kckq" value="@Model.thuTuc.thu_le_phi_kckq" @(Model.thuTuc.thu_le_phi_kckq==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Thu lệ phí khi có kết quả</label>
 
                                             </div>
@@ -351,12 +386,12 @@
                                         <div class="row mb-3">
                                             <label for="thu_le_phi_knhs" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="thuc_hien_hai_gd" name="thuc_hien_hai_gd" value="0">
+                                                <input type="checkbox" id="thuc_hien_hai_gd" name="thuc_hien_hai_gd" value="@Model.thuTuc.thuc_hien_hai_gd" @(Model.thuTuc.thuc_hien_hai_gd==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Thực hiện hai giai đoạn</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="0">
+                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="0" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cbonline">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
@@ -364,25 +399,25 @@
                                         <div class="row mb-3">
                                             <label for="cho_phep_lien_thong" class="col-sm-2 control-label">Cho phép liên thông</label>
                                             <div class="col-sm-8">
-                                                <input type="checkbox" id="cho_phep_lien_thong" name="cho_phep_lien_thong">
+                                                <input type="checkbox" id="cho_phep_lien_thong" name="cho_phep_lien_thong" value="@Model.thuTuc.cho_phep_lien_thong" @(Model.thuTuc.cho_phep_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
-                                        <div class="tab_lienthong" style="display:none">
+                                        <div class="tab_lienthong" style="@(Model.thuTuc.cho_phep_lien_thong==true?"display:block":"display:none")">
                                             <div class="row mb-3">
                                                 <label for="stt" class="col-sm-2 control-label"></label>
                                                 <div class="col-sm-3">
-                                                    <input type="checkbox" id="cho_phep_gui_lien_thong" name="cho_phep_gui_lien_thong" value="0">
+                                                    <input type="checkbox" id="cho_phep_gui_lien_thong" name="cho_phep_gui_lien_thong" value="@Model.thuTuc.cho_phep_gui_lien_thong" @(Model.thuTuc.cho_phep_gui_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="cbonline">Cho phép gửi liên thông</label>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input id="cho_phep_nhan_lien_thong" type="checkbox" name="cho_phep_nhan_lien_thong" value="0">
+                                                    <input id="cho_phep_nhan_lien_thong" type="checkbox" name="cho_phep_nhan_lien_thong" value="@Model.thuTuc.cho_phep_nhan_lien_thong" @(Model.thuTuc.cho_phep_nhan_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="cbonline">Cho phép nhận liên thông</label>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltxl" class="col-sm-2 control-label">Đơn vị liên thông XL</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -395,9 +430,9 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
-                                                <label for="don_vi_ltph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
+                                                <label for="ma_dvlt_ph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -412,11 +447,11 @@
                                             <div class="row mb-3">
                                                 <label for="stt" class="col-sm-2 control-label"></label>
                                                 <div class="col-sm-3">
-                                                    <input type="checkbox" id="gui_lt_kem_kq_xl" name="gui_lt_kem_kq_xl" value="0">
+                                                    <input type="checkbox" id="gui_lt_kem_kq_xl" name="gui_lt_kem_kq_xl" value="@Model.thuTuc.gui_lt_kem_kq_xl" @(Model.thuTuc.gui_lt_kem_kq_xl==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="cbonline">Gửi liên thông kèm kết quả xử lý</label>
                                                 </div>
                                                 <div class="col-sm-5">
-                                                    <input type="checkbox" id="chi_tra_kq_kckqlt" name="chi_tra_kq_kckqlt" value="0">
+                                                    <input type="checkbox" id="chi_tra_kq_kckqlt" name="chi_tra_kq_kckqlt" value="@Model.thuTuc.chi_tra_kq_kckqlt" @(Model.thuTuc.chi_tra_kq_kckqlt==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="cbonline">Chỉ trả kết quả khi có kết quả liên thông</label>
                                                 </div>
                                             </div>

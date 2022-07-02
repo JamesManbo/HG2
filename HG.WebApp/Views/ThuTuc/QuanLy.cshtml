@@ -2,13 +2,16 @@
 @{
     ViewData["Title"] = "Sổ Hồ Sơ";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var LstPhongBan = ViewBag.LstPhongBan as List<HG.Entities.Dm_Phong_Ban>;
 }
+@model HG.Entities.Entities.ThuTuc.ThuTucPaging
+
 <script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 <div class="card">
     <div class="card-body">
         <div class="pageheader">
             <div class="searchbar">
-                <input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." name="keyword" />
+                <input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
                 <input type="submit" name="ctl08$BtnSearch" value="" onclick="return CheckSearch();" id="BtnSearch" hidden="hidden" />
             </div>
             <div class="pageicon"><span class="iconfa-table"></span></div>
@@ -34,7 +37,7 @@
                     <p class="stdformbutton" style="margin-bottom: 10px;">
                         <input type="submit" name="" value="Thêm" id="" onclick="window.location.href = '/ThuTuc/ThemThuTuc';" class="btn btn-primary" style="width:100px;" />
 
-                        <input type="submit" name="" value="Xóa" onclick="" id=""class="btn btn-primary" style="width:100px;" />
+                        <input type="submit" name="" value="Xóa" onclick="" id="" class="btn btn-primary" style="width:100px;" />
                     </p>
                     <div class="widget">
                         <h4 class="widgettitle">Lọc danh sách theo</h4>
@@ -43,32 +46,14 @@
                                 <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban</label>
                                 <div class="col-md-10">
                                     <select name="ctl08$ddlPhongBan" onchange="javascript:setTimeout(&#39;__doPostBack(\&#39;ctl08$ddlPhongBan\&#39;,\&#39;\&#39;)&#39;, 0)" id="ctl08_ddlPhongBan" class="form-control input-default">
-                                        <option selected="selected" value="------- Chọn Phòng Ban -------">------- Chọn Ph&#242;ng Ban -------</option>
-                                        <option value="PTCKH">Ph&#242;ng T&#224;i ch&#237;nh - Kế hoạch</option>
-                                        <option value="PTNMT">Ph&#242;ng T&#224;i nguy&#234;n v&#224; M&#244;i trường</option>
-                                        <option value="PTP">Ph&#242;ng Tư ph&#225;p</option>
-                                        <option value="PNN">Ph&#242;ng N&#244;ng nghiệp v&#224; PTNT</option>
-                                        <option value="PNV">Ph&#242;ng Nội Vụ</option>
-                                        <option value="PQLDT">Ph&#242;ng QL Đ&#244; thị</option>
-                                        <option value="Văn thư">UBND_Văn thư</option>
-                                        <option value="VP">Văn ph&#242;ng UBND huyện</option>
-                                        <option value="VPDK">Văn ph&#242;ng Đăng k&#253; Đất đai</option>
-                                        <option value="PVH">Ph&#242;ng Văn h&#243;a v&#224; th&#244;ng tin</option>
-                                        <option value="PYT">Ph&#242;ng Y tế</option>
-                                        <option value="TTH">Thanh tra Huyện</option>
-                                        <option value="LD">L&#227;nh đạo UBND huyện</option>
-                                        <option value="LĐVP_UBND">UBND_L&#227;nh đạo văn ph&#242;ng</option>
-                                        <option value="NC_UBND">UBND_Ph&#242;ng Nội ch&#237;nh</option>
-                                        <option value="KGVX_UBND">UBND_Ph&#242;ng Khoa gi&#225;o văn x&#227;</option>
-                                        <option value="KTN_UBND">UBND_Ph&#242;ng Kinh tế ng&#224;nh</option>
-                                        <option value="KTTH_UBND">UBND_Ph&#242;ng Kinh tế Tổng hợp</option>
-                                        <option value="PKT">Ph&#242;ng Kinh tế</option>
-                                        <option value="PKTHT">Ph&#242;ng Kinh tế v&#224; Hạ tầng</option>
-                                        <option value="PLD">Ph&#242;ng Lao động - Thương binh v&#224; X&#227; hội</option>
-                                        <option value="PBT">PH&#210;NG BAN TEST</option>
-                                        <option value="PDT">Ph&#242;ng D&#226;n tộc</option>
-                                        <option value="PGD">Ph&#242;ng Gi&#225;o dục v&#224; Đ&#224;o tạo</option>
-
+                                        <option selected="selected" value="------- Chọn Phòng Ban -------">------- Chọn phòng ban -------</option>
+                                        @if (LstPhongBan != null)
+                                        {
+                                            foreach (var item in LstPhongBan)
+                                            {
+                                                <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                            }
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -86,72 +71,139 @@
                                 </select> bản ghi
                             </label>
                         </div>
-                        <table class="table table-bordered responsive" id="dyntable">
-                            <colgroup>
-                                <col class="con0" style="width: 20px" />
-                                <col class="con1" style="width: 3%" />
-                                <col class="con0" />
-                                <col class="con1" style="width: 20%" />
-                                <col class="con0" style="width: 5%" />
-                                <col class="con1" style="width: 3%" />
-                                <col class="con0" style="width: 3%" />
-                                <col class="con1" style="width: 2%" />
-                                <col class="con0" style="width: 2%" />
-                                <col class="con1" style="width: 2%" />
-                            </colgroup>
-                            <thead class="widgettitle">
-                                <tr>
-                                    <th class="head0 nosort">
-                                        <input id="checkall" type="checkbox" name="ctl08$RepeaterTable$ctl00$checkall" />
-                                    </th>
-                                    <th class="head0">STT</th>
-                                    <th class="head1">TÊN</th>
-                                    <th class="head0">LĨNH VỰC</th>
-                                    <th class="head1">LUỒNG</th>
-                                    <th class="head0">OL</th>
-                                    <th class="head1">LT</th>
-                                    <th class="head0">#</th>
-                                    <th class="head1">#</th>
-                                    <th class="head0">#</th>
-                                </tr>
-                            </thead>
+                        <div id="dataTable">
+                            <div class="dataTable-container">
+                                <table class="table table-bordered responsive">
+                                    <thead class="widgettitle">
+                                        <tr>
+                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                <input type="checkbox" name="" id="selectAll" />
+                                            </th>                                      
 
-                            <tr class="gradeX">
-                                <td class="aligncenter">
-                                    <input id="ctl08_RepeaterTable_ctl01_checkbox" type="checkbox" name="ctl08$RepeaterTable$ctl01$checkbox" />
-                                </td>
-                                <td>1<input type="hidden" name="ctl08$RepeaterTable$ctl01$HiddenID" id="ctl08_RepeaterTable_ctl01_HiddenID" value="q" /></td>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 45%;">TÊN</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 20%;">LĨNH VỰC</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">LUỒNG</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">OL</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">LT</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.lstThuTuc != null)
+                                        {
+                                            var stt = 1;
+                                            foreach (var item in Model.lstThuTuc)
+                                            {
+                                                <tr>
+                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thu_tuc" /></td>
+                                                    <td scope="row">
+                                                        @stt
+                                                        <input type="hidden" name="" id="" value="@item.ma_thu_tuc" />
+                                                    </td>
+                                                    <td><a href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())">@item.ten_thu_tuc</a></td>
 
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q">sdcd</a>
-                                </td>
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q">Lĩnh vực Công thương</a>
-                                </td>
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink5" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q">Có</a>
-                                </td>
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q"></a>
-                                </td>
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="./?uid=38&amp;Action=view&amp;ActionTP=grid&amp;ActionVB=grid&amp;FCode=q"></a>
-                                </td>
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_lnkviewRow" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="javascript:__doPostBack(&#39;ctl08$RepeaterTable$ctl01$lnkviewRow&#39;,&#39;&#39;)"><span class="glyphicon glyphicon-list-alt"></span></a>
-                                </td>
-                                <td>
-                                    <a id="ctl08_RepeaterTable_ctl01_lnkEdit" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="javascript:__doPostBack(&#39;ctl08$RepeaterTable$ctl01$lnkEdit&#39;,&#39;&#39;)"><span class="glyphicon glyphicon-edit"></span></a>
-                                </td>
-                                <td>
-                                    <a onclick="return confirm(&#39;Bạn có muốn xóa không?&#39;);" id="ctl08_RepeaterTable_ctl01_lnkDelRow" data-placement="top" data-toggle="tooltip" data-original-title="Xóa" href="javascript:__doPostBack(&#39;ctl08$RepeaterTable$ctl01$lnkDelRow&#39;,&#39;&#39;)"><span class="glyphicon glyphicon-trash"></span></a>
-                                </td>
-                            </tr>
-                        </table>
+                                                    <td>@item.ten_linh_vuc</td>
+                                                    <td>@item.luong</td>
+                                                    <td>@item.nop_online</td>
+                                                    <td>@item.cho_phep_lien_thong</td>
+                                                    <td>
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())">
+                                                            <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())">
+                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+                                                        <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@item.ma_thu_tuc')"
+                                                   title=""
+                                                   data-placement="top"
+                                                   data-toggle="tooltip"
+                                                   data-original-title="Xóa"
+                                                   href="#">
+                                                            <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                stt++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
+                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                @{
+                                    var TotalPage = (int)ViewBag.TotalPage;
+                                    var CurrentPage = (int)ViewBag.CurrentPage;
+                                    if (TotalPage > 5)
+                                    {
+                                        if (CurrentPage > CurrentPage + 2)
+                                        {
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        };
+                                        if (CurrentPage > 3)
+                                        {
+                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                            {
+                                                if (i == CurrentPage)
+                                                {
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                                else
+                                                {
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i == CurrentPage)
+                                                {
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                                else
+                                                {
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                            }
+
+                                        }
+
+                                        if (CurrentPage < CurrentPage + 2)
+                                        {
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                        };
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i <= TotalPage; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-
                 @*TAB Quản lý biểu mẫu*@
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">
                     <p class="stdformbutton" style="margin-bottom: 10px;">

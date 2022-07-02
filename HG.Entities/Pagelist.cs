@@ -15,4 +15,13 @@ namespace HG
         public int TotalRecords { get; set; } = 0;
         public int CurrentPage { get; set; } = 0;
     }
+
+    public class PagelistMain
+    {
+        public int TotalPage { get; set; }
+        public int CurrentPage { get; set; }
+        public int RecoredFrom { get; set; } = 0;
+        public int RecoredTo { get; set; } = 0;
+        public int TotalRecords { get; set; } = 0;
+    }
 }

@@ -22,7 +22,7 @@ namespace HG.Data.Business.ThuTuc
 
         #region Thủ tục
 
-        public ThuTucPaging DanhSanhThuTuc(DanhMucModel item)
+        public ThuTucPaging DanhSanhThuTuc(ThuTucModels item)
         {
             try
             {
@@ -78,14 +78,15 @@ namespace HG.Data.Business.ThuTuc
             DbProvider.AddParameter("cho_phep_lien_thong", item.cho_phep_lien_thong, SqlDbType.Bit);
             DbProvider.AddParameter("cho_phep_gui_lien_thong", item.cho_phep_gui_lien_thong, SqlDbType.Bit);
             DbProvider.AddParameter("cho_phep_nhan_lien_thong", item.cho_phep_nhan_lien_thong, SqlDbType.Bit);
-            DbProvider.AddParameter("lst_ma_dvlt_xl", item.lst_ma_dvlt_xl, SqlDbType.NVarChar);
-            DbProvider.AddParameter("lst_ma_dvlt_ph", item.lst_ma_dvlt_ph, SqlDbType.NVarChar);
+            DbProvider.AddParameter("don_vi_ltxl", item.don_vi_ltxl, SqlDbType.NVarChar);
+            DbProvider.AddParameter("don_vi_ltph", item.don_vi_ltph, SqlDbType.NVarChar);
 
             DbProvider.AddParameter("gui_lt_kem_kq_xl", item.gui_lt_kem_kq_xl, SqlDbType.Bit);
             DbProvider.AddParameter("chi_tra_kq_kckqlt", item.chi_tra_kq_kckqlt, SqlDbType.Bit);
             DbProvider.AddParameter("thuc_hien", item.thuc_hien, SqlDbType.NVarChar);
             DbProvider.AddParameter("thu_le_phi_kckq", item.thu_le_phi_kckq, SqlDbType.Bit);
-            DbProvider.AddParameter("uid", item.uid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("UidName", item.UidName, SqlDbType.NVarChar);
 
             DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
             DbProvider.AddParameter("ten_loi", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
@@ -115,10 +116,10 @@ namespace HG.Data.Business.ThuTuc
             try
             {
                 ThuTucModel menu = new ThuTucModel();
-                menu.PagelistThanhPhan = new Pagelist();
-                menu.PagelistVanBanLQ = new Pagelist();
-                menu.PagelistNhomTP = new Pagelist();
-                menu.PagelisthanhPhanKQXL = new Pagelist();
+                menu.PagelistThanhPhan = new PagelistMain();
+                menu.PagelistVanBanLQ = new PagelistMain();
+                menu.PagelistNhomTP = new PagelistMain();
+                menu.PagelisthanhPhanKQXL = new PagelistMain();
 
                 DbProvider.SetCommandText2("dm_danh_sach_thu_tuc", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_thu_tuc", ma_thu_tuc, SqlDbType.VarChar);
@@ -130,10 +131,10 @@ namespace HG.Data.Business.ThuTuc
                 DbProvider.AddParameter("page", CurrentPage, SqlDbType.Int);
                 DbProvider.AddParameter("page_size", RecordsPerPage, SqlDbType.Int);
                 // Output params
-                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("total_tp", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("total_vp", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("total_nhom_tp", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("total_tpkq", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 DbProvider.ExecuteReader_ToMyReader();
                 // Lấy về danh sách các người dung
                 menu.thuTuc = DbProvider.GetObjectFromMyReader<DmThuTuc>();
