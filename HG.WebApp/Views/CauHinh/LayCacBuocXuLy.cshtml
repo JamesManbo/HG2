@@ -1,0 +1,108 @@
+﻿                    @model HG.Entities.Entities.Luong.QuyTrinhXuLy_paging      
+                    <div id="CacBuocXuLyChiTiet">
+                            <div class="dataTable-container">
+                                <table class="table table-bordered responsive">
+                                    <thead class="widgettitle">
+                                        <tr>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 32%;">TÊN BƯỚC</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 8%;">NGƯỜI XỬ LÝ </th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">THỨ TỰ </th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">SỐ NGÀY</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 7%;">MÃ NHÁNH</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 3%;">#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.lstQuyTrinhXuLy != null)
+                                        {
+                                            var stt = 1;
+                                            foreach (var item in Model.lstQuyTrinhXuLy)
+                                            {
+                                                <tr>
+                                                    <td scope="row">
+                                                        @stt
+                                                    </td>
+                                                    <td><a href="#">@item.ten_buoc</a></td>
+
+                                                    <td>@item.nguoi_co_the_xl</td>
+                                                    <td>@item.stt</td>
+                                                    <td>@item.so_ngay_xl</td>
+                                                    <td>@item.ma_nhanh</td>
+                                                    <td>
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Luong/SuaQuyTrinhXuLy?code=@item.ma_luong&step=@item.Id">
+                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                stt++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                @{
+                                    var TotalPage = (int)ViewBag.TotalPage;
+                                    var CurrentPage = (int)ViewBag.CurrentPage;
+                                    if (TotalPage > 5)
+                                    {
+                                        if (CurrentPage > CurrentPage + 2)
+                                        {
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        };
+                                        if (CurrentPage > 3)
+                                        {
+                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                            {
+                                                if (i == CurrentPage)
+                                                {
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                                else
+                                                {
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i == CurrentPage)
+                                                {
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                                else
+                                                {
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                }
+                                            }
+
+                                        }
+
+                                        if (CurrentPage < CurrentPage + 2)
+                                        {
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                        };
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i <= TotalPage; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>

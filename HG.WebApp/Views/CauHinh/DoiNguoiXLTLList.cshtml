@@ -1,0 +1,68 @@
+﻿            @model List<HG.Entities.Entities.Nguoi_PHXLModel>                    
+                <input id="ma_nguoi_dung" value="@ViewBag.ma_nguoi_dung" hidden/>
+                <input id="ma_nguoi_dung_thay_the" value="@ViewBag.ma_nguoi_dung_thay_the" hidden/>
+                <div class="dataTable-container">
+                        <table class="table table-bordered responsive">
+                            <thead class="widgettitle">
+                                <tr>
+                                   
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN LUỒNG</th>
+                                  @*  <th class="head1" scope="col" data-sortable="" style="width: 5%;">NGƯỜI XỬ LÝ</th>
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">NGƯỜI CÓ THỂ XỬ LÝ</th>*@
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    var stt = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td scope="row">
+                                                @stt
+                                                <input type="hidden" name="" id="ma_luong" value="@item.ma_luong" />
+                                            </td>
+                                            <td><p  style="color:#4154f1; cursor:pointer" onclick="LayCacBuocXuLy()">@item.ten_luong</p></td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+            </div>
+           <script>
+            function LayCacBuocXuLy() {
+                  
+                  $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/LayCacBuocXuLy?ma_luong="+$("#ma_luong").val(),
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                           success: function(data) {
+                              $("#CacBuocXuLyChiTiet").html(data);
+                              $("#CacBuocXuLy").modal("show"); 
+                           }       
+                  });
+            }
+           </script>
+          <div class="modal fade" id="CacBuocXuLy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <span id="CacBuocXuLyChiTiet">Xóa thành công</span>
+                        </div>
+                        <div class="modal-footer">
+                             <button type="button" class="btn btn-primary" id="BtnThayDoiNgXL">Thay đổi người xl</button>
+                             <button type="button" class="btn btn-primary" id="BtnXoaNgXL">Xóa người xử lý</button>
+                             <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>

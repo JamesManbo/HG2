@@ -68,5 +68,32 @@ namespace HG.Data.Business.CauHinh
                 return "Xóa thất bại!";
             }
         }
+        public List<Nguoi_PHXLModel> ThayTheNguoiXL(Guid ma_nguoi_dung_hien_tai, Guid ma_nguoi_dung_thay_the, Guid uid)
+        {
+            try
+            {
+                List<Nguoi_PHXLModel> nguoi_PHXLModel = new List<Nguoi_PHXLModel>();
+                DbProvider.SetCommandText2("ThayTheNguoiXuLy", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("@ma_nguoi_dung", ma_nguoi_dung_hien_tai, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("@ma_nguoi_thay_the", ma_nguoi_dung_thay_the, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("@uid", uid, SqlDbType.UniqueIdentifier);
+
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                nguoi_PHXLModel = DbProvider.ExecuteListObject<Nguoi_PHXLModel>();
+                var maloi = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                if (maloi == 1)
+                {
+                    return new List<Nguoi_PHXLModel>();
+                }
+                return nguoi_PHXLModel;
+            }
+            catch (Exception e)
+            {
+                return new List<Nguoi_PHXLModel>();
+            }
+        }
     }
 }

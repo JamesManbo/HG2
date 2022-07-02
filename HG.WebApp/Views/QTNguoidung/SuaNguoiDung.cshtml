@@ -141,7 +141,7 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Ngày sinh</label>
                             <div class="col-md-10">
-                                <input name="ngay_sinh" type="text" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" value="@Model.aspNetUsersModel.First().ngay_sinh" placeholder="Ngày sinh">
+                                <input name="ngay_sinh" type="date" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" value="@Model.aspNetUsersModel.First().ngay_sinh" placeholder="Ngày sinh">
                                 @*<span id="ctl08_ctl00_CompareValidator2" style="color:Red;display:none;">Phải nhập dữ liệu kiểu ngày/tháng/năm!</span>*@
                             </div>
                         </div>
@@ -415,7 +415,6 @@
                                             }
                                               <option value="@item.ma_nhom">	@item.ten_nhom</option>                      
                                         }
-
                                     }
                                 </select>
                                 <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" hidden>
@@ -476,14 +475,14 @@
                                              foreach (var item in lst_nguoi_dung.asp_Nhoms)
                                             {
                                                 <tr>
-                                                <td align="center">
-                                                     <a href="/QTNguoiDung/SuaNguoiDung?Id=@item.Id&type=@(StatusAction.Edit.ToString())">Chọn</a>
-                                                </td>
-                                                <td>
-                                                    @item.ten_dang_nhap
-                                                </td>
-                                                <td style="width: 25%;"> @(item.ho_dem+ " " +item.ten)</td>
-                                            </tr>
+                                                    <td align="center">
+                                                         <a href="/QTNguoiDung/SuaNguoiDung?Id=@item.Id&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                                    </td>
+                                                    <td>
+                                                        @item.ten_dang_nhap
+                                                    </td>
+                                                    <td style="width: 25%;"> @(item.ho_dem+ " " +item.ten)</td>
+                                                </tr>
                                             }
                                         }
                                     </tbody>

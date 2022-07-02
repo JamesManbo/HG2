@@ -12,7 +12,7 @@
                             </label>
                             <div class="col-sm-8">
                                 <select name="ma_nguoi_dung_hien_tai" id="ma_nguoi_dung_hien_tai" class="form-control input-default form-select"  placeholder="Chọn người dùng hiện tại">
-                                    <option value="0">------------ Chọn người dùng hiện tại ------------</option>
+                                    <option value="0">Chọn người xử lý hiện tại</option>
                                     @if(danhSachNguoiDung != null)
                                     {
                                          foreach (var item in danhSachNguoiDung)
@@ -28,8 +28,8 @@
                                 Người xử lý thay thế:
                             </label>
                             <div class="col-sm-8">
-                                <select name="ma_nguoi_dung" id="ma_phong_ban" class="form-control input-default form-select" onchange="XoaNguoiCTXLList(this)" placeholder="Chọn người dùng thay thế">
-                                    <option value="0">------------ Chọn người dùng thay thế ------------</option>
+                                <select name="ma_nguoi_dung_thay_the" id="ma_nguoi_dung_thay_the" class="form-control input-default form-select" placeholder="Chọn người dùng thay thế">
+                                    <option value="0">Chọn người xử lý thay thế</option>
                                     @if(danhSachNguoiDung != null)
                                     {
                                          foreach (var item in danhSachNguoiDung)
@@ -39,6 +39,32 @@
                                     }
                                 </select>
                             </div>
-                            <div class="col-sm-2"><input type="button" class="btn btn-primary" value="Thay thế"/></div>
+                            <div class="col-sm-2"><input type="button" class="btn btn-primary" value="Thay thế" onclick="ThayTheNguoiXuLy()"/></div>
                 </div>
         </div>
+        <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                 <div id="ThayTheNguoiXL">
+                    
+               
+                </div>
+                <!-- End Table with stripped rows -->
+        </div>
+
+
+         <script>
+                    function ThayTheNguoiXuLy() {
+                        var ma_nguoi_dung_hien_tai = document.getElementById("ma_nguoi_dung_hien_tai").options[document.getElementById("ma_nguoi_dung_hien_tai").selectedIndex].value;
+                        var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_the").options[document.getElementById("ma_nguoi_dung_thay_the").selectedIndex].value;
+                       
+                        $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/ThayTheNguoiXL?ma_nguoi_dung_hien_tai="+ma_nguoi_dung_hien_tai+ "&ma_nguoi_dung_thay_the=" + ma_nguoi_dung_thay_the,
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                            success: function(data) {
+                                $("#ThayTheNguoiXL").html(data);
+                            }
+                         });
+                    }
+                    
+            </script>

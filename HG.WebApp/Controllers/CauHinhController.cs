@@ -1,5 +1,7 @@
 ﻿using HG.Data.Business.CauHinh;
+using HG.Data.Business.DanhMuc;
 using HG.Entities.CauHinh;
+using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,8 @@ namespace HG.WebApp.Controllers
         private readonly SignInManager<AspNetUsers> signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly CauHinhDao _cauHinhDao;
+        private readonly LuongXuLyDao _danhmucDao;
+        private readonly DanhMucDao _dmDao;
         //extend sys identity
         public CauHinhController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, SignInManager<AspNetUsers> signInManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -27,6 +31,8 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _cauHinhDao = new CauHinhDao(DbProvider);
+            _danhmucDao = new LuongXuLyDao(DbProvider);
+            _dmDao = new DanhMucDao(DbProvider);
         }
         [HttpGet]
         public IActionResult CauHinh()
@@ -145,10 +151,62 @@ namespace HG.WebApp.Controllers
         {
             var db = new EAContext();
             ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
-
             return PartialView();
         }
+
+        public async Task<IActionResult> ThayTheNguoiXL(string ma_nguoi_dung_hien_tai = "", string ma_nguoi_dung_thay_the = "")
+        {
+            if (!string.IsNullOrEmpty(ma_nguoi_dung_hien_tai) && !string.IsNullOrEmpty(ma_nguoi_dung_thay_the))
+            {
+                var UserId = Guid.Parse(userManager.GetUserId(User));
+                var lstObj = _cauHinhDao.ThayTheNguoiXL(Guid.Parse(ma_nguoi_dung_hien_tai), Guid.Parse(ma_nguoi_dung_thay_the), UserId);
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/DoiNguoiXLList.cshtml", lstObj);
+                return Content(result);
+            }
+            return Content("");
+        }
+
         #endregion
-       
+        #region đổi người xử lý theo luồng
+        public IActionResult DoiNguoiXLTLPartial()
+        {
+            var db = new EAContext();
+            ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
+            return PartialView();
+        }
+        public async Task<IActionResult> DoiNguoiXLTLList(string ma_nguoi_dung = "", string ma_nguoi_dung_thay_the = "")
+        {
+            ViewBag.ma_nguoi_dung = ma_nguoi_dung; 
+            ViewBag.ma_nguoi_dung_thay_the = ma_nguoi_dung_thay_the;
+            if (!string.IsNullOrEmpty(ma_nguoi_dung))
+            {
+                var lstObj = _cauHinhDao.LayDsNhomPhanTrang(Guid.Parse(ma_nguoi_dung));
+                ViewBag.ma_nguoi_dung = ma_nguoi_dung;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/DoiNguoiXLTLList.cshtml", lstObj);
+                return Content(result);
+            }
+            return Content("");
+        }
+        public async Task<IActionResult> LayCacBuocXuLy(string ma_luong)
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = ma_luong, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
+            ds.ma_luong = ma_luong;
+            var user = _dmDao.DanhSachNguoiDung("0");
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/LayCacBuocXuLy.cshtml", ds);
+            return Content(result);
+        }
+
+        public IActionResult ThayDoiNguoiXLTheoLuong(string ma_luong = "", string ma_buoc = "")
+        {
+            return View();
+        }
+        #endregion
+
     }
 }
