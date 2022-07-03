@@ -187,7 +187,7 @@ namespace HG.WebApp.Controllers
             }
             return Content("");
         }
-        public async Task<IActionResult> LayCacBuocXuLy(string ma_luong)
+        public async Task<IActionResult> LayCacBuocXuLy(string ma_luong, string ma_nguoi_dung = "", string ma_nguoi_dung_thay_the = "")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = ma_luong, tu_khoa = "", RecordsPerPage = pageSize };
@@ -198,13 +198,47 @@ namespace HG.WebApp.Controllers
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            ViewBag.NguoiHienTai = "";
+            ViewBag.NguoiThayThe = "";
+            if (!string.IsNullOrEmpty(ma_nguoi_dung))
+            {
+                var objNguoihientai = await userManager.FindByIdAsync(ma_nguoi_dung);
+                ViewBag.NguoiHienTai = objNguoihientai.ho_dem + " " + objNguoihientai.ten;
+            }
+            if (!string.IsNullOrEmpty(ma_nguoi_dung_thay_the))
+            {
+                var objNguoihientai = await userManager.FindByIdAsync(ma_nguoi_dung_thay_the);
+                ViewBag.NguoiThayThe = objNguoihientai.ho_dem + " " + objNguoihientai.ten;
+            }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/LayCacBuocXuLy.cshtml", ds);
             return Content(result);
         }
 
-        public IActionResult ThayDoiNguoiXLTheoLuong(string ma_luong = "", string ma_buoc = "")
+        public IActionResult ThayDoiNguoiXLTL(string ma_buoc = "", string ma_nguoi_dung = "", string ma_nguoi_dung_thay_the ="")
         {
-            return View();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            var result = "Thay đổi người thay thế không thành công!";
+            foreach (var item in ma_buoc.Split(""))
+            {
+                if(item != "on")
+                {
+                    result = _cauHinhDao.ThayDoiXLTL(item, Guid.Parse(ma_nguoi_dung), Guid.Parse(ma_nguoi_dung_thay_the), UserId);
+                }
+            }
+            return Content(result);
+        }
+        public IActionResult XoaNguoiXLTL(string ma_buoc = "", string ma_nguoi_dung = "", string ma_nguoi_dung_thay_the = "")
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            var result = "Xóa người thay thế không thành công!";
+            foreach (var item in ma_buoc.Split(""))
+            {
+                if (item != "on")
+                {
+                    result = _cauHinhDao.XoaNguoiXLTL(item, UserId);
+                }
+            }
+            return Content(result);
         }
         #endregion
 

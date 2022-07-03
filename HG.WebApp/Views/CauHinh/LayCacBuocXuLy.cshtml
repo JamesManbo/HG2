@@ -1,16 +1,26 @@
 ﻿                    @model HG.Entities.Entities.Luong.QuyTrinhXuLy_paging      
+                  
+                     <div>
+                                <span>Người hiện tại:</span> 
+                                <span id="nguoihientai" style="font-weight: bold">@ViewBag.NguoiHienTai</span>
+                                <span>Người thay thế:</span> 
+                                <span id="nguoithaythe" style="font-weight: bold">@ViewBag.NguoiThayThe</span>
+                     </div>
+
                     <div id="CacBuocXuLyChiTiet">
                             <div class="dataTable-container">
                                 <table class="table table-bordered responsive">
                                     <thead class="widgettitle">
                                         <tr>
+                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                        <input type="checkbox" name="" id="selectAll" />
+                                            </th>
                                             <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
                                             <th class="head1" scope="col" data-sortable="" style="width: 32%;">TÊN BƯỚC</th>
                                             <th class="head0" scope="col" data-sortable="" style="width: 8%;">NGƯỜI XỬ LÝ </th>
                                             <th class="head0" scope="col" data-sortable="" style="width: 5%;">THỨ TỰ </th>
                                             <th class="head1" scope="col" data-sortable="" style="width: 5%;">SỐ NGÀY</th>
                                             <th class="head0" scope="col" data-sortable="" style="width: 7%;">MÃ NHÁNH</th>
-                                            <th class="head1" scope="col" data-sortable="" style="width: 3%;">#</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -20,6 +30,7 @@
                                             foreach (var item in Model.lstQuyTrinhXuLy)
                                             {
                                                 <tr>
+                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_buoc" /></td>
                                                     <td scope="row">
                                                         @stt
                                                     </td>
@@ -29,11 +40,7 @@
                                                     <td>@item.stt</td>
                                                     <td>@item.so_ngay_xl</td>
                                                     <td>@item.ma_nhanh</td>
-                                                    <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Luong/SuaQuyTrinhXuLy?code=@item.ma_luong&step=@item.Id">
-                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                        </a>
-                                                    </td>
+                                                
                                                 </tr>
                                                 stt++;
                                             }
@@ -106,3 +113,39 @@
                                 }
                             </div>
                         </div>
+                        <script> 
+                           $( document ).ready(function() {
+                                $('#selectAll').click(function() {
+                                    var val = [];
+                                    if ($(this).is(':checked')) {
+                                        $(".ads_Checkbox").prop("checked", true);
+                                        $(':checkbox:checked').each(function(i) {
+                                            if (i > 0) {
+                                                val[i - 1] = $(this).val();
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        $(".ads_Checkbox").prop("checked", false);
+                                        val = [];
+                                    }
+                                   $('input[name="lstBuoc"]').attr('value',val); 
+                                });
+
+
+                                $('.ads_Checkbox').click(function() {
+                                    var val = [];
+                                    $('.ads_Checkbox:checkbox:checked').each(function(i) {
+                                        if ($('#selectAll').is(':checked')) {
+                                            if (i > 0) {
+                                                val[i - 1] = $(this).val();
+                                            }
+                                        } else {
+                                            val[i] = $(this).val();
+                                        }
+
+                                    });
+                                    $('input[name="lstBuoc"]').attr('value',val); 
+                                });
+                            });
+                        </script>

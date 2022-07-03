@@ -24,28 +24,13 @@
                             </div>
                             <div class="col-sm-2"><input type="button" class="btn btn-primary" value="  Lọc  " onclick="LocNguoiXuLyHienTai()"/></div>
                 </div>
-                 <script>
-                    function LocNguoiXuLyHienTai() {
-                        var ma_nguoi_xl_hien_tai = document.getElementById("ma_nguoi_xl_hien_tai").options[document.getElementById("ma_nguoi_xl_hien_tai").selectedIndex].value;
-                        var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_the").options[document.getElementById("ma_nguoi_dung_thay_the").selectedIndex].value;
-                        $.ajax({
-                           type: "GET",
-                           url: "/CauHinh/DoiNguoiXLTLList?ma_nguoi_dung="+ma_nguoi_xl_hien_tai + "&ma_nguoi_dung_thay_the="+ma_nguoi_dung_thay_the,
-                           data: "",
-                           contentType: 'application/json; charset=utf-8',
-                            success: function(data) {
-                                $("#LocNguoiXuLyHienTai").html(data);
-                            }
-                         });
-                    }
-                    
-            </script>
+             
                 <div class="form-group row">
                             <label class="col-sm-2 control-label">
                                 Người xử lý thay thế:
                             </label>
                             <div class="col-sm-8">
-                                <select name="ma_nguoi_dung_thay_the" id="ma_nguoi_dung_thay_the" class="form-control input-default form-select" placeholder="Chọn người dùng thay thế">
+                                <select name="ma_nguoi_dung_thay_thetl" id="ma_nguoi_dung_thay_thetl" class="form-control input-default form-select" placeholder="Chọn người dùng thay thế">
                                     <option value="0">Chọn người xử lý thay thế</option>
                                     @if(danhSachNguoiDung != null)
                                     {
@@ -58,6 +43,22 @@
                             </div>
                             
                 </div>
+                <script>
+                    function LocNguoiXuLyHienTai() {
+                        var ma_nguoi_xl_hien_tai = document.getElementById("ma_nguoi_xl_hien_tai").options[document.getElementById("ma_nguoi_xl_hien_tai").selectedIndex].value;
+                        var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_thetl").options[document.getElementById("ma_nguoi_dung_thay_thetl").selectedIndex].value;
+                        $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/DoiNguoiXLTLList?ma_nguoi_dung="+ma_nguoi_xl_hien_tai + "&ma_nguoi_dung_thay_the="+ma_nguoi_dung_thay_the,
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                            success: function(data) {
+                                $("#LocNguoiXuLyHienTai").html(data);
+                            }
+                         });
+                    }
+                    
+                </script>
         </div>
         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                  <div id="LocNguoiXuLyHienTai">

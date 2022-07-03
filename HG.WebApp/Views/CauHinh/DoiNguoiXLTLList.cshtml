@@ -1,6 +1,6 @@
 ﻿            @model List<HG.Entities.Entities.Nguoi_PHXLModel>                    
-                <input id="ma_nguoi_dung" value="@ViewBag.ma_nguoi_dung" hidden/>
-                <input id="ma_nguoi_dung_thay_the" value="@ViewBag.ma_nguoi_dung_thay_the" hidden/>
+                <input id="ma_nguoi_dung_tl" value="@ViewBag.ma_nguoi_dung" hidden/>
+                <input id="ma_nguoi_dung_thay_the_tl" value="@ViewBag.ma_nguoi_dung_thay_the" hidden/>
                 <div class="dataTable-container">
                         <table class="table table-bordered responsive">
                             <thead class="widgettitle">
@@ -33,34 +33,72 @@
             </div>
            <script>
             function LayCacBuocXuLy() {
-                  
-                  $.ajax({
+                  var ma_nguoi_xl_hien_tai = document.getElementById("ma_nguoi_xl_hien_tai").options[document.getElementById("ma_nguoi_xl_hien_tai").selectedIndex].value;
+                  var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_thetl").options[document.getElementById("ma_nguoi_dung_thay_thetl").selectedIndex].value;
+                    if (ma_nguoi_dung_thay_the == null || ma_nguoi_dung_thay_the == "") {
+                        alert("bạn chưa chọn người thay thế!");
+                        return;
+                    }
+                      $.ajax({
+                               type: "GET",
+                               url: "/CauHinh/LayCacBuocXuLy?ma_luong="+ $("#ma_luong").val() + "&ma_nguoi_dung=" + ma_nguoi_xl_hien_tai + "&ma_nguoi_dung_thay_the="+ma_nguoi_dung_thay_the,
+                               data: "",
+                               contentType: 'application/json; charset=utf-8',
+                               success: function(data) {
+                                  $("#CacBuocXuLyChiTiet").html(data);
+                                  $("#CacBuocXuLy").modal("show"); 
+                               }       
+                      });
+            }
+            function ThayDoiNguoiXLTL() {
+                if ($("#lstBuoc").val() == "" || $("#lstBuoc").val() == undefined || $("#lstBuoc").val() == null) {
+                     alert("bạn chưa chọn bước xử lý!");
+                     return;
+                }
+                $.ajax({
                            type: "GET",
-                           url: "/CauHinh/LayCacBuocXuLy?ma_luong="+$("#ma_luong").val(),
+                           url: "/CauHinh/ThayDoiNguoiXLTL?ma_buoc="+ $("#lstBuoc").val()+"&ma_nguoi_dung=" + $("#ma_nguoi_dung_tl").val() + "&ma_nguoi_dung_thay_the="+ $("#ma_nguoi_dung_thay_the_tl").val(),
                            data: "",
                            contentType: 'application/json; charset=utf-8',
                            success: function(data) {
-                              $("#CacBuocXuLyChiTiet").html(data);
-                              $("#CacBuocXuLy").modal("show"); 
+                               alert(data);
                            }       
                   });
             }
+            function XoaNguoiXLTL() {
+                if ($("#lstBuoc").val() == "" || $("#lstBuoc").val() == undefined || $("#lstBuoc").val() == null) {
+                     alert("bạn chưa chọn bước xử lý!");
+                     return;
+                }
+                $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/XoaNguoiXLTL?ma_buoc="+ $("#lstBuoc").val(),
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                           success: function(data) {
+                               alert(data);
+                           }       
+                  });
+            }
+           
            </script>
           <div class="modal fade" id="CacBuocXuLy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog" role="document" style="width: 750px;">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Danh sách các bước xử lý</h5>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                        <input hidden id="lstBuoc" name="lstBuoc" value="" />
                         <div class="modal-body">
+                           
                             <span id="CacBuocXuLyChiTiet">Xóa thành công</span>
                         </div>
                         <div class="modal-footer">
-                             <button type="button" class="btn btn-primary" id="BtnThayDoiNgXL">Thay đổi người xl</button>
-                             <button type="button" class="btn btn-primary" id="BtnXoaNgXL">Xóa người xử lý</button>
+                             <button type="button" class="btn btn-primary" onclick="ThayDoiNguoiXLTL()" id="BtnThayDoiNgXL">Thay đổi người xl</button>
+                             <button type="button" class="btn btn-primary" onclick="XoaNguoiXLTL()" id="BtnXoaNgXL">Xóa người xử lý</button>
                              <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
                         </div>
                     </div>
