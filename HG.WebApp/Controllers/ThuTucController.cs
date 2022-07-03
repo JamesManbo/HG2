@@ -1,4 +1,5 @@
-﻿using HG.Data.Business.ThuTuc;
+﻿using HG.Data.Business.DanhMuc;
+using HG.Data.Business.ThuTuc;
 using HG.Entities.Entities.Model;
 using HG.Entities.Entities.ThuTuc;
 using HG.WebApp.Data;
@@ -19,6 +20,7 @@ namespace HG.WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         Sercutiry sercutiry = new Sercutiry();
         private readonly ThuTucDao _thuTucDao;
+        private readonly LuongXuLyDao _luongDao;
 
         //extend sys identity
         public ThuTucController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -29,6 +31,7 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _thuTucDao = new ThuTucDao(DbProvider);
+            _luongDao = new LuongXuLyDao(DbProvider);
         }
         public IActionResult QuanLy()
         {
@@ -42,13 +45,14 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             }
             return View("~/Views/ThuTuc/QuanLy.cshtml", ds);
         }
 
-        public IActionResult QuanLyPaging(int currentPage = 0, int pageSize = 0, string ma_pb = "", string tu_khoa = "")
+        public async Task<IActionResult> QuanLyPaging(int currentPage = 0, int pageSize = 0, string ma_pb = "", string ma_lv = "", string tu_khoa = "")
         {
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = ma_pb, tu_khoa = "", RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
@@ -57,8 +61,10 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             }
-            return View("~/Views/ThuTuc/QuanLyPaging.cshtml", ds);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/QuanLyPaging.cshtml", ds);
+            return Content(result);
         }
         public IActionResult ThemThuTuc(int currentPage = 0, int pageSize = 20)
         {
@@ -88,6 +94,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
                 ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
                 ViewBag.LstDonViLienThong = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
             return View("~/Views/ThuTuc/ThemThuTuc.cshtml", ds);
         }
@@ -139,9 +146,36 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
                 ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
                 ViewBag.LstDonViLienThong = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
             ViewBag.type_view = type;
             return View("~/Views/ThuTuc/SuaThuTuc.cshtml", ds);
+        }
+
+        public async Task<IActionResult> RenderViewThuTuc(int type = 0)
+        {
+            var ds = _luongDao.DanhSachThuTuc();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ViewThuTuc.cshtml", ds);
+            return Content(result);
+        }
+
+        [HttpPost]
+        public IActionResult XoaThuTuc(string code, int type)
+        {
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _thuTucDao.XoaThuTuc(code, type, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/QuanLy" });
+        }
+
+        [HttpPost]
+        public IActionResult ThemBieuMau(string bieu_mau, string ten_file)
+        {
+            return null;
         }
     }
 }

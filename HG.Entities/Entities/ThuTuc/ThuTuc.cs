@@ -35,7 +35,7 @@ namespace HG.Entities.Entities.ThuTuc
 
         public bool cho_phep_gui_lien_thong { get; set; }
         public bool cho_phep_nhan_lien_thong { get; set; }
-       
+
         public bool gui_lt_kem_kq_xl { get; set; }
         public bool chi_tra_kq_kckqlt { get; set; }
         public string thuc_hien { get; set; }
@@ -46,7 +46,11 @@ namespace HG.Entities.Entities.ThuTuc
         public bool luong { get; set; }
         public string UidName { get; set; }
     }
-
+    public class MapLuong
+    {
+        public string ma_luong { get; set; }
+        public string ten_luong { get; set; }
+    }
     public class ThanhPhan
     {
         public string ma_thu_tuc { get; set; }
@@ -103,6 +107,7 @@ namespace HG.Entities.Entities.ThuTuc
     public class ThuTucModel
     {
         public DmThuTuc thuTuc { get; set; }
+        public List<MapLuong> lstLuong { get; set; }
         public List<ThanhPhan> lstThanhPhan { get; set; }
         public PagelistMain PagelistThanhPhan { get; set; } = new PagelistMain();
         public List<VanBanLQ> lstVanBanLQ { get; set; }

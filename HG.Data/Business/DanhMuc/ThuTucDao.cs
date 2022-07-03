@@ -30,6 +30,8 @@ namespace HG.Data.Business.ThuTuc
                 menu.Pagelist = new Pagelist();
                 DbProvider.SetCommandText2("dm_danh_sach_thu_tuc_list", CommandType.StoredProcedure);
                 DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_pb", item.ma_pb, SqlDbType.VarChar);
+                DbProvider.AddParameter("ma_lv", item.ma_lv, SqlDbType.VarChar);
                 // Input params
                 DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
                 DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
@@ -97,10 +99,11 @@ namespace HG.Data.Business.ThuTuc
             return response;
         }
 
-        public int XoaThuTuc(string ma_thu_tuc, Guid uid)
+        public int XoaThuTuc(string ma_thu_tuc, int type, Guid uid)
         {
             DbProvider.SetCommandText2("dm_xoa_thu_tuc", CommandType.StoredProcedure);
             DbProvider.AddParameter("ma_thu_tuc", ma_thu_tuc, SqlDbType.VarChar);
+            DbProvider.AddParameter("type", type, SqlDbType.Int);
             DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
             // Lấy về danh sách các trường học
@@ -138,7 +141,8 @@ namespace HG.Data.Business.ThuTuc
                 DbProvider.ExecuteReader_ToMyReader();
                 // Lấy về danh sách các người dung
                 menu.thuTuc = DbProvider.GetObjectFromMyReader<DmThuTuc>();
-
+                DbProvider.ExecuteReader_NextResult();
+                menu.lstLuong = DbProvider.ExecuteReader_frmMyReader<MapLuong>();
                 DbProvider.ExecuteReader_NextResult();
                 menu.lstThanhPhan = DbProvider.ExecuteReader_frmMyReader<ThanhPhan>();
                 DbProvider.ExecuteReader_NextResult();

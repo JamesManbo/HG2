@@ -44,6 +44,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Nhanh_Xu_Ly> Dm_Nhanh_Xu_Ly { get; set; }
         public virtual DbSet<Dm_Buoc_Thuc_Hien> Dm_Buoc_Thuc_Hien { get; set; }
         public virtual DbSet<Dm_Don_Vi_Lien_Thong> Dm_Don_Vi_Lien_Thong { get; set; }
+        public virtual DbSet<Dm_Muc_Do_Thuc_Hien> Dm_Muc_Do_Thuc_Hien { get; set; }
 
         // END Danh mục
 
