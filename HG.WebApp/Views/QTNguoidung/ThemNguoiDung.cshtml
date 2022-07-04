@@ -31,19 +31,15 @@
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
             </div>
             <div class="modal-body">
                 @ViewBag.ErrorMsg
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -89,7 +85,7 @@
         <div class="maincontentinner">
             <div class="widget">
                 <h4 class="widgettitle">Cập nhật thông tin người dùng</h4>
-                <form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/ThemMoi" method="post" enctype="multipart/form-data">
+                <form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/ThemNguoiDung" method="post" enctype="multipart/form-data">
                     <div class="form-horizontal">
                         <div class="form-group row">
                             <label class="col-md-2 control-label">
@@ -97,7 +93,7 @@
                                 <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
+                                <input name="UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" value="@Model.UserName" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
                             </div>
                             <div class="col-md-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -113,7 +109,7 @@
                                 Mật khẩu mặc định
                             </label>
                             <div class="col-md-10">
-                                <input name="ctl08$ctl00$TextBox1" type="text" id="ctl08_ctl00_TextBox1" disabled="disabled" class="form-control input-default" placeholder="1">
+                                <input name="ctl08$ctl00$TextBox1" type="text" id="ctl08_ctl00_TextBox1" disabled="disabled"  class="form-control input-default" placeholder="1">
                             </div>
                         </div>
 
@@ -125,7 +121,7 @@
                                 <span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-10">
-                                <input name="ho_dem" type="text" id="ho_dem" maxlength="50" class="form-control input-default" placeholder="Họ đêm">
+                                <input name="ho_dem" type="text" id="ho_dem" maxlength="50" class="form-control input-default" placeholder="Họ đêm" value="@Model.ho_dem">
                                 @*<span id="ctl08_ctl00_RequiredFieldValidator2" class="error" style="color:Red;display:none;">Bạn cần nhập họ đệm!</span>*@
                             </div>
                         </div>
@@ -135,20 +131,20 @@
                                 <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-10">
-                                <input name="ten" type="text" id="ten" maxlength="50" class="form-control input-default" placeholder="Tên">
+                                <input name="ten" type="text" id="ten" maxlength="50" class="form-control input-default" placeholder="Tên" value="@Model.ten">
                                 @*<span id="ctl08_ctl00_RequiredFieldValidator3" style="color:Red;display:none;">Tên không được trống!</span>*@
                             </div>
                         </div>
                         <div class="form-group" hidden="hidden">
                             <label class="col-md-2 control-label">Bí danh</label>
                             <div class="col-md-10">
-                                <input name="ctl08$ctl00$Bidanh" type="text" maxlength="50" class="form-control input-default" placeholder="Bí danh">
+                                <input name="ctl08$ctl00$Bidanh" type="text" maxlength="50" class="form-control input-default" placeholder="Bí danh" value="">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Ngày sinh</label>
                             <div class="col-md-10">
-                                <input name="ngay_sinh" type="date" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" placeholder="Ngày sinh">
+                                <input name="ngay_sinh" type="date" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" placeholder="Ngày sinh" value="@Model.ngay_sinh">
                                 @*<span id="ctl08_ctl00_CompareValidator2" style="color:Red;display:none;">Phải nhập dữ liệu kiểu ngày/tháng/năm!</span>*@
                             </div>
                         </div>
@@ -156,13 +152,13 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Điện thoại</label>
                             <div class="col-md-10">
-                                <input name="PhoneNumber" type="text" id="PhoneNumber" maxlength="12" class="form-control input-default" placeholder="Số điện thoại">
+                                <input name="PhoneNumber" type="text" id="PhoneNumber" maxlength="12" class="form-control input-default" placeholder="Số điện thoại" value="@Model.PhoneNumber">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Email</label>
                             <div class="col-md-10">
-                                <input name="Email" type="text" id="Email" class="form-control input-default" maxlength="50" placeholder="Email">
+                                <input name="Email" type="text" id="Email" class="form-control input-default" maxlength="50" placeholder="Email" value="@Model.Email ">
                             </div>
                         </div>
 
@@ -463,7 +459,7 @@
                                             <th scope="col">Tên đăng nhập</th>
                                             <th scope="col">Tên đầy đủ</th>
                                         </tr>
-                                        @if(lst_nguoi_dung.asp_Nhoms != null)
+                                        @if(lst_nguoi_dung != null && lst_nguoi_dung.asp_Nhoms != null)
                                         {
                                              foreach (var item in lst_nguoi_dung.asp_Nhoms)
                                             {

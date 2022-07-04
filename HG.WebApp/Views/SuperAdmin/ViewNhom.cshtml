@@ -8,8 +8,11 @@
 <div class="card">
     <div class="pageheader">
         <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-            <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
+             @using (Html.BeginForm("ViewNhom", "SuperAdmin", FormMethod.Get,new { @class="searchbar" }))
+                {
+                    <input name="txtSearch" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." value="@ViewBag.txtSearch"/>
+                    <input type="submit" name="" style="cursor:pointer" id="BtnSearch" hidden="hidden" />
+                }
         </div>
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">

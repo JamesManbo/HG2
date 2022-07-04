@@ -29,15 +29,16 @@ namespace HG.WebApp.Controllers
             _nguoiDungDao = new NguoiDungDao(DbProvider);
         }
 
-        public IActionResult ListNguoiDung(string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
+        public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
         {
             ViewBag.ma_phong_ban = ma_phong_ban;
             ViewBag.trang_thai = trang_thai;
             ViewBag.da_xoa = da_xoa;
+            ViewBag.txtSearch = txtSearch;
             var totalRecouds = 0;
             EAContext eAContext = new EAContext();
             HelperString stringHelper = new HelperString();
-            var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang(new NguoiDungSearchItem { ma_phong_ban = ma_phong_ban,  PageIndex = 0, RecordsPerPage = 3, trang_thai = trang_thai, da_xoa = da_xoa }, out totalRecouds);
+            var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang(new NguoiDungSearchItem { ma_phong_ban = ma_phong_ban,  PageIndex = 0, RecordsPerPage = 3, trang_thai = trang_thai, da_xoa = da_xoa, tu_khoa= txtSearch }, out totalRecouds);
 
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
             ViewBag.TotalPage = totalRecouds/3;
@@ -56,12 +57,10 @@ namespace HG.WebApp.Controllers
         [HttpGet]
         public IActionResult ThemNguoiDung()
         {
-            List<Asp_nhom> lstDMNhom = new List<Asp_nhom>();
-            using (var db = new EAContext())
-            {
-                lstDMNhom = db.Asp_nhom.ToList();
-            }
-            ViewBag.LstNhom = lstDMNhom;
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
 
@@ -73,45 +72,54 @@ namespace HG.WebApp.Controllers
         {
             var UserId = Guid.Parse(userManager.GetUserId(User));
             var ObjId = _nguoiDungDao.ThemMoi(item, UserId);
-
-			if (!string.IsNullOrEmpty(ObjId) && item.lstGroup != null)
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            if (!string.IsNullOrEmpty(ObjId))
 			{
-				for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
-				{
-					_nguoiDungDao.ThemMoi_NguoiDung_Nhom(Guid.Parse(ObjId), item.lstGroup.Split(",")[i].ToString(), UserId);
-				}
-				return RedirectToAction("ThemNguoiDung");
+                if(item.lstGroup != null)
+                {
+                    for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                    {
+                        _nguoiDungDao.ThemMoi_NguoiDung_Nhom(Guid.Parse(ObjId), item.lstGroup.Split(",")[i].ToString(), UserId);
+                    }
+                    return RedirectToAction("ThemNguoiDung");
+                }
+                else
+                {
+                    return RedirectToAction("ThemNguoiDung");
+                }
+				
 			}
 			else
 			{
-				item.responseErr.ErrorCode = 1;
-				item.responseErr.ErrorMsg = "Có lỗi xảy ra";
-				return PartialView(item);
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Tên người dùng đã tồn tại hoặc lỗi hệ thống!!!";
+				return View(item);
 			}
         }
 
         [HttpGet]
         public IActionResult SuaNguoiDung(Guid Id, string type)
         {
-            List<Asp_nhom> lstDMNhom = new List<Asp_nhom>();
-            using (var db = new EAContext())
-            {
-                lstDMNhom = db.Asp_nhom.ToList();
-            }
-            ViewBag.LstNhom = lstDMNhom;
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
+            var abc = _nguoiDungDao.LayNguoiDungBoiId(Id).asp_nhom;
+            var obj = string.Join(",", _nguoiDungDao.LayNguoiDungBoiId(Id).asp_nhom.Select(n => n.ma_nhom).ToArray()) ;
             return View(_nguoiDungDao.LayNguoiDungBoiId(Id));
         }
         [HttpGet]
         public IActionResult ViewNguoiDung(Guid Id, string type)
         {
-            List<Asp_nhom> lstDMNhom = new List<Asp_nhom>();
-            using (var db = new EAContext())
-            {
-                lstDMNhom = db.Asp_nhom.ToList();
-            }
-            ViewBag.LstNhom = lstDMNhom;
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             return View(_nguoiDungDao.LayNguoiDungBoiId(Id));
@@ -143,15 +151,15 @@ namespace HG.WebApp.Controllers
                 }
                 else
                 {
-                    item.responseErr.ErrorCode = 1;
-                    item.responseErr.ErrorMsg = "Có lỗi xảy ra";
+                    ViewBag.ErrorCode = 1;
+                    ViewBag.ErrorMsg = "Lỗi dữ liệu!!!";
                     return PartialView(item);
                 }
             }
             catch(Exception e)
             {
-                item.responseErr.ErrorCode = 1;
-                item.responseErr.ErrorMsg = "Có lỗi xảy ra";
+                  ViewBag.ErrorCode = 1;
+                    ViewBag.ErrorMsg = "Lỗi dữ liệu!!!";
                 return PartialView(item);
             }
             

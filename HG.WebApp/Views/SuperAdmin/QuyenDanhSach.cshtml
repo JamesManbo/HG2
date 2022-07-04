@@ -10,8 +10,8 @@
         
                 @using (Html.BeginForm("QuyenDanhSach", "SuperAdmin", FormMethod.Get,new { @class="searchbar" }))
                 {
-                    <input name="txtSearch" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-                    <input type="submit" name="BtnSearch" value="" onclick="" id="BtnSearch" hidden="hidden" />
+                    <input name="txtSearch" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..."  value="@ViewBag.txtSearch"/>
+                    <input type="submit" name="BtnSearch" value="" style="cursor:pointer" id="BtnSearch" hidden="hidden" />
                 }
                 <div class="pageicon"><span class="iconfa-table"></span></div>
                 <div class="pagetitle">

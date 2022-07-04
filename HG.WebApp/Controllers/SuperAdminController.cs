@@ -44,13 +44,26 @@ namespace HG.WebApp.Controllers
 
         #region Nhom
         [HttpGet]
-        public IActionResult ViewNhom(NhomSearchItem item)
+        public IActionResult ViewNhom(string txtSearch = "")
         {
-            EAContext eAContext = new EAContext();
-            ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count();
-            ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count()/10;
-            ViewBag.CurrentPage = 1;
-            return View(eAContext.Asp_nhom.Where(n=>n.Deleted == 0).ToList());
+            ViewBag.txtSearch = txtSearch;
+            if (string.IsNullOrEmpty(txtSearch))
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count();
+                ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count() / 10;
+                ViewBag.CurrentPage = 1;
+                return View(eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList());
+            }
+            else
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count();
+                ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count() / 10;
+                ViewBag.CurrentPage = 1;
+                return View(eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).ToList());
+            }
+           
         }
 
         [HttpGet]
@@ -159,6 +172,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext eAContext = new EAContext();
             ViewBag.CurrentPage = 1;
+            ViewBag.txtSearch = txtSearch;
             ViewBag.TotalPage =  Convert.ToInt32(_config.GetSection("AppSetting").GetSection("PageSize").Value);
             if (!string.IsNullOrEmpty(txtSearch))
             {

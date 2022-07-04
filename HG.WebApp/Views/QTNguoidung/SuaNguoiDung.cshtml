@@ -31,19 +31,15 @@
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
             </div>
             <div class="modal-body">
                 @ViewBag.ErrorMsg
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -168,7 +164,7 @@
                                     {
                                          foreach (var item in lst_phong_ban)
                                          {
-                                           if(item.ma_phong_ban == Model.aspNetUsersModel.First().ma_phong_ban)
+                                           if(item.ma_phong_ban == Model.aspNetUsersModel.FirstOrDefault().ma_phong_ban.Trim().ToString())
                                             {
                                                 <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
                                             }
@@ -189,7 +185,7 @@
                                     {
                                         foreach (var item in lst_chuc_vu)
                                         {
-                                            if(item.ma_chuc_vu == Model.aspNetUsersModel.First().ma_chuc_vu)
+                                            if(item.ma_chuc_vu == Model.aspNetUsersModel.FirstOrDefault().ma_chuc_vu.Trim().ToString())
                                             {
                                                 <option value="@item.ma_chuc_vu" selected>@item.ten_chuc_vu</option>
                                             }
@@ -470,7 +466,7 @@
                                             <th scope="col">Tên đăng nhập</th>
                                             <th scope="col">Tên đầy đủ</th>
                                         </tr>
-                                        @if(lst_nguoi_dung.asp_Nhoms != null)
+                                        @if(lst_nguoi_dung != null && lst_nguoi_dung.asp_Nhoms != null)
                                         {
                                              foreach (var item in lst_nguoi_dung.asp_Nhoms)
                                             {
