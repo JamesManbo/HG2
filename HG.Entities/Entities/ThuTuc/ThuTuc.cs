@@ -67,8 +67,10 @@ namespace HG.Entities.Entities.ThuTuc
         public int? ban_pho_to { get; set; }
         public int? Stt { get; set; }
         public DateTime? ngay_bat_dau { get; set; }
-
+        public string url_file { get; set; }
         public DateTime? ngay_ket_thuc { get; set; }
+        public Guid? CreatedUid { get; set; }
+        public string UidName { get; set; }
     }
 
     public class NhomTP

@@ -166,6 +166,34 @@ namespace HG.Data.Business.ThuTuc
         }
         #endregion
 
+        public int LuuThanhPhan(ThanhPhan item)
+        {
+            var response = new Response();
+            DbProvider.SetCommandText2("dm_them_sua_thanh_phan_TT", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc, SqlDbType.VarChar);
+            DbProvider.AddParameter("ma_thanh_phan", item.ma_thanh_phan, SqlDbType.VarChar);
+            DbProvider.AddParameter("ten_thanh_phan", item.ten_thanh_phan, SqlDbType.NVarChar);
+            DbProvider.AddParameter("bat_buoc", item.bat_buoc, SqlDbType.Bit);
+            DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+            DbProvider.AddParameter("file_dinh_kem", item.file_dinh_kem, SqlDbType.NVarChar);
+            DbProvider.AddParameter("url_file", item.url_file, SqlDbType.NVarChar);
+            DbProvider.AddParameter("bieu_mau", item.bieu_mau, SqlDbType.Bit);
+            DbProvider.AddParameter("ten_form_nhap", item.ten_form_nhap, SqlDbType.NVarChar);
+            DbProvider.AddParameter("duong_dan_form_nhap", item.duong_dan_form_nhap, SqlDbType.NVarChar);
+            DbProvider.AddParameter("ban_goc", item.ban_goc, SqlDbType.Int);
+            DbProvider.AddParameter("ban_sao", item.ban_sao, SqlDbType.Int);
+            DbProvider.AddParameter("ban_pho_to", item.ban_pho_to, SqlDbType.Int);
+            DbProvider.AddParameter("ngay_bat_dau", item.ngay_bat_dau, SqlDbType.DateTime);
+            DbProvider.AddParameter("ngay_ket_thuc", item.ngay_ket_thuc, SqlDbType.DateTime);
+            DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("UidName", item.UidName, SqlDbType.NVarChar);
+            DbProvider.AddParameter("stt", item.Stt, SqlDbType.Int);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
 
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            var rs = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return rs;
+        }
     }
 }

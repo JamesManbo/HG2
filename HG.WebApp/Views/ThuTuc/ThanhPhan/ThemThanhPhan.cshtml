@@ -34,24 +34,100 @@
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
-        $('#form_pb').validate({
-            rules: {
-                ma_thu_tuc: "required",
-                ten_thu_tuc: "required",
-                ma_linh_vuc: "required",
-                ma_phong_ban: "required",
-                so_ngay_xl: "required",
-                so_bo_hs: "required"
-            },
-            messages: {
-                ma_thu_tuc: "Bạn cần nhập mã thủ tục!",
-                ten_thu_tuc: "Bạn cần nhập tên thủ tục!",
-                ma_linh_vuc: "Bạn cần nhập lĩnh vực",
-                ma_phong_ban: "Bạn cần nhập phòng ban",
-                so_ngay_xl: "Bạn cần nhập số ngày xử lý",
-                so_bo_hs: "Bạn cần nhập số bộ hồ sơ"
+        $("#files").on('change', function() {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TPTT',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                            $('#url_file').val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
             }
         });
+
+
+        $('#form_tptt').validate({
+            rules: {
+                ma_thanh_phan: {
+                    required: true
+                },
+                ten_thanh_phan: "required",
+                ban_sao: {
+                    required: true,
+                    number: true
+                },
+                ban_pho_to: {
+                    required: true,
+                    number: true
+                },
+                ban_chinh: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                ma_thanh_phan: "Bạn cần nhập mã thủ tục!",
+                ten_thanh_phan: "Bạn cần nhập tên thủ tục!",
+                ban_sao: {
+                    required: 'Bạn cần nhập số lượng bản sao.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                },
+                ban_pho_to: {
+                    required: 'Bạn cần nhập số lượng bản phô tô.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                },
+                ban_chinh: {
+                    required: 'Bạn cần nhập số lượng bản chính.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                }
+            }, submitHandler: function(form) {
+                var formData = new FormData();
+                var data = convetArrayToObj($("#form_tptt").serializeArray());
+
+                $.ajax({
+                    url: '@Url.Action("ThemThanhPhan", "ThuTuc")',
+                    type: "post",
+                    contentType: 'application/x-www-form-urlencoded',
+                    data: data,
+                    success: function(result) {
+                        alert(result.errorCode);
+                    }
+                });
+            }
+        });
+
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
 
         $('.select2').select2({
             closeOnSelect: false
@@ -132,7 +208,7 @@
             $('#chi_tra_kq_kckqlt').val($(this).is(':checked'));
         });
 
-        var ngctxl = "@Model.thuTuc.don_vi_ltxl";
+        var ngctxl = "@(Model.thuTuc.don_vi_ltxl)";
         var arrNgctxl = ngctxl.split(",");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
@@ -236,21 +312,21 @@
                                                     Chọn
                                                 </button>
 
-                                                <script>
-                                                    function myModalPopup() {
-                                                        $.ajax({
-                                                            type: "GET",
-                                                            url: "../ThuTuc/RenderViewThuTuc",
-                                                            data: "",
-                                                            contentType: 'application/json; charset=utf-8',
-                                                            success: function(data) {
-                                                                console.log(data);
-                                                                $("#basicModal .modal-body").html(data);
-                                                            }
-                                                        });
-                                                    }
+                                                @*     <script>
+                                                function myModalPopup() {
+                                                $.ajax({
+                                                type: "GET",
+                                                url: "../ThuTuc/RenderViewThuTuc",
+                                                data: "",
+                                                contentType: 'application/json; charset=utf-8',
+                                                success: function(data) {
+                                                console.log(data);
+                                                $("#basicModal .modal-body").html(data);
+                                                }
+                                                });
+                                                }
 
-                                                </script>
+                                                </script>*@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -524,137 +600,166 @@
                         </div>
                         @*TAB thành phần *@
                         <div class="tab-pane fade" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc';" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
-                            </p>
-                            <select name="ctl08$ctl00$ctl02$MaNhomTT" onchange="javascript:setTimeout('__doPostBack(\'ctl08$ctl00$ctl02$MaNhomTT\',\'\')', 0)" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
-                                <option selected="selected" value="0">------------- Chọn nhóm thành phần hồ sơ -------------</option>
-                            </select>
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-                                <div class="dataTable-container">
-                                    <table class="table table-bordered responsive">
-                                        <thead class="widgettitle">
-                                            <tr>
-                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                    <input type="checkbox" name="" id="selectAll" />
-                                                </th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.lstThanhPhan != null)
-                                            {
-                                                foreach (var item in Model.lstThanhPhan)
-                                                {
-                                                    <tr>
-                                                        <td><input type="checkbox" class="ads_Checkbox_tp" value="@item.ma_thanh_phan" /></td>
-                                                        <td scope="row">
-                                                            1
-                                                            <input type="hidden" value="@item.ma_thanh_phan" />
-                                                        </td>
-                                                        <td><a href="#">@item.ten_thanh_phan</a></td>
+                            <div id="ctl14_ctl00_ctl02_Form">
 
-                                                        <td>@item.mo_ta</td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc">
-                                                                <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan">
-                                                                <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a onclick=""
-                                                       title=""
-                                                       data-placement="top"
-                                                       data-toggle="tooltip"
-                                                       data-original-title="Xóa"
-                                                       href="#">
-                                                                <span class="glyphicon glyphicon-trash">Xóa</span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                }
+                                <form id="form_tptt">
 
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistThanhPhan.RecoredFrom đến  @Model.PagelistThanhPhan.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
-                                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                    @{
-                                        var TotalPage = Model.PagelistThanhPhan.TotalPage;
-                                        var CurrentPage = Model.PagelistThanhPhan.CurrentPage;
-                                        if (TotalPage > 5)
-                                        {
-                                            if (CurrentPage > CurrentPage + 2)
-                                            {
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                            };
-                                            if (CurrentPage > 3)
-                                            {
-                                                for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
-                                                {
-                                                    if (i == CurrentPage)
-                                                    {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                for (int i = 1; i <= 5; i++)
-                                                {
-                                                    if (i == CurrentPage)
-                                                    {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
+                                    <div class="form-horizontal">
+                                        <input name="ma_thu_tuc" hidden value="@Model.thuTuc.ma_thu_tuc" />
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">
+                                                Mã thành phần
+                                                <span style="color:Red;">(*)</span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input name="ma_thanh_phan" type="text" value="@(Model.thuTuc.ma_thu_tuc+"-"+(Model.lstThanhPhan.Count()+1).ToString())" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần">
 
-                                            }
+                                            </div>
+                                            <label class="col-md-1 control-label">
+                                                <a id="lnkFCode" data-toggle="modal" data-target="#myModal" class="btn btn-primary" onclick="myModalPopup(this.name);" name="" style="display:inline-block;width:100%;">Chọn</a>
+                                            </label>
+                                        </div>
 
-                                            if (CurrentPage < CurrentPage + 2)
-                                            {
-                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                            };
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= TotalPage; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                    }
-                                </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">
+                                                Tên thành phần
+                                                <span style="color:Red;">(*)</span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input name="ten_thanh_phan" type="text" value="" id="ten_thanh_phan" class="form-control input-default" placeholder="Tên thành phần">
 
-                                <!-- End Table with stripped rows -->
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Bắt buộc</label>
+                                            <div class="col-md-8">
+                                                <table id="ctl14_ctl00_ctl02_BatBuoc" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0"><label for="ctl14_ctl00_ctl02_BatBuoc_0">&nbsp;Không &nbsp;&nbsp;</label></td>
+                                                            <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" checked="checked"><label for="ctl14_ctl00_ctl02_BatBuoc_1">&nbsp;Có</label></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Mô tả</label>
+                                            <div class="col-md-8">
+                                                <textarea name="mo_ta" rows="2" cols="20" id="mo_ta" class="form-control input-default" placeholder="Mô tả"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
 
+                                            <label for="inputPassword" class="col-md-2 control-label">Đính kèm</label>
+                                            <div class="col-md-6">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <input type="hidden">
+                                                    <div class="input-append">
+
+                                                        <span class="btn btn-default btn-file">
+                                                            <span class="fileupload-new" id="but">Chọn file</span>
+                                                            <span class="fileupload-exists">Thay đổi</span>
+                                                            <input type="file" id="files">
+                                                            <input name="url_file" id="url_file">
+                                                        </span>
+                                                        <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Xóa</a>
+                                                        &nbsp;<input type="submit" name="ctl14$ctl00$ctl02$xoatep" value="Xóa tệp" onclick="return confirm('Tệp đính kèm sẽ được xóa?');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl14$ctl00$ctl02$xoatep&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-2"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Có biểu mẫu không</label>
+                                            <div class="col-md-2">
+                                                <table id="ctl14_ctl00_ctl02_BieuMau" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input id="bieu_mau1" type="radio" name="bieu_mau" value="chkkhong" checked="checked">
+                                                                <label for="bieu_mau1">Không</label>
+                                                            </td>
+                                                            <td>
+                                                                <input id="bieu_mau2" type="radio" name="bieu_mau" value="chkco">
+                                                                <label for="bieu_mau2">Có</label>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <label class="col-md-1 control-label">Bắt đầu </label>
+                                            <div class="col-md-2">
+                                                <input name="ngay_bat_dau" type="text" id="ngay_bat_dau" class="form-control  datepicker hasDatepicker" placeholder="ngày/tháng/năm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Kết thúc</label>
+                                            <div class="col-md-2">
+                                                <input name="ngay_ket_thuc" type="text" id="ngay_ket_thuc" class="form-control  datepicker hasDatepicker" placeholder="ngày/tháng/năm">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span style="color:#0026ff">  Thời gian áp dụng biểu mẫu</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Tên form nhập</label>
+                                            <div class="col-md-8">
+                                                <input name="ten_form_nhap" type="text" id="ten_form_nhap" class="form-control input-default" placeholder="Tên form nhập">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Đường dẫn form nhập</label>
+                                            <div class="col-md-8">
+                                                <input name="duong_dan_form_nhap" type="text" id="duong_dan_form_nhap" class="form-control input-default" placeholder="Mã đơn vị/tên file.ascx(Đường dẫn file)">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">
+                                                Bản chính
+                                            </label>
+                                            <div class="col-md-2">
+                                                <input name="ban_chinh" type="text" value="0" id="ban_chinh" class="form-control input-default" placeholder="Số lượng bản chính">
+                                            </div>
+
+                                            <label class="col-md-1 control-label">
+                                                Bản sao
+                                            </label>
+                                            <div class="col-md-2">
+                                                <input name="ban_sao" type="text" value="0" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao">
+                                                @*<span id="ctl14_ctl00_ctl02_RegularExpressionValidator5" style="color:Red;display:none;">Chỉ được nhập số từ 0 -&gt; 9</span>*@
+                                            </div>
+
+                                            <label class="col-md-1 control-label">
+                                                Bản phô tô
+                                            </label>
+                                            <div class="col-md-2">
+                                                <input name="ban_pho_to" type="text" value="0" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô">
+                                                @*<span id="ctl14_ctl00_ctl02_RegularExpressionValidator6" style="color:Red;display:none;">Chỉ được nhập số từ 0 -&gt; 9</span>*@
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Thứ tự</label>
+                                            <div class="col-md-8">
+                                                <input name="stt" type="text" value="1" id="ctl14_ctl00_ctl02_FIndex" class="form-control input-default" placeholder="Số thứ tự">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+
+                                                <input type="submit" name="" value="Lưu và Thêm" id="BtbLuuvaThem" class="btn btn-primary">
+                                                <input type="submit" name="ctl14$ctl00$ctl02$BtbSave1" value="Lưu" id="BtbSave1" class="btn btn-primary">
+
+                                                <input type="submit" name="ctl14$ctl00$ctl02$btnDel" value="Xóa" id="btnDel" class="btn btn-primary">
+                                                <input type="submit" name="ctl14$ctl00$ctl02$BtnClose" value="Đóng" id="BtnClose" class="btn btn-primary">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         @*TAB Văn bản liên quan *@
