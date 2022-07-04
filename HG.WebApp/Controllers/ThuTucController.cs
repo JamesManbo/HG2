@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HG.WebApp.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class ThuTucController : BaseController
     {
         private readonly ILogger<UserController> _logger;
