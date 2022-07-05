@@ -14,6 +14,49 @@ namespace HG.WebApp.Helper
         public int CurrentPage = 0;
         public string LinkPage = "";
         public int TotalPage = 0;
+
+        private static readonly string[] VietnameseSigns = new string[]
+        {
+
+            "aAeEoOuUiIdDyY",
+
+            "áàạảãâấầậẩẫăắằặẳẵ",
+
+            "ÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴ",
+
+            "éèẹẻẽêếềệểễ",
+
+            "ÉÈẸẺẼÊẾỀỆỂỄ",
+
+            "óòọỏõôốồộổỗơớờợởỡ",
+
+            "ÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠ",
+
+            "úùụủũưứừựửữ",
+
+            "ÚÙỤỦŨƯỨỪỰỬỮ",
+
+            "íìịỉĩ",
+
+            "ÍÌỊỈĨ",
+
+            "đ",
+
+            "Đ",
+
+            "ýỳỵỷỹ",
+
+            "ÝỲỴỶỸ"
+        };
+        public static string RemoveSign4VietnameseString(string str)
+        {
+            for (int i = 1; i < VietnameseSigns.Length; i++)
+            {
+                for (int j = 0; j < VietnameseSigns[i].Length; j++)
+                    str = str.Replace(VietnameseSigns[i][j], VietnameseSigns[0][i - 1]);
+            }
+            return str;
+        }
         /// <summary>
         /// Chuyển đổi chữ tiếng việt có dấu sang không dấu
         /// </summary>
@@ -126,7 +169,7 @@ namespace HG.WebApp.Helper
         {
             string strPageHTML = "<div class=\"dataTables_paginate paging_full_numbers\" id=\"dyntable_paginate\">";
             LinkPage = LinkPage.Split('?')[0];
-            
+
             if (CurrentPage > PageStep + 1)
             {
                 strPageHTML += "<a class=\"first paginate_button paginate_button_disabled\" href=\"" + LinkPage + "?page=1\">Đầu</a>";

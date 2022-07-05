@@ -27,14 +27,35 @@
             color: #fff;
             font-weight: bold;
         }
+
+    .btn-search {
+        border: 0;
+        padding: 0;
+        margin-left: -30px;
+        background: none;
+    }
+
+    .search-form input {
+        width: 240px;
+        padding: 10px;
+        font-size: 12px;
+        border: 1px solid #ddd;
+        height: auto;
+    }
+
+    .search-form {
+        position: absolute;
+        top: 33%;
+        right: 20px;
+    }
 </style>
 <script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 <div class="card">
     <div class="card-body">
         <div class="pageheader">
-            <div class="searchbar">
-                <input name="ctl08$Search" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-                <input type="submit" name="ctl08$BtnSearch" value="" onclick="return CheckSearch();" id="BtnSearch" hidden="hidden" />
+            <div class="search-form d-flex align-items-center">
+                <input type="text" name="tu_khoa" id="tu_khoa" placeholder="Nhập từ khóa tìm kiếm..">
+                <button class="btn-search" type="button" onclick="searchForm()" id="searchForm" title="Search"><i class="bi bi-search"></i></button>
             </div>
             <div class="pageicon"><span class="iconfa-table"></span></div>
             <div class="pagetitle">
@@ -183,8 +204,8 @@
                                     {
                                         if (CurrentPage > CurrentPage + 2)
                                         {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if (CurrentPage > 3)
                                         {
@@ -192,11 +213,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -206,11 +227,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
 
@@ -218,8 +239,8 @@
 
                                         if (CurrentPage < CurrentPage + 2)
                                         {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                         };
                                     }
                                     else
@@ -228,11 +249,11 @@
                                         {
                                             if (i == CurrentPage)
                                             {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                             else
                                             {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                         }
                                     }
@@ -308,13 +329,30 @@
         });
     }
 
+    function searchForm() {
+        var pageSize = $("#lstPageSize").val();
+        var ma_lv = $("#ma_lv").val();
+        var ma_pb = $("#ma_pb").val();
+        var tuKhoa = $("#tu_khoa").val();
+        $.ajax({
+            type: "GET",
+            url: "../ThuTuc/QuanLyPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&ma_pb=" + ma_pb + "&ma_lv=" + ma_lv + "&tu_khoa=" + tuKhoa,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
+
     function ChangePhongBan(data) {
         $("#ma_pb").val(data.value);
-        $("#ma_lv").val("");
+        var ma_lv = $("#ma_lv").val();
         var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
-            url: "../ThuTuc/QuanLyPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&ma_pb=" + data.value + "&ma_lv=" + "&tu_khoa=",
+            url: "../ThuTuc/QuanLyPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&ma_pb=" + data.value + "&ma_lv=" + ma_lv + "&tu_khoa=",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -326,11 +364,11 @@
 
     function ChangeLinhVuc(data) {
         $("#ma_lv").val(data.value);
-        $("#ma_pb").val("");
+        var ma_pb = $("#ma_pb").val();
         var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
-            url: "../ThuTuc/QuanLyPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&ma_pb=" + "&ma_lv=" + data.value + "&tu_khoa=",
+            url: "../ThuTuc/QuanLyPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&ma_pb=" + ma_pb + "&ma_lv=" + data.value + "&tu_khoa=",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {

@@ -34,9 +34,20 @@
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
+        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
         $('#form_pb').validate({
             rules: {
-                ma_thu_tuc: "required",
+                ma_thu_tuc: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
                 ten_thu_tuc: "required",
                 ma_linh_vuc: "required",
                 ma_phong_ban: "required",
@@ -44,7 +55,9 @@
                 so_bo_hs: "required"
             },
             messages: {
-                ma_thu_tuc: "Bạn cần nhập mã thủ tục!",
+                ma_thu_tuc: {
+                    required: "Bạn cần nhập mã thủ tục!",
+                },
                 ten_thu_tuc: "Bạn cần nhập tên thủ tục!",
                 ma_linh_vuc: "Bạn cần nhập lĩnh vực",
                 ma_phong_ban: "Bạn cần nhập phòng ban",
@@ -58,6 +71,12 @@
         });
 
         $("#nop_online").val($("#nop_online").is(':checked'));
+        if ($("#nop_online").is(':checked')) {
+            $(".tab_thuc_hien").attr("style", "display:none");
+        } else {
+            $(".tab_thuc_hien").attr("style", "display:flex");
+        }
+
         $('#nop_online').change(function() {
             if ($(this).is(':checked')) {
                 $(".tab_thuc_hien").attr("style", "display:flex")
@@ -103,6 +122,13 @@
         });
 
         $("#cho_phep_lien_thong").val($("#cho_phep_lien_thong").is(':checked'));
+
+        if ($('#cho_phep_lien_thong').is(':checked')) {
+            $(".tab_lienthong").attr("style", "display:block")
+        } else {
+            $(".tab_lienthong").attr("style", "display:none")
+        }
+
         $('#cho_phep_lien_thong').change(function() {
             if ($(this).is(':checked')) {
                 $(".tab_lienthong").attr("style", "display:block")
@@ -232,7 +258,7 @@
                                                 <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                             <div class="col-sm-1">
-                                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     Chọn
                                                 </button>
 
@@ -435,7 +461,7 @@
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="0" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="@Model.thuTuc.tra_kq_ktn" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tra_kq_ktn">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
@@ -513,7 +539,7 @@
 
                                             <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=0')">Xóa</button>
                                             <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=1')">Bãi bỏ TTHC</button>
-                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/ThanhPhan?code=@Model.thuTuc.ma_thu_tuc';">Thành phần</button>
+                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc';">Thành phần</button>
                                             <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/QuanLy';">Đóng</button>
                                         </div>
                                     </form>

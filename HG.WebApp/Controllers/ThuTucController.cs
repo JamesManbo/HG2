@@ -3,6 +3,7 @@ using HG.Data.Business.ThuTuc;
 using HG.Entities.Entities.Model;
 using HG.Entities.Entities.ThuTuc;
 using HG.WebApp.Data;
+using HG.WebApp.Helper;
 using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -54,7 +55,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> QuanLyPaging(int currentPage = 0, int pageSize = 0, string ma_pb = "", string ma_lv = "", string tu_khoa = "")
         {
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = "", RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
@@ -103,6 +104,7 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemThuTuc(DmThuTuc item)
         {
+            item.ma_thu_tuc = String.Concat(HelperString.RemoveSign4VietnameseString(item.ma_thu_tuc).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var _pb = _thuTucDao.LuuThuTuc(item);

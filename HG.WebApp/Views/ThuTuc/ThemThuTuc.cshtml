@@ -30,15 +30,27 @@
         border: 0;
         border-radius: 0;
     }
+
 </style>
 <script>
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
 
+        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
         $('#form_pb').validate({
             rules: {
-                ma_thu_tuc: "required",
+                ma_thu_tuc: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
                 ten_thu_tuc: "required",
                 ma_linh_vuc: "required",
                 ma_phong_ban: "required",
@@ -46,7 +58,9 @@
                 so_bo_hs: "required"
             },
             messages: {
-                ma_thu_tuc: "Bạn cần nhập mã thủ tục!",
+                ma_thu_tuc: {
+                    required: "Bạn cần nhập mã thủ tục!",
+                },
                 ten_thu_tuc: "Bạn cần nhập tên thủ tục!",
                 ma_linh_vuc: "Bạn cần nhập lĩnh vực",
                 ma_phong_ban: "Bạn cần nhập phòng ban",
@@ -56,7 +70,8 @@
         });
 
         $('.select2').select2({
-            closeOnSelect: false
+            allowClear: true,
+            multiple: true,
         });
 
         $("#nop_online").val($("#nop_online").is(':checked'));
@@ -134,7 +149,6 @@
             $('#chi_tra_kq_kckqlt').val($(this).is(':checked'));
         });
 
-
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
             $("#don_vi_ltxl").val(Arr.join(","));
@@ -174,16 +188,16 @@
                             <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tthc" role="tab" aria-controls="pills-home" aria-selected="true">Thủ tục hành chính</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Thành phần</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false">Văn bản liên quan</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Văn bản liên quan</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false">Nhóm thành phần</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Nhóm thành phần</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần xử lý kết quả</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Thành phần xử lý kết quả</button>
                         </li>
                     </ul>
 
@@ -268,7 +282,7 @@
                                         <div class="row mb-3 tab_thuc_hien" style="display:none">
                                             <label for="ten_pb" class="col-sm-2 control-label">Thực hiện</label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="thuc_hien">                                                  
+                                                <select class="form-select form-control input-default" name="thuc_hien">
                                                     @if (LstMucDoThucHien != null)
                                                     {
                                                         foreach (var item in LstMucDoThucHien)

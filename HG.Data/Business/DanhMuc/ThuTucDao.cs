@@ -29,7 +29,7 @@ namespace HG.Data.Business.ThuTuc
                 ThuTucPaging menu = new ThuTucPaging();
                 menu.Pagelist = new Pagelist();
                 DbProvider.SetCommandText2("dm_danh_sach_thu_tuc_list", CommandType.StoredProcedure);
-                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa, SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_pb", item.ma_pb, SqlDbType.VarChar);
                 DbProvider.AddParameter("ma_lv", item.ma_lv, SqlDbType.VarChar);
                 // Input params

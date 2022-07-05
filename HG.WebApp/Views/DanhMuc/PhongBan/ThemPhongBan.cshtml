@@ -25,7 +25,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" maxlength="25" value="">
+                                <input type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" maxlength="25" value="@ViewBag.code">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -53,6 +53,31 @@
                             <label for="ten_pb" class="col-sm-2 control-label">Tên phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-default" placeholder="Tên phòng ban" name="ten_phong_ban" maxlength="200" value="">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Mã định danh phòng ban</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã định danh phòng ban theo chuẩn quốc gia" name="ma_dinh_danh_pb" maxlength="50" value="">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tk_thanh_toan" class="col-sm-2 control-label">Có tài khoản thanh toán</label>
+                            <div class="col-sm-2">
+                                <input id="tk_thanh_toan" name="tk_thanh_toan" type="checkbox" value="0" class="ads_Checkbox_cn">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Phòng ban cha</label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" name="phong_ban_cha">
+                                    <option selected="selected" value="">---- Chọn phòng ban ----</option>
+                                    @if (lst_phong_ban != null)
+                                        foreach (var item in lst_phong_ban)
+                                        {
+                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                        }
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -199,6 +224,12 @@
 </script>
 <script>
     $(document).ready(function() {
+        $("#tk_thanh_toan").val($("#tk_thanh_toan").is(':checked'));
+
+        $('#tk_thanh_toan').change(function() {
+            $('#tk_thanh_toan').val($(this).is(':checked'));
+        });
+
         $('#myModalUser').on('shown.bs.modal', function() {
             var data = { ma_phong_ban: 0 };
             $.ajax({

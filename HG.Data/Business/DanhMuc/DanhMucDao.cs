@@ -50,6 +50,9 @@ namespace HG.Data.Business.DanhMuc
             DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.VarChar);
             DbProvider.AddParameter("ten_phong_ban", item.ten_phong_ban, SqlDbType.NVarChar);
             DbProvider.AddParameter("mo_ta", item.mo_ta, SqlDbType.NVarChar);
+            DbProvider.AddParameter("ma_dinh_danh_pb", item.ma_dinh_danh_pb, SqlDbType.VarChar);
+            DbProvider.AddParameter("tk_thanh_toan", item.tk_thanh_toan, SqlDbType.Bit);
+            DbProvider.AddParameter("phong_ban_cha", item.phong_ban_cha, SqlDbType.VarChar);
             DbProvider.AddParameter("nguoi_dai_dien", item.nguoi_dai_dien, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
@@ -221,9 +224,9 @@ namespace HG.Data.Business.DanhMuc
             DbProvider.AddParameter("thang9", item.thang2, SqlDbType.VarChar);
             DbProvider.AddParameter("thang10", item.thang2, SqlDbType.VarChar);
             DbProvider.AddParameter("thang11", item.thang2, SqlDbType.VarChar);
-            DbProvider.AddParameter("thang12", item.thang2, SqlDbType.VarChar);    
+            DbProvider.AddParameter("thang12", item.thang2, SqlDbType.VarChar);
             DbProvider.AddParameter("uid", item.CreatedUid, SqlDbType.UniqueIdentifier);
-            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);         
+            DbProvider.AddParameter("uid_name", item.UidName, SqlDbType.NVarChar);
             DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
             // Lấy về danh sách các trường học
             DbProvider.ExecuteNonQuery();
@@ -231,7 +234,7 @@ namespace HG.Data.Business.DanhMuc
             return ma_loi;
         }
 
-       
+
         #endregion
     }
 }

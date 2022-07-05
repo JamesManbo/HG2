@@ -27,11 +27,11 @@
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
                     <form id="form_pb" action="/DanhMuc/SuaPhongBan?code=@Model.ma_phong_ban&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
-                        >
+
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" id="ma_pb" maxlength="25" value="@Model.ma_phong_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input onfocusout="CheckMa(this)" type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" id="ma_pb" maxlength="25" value="@Model.ma_phong_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -58,7 +58,39 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tên phòng ban" name="ten_phong_ban" id="ten_pb" maxlength="200" value="@Model.ten_phong_ban"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Tên phòng ban" name="ten_phong_ban" id="ten_pb" maxlength="200" value="@Model.ten_phong_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Mã định danh phòng ban</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã định danh phòng ban theo chuẩn quốc gia" name="ma_dinh_danh_pb" maxlength="50" value="@Model.ma_dinh_danh_pb" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tk_thanh_toan" class="col-sm-2 control-label">Có tài khoản thanh toán</label>
+                            <div class="col-sm-2">
+                                <input id="tk_thanh_toan" name="tk_thanh_toan" type="checkbox" value="@Model.tk_thanh_toan" class="ads_Checkbox_cn" @(Model.tk_thanh_toan ? "checked" : "" )>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Phòng ban cha</label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" name="phong_ban_cha">
+                                    <option selected="selected" value="">---- Chọn phòng ban ----</option>
+                                    @if (lst_phong_ban != null)
+                                        foreach (var item in lst_phong_ban.Where(n => n.ma_phong_ban != Model.ma_phong_ban))
+                                        {
+                                            if (Model.phong_ban_cha == item.ma_phong_ban)
+                                            {
+                                                <option selected value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                            }
+                                        }
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -95,8 +127,8 @@
                                     }
                                 </select>
                             </div>
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary">Chọn</button>
+                             <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModalUser">Chọn</button>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -228,11 +260,30 @@
         });
     }
 
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaPb",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result == 0) {
+                    window.location.href = '/Danhmuc/ThemPhongBan?code=' + data.value;
+                }
+            }
+        });
+    };
+
 </script>
 
 <script>
     $(document).ready(function() {
+        $("#tk_thanh_toan").val($("#tk_thanh_toan").is(':checked'));
 
+        $('#tk_thanh_toan').change(function() {
+            $('#tk_thanh_toan').val($(this).is(':checked'));
+        });
 
         $('.select2').select2({
             closeOnSelect: false
@@ -247,6 +298,7 @@
                 ten_phong_ban: "Bạn cần nhập tên phòng ban!"
             }
         });
+
 
         function convetArrayToObj(serialized) {
             var FormHelper = {};

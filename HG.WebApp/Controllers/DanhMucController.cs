@@ -44,7 +44,7 @@ namespace HG.WebApp.Controllers
             var phongBan = new List<Dm_Phong_Ban>();
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 phongBan = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
             }
@@ -66,6 +66,10 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 var ds = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ma_phong_ban.Contains(tu_khoa) || n.ten_phong_ban.Contains(tu_khoa)).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
                 ViewBag.TotalRecored = totalRecored;
@@ -78,8 +82,18 @@ namespace HG.WebApp.Controllers
             }
             return Content(result);
         }
+        [HttpPost]
+        public int CheckMaPb(string code)
+        {
+            var lstpb = new List<Dm_Phong_Ban>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0 && n.ma_phong_ban.ToUpper() == code.ToUpper()).ToList();
+            }
+            return lstpb.Count();
+        }
 
-        public IActionResult ThemPhongBan()
+        public IActionResult ThemPhongBan(string code = "")
         {
             var modal = new Dm_Phong_Ban();
             var user = _danhmucDao.DanhSachNguoiDung("0");
@@ -90,12 +104,14 @@ namespace HG.WebApp.Controllers
             }
             ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_phong_ban = lstpb;
+            ViewBag.code = code;
             return View("~/Views/DanhMuc/Phongban/ThemPhongBan.cshtml", modal);
         }
 
         [HttpPost]
         public IActionResult ThemPhongBan(Dm_Phong_Ban pb)
         {
+            pb.ma_phong_ban = String.Concat(HelperString.RemoveSign4VietnameseString(pb.ma_phong_ban).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
             pb.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             pb.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuPhongBan(pb);
@@ -174,8 +190,12 @@ namespace HG.WebApp.Controllers
 
         }
         [HttpPost]
-        public IActionResult XoaPhongBan(string code)
+        public IActionResult XoaPhongBan(string code = "")
         {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaPhongBan(code, uid);
             if (_pb > 0)
@@ -200,7 +220,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> RenderViewNguoiDung(string ma_phong_ban)
         {
             var ds_nguoi_dung = _danhmucDao.DanhSachNguoiDung(ma_phong_ban);
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/Phongban/ViewNguoiDung.cshtml", ds_nguoi_dung);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/ViewNguoiDung.cshtml", ds_nguoi_dung);
             return Content(result);
         }
         #endregion
