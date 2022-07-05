@@ -185,7 +185,7 @@
                                     {
                                         foreach (var item in lst_chuc_vu)
                                         {
-                                            if(item.ma_chuc_vu == Model.aspNetUsersModel.FirstOrDefault().ma_chuc_vu.Trim().ToString())
+                                            if(item.ma_chuc_vu == (Model.aspNetUsersModel.FirstOrDefault().ma_chuc_vu ?? "").Trim().ToString())
                                             {
                                                 <option value="@item.ma_chuc_vu" selected>@item.ten_chuc_vu</option>
                                             }

@@ -390,7 +390,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext eAContext = new EAContext();
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = 0 };
             var ds = _menuDao.DanhSanhMenu(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;

@@ -11,13 +11,15 @@
 <script>
     function PhanQuyenChange() {
         var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+         if(ma_vai_tro == "" || ma_vai_tro == undefined){
+             window.location.href = "/SuperAdmin/PhanQuyen";
+         }
          $.ajax({
             type: "GET",
             url: "../SuperAdmin/PhanQuyenChinhSua?ma_vai_tro=" + ma_vai_tro,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-               // console.log(data);
                 $("#dataTable").html(data);
             }
         });
@@ -35,13 +37,14 @@
         $.ajax({
             url: "/SuperAdmin/LuuPhanQuyen?objVaitroChucNangQuyen="+items,
             type: "GET",
-            cache: false,
-            data:items,
+            //cache: false,
+            //data:items,
             contentType: 'application/json; charset=utf-8',
-            dataType: "json",
+            data: "",
             success: function(data) {
-               // console.log(data);
+               $("#NotifyRole").modal("show");
                 $("#dataTable").html(data);
+                
             }
         });
     }
@@ -187,8 +190,8 @@
                             {
                                 if (CurrentPage > CurrentPage + 2)
                                 {
-                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                 };
                                 if (CurrentPage > 3)
                                 {
@@ -196,11 +199,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
                                 }
@@ -210,11 +213,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
 
@@ -222,8 +225,8 @@
 
                                 if (CurrentPage < CurrentPage + 2)
                                 {
-                                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                 };
                             }
                             else
@@ -232,11 +235,11 @@
                                 {
                                     if (i == CurrentPage)
                                     {
-                                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                     else
                                     {
-                                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                 }
                             }
@@ -252,8 +255,21 @@
 
     </div>
 </div>
-
-
+<div class="modal fade" id="NotifyRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                Lưu quyền thành công !!!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="basicModal" tabindex="-1">
                     <div class="modal-dialog" id="contetModel">
                         <div class="modal-content">

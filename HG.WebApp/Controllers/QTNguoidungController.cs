@@ -190,17 +190,22 @@ namespace HG.WebApp.Controllers
         //Case2
         public IActionResult XoaNnguoiDung(string Id, string type)
         {
+            var _pb = 0;
             if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "User");
             }
             var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _nguoiDungDao.Xoa(Id, uid);
+                foreach(var item in Id.Split(","))
+                {
+                    _pb = _nguoiDungDao.Xoa(Guid.Parse(item), uid);
+                }
+           
             if (_pb > 0)
             {
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return Json(new { error = 0, msg = "Xóa thành công!", href = "/SuperAdmin/ViewNhom" });
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/QTNguoidung/ListNguoiDung" });
         }
         #endregion
 

@@ -159,12 +159,12 @@ namespace HG.Data.Business.NguoiDung
             }
         }
 
-        public int Xoa(string ma_nguoi_dung, Guid uid)
+        public int Xoa(Guid ma_nguoi_dung, Guid uid)
         {
             try
             {
                 DbProvider.SetCommandText2("nguoidung$Xoa", CommandType.StoredProcedure);
-                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 // Lấy về danh sách các trường học
