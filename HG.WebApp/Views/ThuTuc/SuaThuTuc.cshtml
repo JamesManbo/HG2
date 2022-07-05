@@ -461,7 +461,7 @@
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="@Model.thuTuc.tra_kq_ktn" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="@Model.thuTuc.tra_kq_ktn" @(Model.thuTuc.thuc_hien_hai_gd==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tra_kq_ktn">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
