@@ -46,6 +46,7 @@ namespace HG.WebApp.Controllers
         [HttpGet]
         public IActionResult ViewNhom(string txtSearch = "")
         {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.txtSearch = txtSearch;
             if (string.IsNullOrEmpty(txtSearch))
             {
@@ -59,7 +60,7 @@ namespace HG.WebApp.Controllers
             {
                 EAContext eAContext = new EAContext();
                 ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count();
-                ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count() / 10;
+                ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count() / pageSize;
                 ViewBag.CurrentPage = 1;
                 return View(eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).ToList());
             }
@@ -69,21 +70,39 @@ namespace HG.WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> SuaNhom(string code, string type)
         {
-            var idg = Guid.Parse(code);
-            var obj = _nhomDao.LayNhomId(idg);
+            var obj = _nhomDao.LayNhomId(code);
             ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
             if (type == StatusAction.Edit.ToString())
             {
-                var UserUpdate = "";
-                if (obj.UpdatedUid != null)
+                ViewBag.UserCreated = "";
+                ViewBag.UserUpdate = "";
+                if (obj != null && obj.CreatedUid != null)
                 {
-                    UserUpdate = await userManager.GetUserNameAsync(await userManager.FindByIdAsync(obj.UpdatedUid.ToString()));
-                }
-                ViewBag.UserUpdate = UserUpdate;
+                    var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                    ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                };
+                if (obj != null && obj.UpdatedUid != null)
+                {
+                    var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                    ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                };
+                ViewBag.type_view = StatusAction.Edit.ToString();
                 return View(obj);
             }
             else
             {
+                ViewBag.UserCreated = "";
+                ViewBag.UserUpdate = "";
+                if (obj != null && obj.CreatedUid != null)
+                {
+                    var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                    ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                };
+                if (obj != null && obj.UpdatedUid != null)
+                {
+                    var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                    ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                };
                 ViewBag.type_view = StatusAction.View.ToString();
                 return View(obj);
             }
@@ -94,25 +113,50 @@ namespace HG.WebApp.Controllers
         {
             ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
             item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
-            var ObjId = _nhomDao.ChinhSuaNhom(item);
-            if (ObjId.ErrorCode == 0)
+            if (item.type_view == StatusAction.Add.ToString())
             {
-                return RedirectToAction("ViewNhom", "SuperAdmin");
+                var ObjId = _nhomDao.ChinhSuaNhom(item);
+                if (ObjId.ErrorCode == 0)
+                {
+                    ViewBag.type_view = StatusAction.Add.ToString();
+                    return RedirectToAction("ThemNhom");
+                }
+                else
+                {
+                    ViewBag.ErrorCode = ObjId.ErrorCode;
+                    ViewBag.ErrorMsg = ObjId.ReturnMsg;
+                    return View(item);
+                }
+               
             }
             else
             {
-                ViewBag.ErrorCode = ObjId.ErrorCode;
-                ViewBag.ErrorMsg = ObjId.ReturnMsg;
-                return View(item);
+                var ObjId = _nhomDao.ChinhSuaNhom(item);
+                if (ObjId.ErrorCode == 0)
+                {
+                    ViewBag.type_view = StatusAction.View.ToString();
+                    return View(item);
+                }
+                else
+                {
+                    ViewBag.ErrorCode = ObjId.ErrorCode;
+                    ViewBag.ErrorMsg = ObjId.ReturnMsg;
+                    return View(item);
+                }
             }
         }
-
+        public IActionResult KiemTraMaNhom(string code)
+        {
+            EAContext db = new EAContext();
+            var obj = db.Asp_nhom.Where(n => n.ma_nhom == code && n.Deleted != 1).FirstOrDefault();
+            return obj == null ? Content("") : Content("True");
+        }
         [HttpGet]
-        public IActionResult ThemNhom()
+        public IActionResult ThemNhom(string ma_nhom = "")
         {
             var ds = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100});
             ViewBag.ListNhom = ds.asp_Nhoms;
-            return View();
+            return View(new Asp_nhom() { ma_nhom = ma_nhom});
         }
 
         [HttpPost]
@@ -315,7 +359,7 @@ namespace HG.WebApp.Controllers
                     obj.UpdatedDateUtc = DateTime.Now;
                     db.Entry(obj).State = EntityState.Modified;
                     db.SaveChanges();
-                    ViewBag.type_view = StatusAction.View.ToString();
+                    ViewBag.type_view = StatusAction.Add.ToString();
                     return RedirectToAction("QuyenThemMoi");
                 }
                 else

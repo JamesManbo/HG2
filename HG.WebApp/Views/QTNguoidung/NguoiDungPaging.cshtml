@@ -18,7 +18,7 @@
                             <tr role="row">
                                 <th class="head0 nosort sorting_asc" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="
                                     : activate to sort column ascending" style="width: 12px;">
-                                    <input id="checkall" type="checkbox" name="ctl08$RepeaterTable$ctl00$checkall"></th>
+                                    <input  id="selectAll" type="checkbox" name=""></th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="STT: activate to sort column ascending" style="width: 22px;">STT</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐĂNG NHẬP: activate to sort column ascending" style="width: 190px;">TÊN ĐĂNG NHẬP</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐẦY ĐỦ: activate to sort column ascending" style="width: 302px;">TÊN ĐẦY ĐỦ</th>
@@ -38,20 +38,20 @@
                                 {
                                         <tr class="gradeX odd">
                                             <td class="aligncenter  sorting_2">
-                                                <input id="ctl08_RepeaterTable_ctl01_checkbox" type="checkbox" name="ctl08$RepeaterTable$ctl01$checkbox"></td>
+                                                <input type="checkbox" class="ads_Checkbox" value="@item.Id"></td>
                                             <td class=" ">@stt</td>
 
 
                                              <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="./?uid=55&amp;Action=view&amp;FCode=nctham.qba">@item.ten_dang_nhap</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@item.ten_dang_nhap</a></td>
 
 
                                             <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="/QTNguoiDung/SuaNguoiDung/@item.Id">@(item.ten == null ? "" : (item.ho_dem == null ? "" : item.ho_dem.ToString() + " " + item.ten.ToString() ))</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten == null ? "" : (item.ho_dem == null ? "" : item.ho_dem.ToString() + " " + item.ten.ToString() ))</a></td>
                                             <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="/QTNguoiDung/SuaNguoiDung/@item.Id">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
                                             <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="/QTNguoiDung/SuaNguoiDung/@item.Id">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
                                             <td style="text-align: center;" class=" ">
                                                 </td>
                                              <td style="text-align: center;" class=" ">

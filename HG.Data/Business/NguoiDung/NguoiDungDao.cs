@@ -54,12 +54,18 @@ namespace HG.Data.Business.NguoiDung
                 {
                     abc = (item.CurrentPage - 1) * item.RecordsPerPage;
                 }
+                else if(item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
+
                 // Input params
                 DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
                 DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
-                DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.NVarChar);
-                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
-                DbProvider.AddParameter("trang_thai", 0, SqlDbType.Int);
+                DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.VarChar);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa, SqlDbType.NVarChar);
+                DbProvider.AddParameter("trang_thai", item.trang_thai, SqlDbType.Int);
+                DbProvider.AddParameter("da_xoa", item.da_xoa, SqlDbType.Int);
                 // Output params
                 DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
 
@@ -157,9 +163,8 @@ namespace HG.Data.Business.NguoiDung
         {
             try
             {
-
                 DbProvider.SetCommandText2("nguoidung$Xoa", CommandType.StoredProcedure);
-                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.VarChar);
+                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.NVarChar);
                 DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 // Lấy về danh sách các trường học

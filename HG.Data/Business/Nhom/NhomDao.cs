@@ -112,14 +112,14 @@ namespace HG.Data.Business.Nhom
             return ma_loi;
         }
 
-        public NhomModel LayNhomId(Guid NhomId)
+        public NhomModel LayNhomId(string NhomId)
         {
             try
             {
                 NhomModel result = new NhomModel();
                 DbProvider.SetCommandText2("[nhom$danhsach$id]", CommandType.StoredProcedure);
                 // Input params
-                DbProvider.AddParameter("NhomId", NhomId, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("NhomId", NhomId, SqlDbType.NVarChar);
                 result = DbProvider.ExecuteObject<NhomModel>();
                 return result;
             }

@@ -36,15 +36,15 @@ namespace HG.WebApp.Controllers
             ViewBag.trang_thai = trang_thai;
             ViewBag.da_xoa = da_xoa;
             ViewBag.txtSearch = txtSearch;
-            var totalRecouds = 0;
             EAContext eAContext = new EAContext();
             HelperString stringHelper = new HelperString();
-            var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang(new NguoiDungSearchItem { ma_phong_ban = ma_phong_ban,  PageIndex = 1, RecordsPerPage = pageSize, trang_thai = trang_thai, da_xoa = da_xoa, tu_khoa= txtSearch }, out totalRecouds);
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
+            var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
 
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
-            ViewBag.TotalPage = (totalRecouds/ pageSize) + 1;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
             ViewBag.CurrentPage = 1;
-            return View(ds);
+            return View(ds.asp_Nhoms);
         }
         public async Task<IActionResult> NguoiDungPaging(int currentPage = 0, string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
         {
@@ -80,28 +80,38 @@ namespace HG.WebApp.Controllers
             ViewBag.LstNhom = db.Asp_nhom.ToList();
             ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
-            if (!string.IsNullOrEmpty(ObjId))
-			{
-                if(item.lstGroup != null)
+                if (!string.IsNullOrEmpty(ObjId))
                 {
-                    for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                    if (item.lstGroup != null)
                     {
-                        _nguoiDungDao.ThemMoi_NguoiDung_Nhom(Guid.Parse(ObjId), item.lstGroup.Split(",")[i].ToString(), UserId);
+                        for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                        {
+                            _nguoiDungDao.ThemMoi_NguoiDung_Nhom(Guid.Parse(ObjId), item.lstGroup.Split(",")[i].ToString(), UserId);
+                        }
+
                     }
-                    return RedirectToAction("ThemNguoiDung");
+                };
+                if (!string.IsNullOrEmpty(ObjId))
+                {
+                    if (item.type_view == StatusAction.Add.ToString())
+                    {
+                        return RedirectToAction("ThemNguoiDung", "QTnguoidung");
+                    }
+                    else if (item.type_view == StatusAction.View.ToString())
+                    {
+                        return RedirectToAction("ViewNguoiDung", "QTnguoidung", new { code = item.Id, type = StatusAction.View.ToString() });
+                    }
                 }
                 else
                 {
-                    return RedirectToAction("ThemNguoiDung");
+                    ViewBag.ErrorCode = 1;
+                    ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+                    return View(item);
                 }
-				
-			}
-			else
-			{
-                ViewBag.ErrorCode = 1;
-                ViewBag.ErrorMsg = "Tên người dùng đã tồn tại hoặc lỗi hệ thống!!!";
-				return View(item);
-			}
+            ViewBag.ErrorCode = 1;
+            ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+            return View(item);
+
         }
 
         [HttpGet]
@@ -134,12 +144,15 @@ namespace HG.WebApp.Controllers
             var UserId = Guid.Parse(userManager.GetUserId(User));
             var ObjId = _nguoiDungDao.SuaNguoiDung(item, UserId);
             try {
-                if (ObjId.ErrorCode == 0 && item.lstGroup != null)
+                if (ObjId.ErrorCode == 0)
                 {
-                    for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                    if(item.lstGroup != null)
                     {
-                        _nguoiDungDao.ThemMoi_NguoiDung_Nhom(item.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
-                    }
+                        for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                        {
+                            _nguoiDungDao.ThemMoi_NguoiDung_Nhom(item.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
+                        }
+                    };
                     if (item.type_view == StatusAction.Add.ToString())
                     {
                         return RedirectToAction("ThemNguoiDung");
@@ -175,14 +188,14 @@ namespace HG.WebApp.Controllers
         //}
 
         //Case2
-        public IActionResult XoaNnguoiDung(string code, string type)
+        public IActionResult XoaNnguoiDung(string Id, string type)
         {
             if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "User");
             }
             var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _nguoiDungDao.Xoa(code, uid);
+            var _pb = _nguoiDungDao.Xoa(Id, uid);
             if (_pb > 0)
             {
                 return Json(new { error = 1, msg = "Xóa lỗi" });
