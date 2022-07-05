@@ -30,7 +30,7 @@ namespace HG.Data.Business.NguoiDung
                 DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
                 DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.NVarChar);
                 DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
-                DbProvider.AddParameter("trang_thai", 0, SqlDbType.Int);
+                DbProvider.AddParameter("trang_thai", item.da_xoa == null ? 0 : 1, SqlDbType.Int);
                 // Output params
                 DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
 
@@ -48,10 +48,14 @@ namespace HG.Data.Business.NguoiDung
             try
             {
                 ds_nguoi_dung_paging ds_Nguoi_Dung_Paging = new ds_nguoi_dung_paging();
+                var abc = 1;
                 DbProvider.SetCommandText2("nguoidung$danhsanh$phantrang", CommandType.StoredProcedure);
-
+                if(item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
                 // Input params
-                DbProvider.AddParameter("StartingRow", item.CurrentPage, SqlDbType.Int);
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
                 DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
                 DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.NVarChar);
                 DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);

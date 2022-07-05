@@ -31,6 +31,7 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
         {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.ma_phong_ban = ma_phong_ban;
             ViewBag.trang_thai = trang_thai;
             ViewBag.da_xoa = da_xoa;
@@ -38,18 +39,21 @@ namespace HG.WebApp.Controllers
             var totalRecouds = 0;
             EAContext eAContext = new EAContext();
             HelperString stringHelper = new HelperString();
-            var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang(new NguoiDungSearchItem { ma_phong_ban = ma_phong_ban,  PageIndex = 0, RecordsPerPage = 3, trang_thai = trang_thai, da_xoa = da_xoa, tu_khoa= txtSearch }, out totalRecouds);
+            var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang(new NguoiDungSearchItem { ma_phong_ban = ma_phong_ban,  PageIndex = 1, RecordsPerPage = pageSize, trang_thai = trang_thai, da_xoa = da_xoa, tu_khoa= txtSearch }, out totalRecouds);
 
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
-            ViewBag.TotalPage = totalRecouds/3;
+            ViewBag.TotalPage = (totalRecouds/ pageSize) + 1;
             ViewBag.CurrentPage = 1;
             return View(ds);
         }
         public async Task<IActionResult> NguoiDungPaging(int currentPage = 0, string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
         {
-            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = currentPage, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = 3 };
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = currentPage, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
+
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoiDung/NguoiDungPaging.cshtml", ds);
             return Content(result);
         }

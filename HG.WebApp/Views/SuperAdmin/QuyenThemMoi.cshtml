@@ -1,7 +1,7 @@
 ﻿@using HG.WebApp
 @{
     ViewData["Title"] = "Quyền"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    
+    var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<AspNetRoles>;
 }
 @model HG.WebApp.AspNetRoles
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -48,9 +48,13 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã quyền <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" maxlength="50" name="ma_quyen" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") value="@(Model.ma_quyen == null?"":Model.ma_quyen)">
+                                <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_quyen" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") value="@(Model.ma_quyen == null?"":Model.ma_quyen)">
                             </div>
-                       
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Chọn
+                                </button>
+                            </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên Quyền <span style="color:red">(*)</span></label>
@@ -92,6 +96,7 @@
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu</button>
+                           
                             <button type="button" class="btn btn-secondary" onclick="window.location.href='/SuperAdmin/QuyenDanhSach';">Đóng</button>
                         </div>
                     </form><!-- End Horizontal Form -->
@@ -126,8 +131,68 @@
         };
 
     });
-
+     function CheckedCode(abc){
+         $.ajax({
+                  type: "GET",
+                  url: "/SuperAdmin/KiemTraMaQuyen?Code=" + abc.value,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      if (data == "") {
+                          window.location.href = '/SuperAdmin/QuyenThemMoi?ma_quyen=' + abc.value
+                      } else {
+                          window.location.href = '/SuperAdmin/QuyenChinhSua?code=' + abc.value +"&type=Edit"
+                      }
+                  }
+          });           
+    }
 </script>
 
 
 
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div style="overflow-y: auto;">
+                        <div id="pnlMain">
+                            <div>
+                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                                    <tbody>
+                                        <tr class="widgettitle">
+                                            <th align="center" scope="col">CHỌN</th>
+                                            <th scope="col">TÊN</th>
+                                            <th scope="col">MÔ TẢ</th>
+                                        </tr>
+                                            @if(lst_nguoi_dung != null)
+                                            {
+                                                foreach (var item in lst_nguoi_dung)
+                                                {
+                                                    <tr>
+                                                        <td align="center">
+                                                             <a href="/SuperAdmin/QuyenChinhSua?code=@item.ma_quyen&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                                        </td>
+                                                        <td>
+                                                            @item.Name
+                                                        </td>
+                                                        <td style="width: 25%;">@item.Description</td>
+                                                    </tr>
+                                                }
+                                            }
+                                  
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->

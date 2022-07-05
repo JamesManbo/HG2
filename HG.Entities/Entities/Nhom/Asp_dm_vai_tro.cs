@@ -14,5 +14,6 @@ namespace HG.Entities.Entities.Nhom
         public string? buoc_xu_ly { get; set; }
         public string? ten_vai_tro { get; set; }
         public string? mo_ta { get; set; }
+        public int? stt { get; set; }
     }
 }

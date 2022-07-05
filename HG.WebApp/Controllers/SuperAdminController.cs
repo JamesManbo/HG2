@@ -170,15 +170,26 @@ namespace HG.WebApp.Controllers
         #region Quyen
         public IActionResult QuyenDanhSach(string txtSearch = "")
         {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             EAContext eAContext = new EAContext();
             ViewBag.CurrentPage = 1;
             ViewBag.txtSearch = txtSearch;
             ViewBag.TotalPage =  Convert.ToInt32(_config.GetSection("AppSetting").GetSection("PageSize").Value);
             if (!string.IsNullOrEmpty(txtSearch))
             {
-                return View(eAContext.AspNetRoles.Where(n=>n.ma_quyen.Contains(txtSearch)).ToList());
+                var totalRecouds = eAContext.AspNetRoles.Where(n => n.Name.Contains(txtSearch) && n.Deleted != 1).Count();
+                ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                return View(eAContext.AspNetRoles.Where(n=>n.Name.Contains(txtSearch) && n.Deleted != 1).ToList());
             }
-            return View(eAContext.AspNetRoles.ToList());
+            else
+            {
+                var totalRecouds = eAContext.AspNetRoles.Where(n => n.Deleted != 1).Count();
+                ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                return View(eAContext.AspNetRoles.Where(n => n.Deleted != 1).ToList());
+            }
+            
         }
 
         public IActionResult XoaQuyen(string code, string type)
@@ -197,10 +208,12 @@ namespace HG.WebApp.Controllers
             }
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/SuperAdmin/QuyenDanhSach" });
         }
-        public IActionResult QuyenThemMoi()
+        public IActionResult QuyenThemMoi(string ma_quyen = "")
         {
+            EAContext db = new EAContext();
+            ViewBag.lst_nguoi_dung = db.AspNetRoles.Where(n => n.Deleted != 1).ToList();
             ViewBag.type_view = "";
-            return View(new AspNetRoles());
+            return View(new AspNetRoles() { ma_quyen = ma_quyen });
         }
         [HttpPost]
         public IActionResult QuyenThemMoi(AspNetRoles item)
@@ -213,7 +226,7 @@ namespace HG.WebApp.Controllers
                 item.Deleted = 0;
                 item.CreatedDateUtc = DateTime.Now;
                 var obj = eAContext.AspNetRoles.Where(n => n.ma_quyen == item.ma_quyen).Count();
-                if(obj > 0)
+                if (obj > 0)
                 {
                     ViewBag.ErrorCode = 1;
                     ViewBag.ErrorMsg = "Mã đã tồn tại trong hệ thống";
@@ -234,33 +247,90 @@ namespace HG.WebApp.Controllers
             }
           
         }
-        public IActionResult QuyenChinhSua(string code, string type)
+        public IActionResult KiemTraMaQuyen(string code)
         {
+            EAContext db = new EAContext();
+            var obj = db.AspNetRoles.Where(n => n.ma_quyen == code && n.Deleted != 1).FirstOrDefault();
+            return obj == null ? Content("") : Content("True");
+        }
+        public async Task<IActionResult> QuyenChinhSua(string code, string type)
+        {
+
             if (type == StatusAction.Edit.ToString())
             {
                 EAContext eAContext = new EAContext();
                 ViewBag.type_view = StatusAction.Edit.ToString();
-                return View(eAContext.AspNetRoles.Where(n => n.ma_quyen == code).FirstOrDefault());
+                var obj = eAContext.AspNetRoles.Where(n => n.ma_quyen == code).FirstOrDefault();
+                ViewBag.UserCreated = "";
+                ViewBag.UserUpdate = "";
+                if (obj != null && obj.CreatedUid != null)
+                {
+                    var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                    ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                };
+                if(obj != null && obj.UpdatedUid != null)
+                {
+                    var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                    ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                };
+                ViewBag.lst_nguoi_dung = eAContext.AspNetRoles.Where(n => n.Deleted != 1).ToList();
+                return View(obj);
             }
             else
             {
                 EAContext eAContext = new EAContext();
                 ViewBag.type_view = StatusAction.View.ToString();
-                return View(eAContext.AspNetRoles.Where(n => n.ma_quyen == code).FirstOrDefault());
+                ViewBag.UserCreated = "";
+                ViewBag.UserUpdate = "";
+                var obj = eAContext.AspNetRoles.Where(n => n.ma_quyen == code).FirstOrDefault();
+                ViewBag.UserCreated = "";
+                ViewBag.UserUpdate = "";
+                if (obj != null && obj.CreatedUid != null)
+                {
+                    var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                    ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                }
+                if (obj != null && obj.UpdatedUid != null)
+                {
+                    var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                    ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                }
+                ViewBag.lst_nguoi_dung = eAContext.AspNetRoles.Where(n => n.Deleted != 1).ToList();
+                return View(obj);
             }
         }
         [HttpPost]
-        public IActionResult QuyenChinhSua(AspNetRoles item)
+        public IActionResult QuyenChinhSua(AspNetRoles item, string type_view)
         {
             try
             {
-                item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
-                item.UpdatedDateUtc = DateTime.Now;
                 EAContext db = new EAContext();
-                db.Entry(item).State = EntityState.Modified;
-                db.SaveChanges();
-                ViewBag.type_view = StatusAction.View.ToString();
-                return View(item);
+                var obj = db.AspNetRoles.AsNoTracking().Where(n => n.ma_quyen == item.ma_quyen).FirstOrDefault();
+                if (type_view == StatusAction.Add.ToString() && obj != null )
+                {
+                    obj.Name = item.Name;
+                    obj.Description = item.Description;
+                    obj.Stt = item.Stt;
+                    obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                    obj.UpdatedDateUtc = DateTime.Now;
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                    ViewBag.type_view = StatusAction.View.ToString();
+                    return RedirectToAction("QuyenThemMoi");
+                }
+                else
+                {
+                    obj.Name = item.Name;
+                    obj.Description = item.Description;
+                    obj.Stt = item.Stt;
+                    obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                    obj.UpdatedDateUtc = DateTime.Now;
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                    ViewBag.type_view = StatusAction.View.ToString();
+                    return View(item);
+                }
+                
             }
             catch (Exception ex)
             {

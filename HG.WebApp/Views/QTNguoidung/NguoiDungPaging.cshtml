@@ -1,8 +1,7 @@
 ﻿@using HG.WebApp
 @model HG.Entities.Entities.ds_nguoi_dung_paging
 
-<div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
-                <table class="table table-bordered responsive dataTable" id="dyntable" aria-describedby="dyntable_info">
+                <table class="table table-bordered responsive dataTable" id="dyntable_wrapper" aria-describedby="dyntable_info" > 
                         <colgroup>
                             <col class="con0" style="width: 20px">
                             <col class="con1" style="width: 2%">
@@ -43,16 +42,16 @@
                                             <td class=" ">@stt</td>
 
 
-                                            <td class=" ">
+                                             <td class=" ">
                                                 <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="./?uid=55&amp;Action=view&amp;FCode=nctham.qba">@item.ten_dang_nhap</a></td>
 
 
                                             <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="./?uid=55&amp;Action=view&amp;FCode=nctham.qba">@(item.ten == null ? "" : (item.ho_dem == null ? "" : item.ho_dem.ToString() + " " + item.ten.ToString() ))</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="/QTNguoiDung/SuaNguoiDung/@item.Id">@(item.ten == null ? "" : (item.ho_dem == null ? "" : item.ho_dem.ToString() + " " + item.ten.ToString() ))</a></td>
                                             <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="./?uid=55&amp;Action=view&amp;FCode=nctham.qba">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="/QTNguoiDung/SuaNguoiDung/@item.Id">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
                                             <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="./?uid=55&amp;Action=view&amp;FCode=nctham.qba">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
+                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="/QTNguoiDung/SuaNguoiDung/@item.Id">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
                                             <td style="text-align: center;" class=" ">
                                                 </td>
                                              <td style="text-align: center;" class=" ">
@@ -71,53 +70,7 @@
                         
                         </tbody>
                     </table>
-                    <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 10 của @(ViewBag.TotalPage*10) bản ghi</div>
-                        <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                            @{
-                                var TotalPage = (int)(Model.Pagelist.TotalRecords/3) + 1;
-                                var CurrentPage = (int)Model.Pagelist.CurrentPage;
-                                if (TotalPage> 5)
-                                {
-					                    if(CurrentPage > CurrentPage + 2 ){
-						                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
-                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                        };
-                                        if(CurrentPage > 3)
-                                        {
-                                             for(int i = CurrentPage -2; i< CurrentPage+2; i++){
-						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
-						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
-						                                } 
-					                                }
-                                        }else{
-                                                    for(int i = 1 ; i <= 5; i++){
-						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
-						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
-						                                } 
-					                                }
-
-                                        }
-                           
-					                    if(CurrentPage < CurrentPage + 2 ){
-					                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
-					                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
-					                    };
-                                }else{
-					                    for(int i = 1; i <= TotalPage; i++){
-						                    if(i == CurrentPage){
-							                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
-						                    }else{
-							                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
-						                    } 
-					                    }
-			                    }
-                            }
-                </div>
-</div>
+                   
 <script>
     
 </script>
@@ -138,7 +91,6 @@
                    data: "",
                    contentType: 'application/json; charset=utf-8',
                    success: function(data) {
-                       console.log(data);
                        $("#dyntable_wrapper").html(data);
                    }
                });                             

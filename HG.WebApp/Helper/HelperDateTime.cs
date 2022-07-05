@@ -19,6 +19,12 @@ namespace HG.WebApp.Common
             var dayinWeek = (int)dt.DayOfWeek;
             var stringDatetime = string.Format("{0} ngày {1} tháng {2} năm {3}", thu[dayinWeek], dt.Day, dt.Month, dt.Year);
             return stringDatetime;
+        } 
+        public static string DateTimeToYYYYMMDD(DateTime dt)
+        {
+            //string s = dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            string s2 = dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            return s2;
         }
         /// <summary>
         /// Đếm số ngày giữa 2 khoảng thời gian
