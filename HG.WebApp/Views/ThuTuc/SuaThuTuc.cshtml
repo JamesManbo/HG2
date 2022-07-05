@@ -72,9 +72,9 @@
 
         $("#nop_online").val($("#nop_online").is(':checked'));
         if ($("#nop_online").is(':checked')) {
-            $(".tab_thuc_hien").attr("style", "display:none");
-        } else {
             $(".tab_thuc_hien").attr("style", "display:flex");
+        } else {
+            $(".tab_thuc_hien").attr("style", "display:none");
         }
 
         $('#nop_online').change(function() {

@@ -172,17 +172,15 @@
             closeOnSelect: false
         });
 
-        var ngctxl = "@Model.ma_thu_tuc";
-        alert(ngctxl);
+        var ngctxl = "@Model.ma_thu_tuc";       
         var arrNgctxl = ngctxl.split(",");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
-                Arr.push(i);
-               
+                Arr.push(i);               
                 $("#ma_thu_tuc").val(Arr.join(","));
             });
         }
-        console.log(arrNgctxl);
+        
         $("#multiselect").val(arrNgctxl).trigger('change');
 
         $('#multiselect').on('select2:select', function(e) {
