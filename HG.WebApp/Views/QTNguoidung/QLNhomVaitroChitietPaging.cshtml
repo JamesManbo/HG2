@@ -13,7 +13,7 @@
                             <div class="form-group row">
                                 <label class="col-md-2 control-label">Nhóm</label>
                                 <div class="col-md-8">
-                                    <select  name="ma_nhom" id="ma_nhom" class="form-select form-control input-default " data-placeholder="Chọn một nhóm" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                    <select  name="ma_nhom" onchange="NhomComplete()" id="ma_nhom" class="form-select form-control input-default " data-placeholder="Chọn một nhóm" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                         @if (lst_nhom != null)
                                         {
                                             foreach (var item in lst_nhom)
@@ -21,8 +21,10 @@
                                                 if(item.ma_nhom == ViewBag.ma_nhom)
                                                 {
                                                     <option value="@item.ma_nhom" selected>	@item.ten_nhom</option>
+                                                }else{
+                                                     <option value="@item.ma_nhom">	@item.ten_nhom</option>
                                                 }
-                                                <option value="@item.ma_nhom">	@item.ten_nhom</option>
+                                               
                                             }
 
                                         }
@@ -30,7 +32,21 @@
                                 </div>
                             </div>
                             <script>
-                                function PhongbanComplete(){
+                                $(document).ready(function() {
+                                    $('.select2').select2({
+                                        closeOnSelect: false
+                                    });
+                                    $('#multiselect').on('select2:select', function(e) {
+                                        console.log(e.params.data);
+                                        Arr.push(e.params.data.id);
+                                        $("#lstGroup").val(Arr.join(","));
+                                    });
+                                    $('#multiselect').on("select2:unselect", function(e) {
+                                        Arr.pop(e.params.data.id);
+                                        $("#lstGroup").val(Arr.join(","));
+                                    });
+                                });
+                                function NhomComplete(){
                                     var ma_phong_ban = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
                                     $.ajax({
                                        type: "GET",
@@ -51,7 +67,6 @@
                                        data: "",
                                        contentType: 'application/json; charset=utf-8',
                                        success: function(data) {
-                                           console.log(data);
                                            $("#myTabContent").html(data);
                                        }
                                    });           
@@ -60,14 +75,21 @@
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Thêm người vào nhóm</label>
                                 <div class="col-md-8">
-                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                       <select id="multiselect" class="select2 form-select form-control input-default" multiple="" @(ViewBag.Status == "View" ? "disabled" :"")  data-placeholder="Chọn một người dùng" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                         @if (lst_nguoi_dung != null)
                                         {
                                             foreach (var item in lst_nguoi_dung)
                                             {
-                                                <option value="@item.Id">	@item.UserName</option>
+                                                if(lst_nhom_nguoi_dung != null)
+                                                {
+                                                    if ((lst_nhom_nguoi_dung.lst_ma_nguoi_dung == null ? "" : lst_nhom_nguoi_dung.lst_ma_nguoi_dung).Contains(item.Id.ToString()))
+                                                    {
+                                                         <option value="@item.Id" selected>	@item.UserName</option>
+                                                    }else{
+                                                         <option value="@item.Id">	@item.UserName</option>
+                                                    }    
+                                                }else{ <option value="@item.Id">	@item.UserName</option>}
                                             }
-
                                         }
                                     </select>
                                     <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" hidden>

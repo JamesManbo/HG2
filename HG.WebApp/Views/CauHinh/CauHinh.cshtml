@@ -40,9 +40,9 @@
                     </li>
                        <li class="nav-item" role="presentation">
                       <button class="nav-link" id="ThemNguoiXLVB-tab" data-bs-toggle="tab" data-bs-target="#ThemNguoiXLVB" type="button" role="tab" aria-controls="ThemNguoiXLVB" aria-selected="false">Thêm người XL vào bước</button>
-                         <li class="nav-item" role="presentation">
+                       @*  <li class="nav-item" role="presentation">
                       <button class="nav-link" id="TTKN-tab" data-bs-toggle="tab" data-bs-target="#TTKN" type="button" role="tab" aria-controls="TTKN" aria-selected="false">TT kết nôi</button>
-                    </li>
+                    </li>*@
                   </ul>
                   <div class="tab-content pt-2" id="myTabContent">
                     <form class="tab-pane fade show active" id="CauHinh" role="tabpanel" aria-labelledby="CauHinh-tab" action="/CauHinh/CauHinh" method="post">
@@ -229,7 +229,7 @@
                         @Html.RenderAction("DoiNguoiXLTLPartial", "CauHinh")
                     </div>
                     <div class="tab-pane fade" id="ThemNguoiXLVB" role="tabpanel" aria-labelledby="ThemNguoiXLVB-tab">
-                        @*@Html.RenderAction("ThemNguoiXLVB", "CauHinh")*@
+                        @Html.RenderAction("ThemNguoiXLVBPartial", "CauHinh")
                     </div>
                      <div class="tab-pane fade" id="TTKN" role="tabpanel" aria-labelledby="TTKN-tab">
                          @*@Html.RenderAction("TTKN", "CauHinh")*@

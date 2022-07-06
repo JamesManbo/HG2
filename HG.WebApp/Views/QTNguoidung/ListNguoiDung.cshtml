@@ -15,7 +15,9 @@
     }
     function PhongBanSearch() {
          var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
-            if ($('input[name=Status]:checked').length > 0) {
+               var trang_thai = 0;
+               var da_xoa = 0;   
+         if ($('input[name=Status]:checked').length > 0) {
                  trang_thai = 1;
                  da_xoa = 0;
             }else{

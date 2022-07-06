@@ -52,7 +52,7 @@ namespace HG.WebApp.Controllers
             {
                 EAContext eAContext = new EAContext();
                 ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count();
-                ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count() / 10;
+                ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count() / pageSize;
                 ViewBag.CurrentPage = 1;
                 return View(eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList());
             }

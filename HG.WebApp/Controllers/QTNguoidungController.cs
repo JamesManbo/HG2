@@ -234,13 +234,27 @@ namespace HG.WebApp.Controllers
         #endregion
 
         #region Nhom vai trò
-        public IActionResult QLNhomVaitro()
+        public IActionResult QLNhomVaitro(string txtSearch = "")
         {
-            EAContext eAContext = new EAContext();
-            ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count();
-            ViewBag.TotalPage = eAContext.Asp_nhom.Where(n => n.Deleted == 0).Count() / 10;
-            ViewBag.CurrentPage = 1;
-            return View(eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList());
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ViewBag.txtSearch = txtSearch;
+            if (string.IsNullOrEmpty(txtSearch))
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count();
+                ViewBag.TotalPage = (eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count() / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                return View(eAContext.Asp_nhom.Where(n => n.Deleted != 1).ToList());
+            }
+            else
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count();
+                ViewBag.TotalPage =  ( eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count() / pageSize ) + 1;
+                ViewBag.CurrentPage = 1;
+                return View(eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).ToList());
+            }
+           
         }
 
         public IActionResult QLNhomVaitroChitiet(string code)
@@ -301,8 +315,11 @@ namespace HG.WebApp.Controllers
             ViewBag.ma_nhom = code;
             ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
             ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
+            ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
-            ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
+            //lấy vai trò theo mã nhóm
+            ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
             return PartialView();
         }
         public async Task<IActionResult> ThemNhomVaitro(string code, string lstvaitro = "")

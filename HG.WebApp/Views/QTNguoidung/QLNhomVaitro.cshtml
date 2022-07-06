@@ -7,10 +7,11 @@
 
 <div class="card">
     <div class="pageheader">
-        <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-            <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
-        </div>
+                @using (Html.BeginForm("QLNhomVaitro", "QTNguoiDung", FormMethod.Get,new { @class="searchbar" }))
+                {
+                    <input name="txtSearch" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." value="@ViewBag.txtSearch"/>
+                    <input type="submit" name="" style="cursor:pointer" id="BtnSearch" hidden="hidden" />
+                }
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
             <h5>Danh sách</h5>
@@ -19,14 +20,6 @@
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <!-- Table with stripped rows -->
-            <p class="stdformbutton" style="margin-bottom: 10px;">
-                <input type="button" value="Thêm" onclick="window.location.href = '/SuperAdmin/ThemNhom';" class="btn btn-primary" style="width:100px;" />
-
-                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
-                <input hidden id="lstCode" />
-            </p>
-
             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="dataTable">
 
                 <div class="dataTables_length">
@@ -34,9 +27,9 @@
                         Hiển thị
                         <select class="dataTable-selector">
                             <option value="5">5</option>
-                            <option value="10" selected="">10</option>
+                            <option value="10" >10</option>
                             <option value="15">15</option>
-                            <option value="20">20</option>
+                            <option value="20" selected>20</option>
                             <option value="25">25</option>
                         </select> bản ghi
                     </label>
@@ -72,7 +65,7 @@
                         </tbody>
                     </table>
                 </div> 
-                <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 10 của @(ViewBag.TotalRecords) bản ghi</div>
+                <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 25 của @(ViewBag.TotalRecords) bản ghi</div>
                 <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
                                 var TotalPage = (int) ViewBag.TotalPage;

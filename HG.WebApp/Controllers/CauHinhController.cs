@@ -241,6 +241,64 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
         #endregion
+        #region Thêm người xl vào bước
+        public ActionResult ThemNguoiXLVBPartial()
+        {
+            var db = new EAContext();
+            ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
+            ViewBag.ListLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            return PartialView();
+        }
+        public async Task<IActionResult> ThemNguoiXLVBList(string ma_linh_vuc = "", string nguoi_phoi_hop = "")
+        {
+            ViewBag.ma_linh_vuc = ma_linh_vuc;
+            ViewBag.nguoi_phoi_hop = nguoi_phoi_hop;
+            if (!string.IsNullOrEmpty(ma_linh_vuc))
+            {
+                var lstObj = _cauHinhDao.LayDanhSachLuongBoiLinhVuc(ma_linh_vuc);
+                ViewBag.ma_nguoi_dung = ma_linh_vuc;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/ThemNguoiXLVBList.cshtml", lstObj);
+                return Content(result);
+            }
+            return Content("");
+        }
+        public async Task<IActionResult> LayCacBuocXuLyCuaLuong(string ma_luong, string ma_nguoi_dung)
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = ma_luong, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
+            ds.ma_luong = ma_luong;
+            var user = _dmDao.DanhSachNguoiDung("0");
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            ViewBag.NguoiHienTai = "";
+            ViewBag.NguoiThayThe = "";
+            if (!string.IsNullOrEmpty(ma_nguoi_dung))
+            {
+                var objNguoihientai = await userManager.FindByIdAsync(ma_nguoi_dung);
+                ViewBag.NguoiThemVaoBuoc = objNguoihientai.ho_dem + " " + objNguoihientai.ten;
+            }
+            
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/LayCacBuocXuLyCuaLuong.cshtml", ds);
+            return Content(result);
+        }
+
+        public IActionResult ThemNguoiXLVB(string ma_buoc = "", string ma_nguoi_dung = "")
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            //var result = "Thay đổi người thay thế không thành công!";
+            //foreach (var item in ma_buoc.Split(""))
+            //{
+            //    if (item != "on")
+            //    {
+            //        result = _cauHinhDao.ThayDoiXLTL(item, Guid.Parse(ma_nguoi_dung), Guid.Parse(ma_nguoi_dung_thay_the), UserId);
+            //    }
+            //}
+            return Content("Thêm người xử lý vào bước thành công!");
+        }
+        #endregion
 
     }
 }

@@ -10,8 +10,9 @@
 }
 <script>
     function CloseModelRole() {
+        $("#basicModal").modal("hide");
         localStorage.removeItem($("#CodeMenu").val());
-        $("#basicModal").modal("show");
+
     }
     function PhanQuyenChange() {
         var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;

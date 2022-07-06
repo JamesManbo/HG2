@@ -583,3 +583,44 @@ element.style {
 .error {
     color: red;
 }
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #333;
+    background: #fff;
+    font-size: 14px;
+    border-radius: 0;
+    font-weight: bold;
+}
+
+.nav-pills {
+    background-color: #0866c6;
+}
+
+.nav-link {
+    color: #fff;
+}
+
+    .nav-link:focus, .nav-link:hover {
+        color: #fff;
+        font-weight: bold;
+    }
+
+.btn-search {
+    border: 0;
+    padding: 0;
+    margin-left: -30px;
+    background: none;
+}
+
+.search-form input {
+    width: 240px;
+    padding: 10px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    height: auto;
+}
+
+.search-form {
+    position: absolute;
+    top: 33%;
+    right: 20px;
+}

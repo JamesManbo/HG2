@@ -35,7 +35,7 @@
             function LayCacBuocXuLy() {
                   var ma_nguoi_xl_hien_tai = document.getElementById("ma_nguoi_xl_hien_tai").options[document.getElementById("ma_nguoi_xl_hien_tai").selectedIndex].value;
                   var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_thetl").options[document.getElementById("ma_nguoi_dung_thay_thetl").selectedIndex].value;
-                    if (ma_nguoi_dung_thay_the == null || ma_nguoi_dung_thay_the == "") {
+                    if (ma_nguoi_dung_thay_the == null || ma_nguoi_dung_thay_the == "" || ma_nguoi_dung_thay_the == 0) {
                         alert("bạn chưa chọn người thay thế!");
                         return;
                     }

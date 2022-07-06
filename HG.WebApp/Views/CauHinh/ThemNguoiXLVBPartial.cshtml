@@ -1,5 +1,72 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    var danhSachNguoiDung = ViewBag.DanhSachNguoiDung as List<HG.WebApp.AspNetUsers>;
+    var ListLinhVuc = ViewBag.ListLinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
 }
+
+        <div class="form-horizontal">
+                <div class="form-group">
+                            <label class="col-md-12 control-label" style="text-align: center; color: red">Chức năng này sẽ thêm Người có thể xử lý ở luồng đã khai báo!!!</label>
+                </div>
+                <div class="form-group row">
+                            <label class="col-sm-2 control-label">
+                                Lĩnh vực:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name="ma_linh_vuc" id="ma_linh_vuc" class="form-control input-default form-select" onchange="LocNguoiXuLyHienTai(this)"  placeholder="Chọn lĩnh vực">
+                                    <option value="0">Chọn lĩnh vực</option>
+                                    @if(ListLinhVuc != null)
+                                    {
+                                         foreach (var item in ListLinhVuc)
+                                         {
+                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                         }   
+                                    }
+                                </select>
+                            </div>
+                           
+                </div>
+             
+                <div class="form-group row">
+                            <label class="col-sm-2 control-label">
+                                Người thêm mới:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name="nguoi_phoi_hop" id="nguoi_phoi_hop" class="form-control input-default form-select" placeholder="Chọn người dùng thay thế">
+                                    <option value="0">Chọn người phỗi hợp</option>
+                                    @if(danhSachNguoiDung != null)
+                                    {
+                                         foreach (var item in danhSachNguoiDung)
+                                         {
+                                            <option value="@item.Id">@(item.ho_dem + " " +item.ten )</option>
+                                         }   
+                                    }
+                                </select>
+                            </div>
+                            
+                </div>
+                <script>
+                    function LocNguoiXuLyHienTai() {
+                        var ma_linh_vuc = document.getElementById("ma_linh_vuc").options[document.getElementById("ma_linh_vuc").selectedIndex].value;
+                        var nguoi_phoi_hop = document.getElementById("nguoi_phoi_hop").options[document.getElementById("nguoi_phoi_hop").selectedIndex].value;
+                        $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/ThemNguoiXLVBList?ma_linh_vuc="+ma_linh_vuc + "&nguoi_phoi_hop="+nguoi_phoi_hop,
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                            success: function(data) {
+                                $("#danhsachluonglienquan").html(data);
+                            }
+                         });
+                    }
+                    
+                </script>
+        </div>
+        <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                 <div id="danhsachluonglienquan">
+                    
+               
+                </div>
+        </div>
+
+
+           
