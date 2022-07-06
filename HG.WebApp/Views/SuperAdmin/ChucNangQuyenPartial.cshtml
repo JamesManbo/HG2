@@ -41,7 +41,8 @@
                                     </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="BtnXoaNgXL">Lưu</button>
+                                <button type="button" class="btn btn-secondary" onclick="CloseModelRole()">Đóng</button>
                             </div>
                         </div>
                         <script>$(document).ready(function() {
@@ -81,6 +82,7 @@
                                  var obj = { ma_vai_tro: $("#CodeRole").val(), ma_chuc_nang: $("#CodeMenu").val(), ds_quyen_da_chon: $("#lstRole").val() };
                                  localStorage.setItem($("#CodeMenu").val(), JSON.stringify(obj));
                             });
-                        });</script>
+                        });
+                        </script>
                         
                     </div>

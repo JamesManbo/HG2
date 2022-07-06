@@ -4,33 +4,44 @@
     ViewData["Title"] = "Danh sách người dùng";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var list_phong_ban = ViewBag.ListPhongBan as List<HG.Entities.Dm_Phong_Ban>;
+    var phong_ban = ViewBag.ma_phong_ban as string;
 }
 
 <script>
-    function NguoiDungAutoComplete(){
-        var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
-        var trang_thai = 0;
-        var da_xoa = 0;
-       if ($('input[name=Status]:checked').length > 0) {
-            $("#Deleted").prop("checked", false);
-             trang_thai = 1;
-             da_xoa = 0;
-        }else{
-            if ($('input[name=Deleted]:checked').length > 0) {
-                da_xoa = 1;
-                trang_thai = 0;
-                $("#Status").prop("checked", false);
-            }
-        };
-        //if ($('input[name=Deleted]:checked').length > 0) {
-        //    da_xoa = 0;
-        //    $("#Status").prop('checked', false);
-        //} else {
-        //        da_xoa = 1;
-        //      $("#Deleted").prop("checked", true);
-        //};
+    function NguoiDungAutoComplete(trang_thai,da_xoa){
+       var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
         window.location.href = "/QTNguoiDung/ListNguoiDung?ma_phong_ban=" + ma_phong_ban + "&trang_thai=" + trang_thai + "&da_xoa=" + da_xoa;
 
+    }
+    function PhongBanSearch() {
+         var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
+            if ($('input[name=Status]:checked').length > 0) {
+                 trang_thai = 1;
+                 da_xoa = 0;
+            }else{
+                if ($('input[name=Deleted]:checked').length > 0) {
+                    da_xoa = 1;
+                    trang_thai = 0;
+                }
+            };
+          NguoiDungAutoComplete(trang_thai,da_xoa)
+    }
+    function TrangThaiChecked() {
+         if ($('input[name=Status]:checked').length > 0) {
+             $("#Deleted").prop("checked", false);
+             NguoiDungAutoComplete(1, 0)
+         } else { 
+             NguoiDungAutoComplete(0, 0)
+         }
+    }
+     function DaXoaChecked() {
+         if ($('input[name=Deleted]:checked').length > 0) {
+             $("#Status").prop("checked", false);
+             NguoiDungAutoComplete(0, 1)
+         } else { 
+             NguoiDungAutoComplete(0, 0)
+         }
+         
     }
 </script>
 
@@ -69,17 +80,22 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban</label>
                         <div class="col-md-6">
-                                <select name="ma_phong_ban_sl" id="ma_phong_ban_sl" onchange="NguoiDungAutoComplete()" class="form-select form-control input-default">
+                                <select name="ma_phong_ban_sl" id="ma_phong_ban_sl" onchange="PhongBanSearch()" class="form-select form-control input-default">
 			                    <option value="" >----------------Chọn-----------------</option>
                                 @if(list_phong_ban != null)
                                 {
                                     foreach (var item in list_phong_ban)
                                     {
-                                        if(item.ma_phong_ban == ViewBag.ma_phong_ban)
+                                        if (phong_ban == item.ma_phong_ban)
                                         {
                                             <option value="@item.ma_phong_ban" selected> @item.ten_phong_ban</option>
+
                                         }
-                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                        else
+                                        {
+                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                        }
+
                                     }
                                 }
 
@@ -91,13 +107,13 @@
                              </script>
                         </div>
                         <div class="col-md-4">
-                            <div>
+                          <div>
                                   <span class="cssrbCode" style="margin-right :12px;">
-                                      <input id="Status" type="checkbox" name="Status" value="rbDangHoatDong" @(ViewBag.trang_thai == 1 ? "checked" : "") onclick="NguoiDungAutoComplete()">
+                                      <input id="Status" type="checkbox" name="Status" value="rbDangHoatDong" @(ViewBag.trang_thai == 1 ? "checked" : "") onclick="TrangThaiChecked()">
                                       <label for="ctl08_rbDangHoatDong">&nbsp;&nbsp;Đang hoạt động</label>
                                   </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                   <span class="cssrbCode">
-                                      <input id="Deleted" type="checkbox" name="Deleted" value="rbDaXoa" @(ViewBag.da_xoa == 1 ? "checked" : "") onclick="NguoiDungAutoComplete()">
+                                      <input id="Deleted" type="checkbox" name="Deleted" value="rbDaXoa" @(ViewBag.da_xoa == 1 ? "checked" : "") onclick="DaXoaChecked()">
                                       <label for="ctl08_rbDaXoa">&nbsp;&nbsp;Đã xoá</label>
                                   </span>                  
 		                    </div>
@@ -140,37 +156,38 @@
                 
                         <tbody role="alert" aria-live="polite" aria-relevant="all">
                             @if(Model != null){
-                            var stt = 1;
-                            foreach(var item in Model)
-                                {
-                                        <tr class="gradeX odd">
-                                            <td><input type="checkbox" class="ads_Checkbox" value="@item.Id" /></td>
-                                            <td class=" ">@stt</td>
+                                var stt = 1;
+                                foreach(var item in Model)
+                                    {
+                                            <tr class="gradeX odd">
+                                                <td><input type="checkbox" class="ads_Checkbox" value="@item.Id" /></td>
+                                                <td class=" ">@stt</td>
 
 
-                                            <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@item.ten_dang_nhap</a></td>
+                                                <td class=" ">
+                                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink3" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@item.ten_dang_nhap</a></td>
 
 
-                                            <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten == null ? "" : (item.ho_dem == null ? "" : item.ho_dem.ToString() + " " + item.ten.ToString() ))</a></td>
-                                            <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
-                                            <td class=" ">
-                                                <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
-                                            <td style="text-align: center;" class=" ">
-                                                </td>
-                                            @* <td style="text-align: center;" class=" ">
-                                                </td>*@
+                                                <td class=" ">
+                                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink1" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten == null ? "" : (item.ho_dem == null ? "" : item.ho_dem.ToString() + " " + item.ten.ToString() ))</a></td>
+                                                <td class=" ">
+                                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
+                                                <td class=" ">
+                                                    <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
+                                                <td style="text-align: center;" class=" ">
+                                                    </td>
+                                                @* <td style="text-align: center;" class=" ">
+                                                    </td>*@
                        
-                                            <td class=" ">
-                                                <a  title="" data-placement="top" data-toggle="tooltip" href="/QTNguoiDung/ViewNguoiDung/@item.Id"  data-original-title="Xem">View</a></td>
-                                            <td class=" ">
-                                                <a data-original-title="Sửa" href="/QTNguoiDung/SuaNguoiDung/@item.Id">Edit</a></td>
-                                            <td class=" ">
-                                                <button onclick="confirm.BeforDelete('/QTNguoiDung/XoaNnguoiDung/@item.Id')"  value="Xóa">Delete</button></td>
-                                        </tr>
-                                }
+                                                <td class=" ">
+                                                    <a  title="" data-placement="top" data-toggle="tooltip" href="/QTNguoiDung/ViewNguoiDung/@item.Id"  data-original-title="Xem">Xem</a></td>
+                                                <td class=" ">
+                                                    <a data-original-title="Sửa" href="/QTNguoiDung/SuaNguoiDung/@item.Id">Sửa</a></td>
+                                                <td class=" ">
+                                                    <a onclick="confirm.BeforDelete('/QTNguoiDung/XoaNnguoiDung2?Id=@item.Id')" href="#"  value="Xóa">Xóa</a></td>
+                                    </tr>
+                                            stt++;
+                                    }
                             }
                             
                         
@@ -184,45 +201,51 @@
                                 if (TotalPage> 5)
                                 {
 					                    if(CurrentPage > CurrentPage + 2 ){
-						                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
-                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if(CurrentPage > 3)
                                         {
                                              for(int i = CurrentPage -2; i< CurrentPage+2; i++){
 						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
                                         }else{
                                                     for(int i = 1 ; i <= 5; i++){
 						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
 
                                         }
                            
 					                    if(CurrentPage < CurrentPage + 2 ){
-					                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
-					                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
+                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
+                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
 					                    };
                                 }else{
 					                    for(int i = 1; i <= TotalPage; i++){
 						                    if(i == CurrentPage){
-							                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                    }else{
-							                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
+                                                              <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
 						                    } 
 					                    }
 			                    }
                             }
                 </div>
             </div>
+              <p class="stdformbutton" style="margin-bottom: 10px;">
+                 <input type="button" value="Thêm" onclick="window.location.href = '/QTNguoiDung/ThemNguoiDung';" class="btn btn-primary" style="width:100px;" />
+
+                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                <input hidden id="lstCode" name="lstCode" />
+            </p>
         </div>
     </div>
 

@@ -38,7 +38,7 @@ namespace HG.WebApp.Controllers
             ViewBag.txtSearch = txtSearch;
             EAContext eAContext = new EAContext();
             HelperString stringHelper = new HelperString();
-            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() {tu_khoa = txtSearch, CurrentPage = 1, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
 
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
@@ -57,9 +57,14 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoiDung/NguoiDungPaging.cshtml", ds);
             return Content(result);
         }
-
+        public IActionResult KiemTraNguoiDung(string code)
+        {
+            EAContext db = new EAContext();
+            var obj = db.AspNetUsers.Where(n => n.UserName == code).FirstOrDefault();
+            return obj == null ? Content("") : Content(obj.Id.ToString());
+        }
         [HttpGet]
-        public IActionResult ThemNguoiDung()
+        public IActionResult ThemNguoiDung(string UserName = "")
         {
             var db = new EAContext();
             ViewBag.LstNhom = db.Asp_nhom.ToList();
@@ -68,7 +73,7 @@ namespace HG.WebApp.Controllers
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
 
-            return PartialView(new NguoiDungModels());
+            return PartialView(new NguoiDungModels() { UserName = UserName});
         }
         #region nguoidung
         [HttpPost]
@@ -99,7 +104,7 @@ namespace HG.WebApp.Controllers
                     }
                     else if (item.type_view == StatusAction.View.ToString())
                     {
-                        return RedirectToAction("ViewNguoiDung", "QTnguoidung", new { code = item.Id, type = StatusAction.View.ToString() });
+                        return RedirectToAction("ViewNguoiDung", "QTnguoidung", new { Id = Guid.Parse(ObjId), type = StatusAction.View.ToString() });
                     }
                 }
                 else
@@ -206,6 +211,25 @@ namespace HG.WebApp.Controllers
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/QTNguoidung/ListNguoiDung" });
+        }
+        public IActionResult XoaNnguoiDung2(string Id, string type)
+        {
+            var _pb = 0;
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            foreach (var item in Id.Split(","))
+            {
+                _pb = _nguoiDungDao.Xoa(Guid.Parse(item), uid);
+            }
+
+            if (_pb > 0)
+            {
+                return RedirectToAction("ListNguoiDung");
+            }
+            return RedirectToAction("ListNguoiDung");
         }
         #endregion
 

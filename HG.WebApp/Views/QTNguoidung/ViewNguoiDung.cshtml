@@ -131,13 +131,13 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Phòng ban</label>
                             <div class="col-md-10">
-                                <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
+                                <select readonly name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Toàn bộ phòng ban ------------</option>
                                     @if(lst_phong_ban != null)
                                     {
                                          foreach (var item in lst_phong_ban)
                                          {
-                                           if(item.ma_phong_ban == (Model.aspNetUsersModel.First().ma_phong_ban ?? "").ToString())
+                                           if(item.ma_phong_ban == (Model.aspNetUsersModel.First().ma_phong_ban ?? "").Trim().ToString())
                                             {
                                                 <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
                                             }

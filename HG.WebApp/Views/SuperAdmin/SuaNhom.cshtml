@@ -48,7 +48,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã nhóm <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_nhom" value="@Model.ma_nhom" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
+                                <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_nhom" id="ma_nhom" value="@Model.ma_nhom" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -103,7 +103,7 @@
                         {
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/SuperAdmin/ThemNhom';">Thêm</button>
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/SuperAdmin/SuaNhom?code=@Model.Id&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/SuperAdmin/SuaNhom?code=@Model.ma_nhom&type=@StatusAction.Edit.ToString()';">Sửa</button>
                                 <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/SuperAdmin/XoaNhom?code=@Model.ma_nhom')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/SuperAdmin/ViewNhom';">Đóng</button>
                             </div>
@@ -184,8 +184,8 @@
                 ten_nhom: "required"
             },
             messages: {
-                ma_phong_ban: "Bạn cần nhập mã nhóm!",
-                ten_phong_ban: "Bạn cần nhập tên nhóm!"
+                ma_nhom: "Bạn cần nhập mã nhóm!",
+                ten_nhom: "Bạn cần nhập tên nhóm!"
             }
         });
         function convetArrayToObj(serialized) {
@@ -198,12 +198,16 @@
             }
             return JSON.parse(JSON.stringify(data));
         };
-
+        $('#ma_nhom').on('keypress', function(e) {
+            if (e.which == 32 || e.which > 200){
+                return false;
+            }
+        });
     });
     function CheckedCode(abc){
          $.ajax({
                   type: "GET",
-                  url: "/SuperAdmin/KiemTraMaNhom?Code=" + abc.value,
+                  url: "/SuperAdmin/KiemTraMaNhom?code=" + abc.value,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {

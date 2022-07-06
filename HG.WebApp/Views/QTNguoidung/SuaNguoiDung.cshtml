@@ -26,7 +26,27 @@
             Arr.pop(e.params.data.id);
             $("#lstGroup").val(Arr.join(","));
         });
+        $('#UserName').on('keypress', function(e) {
+            if (e.which == 32 || e.which > 200){
+                return false;
+            }
+        });
     });
+     function CheckedCode(abc){
+         $.ajax({
+                  type: "GET",
+                  url: "/QTNguoidung/KiemTraNguoiDung?Code=" + abc.value,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      if (data == "") {
+                          window.location.href = '/QTNguoiDung/ThemNguoiDung?UserName=' +data
+                      } else {
+                          window.location.href = '/QTNguoiDung/SuaNguoiDung?Id=' + data +"&type=Edit"
+                      }
+                  }
+          });           
+    }
 </script>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,7 +113,7 @@
                                 <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="UserName" value="@Model.aspNetUsersModel.First().UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
+                                <input name="UserName" value="@Model.aspNetUsersModel.First().UserName" onfocusout="CheckedCode(this)" maxlength="50" type="text" id="UserName" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
                             </div>
                             <div class="col-md-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
