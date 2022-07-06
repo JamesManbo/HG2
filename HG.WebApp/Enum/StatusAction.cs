@@ -18,4 +18,13 @@ namespace HG.WebApp
         Add,
         AddNew
     }
+
+    public enum ActionThuTuc
+    {
+        ThuTuc,
+        ThanhPhan,
+        VanBanLQ,
+        NhomTP,
+        TPKQXL
+    }
 }

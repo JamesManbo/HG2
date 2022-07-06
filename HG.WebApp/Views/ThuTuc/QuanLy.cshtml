@@ -168,12 +168,12 @@
                                                     <td>@(item.nop_online?"có":"")</td>
                                                     <td>@(item.cho_phep_lien_thong?"có":"")</td>
                                                     <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())">
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
                                                             <span class="glyphicon glyphicon-list-alt">Xem</span>
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())">
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
                                                             <span class="glyphicon glyphicon-edit">Sửa</span>
                                                         </a>
                                                     </td>

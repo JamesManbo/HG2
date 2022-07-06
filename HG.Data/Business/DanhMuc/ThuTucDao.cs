@@ -165,7 +165,21 @@ namespace HG.Data.Business.ThuTuc
             }
         }
         #endregion
-
+        public List<Dm_Thanh_Phan_Key> DanhSachThanhPhan(string code)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("dm_danh_sach_thanh_phan_key", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_thu_tuc", code, SqlDbType.VarChar);
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteListObject<Dm_Thanh_Phan_Key>();
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new List<Dm_Thanh_Phan_Key>();
+            }
+        }
         public int LuuThanhPhan(ThanhPhan item)
         {
             var response = new Response();
@@ -194,6 +208,19 @@ namespace HG.Data.Business.ThuTuc
             var obj = DbProvider.ExecuteNonQuery();
             var rs = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
             return rs;
+        }
+
+        public int XoaThanhPhan(string ma_thanh_phan, Guid uid)
+        {
+            DbProvider.SetCommandText2("dm_xoa_thanh_phan", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_thu_tuc", ma_thanh_phan, SqlDbType.VarChar);
+            DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+            DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+            var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString());
+            return ma_loi;
         }
     }
 }

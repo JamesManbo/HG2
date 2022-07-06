@@ -76,7 +76,7 @@
                         <div class="row mb-3">
                             <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC</label>
                             <div class="col-sm-8">
-                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     @if (ThuTuc != null)
                                     {
                                         foreach (var item in ThuTuc)
@@ -172,15 +172,15 @@
             closeOnSelect: false
         });
 
-        var ngctxl = "@Model.ma_thu_tuc";       
+        var ngctxl = "@Model.ma_thu_tuc";
         var arrNgctxl = ngctxl.split(",");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
-                Arr.push(i);               
+                Arr.push(i);
                 $("#ma_thu_tuc").val(Arr.join(","));
             });
         }
-        
+
         $("#multiselect").val(arrNgctxl).trigger('change');
 
         $('#multiselect').on('select2:select', function(e) {

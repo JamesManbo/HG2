@@ -82,7 +82,7 @@
                     required: true,
                     number: true
                 },
-                ban_chinh: {
+                ban_goc: {
                     required: true,
                     number: true
                 }
@@ -98,23 +98,10 @@
                     required: 'Bạn cần nhập số lượng bản phô tô.',
                     number: 'Chỉ được nhập số từ 0 - 9'
                 },
-                ban_chinh: {
+                ban_goc: {
                     required: 'Bạn cần nhập số lượng bản chính.',
                     number: 'Chỉ được nhập số từ 0 - 9'
                 }
-            }, submitHandler: function(form) {
-                var formData = new FormData();
-                var data = convetArrayToObj($("#form_tptt").serializeArray());
-
-                $.ajax({
-                    url: '@Url.Action("ThemThanhPhan", "ThuTuc")',
-                    type: "post",
-                    contentType: 'application/x-www-form-urlencoded',
-                    data: data,
-                    success: function(result) {
-                        alert(result.errorCode);
-                    }
-                });
             }
         });
 
@@ -602,7 +589,7 @@
                         <div class="tab-pane fade show active" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
                             <div id="ctl14_ctl00_ctl02_Form">
 
-                                <form id="form_tptt">
+                              <form id="form_tptt" action="/ThuTuc/ThemThanhPhan" method="post" enctype="multipart/form-data">
 
                                     <div class="form-horizontal">
                                         <input name="ma_thu_tuc" hidden value="@Model.thuTuc.ma_thu_tuc" />
@@ -613,13 +600,26 @@
                                             </label>
                                             <div class="col-md-8">
                                                 <input name="ma_thanh_phan" type="text" value="@(Model.thuTuc.ma_thu_tuc+"-"+(Model.lstThanhPhan.Count()+1).ToString())" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần">
-
                                             </div>
-                                            <label class="col-md-1 control-label">
-                                                <a id="lnkFCode" data-toggle="modal" data-target="#myModal" class="btn btn-primary" onclick="myModalPopup(this.name);" name="" style="display:inline-block;width:100%;">Chọn</a>
-                                            </label>
-                                        </div>
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">Chọn</button>
+                                                <script>
+                                                    function myModalPopup() {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: "../ThuTuc/RenderViewThanhPhan?code=@Model.thuTuc.ma_thu_tuc",
+                                                            data: "",
+                                                            contentType: 'application/json; charset=utf-8',
+                                                            success: function(data) {
+                                                                console.log(data);
+                                                                $("#basicModal .modal-body").html(data);
+                                                            }
+                                                        });
+                                                    }
 
+                                                </script>
+                                            </div>
+                                        </div>
                                         <div class="row mb-3">
                                             <label class="col-md-2 control-label">
                                                 Tên thành phần
@@ -627,7 +627,6 @@
                                             </label>
                                             <div class="col-md-8">
                                                 <input name="ten_thanh_phan" type="text" value="" id="ten_thanh_phan" class="form-control input-default" placeholder="Tên thành phần">
-
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -636,8 +635,8 @@
                                                 <table id="ctl14_ctl00_ctl02_BatBuoc" border="0">
                                                     <tbody>
                                                         <tr>
-                                                            <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0"><label for="ctl14_ctl00_ctl02_BatBuoc_0">&nbsp;Không &nbsp;&nbsp;</label></td>
-                                                            <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" checked="checked"><label for="ctl14_ctl00_ctl02_BatBuoc_1">&nbsp;Có</label></td>
+                                                            <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0"><label for="BatBuoc_0">Không</label></td>
+                                                            <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" checked="checked"><label for="BatBuoc_1">&Có</label></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -650,21 +649,16 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-
                                             <label for="inputPassword" class="col-md-2 control-label">Đính kèm</label>
                                             <div class="col-md-6">
                                                 <div class="fileupload fileupload-new" data-provides="fileupload">
                                                     <input type="hidden">
                                                     <div class="input-append">
-
                                                         <span class="btn btn-default btn-file">
-                                                            <span class="fileupload-new" id="but">Chọn file</span>
-                                                            <span class="fileupload-exists">Thay đổi</span>
                                                             <input type="file" id="files">
                                                             <input name="url_file" id="url_file" hidden>
                                                         </span>
-                                                        <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload">Xóa</a>
-                                                        <input type="submit" name="" value="Xóa tệp" onclick="return confirm('Tệp đính kèm sẽ được xóa?');WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl14$ctl00$ctl02$xoatep&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;">
+                                                        <input type="button" hidden name="" value="Xóa tệp" onclick="" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;">
                                                     </div>
                                                 </div>
 
@@ -679,11 +673,11 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input id="bieu_mau1" type="radio" name="bieu_mau" value="chkkhong" checked="checked">
+                                                                <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" checked="checked">
                                                                 <label for="bieu_mau1">Không</label>
                                                             </td>
                                                             <td>
-                                                                <input id="bieu_mau2" type="radio" name="bieu_mau" value="chkco">
+                                                                <input id="bieu_mau2" type="radio" name="bieu_mau" value="1">
                                                                 <label for="bieu_mau2">Có</label>
                                                             </td>
                                                         </tr>
@@ -692,11 +686,11 @@
                                             </div>
                                             <label class="col-md-1 control-label">Bắt đầu </label>
                                             <div class="col-md-2">
-                                                <input name="ngay_bat_dau" type="text" id="ngay_bat_dau" class="form-control  datepicker hasDatepicker" placeholder="ngày/tháng/năm">
+                                                <input name="ngay_bat_dau" type="date" id="ngay_bat_dau" class="form-control  datepicker hasDatepicker" placeholder="ngày/tháng/năm">
                                             </div>
                                             <label class="col-md-1 control-label">Kết thúc</label>
                                             <div class="col-md-2">
-                                                <input name="ngay_ket_thuc" type="text" id="ngay_ket_thuc" class="form-control  datepicker hasDatepicker" placeholder="ngày/tháng/năm">
+                                                <input name="ngay_ket_thuc" type="date" id="ngay_ket_thuc" class="form-control  datepicker hasDatepicker" placeholder="ngày/tháng/năm">
                                             </div>
                                             <div class="col-md-2">
                                                 <span style="color:#0026ff">  Thời gian áp dụng biểu mẫu</span>
@@ -712,7 +706,7 @@
                                         <div class="row mb-3">
                                             <label class="col-md-2 control-label">Đường dẫn form nhập</label>
                                             <div class="col-md-8">
-                                                <input name="duong_dan_form_nhap" type="text" id="duong_dan_form_nhap" class="form-control input-default" placeholder="Mã đơn vị/tên file.ascx(Đường dẫn file)">
+                                                <input name="duong_dan_form_nhap" type="text" id="duong_dan_form_nhap" class="form-control input-default" placeholder="(Đường dẫn file)">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -720,7 +714,7 @@
                                                 Bản chính
                                             </label>
                                             <div class="col-md-2">
-                                                <input name="ban_chinh" type="text" value="0" id="ban_chinh" class="form-control input-default" placeholder="Số lượng bản chính">
+                                                <input name="ban_goc" type="text" value="0" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính">
                                             </div>
 
                                             <label class="col-md-1 control-label">
@@ -728,7 +722,7 @@
                                             </label>
                                             <div class="col-md-2">
                                                 <input name="ban_sao" type="text" value="0" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao">
-                                                @*<span id="ctl14_ctl00_ctl02_RegularExpressionValidator5" style="color:Red;display:none;">Chỉ được nhập số từ 0 -&gt; 9</span>*@
+
                                             </div>
 
                                             <label class="col-md-1 control-label">
@@ -736,28 +730,22 @@
                                             </label>
                                             <div class="col-md-2">
                                                 <input name="ban_pho_to" type="text" value="0" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô">
-                                                @*<span id="ctl14_ctl00_ctl02_RegularExpressionValidator6" style="color:Red;display:none;">Chỉ được nhập số từ 0 -&gt; 9</span>*@
+
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
                                             <label class="col-md-2 control-label">Thứ tự</label>
                                             <div class="col-md-8">
-                                                <input name="stt" type="text" value="1" id="ctl14_ctl00_ctl02_FIndex" class="form-control input-default" placeholder="Số thứ tự">
+                                                <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự">
                                             </div>
                                         </div>
-
-                                        <div class="form-group">
-                                            <div class="col-md-offset-2 col-md-10">
-
-                                                <input type="submit" name="" value="Lưu và Thêm" id="BtbLuuvaThem" class="btn btn-primary">
-                                                <input type="submit" name="" value="Lưu" id="BtbSave1" class="btn btn-primary">
-
-                                                <input type="button" name="" value="Xóa" id="btnDel" class="btn btn-primary">
-                                                <input type="button" name="" value="Đóng" id="BtnClose" class="btn btn-primary">
-                                            </div>
+                                        <input name="type_view" value="@ViewBag.type_view" hidden />
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary" name="type_view_tt" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                            <button type="submit" class="btn btn-primary" name="type_view_tt" value="@(StatusAction.View.ToString())">Lưu</button>
+                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view&active=@(ActionThuTuc.ThanhPhan.ToString())';">Đóng</button>
                                         </div>
-
                                     </div>
                                 </form>
                             </div>

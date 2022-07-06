@@ -7,7 +7,6 @@
     var LstDonViLienThong = ViewBag.LstDonViLienThong as List<HG.Entities.Dm_Don_Vi_Lien_Thong>;
     var LstMucDoThucHien = ViewBag.LstMucDoThucHien as List<HG.Entities.Dm_Muc_Do_Thuc_Hien>;
 }
-
 @model HG.Entities.Entities.ThuTuc.ThuTucModel
 
 <script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
@@ -30,55 +29,114 @@
         border: 0;
         border-radius: 0;
     }
-
 </style>
 <script>
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
-
-        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
-            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
-                return false;
+        $("#files").on('change', function() {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TPTT',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                            $('#url_file').val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
             } else {
-                return true;
-            };
-        }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+                alert("FormData is not supported.");
+            }
+        });
 
-        $('#form_pb').validate({
+
+        $('#form_tptt').validate({
             rules: {
-                ma_thu_tuc: {
-                    required: true,
-                    ma_thu_tuc_vaild: true
+                ma_thanh_phan: {
+                    required: true
                 },
-                ten_thu_tuc: "required",
-                ma_linh_vuc: "required",
-                ma_phong_ban: "required",
-                so_ngay_xl: "required",
-                so_bo_hs: "required"
+                ten_thanh_phan: "required",
+                ban_sao: {
+                    required: true,
+                    number: true
+                },
+                ban_pho_to: {
+                    required: true,
+                    number: true
+                },
+                ban_goc: {
+                    required: true,
+                    number: true
+                }
             },
             messages: {
-                ma_thu_tuc: {
-                    required: "Bạn cần nhập mã thủ tục!",
+                ma_thanh_phan: "Bạn cần nhập mã thành phần!",
+                ten_thanh_phan: "Bạn cần nhập tên thành phần!",
+                ban_sao: {
+                    required: 'Bạn cần nhập số lượng bản sao.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
                 },
-                ten_thu_tuc: "Bạn cần nhập tên thủ tục!",
-                ma_linh_vuc: "Bạn cần nhập lĩnh vực",
-                ma_phong_ban: "Bạn cần nhập phòng ban",
-                so_ngay_xl: "Bạn cần nhập số ngày xử lý",
-                so_bo_hs: "Bạn cần nhập số bộ hồ sơ"
+                ban_pho_to: {
+                    required: 'Bạn cần nhập số lượng bản phô tô.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                },
+                ban_goc: {
+                    required: 'Bạn cần nhập số lượng bản chính.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                }
             }
         });
-        function hideSelected(value) {
-            if (value && !value.selected) {
-                return $('<span>' + value.text + '</span>');
+
+
+
+        //, submitHandler: function(form) {
+        //        var formData = new FormData();
+        //        var data = convetArrayToObj($("#form_tptt").serializeArray());
+
+        //        $.ajax({
+        //            url: '@Url.Action("ThemThanhPhan", "ThuTuc")',
+        //            type: "post",
+        //            contentType: 'application/x-www-form-urlencoded',
+        //            data: data,
+        //            success: function(result) {
+        //                alert(result.errorCode);
+        //            }
+        //        });
+        //    }
+
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
             }
-        }
+            return JSON.parse(JSON.stringify(data));
+        };
 
         $('.select2').select2({
-            allowClear: true,
-            templateResult: hideSelected
+            closeOnSelect: false
         });
-      
+
         $("#nop_online").val($("#nop_online").is(':checked'));
         $('#nop_online').change(function() {
             if ($(this).is(':checked')) {
@@ -154,6 +212,16 @@
             $('#chi_tra_kq_kckqlt').val($(this).is(':checked'));
         });
 
+        var ngctxl = "@(Model.thuTuc.don_vi_ltxl)";
+        var arrNgctxl = ngctxl.split(",");
+        if (arrNgctxl != "") {
+            arrNgctxl.forEach(function(i) {
+                Arr.push(i);
+                $("#don_vi_ltxl").val(Arr.join(","));
+            });
+        }
+        $("#multiselect").val(arrNgctxl).trigger('change');
+
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
             $("#don_vi_ltxl").val(Arr.join(","));
@@ -164,6 +232,18 @@
             $("#don_vi_ltxl").val(Arr.join(","));
         });
 
+        var ngphxl = "@Model.thuTuc.don_vi_ltph";
+
+        var arrNgphxl = ngphxl.split(",");
+
+        if (arrNgphxl != "") {
+            arrNgphxl.forEach(function(i) {
+                Arr2.push(i);
+                $("#don_vi_ltph").val(Arr2.join(","));
+            });
+        }
+        $("#multiselect2").val(arrNgphxl).trigger('change');
+
         $('#multiselect2').on('select2:select', function(e) {
             Arr2.push(e.params.data.id);
             $("#don_vi_ltph").val(Arr2.join(","));
@@ -173,8 +253,6 @@
             Arr2.pop(e.params.data.id);
             $("#don_vi_ltph").val(Arr2.join(","));
         });
-
-
     });
 </script>
 <div class="card">
@@ -192,83 +270,96 @@
                 <div class="tab-primary" style="border: 2px solid #0866c6;">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tthc" role="tab" aria-controls="pills-home" aria-selected="true">Thủ tục hành chính</button>
+                            <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tthc" role="tab" aria-controls="pills-home" aria-selected="false">Thủ tục hành chính</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Thành phần</button>
+                            <button class="nav-link active" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="true">Thành phần</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Văn bản liên quan</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false">Văn bản liên quan</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Nhóm thành phần</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false">Nhóm thành phần</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false" disabled>Thành phần xử lý kết quả</button>
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần xử lý kết quả</button>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="myTabContent" style="padding: 15px;">
                         @*TAB Thủ tục hành chính*@
-                        <div class="tab-pane fade show active" id="pills-tthc" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade" id="pills-tthc" role="tabpanel" aria-labelledby="home-tab">
                             <div class="">
                                 <div class="form-horizontal">
                                     <!-- Horizontal Form -->
                                     <form id="form_pb" action="/ThuTuc/ThemThuTuc" method="post" enctype="multipart/form-data">
+                                        <input name="ma_thu_tuc_old" value="@Model.thuTuc.ma_thu_tuc_old" hidden />
+                                        <div class="row mb-3">
+                                            <label for="ten_pb" class="col-sm-2 control-label">Mã luồng xử lý</label>
+                                            <div class="col-sm-8">
+                                                @if (Model.lstLuong != null)
+                                                {
+                                                    foreach (var item in Model.lstLuong)
+                                                    {
+                                                        <a href="/Luong/QuyTrinhXuLy?code=@item.ma_luong">@item.ten_luong</a>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
                                         <div class="row mb-3">
                                             <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc">
+                                                <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
                                                     Chọn
                                                 </button>
 
-                                                <script>
-                                                    function myModalPopup() {
-                                                        $.ajax({
-                                                            type: "GET",
-                                                            url: "../ThuTuc/RenderViewThuTuc",
-                                                            data: "",
-                                                            contentType: 'application/json; charset=utf-8',
-                                                            success: function(data) {
-                                                                console.log(data);
-                                                                $("#basicModal .modal-body").html(data);
-                                                            }
-                                                        });
-                                                    }
+                                                @*     <script>
+                                                function myModalPopup() {
+                                                $.ajax({
+                                                type: "GET",
+                                                url: "../ThuTuc/RenderViewThuTuc",
+                                                data: "",
+                                                contentType: 'application/json; charset=utf-8',
+                                                success: function(data) {
+                                                console.log(data);
+                                                $("#basicModal .modal-body").html(data);
+                                                }
+                                                });
+                                                }
 
-                                                </script>
+                                                </script>*@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Mã chuẩn quốc gia" name="ma_quoc_gia" value="">
+                                                <input type="text" class="form-control input-default" placeholder="Mã chuẩn quốc gia" name="ma_quoc_gia" value="@Model.thuTuc.ma_quoc_gia" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Tên thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Tên thủ tục" name="ten_thu_tuc" value="">
+                                                <input type="text" class="form-control input-default" placeholder="Tên thủ tục" name="ten_thu_tuc" value="@Model.thuTuc.ten_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                                             <div class="col-sm-8">
-                                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta"></textarea>
+                                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.thuTuc.mo_ta</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="nop_online" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-2">
-                                                <input type="checkbox" id="nop_online" name="nop_online" value="0">
+                                                <input type="checkbox" id="nop_online" name="nop_online" value="@Model.thuTuc.nop_online" @(Model.thuTuc.nop_online==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="nop_online">Nộp Online</label>
 
                                             </div>
                                             <div class="col-sm-2">
-                                                <input type="checkbox" id="hd_online" name="hd_online" value="0">
+                                                <input type="checkbox" id="hd_online" name="hd_online" value="@Model.thuTuc.hd_online" @(Model.thuTuc.hd_online==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="hd_online">Hướng dẫn Online</label>
 
                                             </div>
@@ -276,25 +367,33 @@
                                         <div class="row mb-3">
                                             <label for="tthcc" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-2">
-                                                <input type="checkbox" id="tthcc" name="tthcc" value="0">
+                                                <input type="checkbox" id="tthcc" name="tthcc" value="@Model.thuTuc.tthcc" @(Model.thuTuc.tthcc==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tthcc">TN tại TTHCC</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tthtks" name="tthtks" value="0">
+                                                <input type="checkbox" id="tthtks" name="tthtks" value="@Model.thuTuc.tthtks" @(Model.thuTuc.tthtks==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tthtks">Thủ tục hộ tịch khai sinh</label>
 
                                             </div>
                                         </div>
-                                        <div class="row mb-3 tab_thuc_hien" style="display:none">
-                                            <label for="ten_pb" class="col-sm-2 control-label">Thực hiện</label>
+                                        <div class="row mb-3 tab_thuc_hien">
+                                            <label for="ten_pb" class="col-sm-2 control-label">Thực hiện </label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="thuc_hien">
+                                                <select class="form-select form-control input-default" name="thuc_hien" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <option selected="selected" value="">---- Chọn mức độ thực hiện ----</option>
                                                     @if (LstMucDoThucHien != null)
                                                     {
                                                         foreach (var item in LstMucDoThucHien)
                                                         {
-                                                            <option value="@item.ma_thuc_hien">@item.ten_thuc_hien</option>
+                                                            if (item.ma_thuc_hien == Model.thuTuc.thuc_hien)
+                                                            {
+                                                                <option selected value="@item.ma_thuc_hien">@item.ten_thuc_hien</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.ma_thuc_hien">@item.ten_thuc_hien</option>
+                                                            }
                                                         }
                                                     }
                                                 </select>
@@ -303,13 +402,21 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Lĩnh vực <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="ma_linh_vuc">
+                                                <select class="form-select form-control input-default" name="ma_linh_vuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <option selected="selected" value="">---- Chọn lĩnh vực ----</option>
                                                     @if (LstLinhVuc != null)
                                                     {
                                                         foreach (var item in LstLinhVuc)
                                                         {
-                                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                            if (item.ma_linh_vuc == Model.thuTuc.ma_linh_vuc)
+                                                            {
+                                                                <option selected value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                            }
+
                                                         }
                                                     }
 
@@ -319,75 +426,83 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Phòng Ban <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <select class="form-select form-control input-default" name="ma_phong_ban">
+                                                <select class="form-select form-control input-default" name="ma_phong_ban" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <option selected="selected" value="">---- Chọn phòng ban ----</option>
                                                     @if (LstPhongBan != null)
                                                     {
                                                         foreach (var item in LstPhongBan)
                                                         {
-                                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                            if (item.ma_phong_ban == Model.thuTuc.ma_phong_ban)
+                                                            {
+                                                                <option selected value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                            }
+
                                                         }
                                                     }
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label">Số ngày xử lý <span style="color:red">(*)</span></label>
+                                            <label for="stt" class="col-sm-2 control-label">Số ngày xử lý</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Số ngày xử lý" name="so_ngay_xl" value="">
+                                                <input type="number" class="form-control input-default" name="so_ngay_xl" placeholder="Số ngày xử lý" value="@Model.thuTuc.so_ngay_xl" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Lệ phí trước</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_truoc" value="">
+                                                <input type="number" class="form-control input-default" name="le_phi_truoc" placeholder="Lệ phí" value="@Model.thuTuc.le_phi_truoc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Lệ phí sau</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_sau" value="">
+                                                <input type="number" class="form-control input-default" name="le_phi_sau" placeholder="Lệ phí" value="@Model.thuTuc.le_phi_sau" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label">Số bộ hồ sơ <span style="color:red">(*)</span></label>
+                                            <label for="stt" class="col-sm-2 control-label">Số bộ hồ sơ</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Số bộ hồ sơ" name="so_bo_hs" value="">
+                                                <input type="number" class="form-control input-default" name="so_bo_hs" placeholder="Số bộ hồ sơ" value="@Model.thuTuc.so_bo_hs" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Đường dẫn phôi KQ</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Đường dẫn phôi kết quả" name="duong_dan_kq" value="">
+                                                <input type="text" class="form-control input-default" name="duong_dan_kq" placeholder="Đường dẫn phôi kết quả" value="@Model.thuTuc.duong_dan_kq" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Thông tin mở rộng</label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Thông tin mở rộng" name="thong_tin_mo_rong" value="">
+                                                <input type="text" class="form-control input-default" name="thong_tin_mo_rong" placeholder="Thông tin mở rộng" value="@Model.thuTuc.thong_tin_mo_rong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Nội dung hướng dẫn</label>
                                             <div class="col-sm-8">
-                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung hướng dẫn" name="noi_dung_hd"></textarea>
+                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung hướng dẫn" name="noi_dung_hd" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Html.Raw(Model.thuTuc.noi_dung_hd)</textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Thứ thự" name="stt" value="">
+                                                <input type="number" class="form-control input-default" name="stt" value="@Model.thuTuc.stt" placeholder="Thứ thự" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="thu_le_phi_knhs" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="thu_le_phi_knhs" name="thu_le_phi_knhs" value="0">
+                                                <input type="checkbox" id="thu_le_phi_knhs" name="thu_le_phi_knhs" value="@Model.thuTuc.thu_le_phi_knhs" @(Model.thuTuc.thu_le_phi_knhs==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="thu_le_phi_knhs">Thu lệ phí khi nhận hồ sơ</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="thu_le_phi_kckq" name="thu_le_phi_kckq" value="0">
+                                                <input type="checkbox" id="thu_le_phi_kckq" name="thu_le_phi_kckq" value="@Model.thuTuc.thu_le_phi_kckq" @(Model.thuTuc.thu_le_phi_kckq==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="thu_le_phi_kckq">Thu lệ phí khi có kết quả</label>
 
                                             </div>
@@ -395,12 +510,12 @@
                                         <div class="row mb-3">
                                             <label for="thu_le_phi_knhs" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="thuc_hien_hai_gd" name="thuc_hien_hai_gd" value="0">
+                                                <input type="checkbox" id="thuc_hien_hai_gd" name="thuc_hien_hai_gd" value="@Model.thuTuc.thuc_hien_hai_gd" @(Model.thuTuc.thuc_hien_hai_gd==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="thuc_hien_hai_gd">Thực hiện hai giai đoạn</label>
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="0">
+                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="0" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tra_kq_ktn">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
@@ -408,25 +523,25 @@
                                         <div class="row mb-3">
                                             <label for="cho_phep_lien_thong" class="col-sm-2 control-label">Cho phép liên thông</label>
                                             <div class="col-sm-8">
-                                                <input type="checkbox" id="cho_phep_lien_thong" name="cho_phep_lien_thong">
+                                                <input type="checkbox" id="cho_phep_lien_thong" name="cho_phep_lien_thong" value="@Model.thuTuc.cho_phep_lien_thong" @(Model.thuTuc.cho_phep_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                         </div>
-                                        <div class="tab_lienthong" style="display:none">
+                                        <div class="tab_lienthong" style="@(Model.thuTuc.cho_phep_lien_thong==true?"display:block":"display:none")">
                                             <div class="row mb-3">
                                                 <label for="stt" class="col-sm-2 control-label"></label>
                                                 <div class="col-sm-3">
-                                                    <input type="checkbox" id="cho_phep_gui_lien_thong" name="cho_phep_gui_lien_thong" value="0">
+                                                    <input type="checkbox" id="cho_phep_gui_lien_thong" name="cho_phep_gui_lien_thong" value="@Model.thuTuc.cho_phep_gui_lien_thong" @(Model.thuTuc.cho_phep_gui_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="cho_phep_gui_lien_thong">Cho phép gửi liên thông</label>
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <input id="cho_phep_nhan_lien_thong" type="checkbox" name="cho_phep_nhan_lien_thong" value="0">
+                                                    <input id="cho_phep_nhan_lien_thong" type="checkbox" name="cho_phep_nhan_lien_thong" value="@Model.thuTuc.cho_phep_nhan_lien_thong" @(Model.thuTuc.cho_phep_nhan_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="cho_phep_nhan_lien_thong">Cho phép nhận liên thông</label>
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltxl" class="col-sm-2 control-label">Đơn vị liên thông XL</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -441,7 +556,7 @@
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -456,158 +571,184 @@
                                             <div class="row mb-3">
                                                 <label for="stt" class="col-sm-2 control-label"></label>
                                                 <div class="col-sm-3">
-                                                    <input type="checkbox" id="gui_lt_kem_kq_xl" name="gui_lt_kem_kq_xl" value="0">
+                                                    <input type="checkbox" id="gui_lt_kem_kq_xl" name="gui_lt_kem_kq_xl" value="@Model.thuTuc.gui_lt_kem_kq_xl" @(Model.thuTuc.gui_lt_kem_kq_xl==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="gui_lt_kem_kq_xl">Gửi liên thông kèm kết quả xử lý</label>
                                                 </div>
                                                 <div class="col-sm-5">
-                                                    <input type="checkbox" id="chi_tra_kq_kckqlt" name="chi_tra_kq_kckqlt" value="0">
+                                                    <input type="checkbox" id="chi_tra_kq_kckqlt" name="chi_tra_kq_kckqlt" value="@Model.thuTuc.chi_tra_kq_kckqlt" @(Model.thuTuc.chi_tra_kq_kckqlt==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     <label for="chi_tra_kq_kckqlt">Chỉ trả kết quả khi có kết quả liên thông</label>
                                                 </div>
                                             </div>
                                         </div>
-
-
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Thutuc/QuanLy';">Đóng</button>
+                                            @if (ViewBag.type_view == StatusAction.View.ToString())
+                                            {
+                                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/ThemThuTuc';">Thêm</button>
+                                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                            }
+                                            @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                                            {
+                                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                                            }
+
+                                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=0')">Xóa</button>
+                                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=1')">Bãi bỏ TTHC</button>
+                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/ThanhPhan?code=@Model.thuTuc.ma_thu_tuc';">Thành phần</button>
+                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/QuanLy';">Đóng</button>
                                         </div>
-                                    </form><!-- End Horizontal Form -->
+                                    </form>
+
+                                    <!-- End Horizontal Form -->
                                 </div>
                             </div>
                         </div>
                         @*TAB thành phần *@
-                        <div class="tab-pane fade" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="button" name="" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
-                            </p>
-                            <select name="ctl08$ctl00$ctl02$MaNhomTT" onchange="javascript:setTimeout('__doPostBack(\'ctl08$ctl00$ctl02$MaNhomTT\',\'\')', 0)" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
-                                <option selected="selected" value="0">------------- Chọn nhóm thành phần hồ sơ -------------</option>
-                            </select>
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-                                <div class="dataTable-container">
-                                    <table class="table table-bordered responsive">
-                                        <thead class="widgettitle">
-                                            <tr>
-                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                    <input type="checkbox" name="" id="selectAll" />
-                                                </th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.lstThanhPhan != null)
-                                            {
-                                                foreach (var item in Model.lstThanhPhan)
-                                                {
-                                                    <tr>
-                                                        <td><input type="checkbox" class="ads_Checkbox_tp" value="@item.ma_thanh_phan" /></td>
-                                                        <td scope="row">
-                                                            1
-                                                            <input type="hidden" value="@item.ma_thanh_phan" />
-                                                        </td>
-                                                        <td><a href="#">@item.ten_thanh_phan</a></td>
+                        <div class="tab-pane fade show active" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
+                            <div id="ctl14_ctl00_ctl02_Form">
 
-                                                        <td>@item.mo_ta</td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
-                                                                <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
-                                                                <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a onclick=""
-                                                       title=""
-                                                       data-placement="top"
-                                                       data-toggle="tooltip"
-                                                       data-original-title="Xóa"
-                                                       href="#">
-                                                                <span class="glyphicon glyphicon-trash">Xóa</span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                }
+                                <form id="form_tptt" action="/ThuTuc/ThemThanhPhan" method="post" enctype="multipart/form-data">
 
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistThanhPhan.RecoredFrom đến  @Model.PagelistThanhPhan.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
-                                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                    @{
-                                        var TotalPage = Model.PagelistThanhPhan.TotalPage;
-                                        var CurrentPage = Model.PagelistThanhPhan.CurrentPage;
-                                        if (TotalPage > 5)
-                                        {
-                                            if (CurrentPage > CurrentPage + 2)
-                                            {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                            };
-                                            if (CurrentPage > 3)
-                                            {
-                                                for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
-                                                {
-                                                    if (i == CurrentPage)
-                                                    {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                for (int i = 1; i <= 5; i++)
-                                                {
-                                                    if (i == CurrentPage)
-                                                    {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
+                                    <div class="form-horizontal">
+                                        <input name="ma_thu_tuc" hidden value="@Model.thuTuc.ma_thu_tuc" />
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Mã thành phần<span style="color:Red;">(*)</span></label>
+                                            <div class="col-md-8">
+                                                <input name="ma_thanh_phan" type="text" value="@(Model.lstThanhPhan.FirstOrDefault().ma_thanh_phan)" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
 
-                                            }
+                                            </div>
+                                            <label class="col-md-1 control-label">
+                                                <a id="lnkFCode" data-toggle="modal" data-target="#myModal" class="btn btn-primary" onclick="myModalPopup(this.name);" name="" style="display:inline-block;width:100%;">Chọn</a>
+                                            </label>
+                                        </div>
 
-                                            if (CurrentPage < CurrentPage + 2)
-                                            {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                            };
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= TotalPage; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                    }
-                                </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">
+                                                Tên thành phần<span style="color:Red;">(*)</span>
+                                            </label>
+                                            <div class="col-md-8">
+                                                <input name="ten_thanh_phan" type="text" value="@(Model.lstThanhPhan.FirstOrDefault().ten_thanh_phan)" id="ten_thanh_phan" class="form-control input-default" placeholder="Tên thành phần" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Bắt buộc</label>
+                                            <div class="col-md-8">
+                                                <table id="" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0" @(Model.lstThanhPhan.FirstOrDefault().bat_buoc==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_1">Không</label></td>
+                                                            <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" @(Model.lstThanhPhan.FirstOrDefault().bat_buoc==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_2">Có</label></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Mô tả</label>
+                                            <div class="col-md-8">
+                                                <textarea name="mo_ta" rows="2" cols="20" id="mo_ta" class="form-control input-default" placeholder="Mô tả" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>@(Model.lstThanhPhan.FirstOrDefault().mo_ta)</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
 
-                                <!-- End Table with stripped rows -->
+                                            <label for="inputPassword" class="col-md-2 control-label">Đính kèm</label>
+                                            <div class="col-md-6">
+                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                    <input type="hidden">
+                                                    <div class="input-append">
+                                                        <span class="btn btn-default btn-file">
+                                                            <input type="file" id="files" hidden>
+                                                            <input name="file_dinh_kem" id="file_dinh_kem" value="@(Model.lstThanhPhan.FirstOrDefault().file_dinh_kem)">
+                                                            <input name="url_file" id="url_file" hidden value="@(Model.lstThanhPhan.FirstOrDefault().url_file)">
+                                                            <button type="button" onclick="$('#files').click();" class="btn btn-default" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
+                                                        </span>
+                                                        <input type="button" hidden name="" value="Xóa tệp" onclick="" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;">
+                                                    </div>
+                                                </div>
 
+                                            </div>
+                                            <div class="col-md-2"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Có biểu mẫu không</label>
+                                            <div class="col-md-2">
+
+                                                <table id="=" border="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" @(Model.lstThanhPhan.FirstOrDefault().bieu_mau==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                                <label for="bieu_mau1">Không</label>
+                                                            </td>
+                                                            <td>
+                                                                <input id="bieu_mau2" type="radio" name="bieu_mau" value="1" @(Model.lstThanhPhan.FirstOrDefault().bieu_mau==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                                <label for="bieu_mau2">Có</label>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <label class="col-md-1 control-label">Bắt đầu </label>
+                                            <div class="col-md-2">
+                                                <input name="ngay_bat_dau" type="date" id="ngay_bat_dau" class="form-control  datepicker hasDatepicker" value="@(Model.lstThanhPhan.FirstOrDefault().ngay_bat_dau)" placeholder="ngày/tháng/năm" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                            <label class="col-md-1 control-label">Kết thúc</label>
+                                            <div class="col-md-2">
+                                                <input name="ngay_ket_thuc" type="date" id="ngay_ket_thuc" class="form-control  datepicker hasDatepicker" value="@(Model.lstThanhPhan.FirstOrDefault().ngay_ket_thuc)" placeholder="ngày/tháng/năm" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span style="color:#0026ff">  Thời gian áp dụng biểu mẫu</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Tên form nhập</label>
+                                            <div class="col-md-8">
+                                                <input name="ten_form_nhap" type="text" id="ten_form_nhap" class="form-control input-default" value="@(Model.lstThanhPhan.FirstOrDefault().ten_form_nhap)" placeholder="Tên form nhập" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Đường dẫn form nhập</label>
+                                            <div class="col-md-8">
+                                                <input name="duong_dan_form_nhap" type="text" id="duong_dan_form_nhap" class="form-control input-default" value="@(Model.lstThanhPhan.FirstOrDefault().duong_dan_form_nhap)" placeholder="(Đường dẫn file)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">
+                                                Bản chính
+                                            </label>
+                                            <div class="col-md-2">
+                                                <input name="ban_goc" type="text" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính" value="@(Model.lstThanhPhan.FirstOrDefault().ban_goc)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                            <label class="col-md-1 control-label">
+                                                Bản sao
+                                            </label>
+                                            <div class="col-md-2">
+                                                <input name="ban_sao" type="text" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao" value="@(Model.lstThanhPhan.FirstOrDefault().ban_sao)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                            <label class="col-md-1 control-label">
+                                                Bản phô tô
+                                            </label>
+                                            <div class="col-md-2">
+                                                <input name="ban_pho_to" type="text" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô" value="@(Model.lstThanhPhan.FirstOrDefault().ban_pho_to)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label class="col-md-2 control-label">Thứ tự</label>
+                                            <div class="col-md-8">
+                                                <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự" value="@(Model.lstThanhPhan.FirstOrDefault().Stt)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                            </div>
+                                        </div>
+                                        <input name="type_view" value="@ViewBag.type_view" hidden />
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary" name="type_view_tt" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                            <button type="submit" class="btn btn-primary" name="type_view_tt" value="@(StatusAction.View.ToString())">Lưu</button>
+                                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@Model.lstThanhPhan.FirstOrDefault().ma_thanh_phan&type=@ViewBag.type_view')">Xóa</button>
+                                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view&active=@(ActionThuTuc.ThanhPhan.ToString())';">Đóng</button>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         @*TAB Văn bản liên quan *@
@@ -682,8 +823,8 @@
                                         {
                                             if (CurrentPageVblq > CurrentPageVblq + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageVblq > 3)
                                             {
@@ -691,11 +832,11 @@
                                                 {
                                                     if (i == CurrentPageVblq)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -705,11 +846,11 @@
                                                 {
                                                     if (i == CurrentPageVblq)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -717,8 +858,8 @@
 
                                             if (CurrentPageVblq < CurrentPageVblq + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -727,11 +868,11 @@
                                             {
                                                 if (i == CurrentPageVblq)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -812,8 +953,8 @@
                                         {
                                             if (CurrentPageNtp > CurrentPageNtp + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageNtp > 3)
                                             {
@@ -821,11 +962,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -835,11 +976,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -847,8 +988,8 @@
 
                                             if (CurrentPageNtp < CurrentPageNtp + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -857,11 +998,11 @@
                                             {
                                                 if (i == CurrentPageNtp)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -943,8 +1084,8 @@
                                         {
                                             if (CurrentPageTpkqxl > CurrentPageTpkqxl + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageTpkqxl > 3)
                                             {
@@ -952,11 +1093,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -966,11 +1107,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -978,8 +1119,8 @@
 
                                             if (CurrentPageTpkqxl < CurrentPageTpkqxl + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -988,11 +1129,11 @@
                                             {
                                                 if (i == CurrentPageTpkqxl)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -1007,12 +1148,13 @@
                     </div>
                 </div>
             </div>
-        </div><!-- End Pills Tabs -->
+        </div>
+
+        <!-- End Pills Tabs -->
 
     </div>
 </div>
 <!-- Basic Modal -->
-
 <div class="modal fade" id="basicModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1027,7 +1169,9 @@
             </div>
         </div>
     </div>
-</div><!-- End Basic Modal-->
+</div>
+
+<!-- End Basic Modal-->
 
 <script>
 

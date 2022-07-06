@@ -57,20 +57,22 @@ namespace HG.Entities.Entities.ThuTuc
         public string ma_thanh_phan { get; set; }
         public string ten_thanh_phan { get; set; }
         public string? mo_ta { get; set; }
-        public bool bat_buoc { get; set; }
+        public int bat_buoc { get; set; }
         public string? file_dinh_kem { get; set; }
-        public bool bieu_mau { get; set; }
+        public int bieu_mau { get; set; }
         public string? ten_form_nhap { get; set; }
         public string? duong_dan_form_nhap { get; set; }
         public int? ban_goc { get; set; }
         public int? ban_sao { get; set; }
         public int? ban_pho_to { get; set; }
         public int? Stt { get; set; }
-        public DateTime? ngay_bat_dau { get; set; }
+        public string ngay_bat_dau { get; set; }
         public string url_file { get; set; }
-        public DateTime? ngay_ket_thuc { get; set; }
+        public string ngay_ket_thuc { get; set; }
         public Guid? CreatedUid { get; set; }
         public string UidName { get; set; }
+        public string type_view { get; set; }
+        public string type_view_tt { get; set; }
     }
 
     public class NhomTP

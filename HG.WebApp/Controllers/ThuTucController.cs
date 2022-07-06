@@ -75,23 +75,23 @@ namespace HG.WebApp.Controllers
             //Thành phần
             ds.PagelistThanhPhan.CurrentPage = currentPage;
             ds.PagelistThanhPhan.TotalPage = (ds.PagelistThanhPhan.TotalRecords / pageSize) + ((ds.PagelistThanhPhan.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistThanhPhan.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
+            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistThanhPhan.RecoredTo = ds.PagelistThanhPhan.TotalPage == currentPage ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
             // Văn bản liên quan
             ds.PagelistVanBanLQ.CurrentPage = currentPage;
             ds.PagelistVanBanLQ.TotalPage = (ds.PagelistVanBanLQ.TotalRecords / pageSize) + ((ds.PagelistVanBanLQ.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistVanBanLQ.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
+            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistVanBanLQ.RecoredTo = ds.PagelistVanBanLQ.TotalPage == currentPage ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
             // Nhóm TP
             ds.PagelistNhomTP.CurrentPage = currentPage;
             ds.PagelistNhomTP.TotalPage = (ds.PagelistNhomTP.TotalRecords / pageSize) + ((ds.PagelistNhomTP.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistNhomTP.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
+            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistNhomTP.RecoredTo = ds.PagelistNhomTP.TotalPage == currentPage ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
             // Nhóm TP
             ds.PagelisthanhPhanKQXL.CurrentPage = currentPage;
             ds.PagelisthanhPhanKQXL.TotalPage = (ds.PagelisthanhPhanKQXL.TotalRecords / pageSize) + ((ds.PagelisthanhPhanKQXL.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelisthanhPhanKQXL.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredTo = ds.PagelisthanhPhanKQXL.TotalPage == currentPage ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
             using (var db = new EAContext())
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
@@ -105,6 +105,7 @@ namespace HG.WebApp.Controllers
         public IActionResult ThemThuTuc(DmThuTuc item)
         {
             item.ma_thu_tuc = String.Concat(HelperString.RemoveSign4VietnameseString(item.ma_thu_tuc).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
+            item.ma_quoc_gia = String.Concat(HelperString.RemoveSign4VietnameseString(item.ma_quoc_gia).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var _pb = _thuTucDao.LuuThuTuc(item);
@@ -121,30 +122,30 @@ namespace HG.WebApp.Controllers
         }
 
 
-        public IActionResult SuaThuTuc(string code, string type, int currentPage = 0, int pageSize = 20)
+        public IActionResult SuaThuTuc(string code, string type, string active = "ThuTuc", int currentPage = 0, int pageSize = 20)
         {
             var thuTuc = new ThuTucModel();
             var ds = _thuTucDao.ThuTuc(code, "", "", "", "", currentPage, pageSize);
             //Thành phần
             ds.PagelistThanhPhan.CurrentPage = currentPage;
             ds.PagelistThanhPhan.TotalPage = (ds.PagelistThanhPhan.TotalRecords / pageSize) + ((ds.PagelistThanhPhan.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistThanhPhan.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
+            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistThanhPhan.RecoredTo = (ds.PagelistThanhPhan.TotalPage == currentPage || currentPage == 0) ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
             // Văn bản liên quan
             ds.PagelistVanBanLQ.CurrentPage = currentPage;
             ds.PagelistVanBanLQ.TotalPage = (ds.PagelistVanBanLQ.TotalRecords / pageSize) + ((ds.PagelistVanBanLQ.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistVanBanLQ.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
+            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistVanBanLQ.RecoredTo = (ds.PagelistVanBanLQ.TotalPage == currentPage || currentPage == 0) ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
             // Nhóm TP
             ds.PagelistNhomTP.CurrentPage = currentPage;
             ds.PagelistNhomTP.TotalPage = (ds.PagelistNhomTP.TotalRecords / pageSize) + ((ds.PagelistNhomTP.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistNhomTP.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
+            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistNhomTP.RecoredTo = (ds.PagelistNhomTP.TotalPage == currentPage || currentPage == 0) ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
             // Nhóm TP
             ds.PagelisthanhPhanKQXL.CurrentPage = currentPage;
             ds.PagelisthanhPhanKQXL.TotalPage = (ds.PagelisthanhPhanKQXL.TotalRecords / pageSize) + ((ds.PagelisthanhPhanKQXL.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelisthanhPhanKQXL.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredTo = (ds.PagelisthanhPhanKQXL.TotalPage == currentPage || currentPage == 0) ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
             using (var db = new EAContext())
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
@@ -153,6 +154,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
             ViewBag.type_view = type;
+            ViewBag.active = active;
             return View("~/Views/ThuTuc/SuaThuTuc.cshtml", ds);
         }
 
@@ -166,6 +168,10 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaThuTuc(string code, int type)
         {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _thuTucDao.XoaThuTuc(code, type, uid);
             if (_pb > 0)
@@ -177,78 +183,30 @@ namespace HG.WebApp.Controllers
         }
 
         #region Thành phần
-        public IActionResult ThemThanhPhan(string code, int currentPage = 0, int pageSize = 20)
+
+        public IActionResult ThemThanhPhan(string code, string type = "", int currentPage = 0, int pageSize = 20)
         {
             var ds = _thuTucDao.ThuTuc(code, "", "", "", "", currentPage, pageSize);
             //Thành phần
             ds.PagelistThanhPhan.CurrentPage = currentPage;
             ds.PagelistThanhPhan.TotalPage = (ds.PagelistThanhPhan.TotalRecords / pageSize) + ((ds.PagelistThanhPhan.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistThanhPhan.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
+            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistThanhPhan.RecoredTo = (ds.PagelistThanhPhan.TotalPage == currentPage || currentPage == 0) ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
             // Văn bản liên quan
             ds.PagelistVanBanLQ.CurrentPage = currentPage;
             ds.PagelistVanBanLQ.TotalPage = (ds.PagelistVanBanLQ.TotalRecords / pageSize) + ((ds.PagelistVanBanLQ.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistVanBanLQ.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
+            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistVanBanLQ.RecoredTo = (ds.PagelistVanBanLQ.TotalPage == currentPage || currentPage == 0) ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
             // Nhóm TP
             ds.PagelistNhomTP.CurrentPage = currentPage;
             ds.PagelistNhomTP.TotalPage = (ds.PagelistNhomTP.TotalRecords / pageSize) + ((ds.PagelistNhomTP.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistNhomTP.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
+            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistNhomTP.RecoredTo = (ds.PagelistNhomTP.TotalPage == currentPage || currentPage == 0) ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
             // Nhóm TP
             ds.PagelisthanhPhanKQXL.CurrentPage = currentPage;
             ds.PagelisthanhPhanKQXL.TotalPage = (ds.PagelisthanhPhanKQXL.TotalRecords / pageSize) + ((ds.PagelisthanhPhanKQXL.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelisthanhPhanKQXL.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
-            using (var db = new EAContext())
-            {
-                ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
-                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
-                ViewBag.LstDonViLienThong = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).ToList();
-                ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
-            }
-            return View("~/Views/ThuTuc/ThanhPhan/ThemThanhPhan.cshtml", ds);
-        }
-
-        [HttpPost]
-        public IActionResult ThemThanhPhan(ThanhPhan item)
-        {
-            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
-            item.UidName = User.Identity.Name;
-            item.file_dinh_kem = item.url_file.Split('\\').LastOrDefault();
-            var _pb = _thuTucDao.LuuThanhPhan(item);
-            if (_pb > 0)
-            {
-                return Json(new { errorCode = 1, msg = "Lỗi hệ thống" });
-            }
-            return Json(new { errorCode = 0, msg = "M" });
-            //return RedirectToAction("SuaThanhPhan", "ThuTuc", new { code = item.ma_thu_tuc, code_tp = item.ma_thanh_phan, type = StatusAction.View.ToString() });
-        }
-
-        public IActionResult SuaThanhPhan(string code, string code_tp, string type, int currentPage = 0, int pageSize = 20)
-        {
-            var thuTuc = new ThuTucModel();
-            var ds = _thuTucDao.ThuTuc(code, code_tp, "", "", "", currentPage, pageSize);
-            //Thành phần
-            ds.PagelistThanhPhan.CurrentPage = currentPage;
-            ds.PagelistThanhPhan.TotalPage = (ds.PagelistThanhPhan.TotalRecords / pageSize) + ((ds.PagelistThanhPhan.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistThanhPhan.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
-            // Văn bản liên quan
-            ds.PagelistVanBanLQ.CurrentPage = currentPage;
-            ds.PagelistVanBanLQ.TotalPage = (ds.PagelistVanBanLQ.TotalRecords / pageSize) + ((ds.PagelistVanBanLQ.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistVanBanLQ.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
-            // Nhóm TP
-            ds.PagelistNhomTP.CurrentPage = currentPage;
-            ds.PagelistNhomTP.TotalPage = (ds.PagelistNhomTP.TotalRecords / pageSize) + ((ds.PagelistNhomTP.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelistNhomTP.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
-            // Nhóm TP
-            ds.PagelisthanhPhanKQXL.CurrentPage = currentPage;
-            ds.PagelisthanhPhanKQXL.TotalPage = (ds.PagelisthanhPhanKQXL.TotalRecords / pageSize) + ((ds.PagelisthanhPhanKQXL.TotalRecords % pageSize) > 0 ? 1 : 0);
-            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
-            ds.PagelisthanhPhanKQXL.RecoredTo = ViewBag.TotalPage == currentPage ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredTo = (ds.PagelisthanhPhanKQXL.TotalPage == currentPage || currentPage == 0) ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
             using (var db = new EAContext())
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
@@ -257,7 +215,92 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
             ViewBag.type_view = type;
+            return View("~/Views/ThuTuc/ThanhPhan/ThemThanhPhan.cshtml", ds);
+        }
+
+        [HttpPost]
+        public IActionResult ThemThanhPhan(ThanhPhan item)
+        {
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            if (item.url_file != null)
+            {
+                item.file_dinh_kem = item.url_file.Split('\\').LastOrDefault();
+            }
+            var _pb = _thuTucDao.LuuThanhPhan(item);
+            if (_pb > 0)
+            {
+                return Json(new { errorCode = 1, msg = "Lỗi hệ thống" });
+            }
+            if (item.type_view_tt == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemThanhPhan", "ThuTuc", new { code = item.ma_thu_tuc, type = item.type_view });
+            }
+            else if (item.type_view_tt == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaThanhPhan", "ThuTuc", new { code = item.ma_thu_tuc, code_tp = item.ma_thanh_phan, type = item.type_view, type_tp = item.type_view_tt });
+            }
+            return RedirectToAction("SuaThuTuc", "ThuTuc", new { code = item.ma_thu_tuc, type = item.type_view, active = ActionThuTuc.ThanhPhan.ToString() });
+        }
+
+        public IActionResult SuaThanhPhan(string code, string code_tp, string type, string type_tp, int currentPage = 0, int pageSize = 20)
+        {
+            var thuTuc = new ThuTucModel();
+            var ds = _thuTucDao.ThuTuc(code, code_tp, "", "", "", currentPage, pageSize);
+            //Thành phần
+            ds.PagelistThanhPhan.CurrentPage = currentPage;
+            ds.PagelistThanhPhan.TotalPage = (ds.PagelistThanhPhan.TotalRecords / pageSize) + ((ds.PagelistThanhPhan.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ds.PagelistThanhPhan.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistThanhPhan.RecoredTo = (ds.PagelistThanhPhan.TotalPage == currentPage || currentPage == 0) ? ds.PagelistThanhPhan.TotalRecords : currentPage * pageSize;
+            // Văn bản liên quan
+            ds.PagelistVanBanLQ.CurrentPage = currentPage;
+            ds.PagelistVanBanLQ.TotalPage = (ds.PagelistVanBanLQ.TotalRecords / pageSize) + ((ds.PagelistVanBanLQ.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ds.PagelistVanBanLQ.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistVanBanLQ.RecoredTo = (ds.PagelistVanBanLQ.TotalPage == currentPage || currentPage == 0) ? ds.PagelistVanBanLQ.TotalRecords : currentPage * pageSize;
+            // Nhóm TP
+            ds.PagelistNhomTP.CurrentPage = currentPage;
+            ds.PagelistNhomTP.TotalPage = (ds.PagelistNhomTP.TotalRecords / pageSize) + ((ds.PagelistNhomTP.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ds.PagelistNhomTP.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelistNhomTP.RecoredTo = (ds.PagelistNhomTP.TotalPage == currentPage || currentPage == 0) ? ds.PagelistNhomTP.TotalRecords : currentPage * pageSize;
+            // Nhóm TP
+            ds.PagelisthanhPhanKQXL.CurrentPage = currentPage;
+            ds.PagelisthanhPhanKQXL.TotalPage = (ds.PagelisthanhPhanKQXL.TotalRecords / pageSize) + ((ds.PagelisthanhPhanKQXL.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ds.PagelisthanhPhanKQXL.RecoredFrom = (currentPage - 1) * pageSize < 1 ? 1 : (currentPage - 1) * pageSize;
+            ds.PagelisthanhPhanKQXL.RecoredTo = (ds.PagelisthanhPhanKQXL.TotalPage == currentPage || currentPage == 0) ? ds.PagelisthanhPhanKQXL.TotalRecords : currentPage * pageSize;
+            using (var db = new EAContext())
+            {
+                ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstDonViLienThong = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
+            }
+            ViewBag.type_view = type;
+            ViewBag.type_view_tp = type_tp;
             return View("~/Views/ThuTuc/ThanhPhan/SuaThanhPhan.cshtml", ds);
+        }
+
+        [HttpPost]
+        public IActionResult XoaThanhPhan(string code, string code_tp, string type)
+        {
+            if (String.IsNullOrEmpty(code_tp))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _thuTucDao.XoaThanhPhan(code_tp, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/SuaThuTuc?code=" + code + "&type=" + type + "&action=" + ActionThuTuc.ThanhPhan.ToString() });
+        }
+
+        public async Task<IActionResult> RenderViewThanhPhan(string code = "")
+        {
+            var ds = _thuTucDao.DanhSachThanhPhan(code);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThanhPhan/ViewThanhPhan.cshtml", ds);
+            return Content(result);
         }
         #endregion
 

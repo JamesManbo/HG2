@@ -66,9 +66,7 @@
             }
         });
 
-        $('.select2').select2({
-            closeOnSelect: false
-        });
+        $('.select2').select2();
 
         $("#nop_online").val($("#nop_online").is(':checked'));
         if ($("#nop_online").is(':checked')) {
@@ -199,7 +197,10 @@
             Arr2.pop(e.params.data.id);
             $("#don_vi_ltph").val(Arr2.join(","));
         });
+
+
     });
+
 </script>
 <div class="card">
     <div class="card-body">
@@ -216,25 +217,25 @@
                 <div class="tab-primary" style="border: 2px solid #0866c6;">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tthc" role="tab" aria-controls="pills-home" aria-selected="true">Thủ tục hành chính</button>
+                            <button class="nav-link @(ViewBag.active.Contains(ActionThuTuc.ThuTuc.ToString())?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tthc" role="tab" aria-controls="pills-home" aria-selected="true">Thủ tục hành chính</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần</button>
+                            <button class="nav-link @(ViewBag.active.Contains(ActionThuTuc.ThanhPhan.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tp" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false">Văn bản liên quan</button>
+                            <button class="nav-link @(ViewBag.active.Contains(ActionThuTuc.VanBanLQ.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-vblq" role="tab" aria-controls="pills-profile" aria-selected="false">Văn bản liên quan</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false">Nhóm thành phần</button>
+                            <button class="nav-link @(ViewBag.active.Contains(ActionThuTuc.NhomTP.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-ntp" role="tab" aria-controls="pills-profile" aria-selected="false">Nhóm thành phần</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần xử lý kết quả</button>
+                            <button class="nav-link @(ViewBag.active.Contains(ActionThuTuc.TPKQXL.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tpxlkq" role="tab" aria-controls="pills-profile" aria-selected="false">Thành phần xử lý kết quả</button>
                         </li>
                     </ul>
 
                     <div class="tab-content" id="myTabContent" style="padding: 15px;">
                         @*TAB Thủ tục hành chính*@
-                        <div class="tab-pane fade show active" id="pills-tthc" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.ThuTuc.ToString())?"show active":"")" id="pills-tthc" role="tabpanel" aria-labelledby="home-tab">
                             <div class="">
                                 <div class="form-horizontal">
                                     <!-- Horizontal Form -->
@@ -461,7 +462,7 @@
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="@Model.thuTuc.tra_kq_ktn" @(Model.thuTuc.thuc_hien_hai_gd==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="@Model.thuTuc.tra_kq_ktn" @(Model.thuTuc.tra_kq_ktn==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tra_kq_ktn">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
@@ -487,7 +488,7 @@
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltxl" class="col-sm-2 control-label">Đơn vị liên thông XL</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -502,7 +503,7 @@
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -549,12 +550,13 @@
                             </div>
                         </div>
                         @*TAB thành phần *@
-                        <div class="tab-pane fade" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.ThanhPhan.ToString())?"show active":"")" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc';" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view';" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                                <input hidden id="lstCode_tp" />
                             </p>
-                            <select name="ctl08$ctl00$ctl02$MaNhomTT" onchange="javascript:setTimeout('__doPostBack(\'ctl08$ctl00$ctl02$MaNhomTT\',\'\')', 0)" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
+                            <select name="" onchange="" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
                                 <option selected="selected" value="0">------------- Chọn nhóm thành phần hồ sơ -------------</option>
                             </select>
                             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
@@ -563,7 +565,7 @@
                                         <thead class="widgettitle">
                                             <tr>
                                                 <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                    <input type="checkbox" name="" id="selectAll" />
+                                                    <input type="checkbox" name="" id="selectAll_tp" />
                                                 </th>
                                                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
                                                 <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
@@ -576,29 +578,30 @@
                                         <tbody>
                                             @if (Model.lstThanhPhan != null)
                                             {
+                                                var stt_tp = 1;
                                                 foreach (var item in Model.lstThanhPhan)
                                                 {
                                                     <tr>
                                                         <td><input type="checkbox" class="ads_Checkbox_tp" value="@item.ma_thanh_phan" /></td>
                                                         <td scope="row">
-                                                            1
+                                                            @stt_tp
                                                             <input type="hidden" value="@item.ma_thanh_phan" />
                                                         </td>
                                                         <td><a href="#">@item.ten_thanh_phan</a></td>
 
                                                         <td>@item.mo_ta</td>
                                                         <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc">
+                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view">
                                                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan">
+                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(ViewBag.type_view)&type_tp=@(StatusAction.Edit.ToString())">
                                                                 <span class="glyphicon glyphicon-edit">Sửa</span>
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a onclick=""
+                                                            <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code=@item.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@ViewBag.type_view')"
                                                        title=""
                                                        data-placement="top"
                                                        data-toggle="tooltip"
@@ -608,6 +611,7 @@
                                                             </a>
                                                         </td>
                                                     </tr>
+                                                    stt_tp++;
                                                 }
 
                                             }
@@ -682,9 +686,14 @@
                                 <!-- End Table with stripped rows -->
 
                             </div>
+                            <p class="stdformbutton" style="margin-bottom: 10px;">
+                                <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view';" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+
+                            </p>
                         </div>
                         @*TAB Văn bản liên quan *@
-                        <div class="tab-pane fade" id="pills-vblq" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.VanBanLQ.ToString())?"show active":"")" id="pills-vblq" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
                                 <input type="submit" name="" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
                                 <input type="submit" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
@@ -816,7 +825,7 @@
                             </div>
                         </div>
                         @*TAB Nhóm thành phần *@
-                        <div class="tab-pane fade" id="pills-ntp" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.NhomTP.ToString())?"show active":"")" id="pills-ntp" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
                                 <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
                                 <input type="submit" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
@@ -946,7 +955,7 @@
                             </div>
                         </div>
                         @*TAB Thành phần kết quả xử lý *@
-                        <div class="tab-pane fade" id="pills-tpxlkq" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.TPKQXL.ToString())?"show active":"")" id="pills-tpxlkq" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
                                 <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
                                 <input type="submit" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
@@ -1109,4 +1118,39 @@
 
     CKEDITOR.replace('ckedit2');
 
+    $(function() {
+        $('#selectAll_tp').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox_tp").prop("checked", true);
+                $(':checkbox:checked').each(function(i) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                });
+            }
+            else {
+                $(".ads_Checkbox_tp").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode_tp").val(val);
+        });
+
+
+        $('.ads_Checkbox_tp').click(function() {
+            var val = [];
+            $(':checkbox:checked').each(function(i) {
+                if ($('#selectAll').is(':checked')) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                } else {
+                    val[i] = $(this).val();
+                }
+
+            });
+            $("#lstCode_tp").val(val);
+        });
+
+    });
 </script>  
