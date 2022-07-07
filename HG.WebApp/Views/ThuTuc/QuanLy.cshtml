@@ -1,11 +1,11 @@
 ﻿@using HG.WebApp
-@using AspNetCore.Unobtrusive.Ajax;
+@*@using AspNetCore.Unobtrusive.Ajax;*@
 @{
     ViewData["Title"] = "Thủ tục hành chính";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var LstPhongBan = ViewBag.LstPhongBan as List<HG.Entities.Dm_Phong_Ban>;
     var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
-    var LstBieuMau =  ViewBag.lstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau.dm_bieu_mau>;
+    var LstBieuMau = ViewBag.lstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau.dm_bieu_mau>;
 }
 @model HG.Entities.Entities.ThuTuc.ThuTucPaging
 <style>
@@ -53,14 +53,14 @@
 </style>
 <script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 
-@if (ViewBag.BieuMau >  0)
+@if (ViewBag.BieuMau > 0)
 {
-     <script>
+    <script>
         $(document).ready(function() {
             $('#pills-home-tab').removeClass('active');
-            $('#pills-home').removeClass('show'); 
-            $('#pills-home').removeClass('active'); 
-            $("#pills-profile-tab").addClass('active'); 
+            $('#pills-home').removeClass('show');
+            $('#pills-home').removeClass('active');
+            $("#pills-profile-tab").addClass('active');
             $("#pills-profile").addClass('show');
             $("#pills-profile").addClass('active');
             $("#Notifyeform").modal("show");
@@ -98,7 +98,8 @@
                     <p class="stdformbutton" style="margin-bottom: 10px;">
                         <input type="submit" name="" value="Thêm" id="" onclick="window.location.href = '/ThuTuc/ThemThuTuc';" class="btn btn-primary" style="width:100px;" />
 
-                        <input type="submit" name="" value="Xóa" onclick="" id="" class="btn btn-primary" style="width:100px;" />
+                        <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                        <input hidden id="lstCode" />
                     </p>
                     <div class="widget">
                         <h4 class="widgettitle">Lọc danh sách theo</h4>
@@ -222,8 +223,8 @@
                                     {
                                         if (CurrentPage > CurrentPage + 2)
                                         {
-                                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if (CurrentPage > 3)
                                         {
@@ -231,11 +232,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -245,11 +246,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
 
@@ -257,8 +258,8 @@
 
                                         if (CurrentPage < CurrentPage + 2)
                                         {
-                                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                         };
                                     }
                                     else
@@ -267,11 +268,11 @@
                                         {
                                             if (i == CurrentPage)
                                             {
-                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                             else
                                             {
-                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                         }
                                     }
@@ -279,6 +280,12 @@
                             </div>
                         </div>
                     </div>
+                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                        <input type="submit" name="" value="Thêm" id="" onclick="window.location.href = '/ThuTuc/ThemThuTuc';" class="btn btn-primary" style="width:100px;" />
+
+                        <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                       
+                    </p>
                 </div>
                 @*TAB Quản lý biểu mẫu*@
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">
@@ -286,8 +293,8 @@
                         <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
                     </p>
                     <div>
-                     @using (Html.BeginForm("ThemBieuMau", "ThuTuc", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = "form_pb" }))
-                            {
+                        @using (Html.BeginForm("ThemBieuMau", "ThuTuc", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = "form_pb" }))
+                        {
                             <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <textarea id="ckedit1" class="form-control input-default" placeholder="Mô tả" name="ckedit1"></textarea>
@@ -305,7 +312,7 @@
                                     <button class="control-label btn btn-primary" style="float:right;height:100%">Đóng</button>
                                 </div>
                             </div>
-                       }
+                        }
                     </div>
                     <table class="table table-bordered responsive">
                         <thead class="widgettitle">
@@ -316,29 +323,30 @@
                                 <th class="head0">Xem biểu mẫu</th>
                             </tr>
                         </thead>
-                       
-                            @if (LstBieuMau != null)
+
+                        @if (LstBieuMau != null)
+                        {
+                            foreach (var item in LstBieuMau)
                             {
-                                foreach (var item in LstBieuMau)
-                                { <tr>
+                                <tr>
                                     <td> <a onclick="SuaBieuMau()" href="#">Sửa</a></td> @*Lấy dữ liệu về khi get list và show*@
                                     <td> <a href="/ThuTuc/ViewBieuMau?Id=@item.Id">@item.ten_bieu_mau</a></td>
                                     <td> <a href="/ThuTuc/ViewBieuMau?Id=@item.Id">@item.url_bieu_mau</a></td>
                                     <td> <a href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.View.ToString()">Xem</a></td>
-                                   </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td> <a href="#">Sửa</a></td>
-                                    <td> <a href="#">fileNam</a></td>
-                                    <td> <a href="#">UrlFile</a></td>
-                                    <td> <a href="#">Xem</a></td>
                                 </tr>
                             }
-                            
-                       
+                        }
+                        else
+                        {
+                            <tr>
+                                <td> <a href="#">Sửa</a></td>
+                                <td> <a href="#">fileNam</a></td>
+                                <td> <a href="#">UrlFile</a></td>
+                                <td> <a href="#">Xem</a></td>
+                            </tr>
+                        }
+
+
                     </table>
 
                 </div>
@@ -355,25 +363,25 @@
         var data = $("#form_pb").serialize();
         var value = CKEDITOR.instances['ckedit1'].getData();
         if ($("#ten_bieu_mau").val() == "" || $("#ten_bieu_mau").val() == undefined || $("#ten_bieu_mau").val() == null) {
-             $("#TitleEform").html("Bạn chưa nhập tên biểu mẫu!");
-             $("#Notifyeform").modal("show");
+            $("#TitleEform").html("Bạn chưa nhập tên biểu mẫu!");
+            $("#Notifyeform").modal("show");
             return;
         };
-         if (value == "" ||value == undefined || value == null) {
-             $("#TitleEform").html("Bạn chưa nhập biểu mẫu!");
-             $("#Notifyeform").modal("show");
+        if (value == "" || value == undefined || value == null) {
+            $("#TitleEform").html("Bạn chưa nhập biểu mẫu!");
+            $("#Notifyeform").modal("show");
             return;
         };
         $.ajax({
             type: "Get",
-            url: "../ThuTuc/ThemBieuMau?ten_bieu_mau="+ $("#ten_bieu_mau").val() + "&ckedit1="+ JSON.stringify(value),
+            url: "../ThuTuc/ThemBieuMau?ten_bieu_mau=" + $("#ten_bieu_mau").val() + "&ckedit1=" + JSON.stringify(value),
             data: "",
             contentType: 'application/json; charset=utf-8',
             //data: data,
             //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(data) {
-             $("#TitleEform").html(data);
-             $("#Notifyeform").modal("show");
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
             }
         });
     }
@@ -447,7 +455,7 @@
         var ma_lv = $("#ma_lv").val();
         $.ajax({
             type: "GET",
-            url: "../ThuTuc/QuanLyPaging?currentPage=" + id + "&pageSize=" + pageSize + "&ma_pb=" + ma_pb + "&ma_lv=" + ma_lv + "&tu_khoa=",
+            url: "../ThuTuc/QuanLyPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&ma_pb=" + ma_pb + "&ma_lv=" + ma_lv + "&tu_khoa=",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -497,14 +505,14 @@
             //  console.log(val);
         });
         $('#ten_bieu_mau').on('keypress', function(e) {
-            if (e.which == 32 || e.which > 200){
+            if (e.which == 32 || e.which > 200) {
                 return false;
             }
         });
     });
     CKEDITOR.replace('ckedit1');
 
-</script>  
+</script>
 <div class="modal fade" id="Notifyeform" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 2px solid #0866c6;">

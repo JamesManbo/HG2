@@ -44,6 +44,7 @@
                 // Looping over all files and add it to FormData object
                 for (var i = 0; i < files.length; i++) {
                     fileData.append(files[i].name, files[i]);
+                    $('#file_dinh_kem').val(files[i].name);
                 }
                 // Adding one more key to FormData object
                 $.ajax({
@@ -54,6 +55,7 @@
                     data: fileData,
                     success: function(result) {
                         console.log(result);
+                          $("#xoatep").attr("style", "display:inline-flex");
                         for (var i = 0; i < result.files.length; i++) {
                             $('#url_file').val("" + result.files[i] + "");
                         }
@@ -254,6 +256,12 @@
             $("#don_vi_ltph").val(Arr2.join(","));
         });
     });
+
+    function CleadFile() {
+        $("#files").val(null);
+        $("#url_file").val(null);
+        $("#file_dinh_kem").val(null);
+    }
 </script>
 <div class="card">
     <div class="card-body">
@@ -649,24 +657,25 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-
                                             <label for="inputPassword" class="col-md-2 control-label">Đính kèm</label>
-                                            <div class="col-md-6">
-                                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                    <input type="hidden">
-                                                    <div class="input-append">
-                                                        <span class="btn btn-default btn-file">
-                                                            <input type="file" id="files" hidden>
-                                                            <input name="file_dinh_kem" id="file_dinh_kem" value="@(Model.lstThanhPhan.FirstOrDefault().file_dinh_kem)">
-                                                            <input name="url_file" id="url_file" hidden value="@(Model.lstThanhPhan.FirstOrDefault().url_file)">
-                                                            <button type="button" onclick="$('#files').click();" class="btn btn-default" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
-                                                        </span>
-                                                        <input type="button" hidden name="" value="Xóa tệp" onclick="" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;">
-                                                    </div>
-                                                </div>
-
+                                            <div class="col-md-4">
+                                                <input type="file" id="files" hidden>
+                                                <input name="file_dinh_kem" id="file_dinh_kem" class="form-control" value="@(Model.lstThanhPhan.FirstOrDefault().file_dinh_kem)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input name="url_file" id="url_file" hidden value="@(Model.lstThanhPhan.FirstOrDefault().url_file)">
                                             </div>
-                                            <div class="col-md-2"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
+                                            <div class="col-md-1">
+                                                <button type="button" onclick="$('#files').click();" class="btn btn-default" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <input type="button" name="" value="Xóa tệp" onclick="CleadFile()" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;display:none">
+                                            </div>
+                                            <div class="col-md-1">
+                                                @if (!String.IsNullOrEmpty(Model.lstThanhPhan.FirstOrDefault().url_file))
+                                                {
+                                                    <input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePost('/ThuTuc/XoaFileThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@Model.lstThanhPhan.FirstOrDefault().ma_thanh_phan&type=@ViewBag.type_view')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">
+                                                }
+                                            </div>
+                                            <div class="col-md-1"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
                                         </div>
 
                                         <div class="row mb-3">

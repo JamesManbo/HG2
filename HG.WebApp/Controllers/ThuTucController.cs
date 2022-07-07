@@ -39,7 +39,7 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult QuanLy(int tabbieumau = 0)
         {
-            
+
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
@@ -50,8 +50,8 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted != 1).ToList();
-                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted !=  1).ToList();
-                ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
+                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+                //ViewBag.lstBieuMau = null;
             }
             ViewBag.BieuMau = tabbieumau;
             return View("~/Views/ThuTuc/QuanLy.cshtml", ds);
@@ -59,7 +59,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> QuanLyPaging(int currentPage = 0, int pageSize = 0, string ma_pb = "", string ma_lv = "", string tu_khoa = "")
         {
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = currentPage, ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
@@ -126,7 +126,7 @@ namespace HG.WebApp.Controllers
         }
 
 
-        public IActionResult SuaThuTuc(string code, string type, string active = "ThuTuc", int currentPage = 0, int pageSize = 20)
+        public IActionResult SuaThuTuc(string code, string type, string active = "", int currentPage = 0, int pageSize = 20)
         {
             var thuTuc = new ThuTucModel();
             var ds = _thuTucDao.ThuTuc(code, "", "", "", "", currentPage, pageSize);
@@ -291,13 +291,31 @@ namespace HG.WebApp.Controllers
                 return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
             }
             var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _thuTucDao.XoaThanhPhan(code_tp, uid);
+            var _pb = _thuTucDao.XoaThanhPhan(code_tp, uid, type);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }           
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/SuaThuTuc?code=" + code + "&type=" + type + "&active=" + ActionThuTuc.ThanhPhan.ToString() });
+        }
+
+        [HttpPost]
+        public IActionResult XoaFileThanhPhan(string code, string code_tp, string type)
+        {
+            if (String.IsNullOrEmpty(code_tp))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _thuTucDao.XoaThanhPhan(code_tp, uid, "file");
             if (_pb > 0)
             {
                 // Xử lý các thông báo lỗi tương ứng
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/SuaThuTuc?code=" + code + "&type=" + type + "&action=" + ActionThuTuc.ThanhPhan.ToString() });
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/SuaThanhPhan?code=" + code + "&code_tp=" + code_tp + "&type=" + type + "&type_tp=" + StatusAction.Edit.ToString() });
+
         }
 
         public async Task<IActionResult> RenderViewThanhPhan(string code = "")
@@ -306,6 +324,8 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThanhPhan/ViewThanhPhan.cshtml", ds);
             return Content(result);
         }
+
+
         #endregion
         [HttpPost]
         public IActionResult ThemBieuMau(string ckedit1, string ten_bieu_mau)
@@ -327,12 +347,12 @@ namespace HG.WebApp.Controllers
                 if (obj > 0)
                 {
                     //return "Có thểm thêm thông báo ở đây !";
-                    return RedirectToAction("QuanLy", new { tabbieumau  = "1"});
+                    return RedirectToAction("QuanLy", new { tabbieumau = "1" });
                 };
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<dm_bieu_mau> _role = eAContext.dm_bieu_mau.Add(item);
                 eAContext.SaveChanges();
                 int id = item.Id;
-                if(id > 0)
+                if (id > 0)
                 {
                     return RedirectToAction("QuanLy", new { tabbieumau = 1 });
                 }
@@ -341,7 +361,7 @@ namespace HG.WebApp.Controllers
                     return RedirectToAction("QuanLy", new { tabbieumau = 1 });
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return RedirectToAction("ThemBieuMau", new { tabbieumau = 1 });
             }
@@ -349,7 +369,7 @@ namespace HG.WebApp.Controllers
         public IActionResult ViewBieuMau(int id, string type = "")
         {
             EAContext db = new EAContext();
-            return View(db.dm_bieu_mau.Where(n=>n.Id == id).FirstOrDefault());
+            return View(db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault());
         }
     }
 }

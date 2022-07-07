@@ -210,10 +210,11 @@ namespace HG.Data.Business.ThuTuc
             return rs;
         }
 
-        public int XoaThanhPhan(string ma_thanh_phan, Guid uid)
+        public int XoaThanhPhan(string ma_thanh_phan, Guid uid, string file)
         {
             DbProvider.SetCommandText2("dm_xoa_thanh_phan", CommandType.StoredProcedure);
-            DbProvider.AddParameter("ma_thu_tuc", ma_thanh_phan, SqlDbType.VarChar);
+            DbProvider.AddParameter("ma_thanh_phan", ma_thanh_phan, SqlDbType.VarChar);
+            DbProvider.AddParameter("file", file, SqlDbType.VarChar);
             DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
             DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
             // Lấy về danh sách các trường học
