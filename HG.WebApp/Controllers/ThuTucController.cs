@@ -1,5 +1,6 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Data.Business.ThuTuc;
+using HG.Entities.DanhMuc.dm_bieu_mau;
 using HG.Entities.Entities.Model;
 using HG.Entities.Entities.ThuTuc;
 using HG.WebApp.Data;
@@ -36,8 +37,9 @@ namespace HG.WebApp.Controllers
             _thuTucDao = new ThuTucDao(DbProvider);
             _luongDao = new LuongXuLyDao(DbProvider);
         }
-        public IActionResult QuanLy()
+        public IActionResult QuanLy(int tabbieumau = 0)
         {
+            
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
@@ -47,9 +49,11 @@ namespace HG.WebApp.Controllers
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             using (var db = new EAContext())
             {
-                ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
-                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted != 1).ToList();
+                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted !=  1).ToList();
+                ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
             }
+            ViewBag.BieuMau = tabbieumau;
             return View("~/Views/ThuTuc/QuanLy.cshtml", ds);
         }
 
@@ -303,11 +307,49 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
         #endregion
-
         [HttpPost]
-        public IActionResult ThemBieuMau(string bieu_mau, string ten_file)
+        public IActionResult ThemBieuMau(string ckedit1, string ten_bieu_mau)
         {
-            return null;
+            try
+            {
+                EAContext eAContext = new EAContext();
+                dm_bieu_mau item = new dm_bieu_mau();
+                item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                ViewBag.UidName = User.Identity.Name;
+                item.Deleted = 0;
+                item.CreatedDateUtc = DateTime.Now;
+                item.ten_bieu_mau = ten_bieu_mau;
+                item.mo_ta = ckedit1;
+                item.url_bieu_mau = "ThuTuc/ViewBieuMau?Id=" + ten_bieu_mau;
+                item.ma_thu_tuc = "";
+
+                var obj = eAContext.dm_bieu_mau.Where(n => n.ten_bieu_mau == item.ten_bieu_mau).Count();
+                if (obj > 0)
+                {
+                    //return "Có thểm thêm thông báo ở đây !";
+                    return RedirectToAction("QuanLy", new { tabbieumau  = "1"});
+                };
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<dm_bieu_mau> _role = eAContext.dm_bieu_mau.Add(item);
+                eAContext.SaveChanges();
+                int id = item.Id;
+                if(id > 0)
+                {
+                    return RedirectToAction("QuanLy", new { tabbieumau = 1 });
+                }
+                else
+                {
+                    return RedirectToAction("QuanLy", new { tabbieumau = 1 });
+                }
+            }
+            catch(Exception e)
+            {
+                return RedirectToAction("ThemBieuMau", new { tabbieumau = 1 });
+            }
+        }
+        public IActionResult ViewBieuMau(int id, string type = "")
+        {
+            EAContext db = new EAContext();
+            return View(db.dm_bieu_mau.Where(n=>n.Id == id).FirstOrDefault());
         }
     }
 }
