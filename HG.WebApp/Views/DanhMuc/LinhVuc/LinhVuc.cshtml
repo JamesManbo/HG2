@@ -176,7 +176,7 @@
         var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
-            url: "../DanhMuc/LinhVucPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
+            url: "../DanhMuc/LinhVucPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=" + $("#tu_khoa").val(),
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -189,7 +189,7 @@
         $("#lstPageSize").val(data.value);
         $.ajax({
             type: "GET",
-            url: "../DanhMuc/LinhVucPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
+            url: "../DanhMuc/LinhVucPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#tu_khoa").val(),
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {

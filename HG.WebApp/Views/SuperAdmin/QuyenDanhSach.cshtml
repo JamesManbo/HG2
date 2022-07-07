@@ -34,7 +34,7 @@
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
-                        <select class="dataTable-selector">
+                        <select class="dataTable-selector" onchange="ChangePageSize(this)">
                             <option value="5">5</option>
                             <option value="10" selected="">10</option>
                             <option value="15">15</option>
@@ -194,4 +194,15 @@
         });
 
     });
+   function ChangePageSize(data) {
+        //$.ajax({
+        //    type: "GET",
+        //    url: "/SuperAdmin/NhomPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#txtSearch").val(),
+        //    data: "",
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function(data) {
+        //        $("#dataTable").html(data);
+        //    }
+        //});
+    }
 </script>

@@ -44,9 +44,8 @@ namespace HG.WebApp.Controllers
 
         #region Nhom
         [HttpGet]
-        public IActionResult ViewNhom(string txtSearch = "")
+        public IActionResult ViewNhom(int currentPage = 1,int pageSize = 10, string txtSearch = "")
         {
-            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.txtSearch = txtSearch;
             if (string.IsNullOrEmpty(txtSearch))
             {
@@ -202,7 +201,7 @@ namespace HG.WebApp.Controllers
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/SuperAdmin/ViewNhom" });
         }
 
-        public async Task<IActionResult> NhomPaging(int currentPage = 0, string tu_khoa = "")
+        public async Task<IActionResult> NhomPaging(int currentPage = 1, int pageSize = 10, string tu_khoa = "")
         {
             NhomSearchItem nhomSearchItem = new NhomSearchItem() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = 10 };
             var ds = _nhomDao.LayDsNhomPhanTrang(nhomSearchItem);
