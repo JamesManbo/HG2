@@ -45,6 +45,7 @@ namespace HG.Entities.Entities.ThuTuc
         public Guid? CreatedUid { get; set; }
         public bool luong { get; set; }
         public string UidName { get; set; }
+        public int count_tp { get; set; }
     }
     public class MapLuong
     {

@@ -587,11 +587,11 @@
                                                             @stt_tp
                                                             <input type="hidden" value="@item.ma_thanh_phan" />
                                                         </td>
-                                                        <td><a href="#">@item.ten_thanh_phan</a></td>
+                                                        <td><a href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(ViewBag.type_view)&type_tp=@(StatusAction.View.ToString())">@item.ten_thanh_phan</a></td>
 
                                                         <td>@item.mo_ta</td>
                                                         <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view">
+                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(ViewBag.type_view)&type_tp=@(StatusAction.View.ToString())">
                                                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
                                                             </a>
                                                         </td>

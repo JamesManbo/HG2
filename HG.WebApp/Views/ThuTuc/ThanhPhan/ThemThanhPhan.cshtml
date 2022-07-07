@@ -606,7 +606,7 @@
                                                 <span style="color:Red;">(*)</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input name="ma_thanh_phan" type="text" value="@(Model.thuTuc.ma_thu_tuc+"-"+(Model.lstThanhPhan.Count()+1).ToString())" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần">
+                                                <input name="ma_thanh_phan" type="text" value="@(Model.thuTuc.ma_thu_tuc+"-"+(Model.thuTuc.count_tp+1).ToString())" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần">
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">Chọn</button>
@@ -825,8 +825,8 @@
                                         {
                                             if (CurrentPageVblq > CurrentPageVblq + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageVblq > 3)
                                             {
@@ -834,11 +834,11 @@
                                                 {
                                                     if (i == CurrentPageVblq)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -848,11 +848,11 @@
                                                 {
                                                     if (i == CurrentPageVblq)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -860,8 +860,8 @@
 
                                             if (CurrentPageVblq < CurrentPageVblq + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -870,11 +870,11 @@
                                             {
                                                 if (i == CurrentPageVblq)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -955,8 +955,8 @@
                                         {
                                             if (CurrentPageNtp > CurrentPageNtp + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageNtp > 3)
                                             {
@@ -964,11 +964,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -978,11 +978,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -990,8 +990,8 @@
 
                                             if (CurrentPageNtp < CurrentPageNtp + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -1000,11 +1000,11 @@
                                             {
                                                 if (i == CurrentPageNtp)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -1086,8 +1086,8 @@
                                         {
                                             if (CurrentPageTpkqxl > CurrentPageTpkqxl + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageTpkqxl > 3)
                                             {
@@ -1095,11 +1095,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -1109,11 +1109,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -1121,8 +1121,8 @@
 
                                             if (CurrentPageTpkqxl < CurrentPageTpkqxl + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -1131,11 +1131,11 @@
                                             {
                                                 if (i == CurrentPageTpkqxl)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
