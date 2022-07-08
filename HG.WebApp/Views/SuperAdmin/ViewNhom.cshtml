@@ -37,10 +37,10 @@
                         Hiển thị
                         <select class="dataTable-selector" onchange="ChangePageSize(this)">
                             <option value="5">5</option>
-                            <option value="10" selected="">10</option>
+                            <option value="10">10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
-                            <option value="25">25</option>
+                            <option value="25" selected>25</option>
                         </select> bản ghi
                     </label>
                 </div>
@@ -109,39 +109,39 @@
                                 if (TotalPage> 5)
                                 {
 					                    if(CurrentPage > CurrentPage + 2 ){
-						                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
-                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                      <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
+                                                      <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if(CurrentPage > 3)
                                         {
                                              for(int i = CurrentPage -2; i< CurrentPage+2; i++){
 						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                       <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                       <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
                                         }else{
                                                     for(int i = 1 ; i <= 5; i++){
 						                                if(i == CurrentPage){
-							                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                       <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-							                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                       <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
 
                                         }
                            
 					                    if(CurrentPage < CurrentPage + 2 ){
-					                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
-					                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
 					                    };
                                 }else{
 					                    for(int i = 1; i <= TotalPage; i++){
 						                    if(i == CurrentPage){
-							                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                    }else{
-							                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
+                                                          <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
 						                    } 
 					                    }
 			                    }
@@ -207,15 +207,18 @@
 
     });
        function ChangePageSize(data) {
-        $("#lstPageSize").val(data.value);
-        $.ajax({
-            type: "GET",
-            url: "/SuperAdmin/NhomPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#txtSearch").val(),
-            data: "",
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                $("#dataTable").html(data);
-            }
-        });
+           var tu_khoa = $("#txtSearch").val();
+           if (tu_khoa == undefined) {
+               tu_khoa = "";
+           }
+            $.ajax({
+                type: "GET",
+                url: "/SuperAdmin/NhomPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + tu_khoa,
+                data: "",
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    $("#dataTable").html(data);
+                }
+            });
     }
 </script>

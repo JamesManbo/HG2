@@ -198,6 +198,46 @@ namespace HG.WebApp.Helper
                 return strPageHTML;
             return string.Empty;
         }
-    }
+        public static List<ListPageRecords> ListPageRecords()
+        {
+            List<ListPageRecords> items = new List<ListPageRecords>
+            {
+               new ListPageRecords { key=5, page = 5 },
+               new ListPageRecords { key=10, page = 10 },
+               new ListPageRecords { key=15, page = 15 },
+               new ListPageRecords { key=20, page = 20 },
+               new ListPageRecords { key=25, page = 25 }
+            };
+            return items;
+        }
 
+        public static List<Tempalte> ListTemplate()
+        {
+            List<Tempalte> items = new List<Tempalte>
+            {
+               new Tempalte { TempFormat="{{Text#CoQuan#Tên đơn vị đề nghị}}", TempElement = "<input id=\"txtcoquan\" name=\"txtcoquan\"  />" },
+               new Tempalte { TempFormat="{{Text#DiaBan#Tên địa bàn}}", TempElement = "<input id=\"txtdiaban\" name=\"txtdiaban\"  />" },
+               new Tempalte { TempFormat="{{TextDateTime#Date#Ngày...Tháng..Năm...}}",TempElement =  "<input id=\"txtdiaban\" name=\"txtdiaban\"  />" },
+               new Tempalte { TempFormat="{{Text#So#Số}}", TempElement =  "<input id=\"txtSo\" name=\"txtSo\"  placeholder=\"Nhập số\" />" },
+               new Tempalte { TempFormat="{{Text#SoTB#Số}}", TempElement =  "<input id=\"txtSoTB\" name=\"txtSoTB\" placeholder=\"Nhập số\" />" },
+               new Tempalte { TempFormat="{{Text#DiaBan#T&ecirc;n địa b&agrave;n}}", TempElement =  "<input id=\"txtDiaBan\" name=\"txtDiaBan\" placeholder=\"Nhập địa bàn\" />" },
+               new Tempalte { TempFormat="{{TextDateTime#Date#Ng&agrave;y...Th&aacute;ng..Năm...}}", TempElement =  "<input id=\"TextDateTime\" name=\"TextDateTime\" placeholder=\"Nhập ngày tháng năm\"  />" },
+               new Tempalte { TempFormat="{{Text#Ten#Họ t&ecirc;n}}", TempElement =  "<input id=\"txtCQCQ\" name=\"txtCQCQ\"  />" },
+               new Tempalte { TempFormat="{{Text#HoTenN#Họ t&ecirc;n người thay}}", TempElement =  "<input id=\"txtCQCQ\" name=\"txtCQCQ\"  />" },
+               new Tempalte { TempFormat="{{Text#TenCQTC#Tên cơ quan chủ quan}}", TempElement =  "<input id=\"txtCQCQ\" name=\"txtCQCQ\"  />" },
+
+            };
+            return items;
+        }
+    }
+    public class ListPageRecords
+    {
+        public int key { get; set; }
+        public int page { get; set; }
+    }
+    public class Tempalte
+    {
+        public string TempFormat { get; set; }
+        public string TempElement { get; set; }
+    }
 }

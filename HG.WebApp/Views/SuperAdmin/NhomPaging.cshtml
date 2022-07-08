@@ -8,12 +8,19 @@
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
-                        <select class="dataTable-selector">
-                            <option value="5">5</option>
-                            <option value="10" selected="">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
+                        <select class="dataTable-selector" onchange="ChangePageSize(this)">
+                            @foreach (var item in HG.WebApp.Helper.HelperString.ListPageRecords())
+                            {
+                                if(item.key == ViewBag.PageSize)
+                                {
+                                    <option value="@item.key" selected>@item.page</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.key">@item.page</option>
+                                }
+                    
+                            }
                         </select> bản ghi
                     </label>
                 </div>
@@ -74,10 +81,10 @@
                         </tbody>
                     </table>
                 </div> 
-                <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 25 của 99 bản ghi</div>
+                <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến @ViewBag.PageSize của @ViewBag.TotalRecords bản ghi</div>
                 <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
-                                var TotalPage = (int)(Model.Pagelist.TotalRecords/10) + 1;
+                                var TotalPage = (int)(Model.Pagelist.TotalRecords/ViewBag.PageSize) + 1;
                                 var CurrentPage = (int)Model.Pagelist.CurrentPage;
                                 if (TotalPage> 5)
                                 {
@@ -141,7 +148,20 @@
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/SuperAdmin/XoaNhom?code=' + listData)
     }
-
+    function ChangePageSize(data) {
+        var tu_khoa = $("#txtSearch").val();
+           if (tu_khoa == undefined) {
+               tu_khoa = "";
+           }
+        $.ajax({
+            type: "GET",
+            url: "/SuperAdmin/NhomPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#txtSearch").val(),
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#dataTable").html(data);
+            }
+        });
     $(function() {
         $('#selectAll').click(function() {
             var val = [];

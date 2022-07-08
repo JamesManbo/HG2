@@ -9,6 +9,7 @@ using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HG.WebApp.Controllers
 {
@@ -51,7 +52,7 @@ namespace HG.WebApp.Controllers
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted != 1).ToList();
                 ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-                //ViewBag.lstBieuMau = null;
+                ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n=>n.Deleted != 1).ToList();
             }
             ViewBag.BieuMau = tabbieumau;
             return View("~/Views/ThuTuc/QuanLy.cshtml", ds);
@@ -342,10 +343,15 @@ namespace HG.WebApp.Controllers
                 item.mo_ta = ckedit1;
                 item.url_bieu_mau = "ThuTuc/ViewBieuMau?Id=" + ten_bieu_mau;
                 item.ma_thu_tuc = "";
-
-                var obj = eAContext.dm_bieu_mau.Where(n => n.ten_bieu_mau == item.ten_bieu_mau).Count();
-                if (obj > 0)
+                var obj = eAContext.dm_bieu_mau.Where(n => n.ten_bieu_mau == item.ten_bieu_mau).FirstOrDefault();
+                if (obj != null)
                 {
+                    //is update
+                    obj.UpdatedDateUtc = DateTime.Now;
+                    obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                    obj.mo_ta = item.mo_ta;
+                    eAContext.Entry(obj).State = EntityState.Modified;
+                    eAContext.SaveChanges();
                     //return "Có thểm thêm thông báo ở đây !";
                     return RedirectToAction("QuanLy", new { tabbieumau = "1" });
                 };
@@ -368,8 +374,57 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewBieuMau(int id, string type = "")
         {
+            if(type == StatusAction.View.ToString())
+            {
+                EAContext db = new EAContext();
+                ViewBag.Template = db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault().mo_ta;
+                return View(db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault());
+            }
+            else
+            {
+                EAContext db = new EAContext();
+                var obj = db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault();
+               
+                if(obj != null)
+                {
+                    var abc = obj.mo_ta;
+                    foreach (var item in HG.WebApp.Helper.HelperString.ListTemplate())
+                    {
+                        if (abc.Contains(item.TempFormat))
+                        {
+                            abc = abc.Replace(item.TempFormat, item.TempElement);
+                        }
+                    }
+                    ViewBag.Template = abc;
+                }
+                return View(obj);
+            }
+          
+        }
+        public string XoaBieuMau(int id)
+        {
             EAContext db = new EAContext();
-            return View(db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault());
+            var obj = db.dm_bieu_mau.Find(id);
+            if (obj != null)
+            {
+                db.dm_bieu_mau.Attach(obj);
+                db.dm_bieu_mau.Remove(obj);
+                db.SaveChanges();
+                return "Xóa biểu mẫu thành công !!!";
+            }
+            return "Xóa biểu mẫu không thành công !!!";
+        }
+        public async Task<IActionResult> SuaBieuMau(int id = 0)
+        {
+            EAContext db = new EAContext();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/SuaBieuMau.cshtml", db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault());
+            return Content(result);
+        }
+        public async Task<IActionResult> ThemVBLQ()
+        {
+            EAContext db = new EAContext();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml");
+            return Content(result);
         }
     }
 }

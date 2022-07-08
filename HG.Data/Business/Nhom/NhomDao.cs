@@ -25,10 +25,19 @@ namespace HG.Data.Business.Nhom
             {
                 Asp_nhom_paging asp_Nhom_Paging = new Asp_nhom_paging();
                 asp_Nhom_Paging.Pagelist = new Pagelist();
+                var abc = 0;
+                if (item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
+                else if (item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
                 DbProvider.SetCommandText2("nhom$danhsanh$phantrang", CommandType.StoredProcedure);
 
                 // Input params
-                DbProvider.AddParameter("StartingRow", item.PageIndex, SqlDbType.Int);
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
                 DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
                 DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
                 // Output params

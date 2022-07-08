@@ -44,7 +44,7 @@ namespace HG.WebApp.Controllers
 
         #region Nhom
         [HttpGet]
-        public IActionResult ViewNhom(int currentPage = 1,int pageSize = 10, string txtSearch = "")
+        public IActionResult ViewNhom(int currentPage = 1,int pageSize = 25, string txtSearch = "")
         {
             ViewBag.txtSearch = txtSearch;
             if (string.IsNullOrEmpty(txtSearch))
@@ -203,9 +203,12 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> NhomPaging(int currentPage = 1, int pageSize = 10, string tu_khoa = "")
         {
-            NhomSearchItem nhomSearchItem = new NhomSearchItem() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = 10 };
+            NhomSearchItem nhomSearchItem = new NhomSearchItem() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _nhomDao.LayDsNhomPhanTrang(nhomSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
+            ViewBag.TotalRecords = ds.asp_Nhoms.Count();
+            ViewBag.PageSize = pageSize;
+            ViewBag.TuKhoa = tu_khoa;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/nhomPaging.cshtml", ds);
             return Content(result);
         }
