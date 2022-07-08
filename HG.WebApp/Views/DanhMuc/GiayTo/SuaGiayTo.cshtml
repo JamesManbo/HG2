@@ -6,7 +6,31 @@
 @model HG.Entities.Dm_Giay_To_Hop_Le
 
 
-<div></div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
@@ -14,11 +38,7 @@
             <h5>Thông tin</h5>
             <h1>Giấy tờ hợp lệ</h1>
         </div>
-    </div>
-    @if (ViewBag.error > 0)
-    {
-        <div>@ViewBag.msg</div>
-    }
+    </div> 
     <div class="maincontent">
         <div class="maincontentinner">
             <h4 class="widgettitle">Cập nhật thông tin giấy tờ hợp lệ</h4>
@@ -30,7 +50,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã giấy tờ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input class="form-control input-default" placeholder="Mã giấy tờ" name="ma_giay_to" maxlength="25" value="@Model.ma_giay_to" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="text">
+                                <input class="form-control input-default" onfocusout="CheckMa(this)" placeholder="Mã giấy tờ" name="ma_giay_to" maxlength="25" value="@Model.ma_giay_to" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") type="text">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -151,7 +171,20 @@
             }
         });
     });
-
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaGt",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result.error == 0) {
+                    window.location.href = result.href;
+                }
+            }
+        });
+    };
 </script>
 
 

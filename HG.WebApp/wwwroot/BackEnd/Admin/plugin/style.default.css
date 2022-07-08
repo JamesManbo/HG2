@@ -624,3 +624,27 @@ element.style {
     top: 33%;
     right: 20px;
 }
+.btn-search {
+    border: 0;
+    padding: 0;
+    margin-left: -30px;
+    background: none;
+}
+
+.search-form input {
+    width: 240px;
+    padding: 10px;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    height: auto;
+}
+
+.search-form {
+    position: absolute;
+    top: 33%;
+    right: 20px;
+}
+
+.dataTables_paginate .active {
+    background: #fff;
+}

@@ -6,7 +6,6 @@
 }
 @model HG.Entities.Dm_Phong_Ban
 
-
 <div></div>
 <div class="col-lg-12">
     <div class="pageheader">
@@ -16,9 +15,30 @@
             <h1>Phòng ban</h1>
         </div>
     </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border: 2px solid #0866c6;">
+                <div class="modal-header" style="background-color: #0866c6;">
+                    <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+                </div>
+                <div class="modal-body">
+                    @ViewBag.msg
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (ViewBag.error > 0)
     {
-        <div>@ViewBag.msg</div>
+        <script>
+            $(document).ready(function() {
+                $("#exampleModal").modal("show");
+            });
+        </script>
     }
     <div class="maincontent">
         <div class="maincontentinner">
@@ -127,7 +147,7 @@
                                     }
                                 </select>
                             </div>
-                             <div class="col-sm-1">
+                            <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModalUser">Chọn</button>
                             </div>
                         </div>
@@ -223,10 +243,14 @@
                         <div class="form-group">
                             <span id="singleselect" class="">
                                 <select id="lstuser" style="width: 100%;" class="form-control" name="select3" size="15">
-                                    @foreach (var item in lst_nguoi_dung)
+                                    @if (lst_nguoi_dung != null)
                                     {
-                                        <option value="@item.id">@item.ten_nguoi_dung</option>
+                                        foreach (var item in lst_nguoi_dung)
+                                        {
+                                            <option value="@item.id">@item.ten_nguoi_dung</option>
+                                        }
                                     }
+
                                 </select>
                             </span>
 
@@ -268,8 +292,8 @@
             contentType: 'application/x-www-form-urlencoded',
             data: dataPost,
             success: function(result) {
-                if (result == 0) {
-                    window.location.href = '/Danhmuc/ThemPhongBan?code=' + data.value;
+                if (result.error == 0) {
+                    window.location.href = result.href;
                 }
             }
         });

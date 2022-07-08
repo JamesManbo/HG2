@@ -5,7 +5,7 @@
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
 }
 @model List<HG.Entities.Dm_Phong_Ban>
-<style>
+@*<style>
     .btn-search{
          border: 0;
     padding: 0;
@@ -24,7 +24,7 @@
     top: 33%;
     right: 20px;
     }
-</style>
+</style>*@
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="search-form d-flex align-items-center">
@@ -43,13 +43,11 @@
             <!-- Table with stripped rows -->
             <p class="stdformbutton" style="margin-bottom: 10px;">
                 <input type="button" value="Thêm" onclick="window.location.href = '/Danhmuc/ThemPhongBan';" class="btn btn-primary" style="width:100px;" />
-
                 <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
                 <input hidden id="lstCode" />
             </p>
 
             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-
                 <div class="dataTables_length">
                     <label>
                         Hiển thị

@@ -65,10 +65,10 @@ namespace HG.WebApp.Controllers
             var result = "";
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 if (!String.IsNullOrEmpty(tu_khoa))
                 {
-                    ds = ds.Where(n => n.ma_phong_ban.Contains(tu_khoa) || n.ten_phong_ban.Contains(tu_khoa)).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                    ds = ds.Where(n => n.ma_phong_ban.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_phong_ban.ToUpper().Contains(tu_khoa.ToUpper())).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
@@ -83,14 +83,18 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
         [HttpPost]
-        public int CheckMaPb(string code)
+        public JsonResult CheckMaPb(string code)
         {
             var lstpb = new List<Dm_Phong_Ban>();
             using (var db = new EAContext())
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0 && n.ma_phong_ban.ToUpper() == code.ToUpper()).ToList();
             }
-            return lstpb.Count();
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemPhongBan?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
         }
 
         public IActionResult ThemPhongBan(string code = "")
@@ -100,7 +104,7 @@ namespace HG.WebApp.Controllers
             var lstpb = new List<Dm_Phong_Ban>();
             using (var db = new EAContext())
             {
-                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_phong_ban = lstpb;
@@ -111,7 +115,7 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemPhongBan(Dm_Phong_Ban pb)
         {
-            pb.ma_phong_ban = String.Concat(HelperString.RemoveSign4VietnameseString(pb.ma_phong_ban).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
+            pb.ma_phong_ban = HelperString.CreateCode(pb.ma_phong_ban);
             pb.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             pb.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuPhongBan(pb);
@@ -126,7 +130,7 @@ namespace HG.WebApp.Controllers
                 var lstpb = new List<Dm_Phong_Ban>();
                 using (var db = new EAContext())
                 {
-                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 }
                 ViewBag.lst_nguoi_dung = user;
                 ViewBag.lst_phong_ban = lstpb;
@@ -149,7 +153,7 @@ namespace HG.WebApp.Controllers
             var lstpb = new List<Dm_Phong_Ban>();
             using (var db = new EAContext())
             {
-                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             var pb = lstpb.Where(n => n.ma_phong_ban == code).FirstOrDefault();
             ViewBag.lst_phong_ban = lstpb;
@@ -172,7 +176,7 @@ namespace HG.WebApp.Controllers
                 var lstpb = new List<Dm_Phong_Ban>();
                 using (var db = new EAContext())
                 {
-                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 }
                 ViewBag.lst_phong_ban = lstpb;
                 ViewBag.lst_nguoi_dung = user;
@@ -210,7 +214,7 @@ namespace HG.WebApp.Controllers
             var lstpb = new List<Dm_Phong_Ban>();
             using (var db = new EAContext())
             {
-                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/Phongban/ViewPhongBan.cshtml", lstpb);
             return Content(result);
@@ -223,6 +227,8 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/ViewNguoiDung.cshtml", ds_nguoi_dung);
             return Content(result);
         }
+
+
         #endregion
 
         #region Lĩnh vực
@@ -234,7 +240,7 @@ namespace HG.WebApp.Controllers
             var linhvuc = new List<Dm_Linh_Vuc>();
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 linhvuc = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
             }
@@ -253,7 +259,11 @@ namespace HG.WebApp.Controllers
             var result = "";
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ma_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
                 ViewBag.TotalRecored = totalRecored;
@@ -266,14 +276,16 @@ namespace HG.WebApp.Controllers
             }
             return Content(result);
         }
-        public IActionResult ThemLinhVuc()
+        public IActionResult ThemLinhVuc(string code = "")
         {
+            ViewBag.code = code;
             return View("~/Views/DanhMuc/LinhVuc/ThemLinhVuc.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemLinhVuc(Dm_Linh_Vuc item)
         {
+            item.ma_linh_vuc = HelperString.CreateCode(item.ma_linh_vuc);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuLinhVuc(item);
@@ -334,6 +346,10 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaLinhVuc(string code)
         {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaLinhVuc(code, uid);
             if (_pb > 0)
@@ -349,11 +365,26 @@ namespace HG.WebApp.Controllers
             var linhvuc = new List<Dm_Linh_Vuc>();
             using (var db = new EAContext())
             {
-                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/LinhVuc/ViewLinhVuc.cshtml", linhvuc);
             return Content(result);
+        }
+
+        [HttpPost]
+        public JsonResult CheckMaLv(string code)
+        {
+            var lstpb = new List<Dm_Linh_Vuc>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc.ToUpper() == code.ToUpper()).ToList();
+            }
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemLinhVuc?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
         }
 
         #endregion
@@ -367,7 +398,7 @@ namespace HG.WebApp.Controllers
             var chucvu = new List<Dm_Chuc_Vu>();
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 chucvu = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
             }
@@ -386,7 +417,11 @@ namespace HG.WebApp.Controllers
             var result = "";
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ma_chuc_vu.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_chuc_vu.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
                 ViewBag.TotalRecored = totalRecored;
@@ -400,14 +435,16 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
 
-        public IActionResult ThemChucVu()
+        public IActionResult ThemChucVu(string code = "")
         {
+            ViewBag.code = code;
             return View("~/Views/DanhMuc/ChucVu/ThemChucVu.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemChucVu(Dm_Chuc_Vu item)
         {
+            item.ma_chuc_vu = HelperString.CreateCode(item.ma_chuc_vu);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuChucVu(item);
@@ -467,6 +504,10 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaChucVu(string code)
         {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaChucVu(code, uid);
             if (_pb > 0)
@@ -482,13 +523,27 @@ namespace HG.WebApp.Controllers
             var chucvu = new List<Dm_Chuc_Vu>();
             using (var db = new EAContext())
             {
-                chucvu = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
+                chucvu = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             // var chucvu = eAContext.Dm_Chuc_Vu.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/ChucVu/ViewChucVu.cshtml", chucvu);
             return Content(result);
         }
 
+        [HttpPost]
+        public JsonResult CheckMaCv(string code)
+        {
+            var lstpb = new List<Dm_Chuc_Vu>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Chuc_Vu.Where(n => n.Deleted == 0 && n.ma_chuc_vu.ToUpper() == code.ToUpper()).ToList();
+            }
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemChucVu?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
+        }
         #endregion
 
         #region Giấy tờ hợp lệ
@@ -500,7 +555,7 @@ namespace HG.WebApp.Controllers
             var giayto = new List<Dm_Giay_To_Hop_Le>();
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 giayto = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
             }
@@ -520,7 +575,11 @@ namespace HG.WebApp.Controllers
             var result = "";
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ma_giay_to.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_giay_to.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
                 ViewBag.TotalRecored = totalRecored;
@@ -534,14 +593,16 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
 
-        public IActionResult ThemGiayTo()
+        public IActionResult ThemGiayTo(string code = "")
         {
+            ViewBag.code = code;
             return View("~/Views/DanhMuc/GiayTo/ThemGiayTo.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemGiayTo(Dm_Giay_To_Hop_Le item)
         {
+            item.ma_giay_to = HelperString.CreateCode(item.ma_giay_to);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var response = _danhmucDao.LuuGiayTo(item);
@@ -602,6 +663,10 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaGiayTo(string code)
         {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaGiayTo(code, uid);
             if (_pb > 0)
@@ -617,13 +682,27 @@ namespace HG.WebApp.Controllers
             var giayto = new List<Dm_Giay_To_Hop_Le>();
             using (var db = new EAContext())
             {
-                giayto = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+                giayto = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             //var giayto = eAContext.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/GiayTo/ViewGiayTo.cshtml", giayto);
             return Content(result);
         }
 
+        [HttpPost]
+        public JsonResult CheckMaGt(string code)
+        {
+            var lstpb = new List<Dm_Giay_To_Hop_Le>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0 && n.ma_giay_to.ToUpper() == code.ToUpper()).ToList();
+            }
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemGiayTo?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
+        }
         #endregion
 
         #region Sổ hồ sơ
@@ -635,7 +714,7 @@ namespace HG.WebApp.Controllers
             var hoso = new List<Dm_So_Ho_So>();
             using (var db = new EAContext())
             {
-                var ds = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 hoso = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
             }
@@ -654,7 +733,11 @@ namespace HG.WebApp.Controllers
             var result = "";
             using (var db = new EAContext())
             {
-                var ds = db.Dm_Giay_To_Hop_Le.Where(n => n.Deleted == 0).ToList();
+                var ds = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ten_so.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
                 ViewBag.TotalRecored = totalRecored;
@@ -668,12 +751,12 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
 
-        public IActionResult ThemSoHoSo()
+        public IActionResult ThemSoHoSo(string code = "")
         {
-
+            ViewBag.code = code;
             using (var db = new EAContext())
             {
-                ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             // ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml");
@@ -695,7 +778,7 @@ namespace HG.WebApp.Controllers
             {
                 using (var db = new EAContext())
                 {
-                    ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                    ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 }
                 // ViewBag.LinhVuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
                 return View("~/Views/DanhMuc/SoHoSo/ThemSoHoSo.cshtml", item);
@@ -719,7 +802,7 @@ namespace HG.WebApp.Controllers
             ViewBag.type_view = type;
             using (var db = new EAContext())
             {
-                ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             return View("~/Views/DanhMuc/SoHoSo/SuaSoHoSo.cshtml", hoso);
         }
@@ -737,7 +820,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.msg = "cập giấy tờ lỗi!";
                 using (var db = new EAContext())
                 {
-                    ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+                    ViewBag.LinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 }
                 return PartialView("~/Views/DanhMuc/SoHoSo/SuaSoHoSo.cshtml", item);
             }
@@ -755,6 +838,10 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaSoHoSo(string code)
         {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaSoHoSo(code, uid);
             if (_pb > 0)
@@ -770,10 +857,25 @@ namespace HG.WebApp.Controllers
             var hoso = new List<Dm_So_Ho_So>();
             using (var db = new EAContext())
             {
-                hoso = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).ToList();
+                hoso = db.Dm_So_Ho_So.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/SoHoSo/ViewSoHoSo.cshtml", hoso);
             return Content(result);
+        }
+
+        [HttpPost]
+        public JsonResult CheckMaShs(string code)
+        {
+            var lstpb = new List<Dm_So_Ho_So>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_So_Ho_So.Where(n => n.Deleted == 0 && n.ma_so.ToUpper() == code.ToUpper()).ToList();
+            }
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemSoHoSo?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
         }
 
         #endregion

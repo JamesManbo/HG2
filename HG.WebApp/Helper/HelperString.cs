@@ -57,6 +57,11 @@ namespace HG.WebApp.Helper
             }
             return str;
         }
+
+        public static string CreateCode(string code)
+        {
+            return String.Concat(RemoveSign4VietnameseString(code).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
+        }
         /// <summary>
         /// Chuyển đổi chữ tiếng việt có dấu sang không dấu
         /// </summary>

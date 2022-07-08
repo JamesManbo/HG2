@@ -16,6 +16,7 @@ namespace HG.Entities
         public string ma_linh_vuc { get; set; }
         public string ten_linh_vuc { get; set; }
         public string? mo_ta { get; set; }
-       
+        public string? ma_quoc_gia { get; set; }
+
     }
 }

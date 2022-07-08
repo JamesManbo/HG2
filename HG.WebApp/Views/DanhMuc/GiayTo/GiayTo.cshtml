@@ -7,9 +7,9 @@
 
 <div class="col-lg-12">
     <div class="pageheader">
-        <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-            <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
+         <div class="search-form d-flex align-items-center">
+            <input type="text" name="tu_khoa" id="tu_khoa" placeholder="Nhập từ khóa tìm kiếm..">
+            <button class="btn-search" type="button" onclick="searchForm()" id="searchForm" title="Search"><i class="bi bi-search"></i></button>
         </div>
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
@@ -22,7 +22,6 @@
             <!-- Table with stripped rows -->
             <p class="stdformbutton" style="margin-bottom: 10px;">
                 <input type="button" value="Thêm" onclick="window.location.href = '/Danhmuc/ThemGiayTo ';" class="btn btn-primary" style="width:100px;" />
-
                 <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
                 <input hidden id="lstCode" />
             </p>
@@ -41,7 +40,7 @@
                         </select> bản ghi
                     </label>
                 </div>
-                  <div id="dataTable">
+                <div id="dataTable">
                     <div class="dataTable-container">
                         <table class="table table-bordered responsive">
                             <thead class="widgettitle">
@@ -166,11 +165,15 @@
                 </div>
                 <!-- End Table with stripped rows -->
             </div>
+            <p class="stdformbutton" style="margin-bottom: 10px;">
+                <input type="button" value="Thêm" onclick="window.location.href = '/Danhmuc/ThemGiayTo ';" class="btn btn-primary" style="width:100px;" />
+                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+            </p>
         </div>
     </div>
 </div>
 <script>
-      function GetListByCurrentPage(id) {
+    function GetListByCurrentPage(id) {
         var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
@@ -200,6 +203,27 @@
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/DanhMuc/XoaGiayTo?code=' + listData)
+    }
+
+    var input = document.getElementById("tu_khoa");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchForm").click();
+        }
+    });
+    function searchForm() {
+        var pageSize = $("#lstPageSize").val();
+        var tuKhoa = $("#tu_khoa").val();
+        $.ajax({
+            type: "GET",
+            url: "../DanhMuc/GiayToPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&tu_khoa=" + tuKhoa,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#dataTable").html(data);
+            }
+        });
     }
 
     $(function() {

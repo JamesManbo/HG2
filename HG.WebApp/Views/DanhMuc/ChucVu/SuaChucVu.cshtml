@@ -4,6 +4,33 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 @model HG.Entities.Dm_Chuc_Vu
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
@@ -18,11 +45,11 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_pb" action="/DanhMuc/ThemChucVu" method="post" enctype="multipart/form-data">
+                    <form id="form_pb" action="/DanhMuc/SuaChucVu?code=@Model.ma_chuc_vu&type=@ViewBag.type_view" method="post" enctype="multipart/form-data">
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã chức vụ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã chức vụ" name="ma_chuc_vu" maxlength="25" value="@Model.ma_chuc_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã chức vụ" name="ma_chuc_vu" maxlength="25" value="@Model.ma_chuc_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -142,6 +169,20 @@
 
     });
 
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaCv",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result.error == 0) {
+                    window.location.href = result.href;
+                }
+            }
+        });
+    };
 </script>
 
 

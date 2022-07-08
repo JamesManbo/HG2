@@ -5,6 +5,31 @@
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
 }
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
@@ -13,7 +38,6 @@
             <h1>Phòng ban</h1>
         </div>
     </div>
-
 
     <div class="maincontent">
         <div class="maincontentinner">

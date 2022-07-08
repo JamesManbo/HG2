@@ -1,15 +1,38 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục lĩnh vực"; 
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml"; 
+    ViewData["Title"] = "Danh mục lĩnh vực";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-             <h1>Lĩnh vực</h1>
+            <h1>Lĩnh vực</h1>
         </div>
     </div>
     <div class="maincontent">
@@ -22,7 +45,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã lĩnh vực <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã lĩnh vực" name="ma_linh_vuc" maxlength="25" value="">
+                                <input type="text" class="form-control input-default" placeholder="Mã lĩnh vực" name="ma_linh_vuc" maxlength="25" value="@ViewBag.code">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -47,6 +70,12 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã quốc gia" name="ma_quoc_gia" maxlength="50" value="">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên lĩnh vực <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-default" placeholder="Tên lĩnh vực" name="ten_linh_vuc" value="" maxlength="200">
@@ -63,7 +92,7 @@
                             <div class="col-sm-8">
                                 <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="stt" value="" maxlength="10">
                             </div>
-                        </div>                
+                        </div>
                         <div class="row mb-3">
                             <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
                             <div class="col-sm-8">
@@ -115,8 +144,8 @@
 </div><!-- End Basic Modal-->
 
 <script>
-    $(document).ready(function() {    
-       
+    $(document).ready(function() {
+
         $('#form_pb').validate({
             rules: {
                 ma_linh_vuc: "required",
@@ -126,7 +155,7 @@
                 ma_linh_vuc: "Bạn cần nhập mã lĩnh vực!",
                 ten_linh_vuc: "Bạn cần nhập tên lĩnh vực!"
             }
-        });     
+        });
 
     });
 

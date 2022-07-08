@@ -5,6 +5,33 @@
     var LinhVuc = ViewBag.LinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
 }
 @model HG.Entities.Dm_So_Ho_So
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
+
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
@@ -19,11 +46,11 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_pb" action="/DanhMuc/ThemSoHoSo" method="post" enctype="multipart/form-data">
+                    <form id="form_pb" action="/DanhMuc/SuaSoHoSo?code=@Model.ma_so&type=@ViewBag.type_view" method="post" enctype="multipart/form-data">
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã sổ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã sổ" name="ma_so" value="@Model.ma_so" maxlength="25" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã sổ" name="ma_so" value="@Model.ma_so" maxlength="25" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -50,13 +77,13 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên Sổ <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tên sổ" name="ten_chuc_vu" value="@Model.ten_so" maxlength="200" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Tên sổ" name="ten_so" value="@Model.ten_so" maxlength="200" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Quyển <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Quyển" name="ten_chuc_vu" value="@Model.quyen" maxlength="50" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Quyển" name="quyen" value="@Model.quyen" maxlength="50" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -87,9 +114,9 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Quyển <span style="color:red">(*)</span></label>
+                            <label for="stt" class="col-sm-2 control-label">Hoạt động</label>
                             <div class="col-sm-8">
-                                <input type="checkbox" class="form-control input-default" placeholder="Hoạt động" name="hoat_dong" value="@Model.hoat_dong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="checkbox" class="" id="hoat_dong" name="hoat_dong" placeholder="Hoạt động" value="@Model.hoat_dong" @(Model.hoat_dong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -163,6 +190,11 @@
 <script>
     $(document).ready(function() {
 
+        $("#hoat_dong").val($("#hoat_dong").is(':checked'));
+        $('#hoat_dong').change(function() {
+            $('#hoat_dong').val($(this).is(':checked'));
+        });
+
         $('#form_pb').validate({
             rules: {
                 ma_so: "required",
@@ -180,6 +212,20 @@
 
     });
 
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaShs",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result.error == 0) {
+                    window.location.href = result.href;
+                }
+            }
+        });
+    };
 </script>
 
 
