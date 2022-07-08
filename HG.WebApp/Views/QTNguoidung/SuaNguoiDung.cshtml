@@ -40,7 +40,7 @@
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
                       if (data == "") {
-                          window.location.href = '/QTNguoiDung/ThemNguoiDung?UserName=' +data
+                          window.location.href = '/QTNguoiDung/ThemNguoiDung?UserName=' +abc.value
                       } else {
                           window.location.href = '/QTNguoiDung/SuaNguoiDung?Id=' + data +"&type=Edit"
                       }
@@ -180,7 +180,7 @@
                             <div class="col-md-10">
                                 <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Toàn bộ phòng ban ------------</option>
-                                    @if(lst_phong_ban != null)
+                                    @if(lst_phong_ban != null && Model.aspNetUsersModel != null)
                                     {
                                          foreach (var item in lst_phong_ban)
                                          {
@@ -201,7 +201,7 @@
 
                                 <select name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
                                     <option value="">----------------Chọn-----------------</option>
-                                    @if(lst_chuc_vu != null)
+                                    @if(lst_chuc_vu != null && Model.aspNetUsersModel != null)
                                     {
                                         foreach (var item in lst_chuc_vu)
                                         {

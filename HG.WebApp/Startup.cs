@@ -28,7 +28,14 @@ namespace HG.WebAppApp
             services.AddIdentity<AspNetUsers, AspNetRoles>()
                .AddEntityFrameworkStores<EAContext>()
                .AddDefaultTokenProviders();
-
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            });
             #region Public Transient
             //Cache
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

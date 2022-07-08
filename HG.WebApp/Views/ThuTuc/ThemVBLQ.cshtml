@@ -1,4 +1,43 @@
 ﻿@using HG.WebApp
+ <script>
+  $(document).ready(function() {
+     
+        $("#files").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=VBLQ',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                              $('#avatar').attr('src', result.files[i]);
+                              $('#file_dinh_kem').val(""+result.files[i]+"");
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });    
+ });
+ </script>
             <h4 class="widgettitle">Cập nhật thông tin văn bản liên quan</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
@@ -7,7 +46,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã văn bản <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" id="ma_thu_tuc" class="form-control input-default"  maxlength="50" name="ma_thu_tuc"  value="">
+                                <input type="text" id="ma_thu_tuc" class="form-control input-default"  maxlength="50" name="ma_thu_tuc" required  value="@ViewBag.MaThuTuc">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -18,20 +57,20 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tên văn bản <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" maxlength="250" class="form-control input-default" name="ten_nhom" value="">
+                                <input type="text" maxlength="250" class="form-control input-default" required name="ten_van_ban" value="">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control  input-default" maxlength="250" placeholder="Mô tả" name="mo_ta"></textarea>
+                                <textarea class="form-control input-default" maxlength="250" placeholder="Mô tả" name="mo_ta"></textarea>
                             </div>
                         </div>
                           <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Đính kèm</label>
                             <div class="col-sm-8">
                                 <input type="file" id="files" name="files" style="display: none">
-                                <input type="text" id="avatar1" name="avatar" style="display: none">
+                                <input type="text" id="file_dinh_kem" name="file_dinh_kem" style="display: none">
                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                 <img id="avatar" style="margin-top: 10px;" width="100" />
                             </div>
@@ -44,9 +83,9 @@
                         </div>
                         
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và thêm</button>
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/SuperAdmin/ViewNhom';">Đóng</button>
+                            <button type="button" class="btn btn-primary" onclick="SaveAndAddVBLQ()">Lưu và thêm</button>
+                            <button type="button" class="btn btn-primary" onclick="SaveVBLQ()">Lưu</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/ThuTuc/QuanLy';">Đóng</button>
                         </div>
                     </form>
                 </div>

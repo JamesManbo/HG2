@@ -330,8 +330,8 @@
                     <table class="table table-bordered responsive">
                         <thead class="widgettitle">
                             <tr>
-                                <th class="head0">Sửa</th>
-                                <th class="head0">Xóa</th>
+                                <th class="head0">#</th>
+                                <th class="head0">#</th>
                                 <th class="head0">Xem biểu mãu HTML</th>
                                 <th class="head0">Đường dẫn</th>
                                 <th class="head0">Xem biểu mẫu</th>
@@ -343,7 +343,7 @@
                             foreach (var item in LstBieuMau)
                             {
                                 <tr>
-                                    <td> <a onclick="SuaBieuMau(@item.Id)" href="#">Sửa</a></td> @*Lấy dữ liệu về khi get list và show*@
+                                    <td> <a onclick="SuaBieuMau(@item.Id)" href="#">Sửa</a></td>
                                     <td> <a onclick="XoaBieuMau(@item.Id)"  href="#">Xóa</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.Edit.ToString()">@item.ten_bieu_mau</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.Edit.ToString()">@item.url_bieu_mau</a></td>

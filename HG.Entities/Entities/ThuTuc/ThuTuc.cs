@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,7 +87,8 @@ namespace HG.Entities.Entities.ThuTuc
         public int? stt { get; set; }
     }
 
-    public class VanBanLQ
+    [Table("VanBanLQ")]
+    public class VanBanLQ : BaseEntities
     {
         public string ma_thu_tuc { get; set; }
         public string ma_van_ban { get; set; }

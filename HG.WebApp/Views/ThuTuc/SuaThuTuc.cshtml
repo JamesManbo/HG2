@@ -65,7 +65,7 @@
                 so_bo_hs: "Bạn cần nhập số bộ hồ sơ"
             }
         });
-
+        
         $('.select2').select2();
 
         $("#nop_online").val($("#nop_online").is(':checked'));
@@ -200,10 +200,10 @@
 
 
     });
-    function ThemVBLQ(){
+    function ThemVBLQ(ma_thu_tuc){
          $.ajax({
             type: "Get",
-            url: "../ThuTuc/ThemVBLQ?ma_thu_tuc=",
+            url: "../ThuTuc/ThemVBLQ?ma_thu_tuc="+ma_thu_tuc,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -212,17 +212,36 @@
         });
     }
     function SaveVBLQ(){
-         var data = $("#form_vblq").serialize();
+       if($("#ten_van_ban").val() == "" || "#ten_van_ban").val() == null){
+                $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
+                $("#Notifyeform").modal("show");
+           return;
+       }
+       var data = $("#form_vblq").serialize();
         $.ajax({
             type: "Post",
-            url: "../ThuTuc/ThemVBLQ?ten_bieu_mau=" + $("#ten_bieu_mau").val() + "&ckedit1=" + JSON.stringify(value),
+            url: "../ThuTuc/SaveVBLQ",
             data: data,
-            contentType: 'application/json; charset=utf-8',
             //data: data,
-            //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(data) {
                 $("#TitleEform").html(data);
                 $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+    function SaveAndAddVBLQ(){
+        var data = $("#form_vblq").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/ThuTuc/ThemVBLQ",
+            data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                //$("#TitleEform").html(data);
+                //$("#Notifyeform").modal("show");
+                //setTimeout(ThemVBLQ(ma_thu_tuc) , 3000)
 
             }
         });
@@ -653,8 +672,8 @@
                                         {
                                             if (CurrentPage > CurrentPage + 2)
                                             {
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                             };
                                             if (CurrentPage > 3)
                                             {
@@ -662,11 +681,11 @@
                                                 {
                                                     if (i == CurrentPage)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -676,11 +695,11 @@
                                                 {
                                                     if (i == CurrentPage)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -688,8 +707,8 @@
 
                                             if (CurrentPage < CurrentPage + 2)
                                             {
-                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -698,11 +717,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -721,7 +740,7 @@
                         @*TAB Văn bản liên quan *@
                         <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.VanBanLQ.ToString())?"show active":"")" id="pills-vblq" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="button" name="" value="Thêm" id="" onclick="ThemVBLQ()" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" name="" value="Thêm" id="" onclick="ThemVBLQ('@Model.thuTuc.ma_thu_tuc')" class="btn btn-primary" style="width:100px;" />
                                 <input type="button" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
                             </p>
                             <div id="NhomVBLQ">
@@ -791,8 +810,8 @@
                                             {
                                                 if (CurrentPageVblq > CurrentPageVblq + 2)
                                                 {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
+                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
                                                 };
                                                 if (CurrentPageVblq > 3)
                                                 {
@@ -800,11 +819,11 @@
                                                     {
                                                         if (i == CurrentPageVblq)
                                                         {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
                                                 }
@@ -814,11 +833,11 @@
                                                     {
                                                         if (i == CurrentPageVblq)
                                                         {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
 
@@ -826,8 +845,8 @@
 
                                                 if (CurrentPageVblq < CurrentPageVblq + 2)
                                                 {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
+                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
+                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
                                                 };
                                             }
                                             else
@@ -836,11 +855,11 @@
                                                 {
                                                     if (i == CurrentPageVblq)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -920,8 +939,8 @@
                                         {
                                             if (CurrentPageNtp > CurrentPageNtp + 2)
                                             {
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageNtp > 3)
                                             {
@@ -929,11 +948,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -943,11 +962,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -955,8 +974,8 @@
 
                                             if (CurrentPageNtp < CurrentPageNtp + 2)
                                             {
-                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -965,11 +984,11 @@
                                             {
                                                 if (i == CurrentPageNtp)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -1051,8 +1070,8 @@
                                         {
                                             if (CurrentPageTpkqxl > CurrentPageTpkqxl + 2)
                                             {
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
                                             };
                                             if (CurrentPageTpkqxl > 3)
                                             {
@@ -1060,11 +1079,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -1074,11 +1093,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -1086,8 +1105,8 @@
 
                                             if (CurrentPageTpkqxl < CurrentPageTpkqxl + 2)
                                             {
-                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -1096,11 +1115,11 @@
                                             {
                                                 if (i == CurrentPageTpkqxl)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -1180,3 +1199,19 @@
 
     });
 </script>  
+
+<div class="modal fade" id="Notifyeform" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body" id="TitleEform">
+                Lưu biểu mẫu thành công !!!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -205,28 +205,17 @@ namespace HG.WebApp.Controllers
             var result = await signInManager.PasswordSignInAsync(checkUser, PassWord, RememberMe, true);
             if (!result.Succeeded)
             {
-                return RedirectToAction("ListNguoiDung", "QTNguoidung");
-            }else
-            {
-
-                var roles = await userManager.GetRolesAsync(checkUser);
-                var claims = new[]
-                {
-                new Claim(ClaimTypes.Email,checkUser.Email),
-                new Claim(ClaimTypes.GivenName,UserName),
-                new Claim(ClaimTypes.Role, string.Join(";",roles)),
-                new Claim(ClaimTypes.Name, UserName)
-                 };
+                return RedirectToAction("Login", "User");
+            }else {
+                //laays menu va tat ca nhom vai tro o day
+                
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
                 var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                     _config["Tokens:Issuer"],
-                    claims,
+                    //claims,
                     expires: DateTime.Now.AddHours(3),
                     signingCredentials: creds);
-
-
                 return RedirectToAction("ListNguoiDung", "QTNguoidung");
 
             }

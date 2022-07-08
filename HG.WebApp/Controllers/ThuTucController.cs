@@ -420,11 +420,43 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/SuaBieuMau.cshtml", db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault());
             return Content(result);
         }
-        public async Task<IActionResult> ThemVBLQ()
+        public async Task<IActionResult> ThemVBLQ(string ma_thu_tuc = "")
         {
             EAContext db = new EAContext();
+            ViewBag.MaThuTuc = ma_thu_tuc;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml");
             return Content(result);
+        }
+        [HttpPost]
+        public string SaveVBLQ(string ma_thu_tuc = "", string ten_van_ban = "", string mo_ta = "", string file_dinh_kem = "", string stt = "")
+        {
+            try
+            {
+                EAContext db = new EAContext();
+                VanBanLQ item = new VanBanLQ();
+                item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                item.Deleted = 0;
+                item.ten_van_ban = ten_van_ban;
+                item.ma_thu_tuc = ma_thu_tuc;
+                item.file_dinh_kem = file_dinh_kem;
+                item.mo_ta = mo_ta;
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<VanBanLQ> _role = db.VanBanLQ.Add(item);
+                db.SaveChanges();
+                int id = item.Id;
+                if (id > 0)
+                {
+                    return "Thêm văn bản liên quan thành công!!!";
+                }
+                else
+                {
+                    return "Thêm văn bản liên quan thất bại!!!";
+                }
+            }
+            catch(Exception e)
+            {
+                return "Lỗi dữ liệu !!!";
+            }
+            
         }
     }
 }

@@ -77,26 +77,34 @@ namespace HG.WebApp.Controllers
         }
         #region nguoidung
         [HttpPost]
-        public IActionResult ThemNguoiDung(NguoiDungModels item)
+        public async Task<IActionResult> ThemNguoiDung(NguoiDungModels item)
         {
-            var UserId = Guid.Parse(userManager.GetUserId(User));
-            var ObjId = _nguoiDungDao.ThemMoi(item, UserId);
-            var db = new EAContext();
-            ViewBag.LstNhom = db.Asp_nhom.ToList();
-            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
-            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
-                if (!string.IsNullOrEmpty(ObjId))
+                var UserId = Guid.Parse(userManager.GetUserId(User));
+                AspNetUsers user = new AspNetUsers();
+                user.UserName = item.UserName;
+                user.PhoneNumber = item.PhoneNumber;
+                user.Email = item.Email;
+                user.mat_khau = "1";
+                user.ma_chuc_vu = item.ma_chuc_vu;
+                user.ma_phong_ban = item.ma_phong_ban;
+                user.ho_dem = item.ho_dem;
+                user.ten = item.ten;
+                var result = await userManager.CreateAsync(user, user.mat_khau);
+                var db = new EAContext();
+                ViewBag.LstNhom = db.Asp_nhom.ToList();
+                ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+                ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+                if (result.Succeeded)
                 {
                     if (item.lstGroup != null)
                     {
                         for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
                         {
-                            _nguoiDungDao.ThemMoi_NguoiDung_Nhom(Guid.Parse(ObjId), item.lstGroup.Split(",")[i].ToString(), UserId);
+                            _nguoiDungDao.ThemMoi_NguoiDung_Nhom(user.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
                         }
-
                     }
                 };
-                if (!string.IsNullOrEmpty(ObjId))
+                if (result.Succeeded)
                 {
                     if (item.type_view == StatusAction.Add.ToString())
                     {
@@ -104,7 +112,7 @@ namespace HG.WebApp.Controllers
                     }
                     else if (item.type_view == StatusAction.View.ToString())
                     {
-                        return RedirectToAction("ViewNguoiDung", "QTnguoidung", new { Id = Guid.Parse(ObjId), type = StatusAction.View.ToString() });
+                        return RedirectToAction("ViewNguoiDung", "QTnguoidung", new { Id = user.Id, type = StatusAction.View.ToString() });
                     }
                 }
                 else

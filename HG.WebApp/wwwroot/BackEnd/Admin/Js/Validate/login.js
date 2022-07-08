@@ -14,7 +14,7 @@
                 {
                         required: true,
                         pwcheck: true,
-                        minlength: 8
+                        minlength: 1
                 }
             },
                 messages:
@@ -26,14 +26,15 @@
                     PassWord:
                     {
                         required: "Bạn chưa nhập mật khẩu",
-                        pwcheck: "Mật khẩu cần một chữ hoa, chữ thường và một chữ số",
-                        minlength: "Mật khẩu cần ít nhất 8 ký tự!"
+                        //pwcheck: "Mật khẩu cần một chữ hoa, chữ thường và một chữ số",
+                        minlength: "Mật khẩu cần ít nhất 1 ký tự!"
                     }
                 }
-            }); $.validator.addMethod("pwcheck",
-                function (value, element) {
-                    return /^[A-Za-z0-9\d=!\-@._*]+$/.test(value);
-                });
+            });
+            //$.validator.addMethod("pwcheck",
+            //    function (value, element) {
+            //        return /^[A-Za-z0-9\d=!\-@._*]+$/.test(value);
+            //});
         }
     };
 }();
