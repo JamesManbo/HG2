@@ -140,17 +140,29 @@
 <script>
     $(document).ready(function() {
 
+        jQuery.validator.addMethod("ma_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
         $('#form_pb').validate({
             rules: {
-                ma_giay_to: "required",
+                ma_giay_to: {
+                    required: true,
+                    ma_vaild: true
+                },
                 ten_giay_to: "required"
             },
             messages: {
-                ma_giay_to: "Bạn cần nhập mã giấy tờ!",
+                ma_giay_to: {
+                    required: "Bạn cần nhập mã giấy tờ!",
+                },
                 ten_giay_to: "Bạn cần nhập tên giấy tờ!"
             }
         });
-
     });
 
 </script>

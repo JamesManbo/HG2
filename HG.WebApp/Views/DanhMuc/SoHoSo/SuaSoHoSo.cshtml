@@ -189,21 +189,32 @@
 
 <script>
     $(document).ready(function() {
+        jQuery.validator.addMethod("ma_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
         $("#hoat_dong").val($("#hoat_dong").is(':checked'));
         $('#hoat_dong').change(function() {
             $('#hoat_dong').val($(this).is(':checked'));
         });
-
         $('#form_pb').validate({
             rules: {
-                ma_so: "required",
+                ma_so: {
+                    required: true,
+                    ma_vaild: true
+                },
                 ten_so: "required",
                 quyen: "required",
                 ma_linh_vuc: "required"
             },
             messages: {
-                ma_so: "Bạn cần nhập mã sổ hồ sơ!",
+                ma_so: {
+                    required: "Bạn cần nhập mã sổ hồ sơ!",
+                },
                 ten_so: "Bạn cần nhập tên sổ hồ sơ!",
                 quyen: "Bạn cần nhập quyển",
                 ma_linh_vuc: "Bạn cần nhập mã linh vực"

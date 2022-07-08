@@ -146,13 +146,26 @@
 <script>
     $(document).ready(function() {
 
+        jQuery.validator.addMethod("ma_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
         $('#form_pb').validate({
             rules: {
-                ma_linh_vuc: "required",
+                ma_linh_vuc: {
+                    required: true,
+                    ma_vaild: true
+                },              
                 ten_linh_vuc: "required"
             },
             messages: {
-                ma_linh_vuc: "Bạn cần nhập mã lĩnh vực!",
+                ma_linh_vuc: {
+                    required: "Bạn cần nhập mã lĩnh vực!",
+                },
                 ten_linh_vuc: "Bạn cần nhập tên lĩnh vực!"
             }
         });

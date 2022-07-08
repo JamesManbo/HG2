@@ -312,13 +312,27 @@
         $('.select2').select2({
             closeOnSelect: false
         });
+
+        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
         $('#form_pb').validate({
             rules: {
-                ma_phong_ban: "required",
+                ma_phong_ban: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
                 ten_phong_ban: "required"
             },
             messages: {
-                ma_phong_ban: "Bạn cần nhập mã phòng ban!",
+                ma_phong_ban: {
+                    required: "Bạn cần nhập mã phòng ban!",
+                },               
                 ten_phong_ban: "Bạn cần nhập tên phòng ban!"
             }
         });
