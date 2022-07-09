@@ -200,6 +200,7 @@
 
 
     });
+
     function ThemVBLQ(ma_thu_tuc){
          $.ajax({
             type: "Get",
@@ -212,7 +213,7 @@
         });
     }
     function SaveVBLQ(){
-       if($("#ten_van_ban").val() == "" || "#ten_van_ban").val() == null){
+       if($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null){
                 $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
                 $("#Notifyeform").modal("show");
            return;
@@ -231,21 +232,140 @@
             }
         });
     }
-    function SaveAndAddVBLQ(){
-        var data = $("#form_vblq").serialize();
+    function XoaVBLQ(id){
+       if(id == "" || id == null){
+                $("#TitleEform").html("Mã văn bản liên quan không tồn tại !!!");
+                $("#Notifyeform").modal("show");
+           return;
+       }
         $.ajax({
-            type: "Post",
-            url: "/ThuTuc/ThemVBLQ",
-            data: data,
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            type: "Get",
+            url: "../ThuTuc/XoaVBLQ?id="+ id,
+            data: "",
+            //data: data,
+            contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                //$("#TitleEform").html(data);
-                //$("#Notifyeform").modal("show");
-                //setTimeout(ThemVBLQ(ma_thu_tuc) , 3000)
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
 
             }
         });
     }
+    function SaveAndAddVBLQ(){
+        if($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null){
+                $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
+                $("#Notifyeform").modal("show");
+           return;
+       }
+       var data = $("#form_vblq").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveAndAddVBLQ",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+               $("#NhomVBLQ").html(data);
+                $("#TitleEform").html("Thêm văn bản liên quan thành công!!!");
+                $("#Notifyeform").modal("show");
+            }
+        });
+    }
+    function SuaVBLQ(id,type){
+         $.ajax({
+            type: "Get",
+            url: "../ThuTuc/SuaVBLQ?id=" + id + "&type=" + type ,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomVBLQ").html(data);
+            }
+        });
+    }
+    //start nhom thanh phan
+     function ThemNhomThanhPhan(ma_thu_tuc) {
+        $.ajax({
+            type: "Get",
+            url: "/ThuTuc/ThemNhomThanhPhan?ma_thu_tuc="+ma_thu_tuc,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomThanhPhan").html(data);
+            }
+        });
+    }
+     function SaveNhomTP(){
+       var data = $("#form_nhom_tp").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveNhomTP",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+     function SaveAddNhomTP(){
+       var data = $("#form_nhom_tp").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveAddNhomTP",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+               $("#NhomThanhPhan").html(data);
+                $("#TitleEform").html("Thêm nhóm thành phần thành công!!!");
+                $("#Notifyeform").modal("show");
+            }
+        });
+    }
+     function SuaNhomTP(id,type){
+         $.ajax({
+            type: "Get",
+            url: "../ThuTuc/SuaNhomTP?id=" + id + "&type=" + type ,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomThanhPhan").html(data);
+            }
+        });
+    }
+     function XoaNhomTP(id){
+        if(id == "" || id == null){
+                $("#TitleEform").html("Mã nhóm thành phần không tồn tại !!!");
+                $("#Notifyeform").modal("show");
+           return;
+        }
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/XoaNhomTP?id="+ id,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+    //end Nhom TP
+    function ThemTPKQXL(ma_thu_tuc) {
+        $.ajax({
+            type: "Get",
+            url: "/ThuTuc/ThemTPKQXL?ma_thu_tuc="+ma_thu_tuc,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#TPKQXL").html(data);
+            }
+        });
+    }
+    
 </script>
 <div class="card">
     <div class="card-body">
@@ -672,8 +792,8 @@
                                         {
                                             if (CurrentPage > CurrentPage + 2)
                                             {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                             };
                                             if (CurrentPage > 3)
                                             {
@@ -681,11 +801,11 @@
                                                 {
                                                     if (i == CurrentPage)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -695,11 +815,11 @@
                                                 {
                                                     if (i == CurrentPage)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -707,8 +827,8 @@
 
                                             if (CurrentPage < CurrentPage + 2)
                                             {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -717,11 +837,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -753,6 +873,7 @@
                                                         <input type="checkbox" name="" id="selectAll" />
                                                     </th>
                                                     <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                     <th class="head1" scope="col" data-sortable="" style="width: 45%;">MÃ VĂN BẢN</th>
                                                     <th class="head1" scope="col" data-sortable="" style="width: 45%;">TÊN</th>
                                                     <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
                                                     <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
@@ -763,17 +884,281 @@
                                             <tbody>
                                                 @if (Model.lstVanBanLQ != null)
                                                 {
+                                                    var stt = 1;
                                                     foreach (var item in Model.lstVanBanLQ)
                                                     {
                                                         <tr>
                                                             <td><input type="checkbox" class="ads_Checkbox_vplq" value="@item.ma_van_ban" /></td>
                                                             <td scope="row">
-                                                                1
+                                                                @stt++;
                                                                 <input type="hidden" value="@item.ma_van_ban" />
                                                             </td>
+                                                            <td><a href="#">@item.ma_thu_tuc</a></td>
                                                             <td><a href="#">@item.ten_van_ban</a></td>
 
                                                             <td>@item.file_dinh_kem</td>
+                                                            <td>
+                                                                <a id="" onclick="SuaVBLQ(@item.Id, '@StatusAction.View.ToString()')" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
+                                                                    <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a id="" onclick="SuaVBLQ(@item.Id, '@StatusAction.Edit.ToString()')" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
+                                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a onclick="XoaVBLQ(@item.Id)"
+                                                           title=""
+                                                           data-placement="top"
+                                                           data-toggle="tooltip"
+                                                           data-original-title="Xóa"
+                                                           href="#">
+                                                                    <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistVanBanLQ.RecoredFrom đến  @Model.PagelistVanBanLQ.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
+                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                        @{
+                                            var TotalPageVblq = Model.PagelistVanBanLQ.TotalPage;
+                                            var CurrentPageVblq = Model.PagelistVanBanLQ.CurrentPage;
+                                            if (TotalPageVblq > 5)
+                                            {
+                                                if (CurrentPageVblq > CurrentPageVblq + 2)
+                                                {
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
+                                                };
+                                                if (CurrentPageVblq > 3)
+                                                {
+                                                    for (int i = CurrentPageVblq - 2; i < CurrentPageVblq + 2; i++)
+                                                    {
+                                                        if (i == CurrentPageVblq)
+                                                        {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i == CurrentPageVblq)
+                                                        {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+
+                                                }
+
+                                                if (CurrentPageVblq < CurrentPageVblq + 2)
+                                                {
+                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
+                                                };
+                                            }
+                                            else
+                                            {
+                                                for (int i = 1; i <= TotalPageVblq; i++)
+                                                {
+                                                    if (i == CurrentPageVblq)
+                                                    {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                    else
+                                                    {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                    <!-- End Table with stripped rows -->
+                                </div>
+                            </div>
+                        </div>
+                        @*TAB Nhóm thành phần *@
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.NhomTP.ToString())?"show active":"")" id="pills-ntp" role="tabpanel" aria-labelledby="profile-tab">
+                            <p class="stdformbutton" style="margin-bottom: 10px;">
+                                <input type="button" onclick="ThemNhomThanhPhan('@Model.thuTuc.ma_thu_tuc')" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
+                            </p>
+                            <div id="NhomThanhPhan">
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                    <div class="dataTable-container">
+                                        <table class="table table-bordered responsive">
+                                            <thead class="widgettitle">
+                                                <tr>
+                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                        <input type="checkbox" name="" id="selectAll" />
+                                                    </th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 80%;">TÊN NHÓM</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.lstNhomTP != null)
+                                                {
+                                                    foreach (var item in Model.lstNhomTP)
+                                                    {
+                                                        <tr>
+                                                            <td><input type="checkbox" class="ads_Checkbox_ntp" value="@item.ma_mhom" /></td>
+                                                            <td scope="row">
+                                                                1
+                                                                <input type="hidden" value="@item.ma_mhom" />
+                                                            </td>
+                                                            <td><a onclick="SuaNhomTP(@item.Id,'@StatusAction.View.ToString()')" href="#">@item.ten_nhom</a></td>
+                                                            <td>
+                                                                <a id="" onclick="SuaNhomTP(@item.Id,'@StatusAction.View.ToString()')" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
+                                                                    <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a id="" title="" onclick="SuaNhomTP(@item.Id,'@StatusAction.Edit.ToString()')" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
+                                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a onclick="XoaNhomTP(@item.Id)"
+                                                           title=""
+                                                           data-placement="top"
+                                                           data-toggle="tooltip"
+                                                           data-original-title="Xóa"
+                                                           href="#">
+                                                                    <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistNhomTP.RecoredFrom đến  @Model.PagelistNhomTP.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
+                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                        @{
+                                            var TotalPageNtp = Model.PagelistNhomTP.TotalPage;
+                                            var CurrentPageNtp = Model.PagelistNhomTP.CurrentPage;
+                                            if (TotalPageNtp > 5)
+                                            {
+                                                if (CurrentPageNtp > CurrentPageNtp + 2)
+                                                {
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
+                                                };
+                                                if (CurrentPageNtp > 3)
+                                                {
+                                                    for (int i = CurrentPageNtp - 2; i < CurrentPageNtp + 2; i++)
+                                                    {
+                                                        if (i == CurrentPageNtp)
+                                                        {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i == CurrentPageNtp)
+                                                        {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+
+                                                }
+
+                                                if (CurrentPageNtp < CurrentPageNtp + 2)
+                                                {
+                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
+                                                };
+                                            }
+                                            else
+                                            {
+                                                for (int i = 1; i <= TotalPageNtp; i++)
+                                                {
+                                                    if (i == CurrentPageNtp)
+                                                    {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                    else
+                                                    {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </div>
+
+                                    <!-- End Table with stripped rows -->
+
+                                </div>
+                            </div>
+                        </div>
+                        @*TAB Thành phần kết quả xử lý *@
+                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.TPKQXL.ToString())?"show active":"")" id="pills-tpxlkq" role="tabpanel" aria-labelledby="profile-tab">
+                            <p class="stdformbutton" style="margin-bottom: 10px;">
+                                <input type="button" onclick="ThemTPKQXL('@Model.thuTuc.ma_thu_tuc')" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
+                            </p>
+                            <div id="TPKQXL">
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                    <div class="dataTable-container">
+                                        <table class="table table-bordered responsive">
+                                            <thead class="widgettitle">
+                                                <tr>
+                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                        <input type="checkbox" name="" id="selectAll" />
+                                                    </th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.lstThanhPhanKQXL != null)
+                                                {
+                                                    foreach (var item in Model.lstThanhPhanKQXL)
+                                                    {
+                                                        <tr>
+                                                            <td><input type="checkbox" class="ads_Checkbox_Tpkqxl" value="@item.ma_tp_kq" /></td>
+                                                            <td scope="row">
+                                                                1
+                                                                <input type="hidden" value="@item.ma_tp_kq" />
+                                                            </td>
+                                                            <td><a href="#">@item.ma_tp_kq</a></td>
+                                                            <td>@item.mo_ta</td>
                                                             <td>
                                                                 <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
                                                                     <span class="glyphicon glyphicon-list-alt">Xem</span>
@@ -801,29 +1186,29 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistVanBanLQ.RecoredFrom đến  @Model.PagelistVanBanLQ.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
+                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelisthanhPhanKQXL.RecoredFrom đến  @Model.PagelisthanhPhanKQXL.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
                                     <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                                         @{
-                                            var TotalPageVblq = Model.PagelistVanBanLQ.TotalPage;
-                                            var CurrentPageVblq = Model.PagelistVanBanLQ.CurrentPage;
-                                            if (TotalPageVblq > 5)
+                                            var TotalPageTpkqxl = Model.PagelisthanhPhanKQXL.TotalPage;
+                                            var CurrentPageTpkqxl = Model.PagelisthanhPhanKQXL.CurrentPage;
+                                            if (TotalPageTpkqxl > 5)
                                             {
-                                                if (CurrentPageVblq > CurrentPageVblq + 2)
+                                                if (CurrentPageTpkqxl > CurrentPageTpkqxl + 2)
                                                 {
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
                                                 };
-                                                if (CurrentPageVblq > 3)
+                                                if (CurrentPageTpkqxl > 3)
                                                 {
-                                                    for (int i = CurrentPageVblq - 2; i < CurrentPageVblq + 2; i++)
+                                                    for (int i = CurrentPageTpkqxl - 2; i < CurrentPageTpkqxl + 2; i++)
                                                     {
-                                                        if (i == CurrentPageVblq)
+                                                        if (i == CurrentPageTpkqxl)
                                                         {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
                                                 }
@@ -831,304 +1216,45 @@
                                                 {
                                                     for (int i = 1; i <= 5; i++)
                                                     {
-                                                        if (i == CurrentPageVblq)
+                                                        if (i == CurrentPageTpkqxl)
                                                         {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
 
                                                 }
 
-                                                if (CurrentPageVblq < CurrentPageVblq + 2)
+                                                if (CurrentPageTpkqxl < CurrentPageTpkqxl + 2)
                                                 {
-                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
+                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
                                                 };
                                             }
                                             else
                                             {
-                                                for (int i = 1; i <= TotalPageVblq; i++)
+                                                for (int i = 1; i <= TotalPageTpkqxl; i++)
                                                 {
-                                                    if (i == CurrentPageVblq)
+                                                    if (i == CurrentPageTpkqxl)
                                                     {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
                                         }
                                     </div>
+
+
                                     <!-- End Table with stripped rows -->
+
                                 </div>
-                            </div>
-                        </div>
-                        @*TAB Nhóm thành phần *@
-                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.NhomTP.ToString())?"show active":"")" id="pills-ntp" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
-                                <input type="submit" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
-                            </p>
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-
-                                <div class="dataTable-container">
-                                    <table class="table table-bordered responsive">
-                                        <thead class="widgettitle">
-                                            <tr>
-                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                    <input type="checkbox" name="" id="selectAll" />
-                                                </th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 80%;">TÊN NHÓM</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.lstNhomTP != null)
-                                            {
-                                                foreach (var item in Model.lstNhomTP)
-                                                {
-                                                    <tr>
-                                                        <td><input type="checkbox" class="ads_Checkbox_ntp" value="@item.ma_mhom" /></td>
-                                                        <td scope="row">
-                                                            1
-                                                            <input type="hidden" value="@item.ma_mhom" />
-                                                        </td>
-                                                        <td><a href="#">@item.ten_nhom</a></td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
-                                                                <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
-                                                                <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a onclick=""
-                                                       title=""
-                                                       data-placement="top"
-                                                       data-toggle="tooltip"
-                                                       data-original-title="Xóa"
-                                                       href="#">
-                                                                <span class="glyphicon glyphicon-trash">Xóa</span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            }
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistNhomTP.RecoredFrom đến  @Model.PagelistNhomTP.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
-                                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                    @{
-                                        var TotalPageNtp = Model.PagelistNhomTP.TotalPage;
-                                        var CurrentPageNtp = Model.PagelistNhomTP.CurrentPage;
-                                        if (TotalPageNtp > 5)
-                                        {
-                                            if (CurrentPageNtp > CurrentPageNtp + 2)
-                                            {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
-                                            };
-                                            if (CurrentPageNtp > 3)
-                                            {
-                                                for (int i = CurrentPageNtp - 2; i < CurrentPageNtp + 2; i++)
-                                                {
-                                                    if (i == CurrentPageNtp)
-                                                    {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                for (int i = 1; i <= 5; i++)
-                                                {
-                                                    if (i == CurrentPageNtp)
-                                                    {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-
-                                            }
-
-                                            if (CurrentPageNtp < CurrentPageNtp + 2)
-                                            {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
-                                            };
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= TotalPageNtp; i++)
-                                            {
-                                                if (i == CurrentPageNtp)
-                                                {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                    }
-                                </div>
-
-                                <!-- End Table with stripped rows -->
-
-                            </div>
-                        </div>
-                        @*TAB Thành phần kết quả xử lý *@
-                        <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.TPKQXL.ToString())?"show active":"")" id="pills-tpxlkq" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
-                                <input type="submit" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
-                            </p>
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-                                <div class="dataTable-container">
-                                    <table class="table table-bordered responsive">
-                                        <thead class="widgettitle">
-                                            <tr>
-                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                    <input type="checkbox" name="" id="selectAll" />
-                                                </th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.lstThanhPhanKQXL != null)
-                                            {
-                                                foreach (var item in Model.lstThanhPhanKQXL)
-                                                {
-                                                    <tr>
-                                                        <td><input type="checkbox" class="ads_Checkbox_Tpkqxl" value="@item.ma_tp_kq" /></td>
-                                                        <td scope="row">
-                                                            1
-                                                            <input type="hidden" value="@item.ma_tp_kq" />
-                                                        </td>
-                                                        <td><a href="#">@item.ma_tp_kq</a></td>
-                                                        <td>@item.mo_ta</td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">
-                                                                <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="#">
-                                                                <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a onclick=""
-                                                       title=""
-                                                       data-placement="top"
-                                                       data-toggle="tooltip"
-                                                       data-original-title="Xóa"
-                                                       href="#">
-                                                                <span class="glyphicon glyphicon-trash">Xóa</span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            }
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelisthanhPhanKQXL.RecoredFrom đến  @Model.PagelisthanhPhanKQXL.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
-                                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                    @{
-                                        var TotalPageTpkqxl = Model.PagelisthanhPhanKQXL.TotalPage;
-                                        var CurrentPageTpkqxl = Model.PagelisthanhPhanKQXL.CurrentPage;
-                                        if (TotalPageTpkqxl > 5)
-                                        {
-                                            if (CurrentPageTpkqxl > CurrentPageTpkqxl + 2)
-                                            {
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
-                                            };
-                                            if (CurrentPageTpkqxl > 3)
-                                            {
-                                                for (int i = CurrentPageTpkqxl - 2; i < CurrentPageTpkqxl + 2; i++)
-                                                {
-                                                    if (i == CurrentPageTpkqxl)
-                                                    {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                for (int i = 1; i <= 5; i++)
-                                                {
-                                                    if (i == CurrentPageTpkqxl)
-                                                    {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-
-                                            }
-
-                                            if (CurrentPageTpkqxl < CurrentPageTpkqxl + 2)
-                                            {
-                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
-                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
-                                            };
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= TotalPageTpkqxl; i++)
-                                            {
-                                                if (i == CurrentPageTpkqxl)
-                                                {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                    }
-                                </div>
-
-
-                                <!-- End Table with stripped rows -->
-
                             </div>
                         </div>
                     </div>

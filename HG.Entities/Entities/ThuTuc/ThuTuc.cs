@@ -85,6 +85,7 @@ namespace HG.Entities.Entities.ThuTuc
         public string? mo_ta { get; set; }
         public string? file_dinh_kem { get; set; }
         public int? stt { get; set; }
+        public int Id { get; set; }
     }
 
     [Table("VanBanLQ")]
