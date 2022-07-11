@@ -136,8 +136,8 @@
                                        data: "",
                                        contentType: 'application/json; charset=utf-8',
                                        success: function(data) {
-                                           console.log(data);
                                            $("#dataTable").html(data);
+                                            $("#NotifyRole").modal("show");
                                        }
                                    });           
                                 }
@@ -237,6 +237,21 @@
 
                     </div>
                   </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="NotifyRole" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                Lưu vai trò thành công !!!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

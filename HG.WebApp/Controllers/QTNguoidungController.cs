@@ -264,7 +264,33 @@ namespace HG.WebApp.Controllers
             }
            
         }
+        public async Task<IActionResult> QLNhomVaitroPaging(int currentPage = 1, int pageSize = 10, string txtSearch = "")
+        {
 
+            if (string.IsNullOrEmpty(txtSearch))
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count();
+                ViewBag.TotalPage = (eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count() / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                ViewBag.PageSize = pageSize;
+                ViewBag.txtSearch = txtSearch;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroPaging.cshtml", eAContext.Asp_nhom.Where(n => n.Deleted != 1).ToList());
+                return Content(result);
+            }
+            else
+            {
+                EAContext eAContext = new EAContext();
+                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count();
+                ViewBag.TotalPage = (eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count() / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                ViewBag.PageSize = pageSize;
+                ViewBag.txtSearch = txtSearch;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroPaging.cshtml", eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).ToList());
+                return Content(result);
+            }
+            
+        }
         public IActionResult QLNhomVaitroChitiet(string code)
         {
             ViewBag.Status = "";

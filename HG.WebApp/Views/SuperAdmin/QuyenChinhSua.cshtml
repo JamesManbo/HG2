@@ -89,16 +89,16 @@
                                 <input disabled type="text" class="form-control input-default" value="@ViewBag.UserUpdate">
                             </div>
                         </div>
-                        <div class="row mb-3">
+                           <div class="row mb-3">
                             <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="@(Model.UpdatedDateUtc == null ? "" : Model.UpdatedDateUtc)">
+                                <input disabled type="date" class="form-control input-default"  value="@(Model.UpdatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.UpdatedDateUtc))" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="@(Model.CreatedDateUtc == null ? "" : Model.CreatedDateUtc)">
+                                <input disabled type="date" class="form-control input-default" value="@(Model.CreatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.CreatedDateUtc))"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                         </div>
                         @if (ViewBag.type_view == StatusAction.View.ToString())

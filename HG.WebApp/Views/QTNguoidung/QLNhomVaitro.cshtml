@@ -9,7 +9,7 @@
     <div class="pageheader">
                 @using (Html.BeginForm("QLNhomVaitro", "QTNguoiDung", FormMethod.Get,new { @class="searchbar" }))
                 {
-                    <input name="txtSearch" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." value="@ViewBag.txtSearch"/>
+                    <input name="txtSearch" type="text" id="txtSearch" placeholder="Gõ từ khóa và nhấn enter..." value="@ViewBag.txtSearch"/>
                     <input type="submit" name="" style="cursor:pointer" id="BtnSearch" hidden="hidden" />
                 }
         <div class="pageicon"><span class="iconfa-table"></span></div>
@@ -25,12 +25,12 @@
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
-                        <select class="dataTable-selector">
+                        <select class="dataTable-selector" onchange="ChangePageSize(this)">
                             <option value="5">5</option>
                             <option value="10" >10</option>
                             <option value="15">15</option>
-                            <option value="20" selected>20</option>
-                            <option value="25">25</option>
+                            <option value="20">20</option>
+                            <option value="25" selected>25</option>
                         </select> bản ghi
                     </label>
                 </div>
@@ -118,10 +118,29 @@
 
     </div>
 <script>
+     function ChangePageSize(data) {
+           var txtSearch = $("#txtSearch").val();
+           if (txtSearch == undefined) {
+               txtSearch = "";
+           }
+            $.ajax({
+                type: "GET",
+                url: "/QTNguoiDung/QLNhomVaitroPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&txtSearch=" + txtSearch,
+                data: "",
+                contentType: 'application/json; charset=utf-8',
+                success: function(data) {
+                    $("#dataTable").html(data);
+                }
+            });
+    }
     function GetListByCurrentPage(id) {
+             var txtSearch = $("#txtSearch").val();
+               if (txtSearch == undefined) {
+                   txtSearch = "";
+               }
                $.ajax({
                    type: "GET",
-                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=",
+                  url: "/QTNguoiDung/QLNhomVaitroPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&txtSearch=" + txtSearch,
                    data: "",
                    contentType: 'application/json; charset=utf-8',
                    success: function(data) {

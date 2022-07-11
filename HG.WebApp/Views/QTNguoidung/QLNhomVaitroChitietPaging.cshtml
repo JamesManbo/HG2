@@ -54,7 +54,6 @@
                                        data: "",
                                        contentType: 'application/json; charset=utf-8',
                                        success: function(data) {
-                                           console.log(data);
                                            $("#myTabContent").html(data);
                                        }
                                    });           
@@ -68,6 +67,7 @@
                                        contentType: 'application/json; charset=utf-8',
                                        success: function(data) {
                                            $("#myTabContent").html(data);
+                                            $("#NotifyRole").modal("show");
                                        }
                                    });           
                                 }
