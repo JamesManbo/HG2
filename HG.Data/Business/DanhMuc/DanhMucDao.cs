@@ -62,6 +62,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("ma_dinh_danh_pb", item.ma_dinh_danh_pb ?? "", SqlDbType.VarChar);
                 DbProvider.AddParameter("tk_thanh_toan", item.tk_thanh_toan, SqlDbType.Bit);
                 DbProvider.AddParameter("phong_ban_cha", item.phong_ban_cha ?? "", SqlDbType.VarChar);
+                DbProvider.AddParameter("ma_don_vi", item.ma_don_vi ?? "", SqlDbType.VarChar);
                 DbProvider.AddParameter("nguoi_dai_dien", item.nguoi_dai_dien ?? Guid.Empty, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("uid", item.CreatedUid ?? Guid.Empty, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("uid_name", item.UidName ?? "", SqlDbType.NVarChar);

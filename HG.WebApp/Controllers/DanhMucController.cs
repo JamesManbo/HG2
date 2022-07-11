@@ -1,5 +1,6 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Entities;
+using HG.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
@@ -102,12 +103,15 @@ namespace HG.WebApp.Controllers
             var modal = new Dm_Phong_Ban();
             var user = _danhmucDao.DanhSachNguoiDung("0");
             var lstpb = new List<Dm_Phong_Ban>();
+            var lstdv = new List<dm_don_vi>();
             using (var db = new EAContext())
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
             }
             ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_phong_ban = lstpb;
+            ViewBag.lst_don_vi = lstdv;
             ViewBag.code = code;
             return View("~/Views/DanhMuc/Phongban/ThemPhongBan.cshtml", modal);
         }
@@ -151,13 +155,16 @@ namespace HG.WebApp.Controllers
         {
             var user = _danhmucDao.DanhSachNguoiDung("0");
             var lstpb = new List<Dm_Phong_Ban>();
+            var lstdv = new List<dm_don_vi>();
             using (var db = new EAContext())
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
             }
-            var pb = lstpb.Where(n => n.ma_phong_ban == code).FirstOrDefault();
-            ViewBag.lst_phong_ban = lstpb;
             ViewBag.lst_nguoi_dung = user;
+            ViewBag.lst_phong_ban = lstpb;
+            ViewBag.lst_don_vi = lstdv;
+            var pb = lstpb.Where(n => n.ma_phong_ban == code).FirstOrDefault();
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/Phongban/SuaPhongBan.cshtml", pb);
         }

@@ -15,6 +15,7 @@ namespace HG.Entities
         [Key]
         public string ma_phong_ban { get; set; }
         public string ten_phong_ban { get; set; }
+        public string? ma_don_vi { get; set; }
         public string? mo_ta { get; set; }
         public string? ma_dinh_danh_pb { get; set; } = "";
         public bool tk_thanh_toan { get; set; } = false;

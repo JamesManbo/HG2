@@ -3,6 +3,7 @@
     ViewData["Title"] = "Danh mục"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>;
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
+    var lst_don_vi = ViewBag.lst_don_vi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
 }
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -46,6 +47,19 @@
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
                     <form id="form_pb" action="/DanhMuc/ThemPhongBan" method="post" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Đơn vị <span style="color:red">(*)</span> </label>
+                            <div class="col-sm-8">
+                                <select id="ma_don_vi" class="form-select form-control input-default" name="ma_don_vi">
+                                    <option selected="selected" value="">---- Chọn đơn vị ----</option>
+                                    @if (lst_don_vi != null)
+                                        foreach (var item in lst_don_vi)
+                                        {
+                                            <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                        }
+                                </select>
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
@@ -103,7 +117,8 @@
                                         }
                                 </select>
                             </div>
-                        </div>
+                        </div> 
+                     
                         <div class="row mb-3">
                             <label for="mota" class="col-sm-2 control-label">Mô tả</label>
                             <div class="col-sm-8">
@@ -285,13 +300,15 @@
                     required: true,
                     ma_thu_tuc_vaild: true
                 },
-                ten_phong_ban: "required"
+                ten_phong_ban: "required",
+                ma_don_vi: "required"
             },
             messages: {
                 ma_phong_ban: {
                     required: "Bạn cần nhập mã phòng ban!"
                 },              
-                ten_phong_ban: "Bạn cần nhập tên phòng ban!"
+                ten_phong_ban: "Bạn cần nhập tên phòng ban!",
+                ma_don_vi : "Bạn chưa chọn đơn vị!"
             }
         });
         function convetArrayToObj(serialized) {

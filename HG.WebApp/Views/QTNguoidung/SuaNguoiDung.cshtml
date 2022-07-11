@@ -184,7 +184,7 @@
                                     {
                                          foreach (var item in lst_phong_ban)
                                          {
-                                           if(item.ma_phong_ban == Model.aspNetUsersModel.FirstOrDefault().ma_phong_ban.Trim().ToString())
+                                           if(Model.aspNetUsersModel.FirstOrDefault().ma_phong_ban !=null && item.ma_phong_ban == Model.aspNetUsersModel.FirstOrDefault().ma_phong_ban.Trim().ToString())
                                             {
                                                 <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
                                             }
