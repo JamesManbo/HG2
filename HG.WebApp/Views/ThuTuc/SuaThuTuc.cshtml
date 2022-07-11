@@ -65,7 +65,7 @@
                 so_bo_hs: "Bạn cần nhập số bộ hồ sơ"
             }
         });
-        
+
         $('.select2').select2();
 
         $("#nop_online").val($("#nop_online").is(':checked'));
@@ -201,10 +201,10 @@
 
     });
 
-    function ThemVBLQ(ma_thu_tuc){
-         $.ajax({
+    function ThemVBLQ(ma_thu_tuc) {
+        $.ajax({
             type: "Get",
-            url: "../ThuTuc/ThemVBLQ?ma_thu_tuc="+ma_thu_tuc,
+            url: "../ThuTuc/ThemVBLQ?ma_thu_tuc=" + ma_thu_tuc,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -212,13 +212,13 @@
             }
         });
     }
-    function SaveVBLQ(){
-       if($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null){
-                $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
-                $("#Notifyeform").modal("show");
-           return;
-       }
-       var data = $("#form_vblq").serialize();
+    function SaveVBLQ() {
+        if ($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null) {
+            $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
+        var data = $("#form_vblq").serialize();
         $.ajax({
             type: "Post",
             url: "../ThuTuc/SaveVBLQ",
@@ -232,15 +232,15 @@
             }
         });
     }
-    function XoaVBLQ(id){
-       if(id == "" || id == null){
-                $("#TitleEform").html("Mã văn bản liên quan không tồn tại !!!");
-                $("#Notifyeform").modal("show");
-           return;
-       }
+    function XoaVBLQ(id) {
+        if (id == "" || id == null) {
+            $("#TitleEform").html("Mã văn bản liên quan không tồn tại !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
         $.ajax({
             type: "Get",
-            url: "../ThuTuc/XoaVBLQ?id="+ id,
+            url: "../ThuTuc/XoaVBLQ?id=" + id,
             data: "",
             //data: data,
             contentType: 'application/json; charset=utf-8',
@@ -251,13 +251,13 @@
             }
         });
     }
-    function SaveAndAddVBLQ(){
-        if($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null){
-                $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
-                $("#Notifyeform").modal("show");
-           return;
-       }
-       var data = $("#form_vblq").serialize();
+    function SaveAndAddVBLQ() {
+        if ($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null) {
+            $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
+        var data = $("#form_vblq").serialize();
         $.ajax({
             type: "Post",
             url: "../ThuTuc/SaveAndAddVBLQ",
@@ -265,16 +265,16 @@
             //data: data,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(data) {
-               $("#NhomVBLQ").html(data);
+                $("#NhomVBLQ").html(data);
                 $("#TitleEform").html("Thêm văn bản liên quan thành công!!!");
                 $("#Notifyeform").modal("show");
             }
         });
     }
-    function SuaVBLQ(id,type){
-         $.ajax({
+    function SuaVBLQ(id, type) {
+        $.ajax({
             type: "Get",
-            url: "../ThuTuc/SuaVBLQ?id=" + id + "&type=" + type ,
+            url: "../ThuTuc/SuaVBLQ?id=" + id + "&type=" + type,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -283,10 +283,10 @@
         });
     }
     //start nhom thanh phan
-     function ThemNhomThanhPhan(ma_thu_tuc) {
+    function ThemNhomThanhPhan(ma_thu_tuc) {
         $.ajax({
             type: "Get",
-            url: "/ThuTuc/ThemNhomThanhPhan?ma_thu_tuc="+ma_thu_tuc,
+            url: "/ThuTuc/ThemNhomThanhPhan?ma_thu_tuc=" + ma_thu_tuc,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -294,8 +294,8 @@
             }
         });
     }
-     function SaveNhomTP(){
-       var data = $("#form_nhom_tp").serialize();
+    function SaveNhomTP() {
+        var data = $("#form_nhom_tp").serialize();
         $.ajax({
             type: "Post",
             url: "../ThuTuc/SaveNhomTP",
@@ -309,8 +309,8 @@
             }
         });
     }
-     function SaveAddNhomTP(){
-       var data = $("#form_nhom_tp").serialize();
+    function SaveAddNhomTP() {
+        var data = $("#form_nhom_tp").serialize();
         $.ajax({
             type: "Post",
             url: "../ThuTuc/SaveAddNhomTP",
@@ -318,16 +318,16 @@
             //data: data,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(data) {
-               $("#NhomThanhPhan").html(data);
+                $("#NhomThanhPhan").html(data);
                 $("#TitleEform").html("Thêm nhóm thành phần thành công!!!");
                 $("#Notifyeform").modal("show");
             }
         });
     }
-     function SuaNhomTP(id,type){
-         $.ajax({
+    function SuaNhomTP(id, type) {
+        $.ajax({
             type: "Get",
-            url: "../ThuTuc/SuaNhomTP?id=" + id + "&type=" + type ,
+            url: "../ThuTuc/SuaNhomTP?id=" + id + "&type=" + type,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -335,15 +335,15 @@
             }
         });
     }
-     function XoaNhomTP(id){
-        if(id == "" || id == null){
-                $("#TitleEform").html("Mã nhóm thành phần không tồn tại !!!");
-                $("#Notifyeform").modal("show");
-           return;
+    function XoaNhomTP(id) {
+        if (id == "" || id == null) {
+            $("#TitleEform").html("Mã nhóm thành phần không tồn tại !!!");
+            $("#Notifyeform").modal("show");
+            return;
         }
         $.ajax({
             type: "Get",
-            url: "../ThuTuc/XoaNhomTP?id="+ id,
+            url: "../ThuTuc/XoaNhomTP?id=" + id,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -357,7 +357,7 @@
     function ThemTPKQXL(ma_thu_tuc) {
         $.ajax({
             type: "Get",
-            url: "/ThuTuc/ThemTPKQXL?ma_thu_tuc="+ma_thu_tuc,
+            url: "/ThuTuc/ThemTPKQXL?ma_thu_tuc=" + ma_thu_tuc,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -365,7 +365,7 @@
             }
         });
     }
-    
+
 </script>
 <div class="card">
     <div class="card-body">
@@ -413,15 +413,19 @@
                                                 {
                                                     foreach (var item in Model.lstLuong)
                                                     {
-                                                        <a href="/Luong/QuyTrinhXuLy?code=@item.ma_luong">@item.ten_luong</a>
+                                                        <a href="/Luong/QuyTrinhXuLy?code=@item.ma_luong">@item.ma_luong</a>
                                                     }
+                                                }
+                                                else
+                                                {
+                                                    <p style="color:red;">Chưa có luồng xử lý</p>
                                                 }
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input type="text" onfocus="CheckMa(this)" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
@@ -470,7 +474,7 @@
                                                 <label for="nop_online">Nộp Online</label>
 
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-4">
                                                 <input type="checkbox" id="hd_online" name="hd_online" value="@Model.thuTuc.hd_online" @(Model.thuTuc.hd_online==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="hd_online">Hướng dẫn Online</label>
 
@@ -483,7 +487,7 @@
                                                 <label for="tthcc">TN tại TTHCC</label>
 
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <input type="checkbox" id="tthtks" name="tthtks" value="@Model.thuTuc.tthtks" @(Model.thuTuc.tthtks==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tthtks">Thủ tục hộ tịch khai sinh</label>
 
@@ -696,7 +700,7 @@
                                             @if (ViewBag.type_view == StatusAction.View.ToString())
                                             {
                                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/ThemThuTuc';">Thêm</button>
-                                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()&active=@ActionThuTuc.ThuTuc.ToString()';">Sửa</button>
                                             }
                                             @if (ViewBag.type_view == StatusAction.Edit.ToString())
                                             {
@@ -718,7 +722,7 @@
                         <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.ThanhPhan.ToString())?"show active":"")" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
                             <p class="stdformbutton" style="margin-bottom: 10px;">
                                 <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view';" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" value="Xóa" onclick="DeleteMultipleTP('@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
                                 <input hidden id="lstCode_tp" />
                             </p>
                             <select name="" onchange="" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
@@ -792,8 +796,8 @@
                                         {
                                             if (CurrentPage > CurrentPage + 2)
                                             {
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                             };
                                             if (CurrentPage > 3)
                                             {
@@ -801,11 +805,11 @@
                                                 {
                                                     if (i == CurrentPage)
                                                     {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -815,11 +819,11 @@
                                                 {
                                                     if (i == CurrentPage)
                                                     {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
 
@@ -827,8 +831,8 @@
 
                                             if (CurrentPage < CurrentPage + 2)
                                             {
-                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                             };
                                         }
                                         else
@@ -837,11 +841,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -853,7 +857,7 @@
                             </div>
                             <p class="stdformbutton" style="margin-bottom: 10px;">
                                 <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view';" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                                <input type="button" value="Xóa" onclick="DeleteMultipleTP('@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
 
                             </p>
                         </div>
@@ -864,7 +868,7 @@
                                 <input type="button" name="" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
                             </p>
                             <div id="NhomVBLQ">
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" >
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                     <div class="dataTable-container">
                                         <table class="table table-bordered responsive">
                                             <thead class="widgettitle">
@@ -873,7 +877,7 @@
                                                         <input type="checkbox" name="" id="selectAll" />
                                                     </th>
                                                     <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                                     <th class="head1" scope="col" data-sortable="" style="width: 45%;">MÃ VĂN BẢN</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 45%;">MÃ VĂN BẢN</th>
                                                     <th class="head1" scope="col" data-sortable="" style="width: 45%;">TÊN</th>
                                                     <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
                                                     <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
@@ -933,8 +937,8 @@
                                             {
                                                 if (CurrentPageVblq > CurrentPageVblq + 2)
                                                 {
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq - 1)">Trước</a></span>
                                                 };
                                                 if (CurrentPageVblq > 3)
                                                 {
@@ -942,11 +946,11 @@
                                                     {
                                                         if (i == CurrentPageVblq)
                                                         {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
                                                 }
@@ -956,11 +960,11 @@
                                                     {
                                                         if (i == CurrentPageVblq)
                                                         {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
 
@@ -968,8 +972,8 @@
 
                                                 if (CurrentPageVblq < CurrentPageVblq + 2)
                                                 {
-                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageVblq + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageVblq)">Cuối</a></span>
                                                 };
                                             }
                                             else
@@ -978,11 +982,11 @@
                                                 {
                                                     if (i == CurrentPageVblq)
                                                     {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -999,7 +1003,7 @@
                                 <input type="button" name="ctl08$BtnAdd" value="Xóa" id="" class="btn btn-primary" style="width:100px;" />
                             </p>
                             <div id="NhomThanhPhan">
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                                     <div class="dataTable-container">
                                         <table class="table table-bordered responsive">
                                             <thead class="widgettitle">
@@ -1062,8 +1066,8 @@
                                             {
                                                 if (CurrentPageNtp > CurrentPageNtp + 2)
                                                 {
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp - 1)">Trước</a></span>
                                                 };
                                                 if (CurrentPageNtp > 3)
                                                 {
@@ -1071,11 +1075,11 @@
                                                     {
                                                         if (i == CurrentPageNtp)
                                                         {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
                                                 }
@@ -1085,11 +1089,11 @@
                                                     {
                                                         if (i == CurrentPageNtp)
                                                         {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
 
@@ -1097,8 +1101,8 @@
 
                                                 if (CurrentPageNtp < CurrentPageNtp + 2)
                                                 {
-                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageNtp + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageNtp)">Cuối</a></span>
                                                 };
                                             }
                                             else
@@ -1107,11 +1111,11 @@
                                                 {
                                                     if (i == CurrentPageNtp)
                                                     {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -1195,8 +1199,8 @@
                                             {
                                                 if (CurrentPageTpkqxl > CurrentPageTpkqxl + 2)
                                                 {
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl - 1)">Trước</a></span>
                                                 };
                                                 if (CurrentPageTpkqxl > 3)
                                                 {
@@ -1204,11 +1208,11 @@
                                                     {
                                                         if (i == CurrentPageTpkqxl)
                                                         {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
                                                 }
@@ -1218,11 +1222,11 @@
                                                     {
                                                         if (i == CurrentPageTpkqxl)
                                                         {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                         else
                                                         {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                         }
                                                     }
 
@@ -1230,8 +1234,8 @@
 
                                                 if (CurrentPageTpkqxl < CurrentPageTpkqxl + 2)
                                                 {
-                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
-                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPageTpkqxl + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPageTpkqxl)">Cuối</a></span>
                                                 };
                                             }
                                             else
@@ -1240,11 +1244,11 @@
                                                 {
                                                     if (i == CurrentPageTpkqxl)
                                                     {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                     else
                                                     {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                     }
                                                 }
                                             }
@@ -1288,6 +1292,25 @@
 <script>
 
     CKEDITOR.replace('ckedit2');
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/ThuTuc/CheckMaTTHC",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result.error == 0) {
+                    window.location.href = result.href;
+                }
+            }
+        });
+    };
+
+    function DeleteMultipleTP(code, type) {
+        var listData = $("#lstCode_tp").val();
+        confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code=' + code + "&code_tp=" + listData + "&type=" + type)
+    }
 
     $(function() {
         $('#selectAll_tp').click(function() {
@@ -1308,9 +1331,9 @@
         });
 
 
-        $('.ads_Checkbox_tp').click(function() {
+        $('.ads_Checkbox_tp').click(function() {            
             var val = [];
-            $(':checkbox:checked').each(function(i) {
+            $('.ads_Checkbox_tp:checked').each(function(i) {
                 if ($('#selectAll').is(':checked')) {
                     if (i > 0) {
                         val[i - 1] = $(this).val();
@@ -1324,7 +1347,7 @@
         });
 
     });
-</script>  
+</script>
 
 <div class="modal fade" id="Notifyeform" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

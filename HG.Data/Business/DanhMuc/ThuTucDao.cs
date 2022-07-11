@@ -164,6 +164,19 @@ namespace HG.Data.Business.ThuTuc
                 return new ThuTucModel();
             }
         }
+
+        public int CheckMaThuTuc(string ma_thu_tuc,string table)
+        {
+            DbProvider.SetCommandText2("dm_check_ma_tthc", CommandType.StoredProcedure);
+            DbProvider.AddParameter("ma_check", ma_thu_tuc, SqlDbType.VarChar);
+            DbProvider.AddParameter("table", table, SqlDbType.VarChar);
+            DbProvider.AddParameter("code", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+            // Lấy về danh sách các trường học
+            var obj = DbProvider.ExecuteNonQuery();
+            //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+            var code = int.Parse(DbProvider.Command.Parameters["code"].Value.ToString() ?? "99");
+            return code;
+        }
         #endregion
         public List<Dm_Thanh_Phan_Key> DanhSachThanhPhan(string code)
         {

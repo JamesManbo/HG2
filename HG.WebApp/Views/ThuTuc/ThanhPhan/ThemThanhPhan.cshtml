@@ -72,7 +72,8 @@
         $('#form_tptt').validate({
             rules: {
                 ma_thanh_phan: {
-                    required: true
+                    required: true,
+                    ma_thu_tuc_vaild: true
                 },
                 ten_thanh_phan: "required",
                 ban_sao: {
@@ -89,7 +90,9 @@
                 }
             },
             messages: {
-                ma_thanh_phan: "Bạn cần nhập mã thành phần!",
+                ma_thanh_phan: {
+                    required: "Bạn cần nhập mã thành phần!",
+                },
                 ten_thanh_phan: "Bạn cần nhập tên thành phần!",
                 ban_sao: {
                     required: 'Bạn cần nhập số lượng bản sao.',
@@ -106,22 +109,53 @@
             }
         });
 
-        function convetArrayToObj(serialized) {
-            var FormHelper = {};
-            var s = '';
-            var data = {};
-            for (s in serialized) {
-                if (serialized[s]['name'] != 'query')
-                    data[serialized[s]['name']] = serialized[s]['value']
-            }
-            return JSON.parse(JSON.stringify(data));
-        };
+        function CleadFile() {
+            $("#files").val(null);
+            $("#url_file").val(null);
+            $("#file_dinh_kem").val(null);
+        }
 
-        $('.select2').select2({
-            closeOnSelect: false
+        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
+            if (/[ `!#$%^&*()+\=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
+        $('#form_pb').validate({
+            rules: {
+                ma_thu_tuc: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
+                ten_thu_tuc: "required",
+                ma_linh_vuc: "required",
+                ma_phong_ban: "required",
+                so_ngay_xl: "required",
+                so_bo_hs: "required"
+            },
+            messages: {
+                ma_thu_tuc: {
+                    required: "Bạn cần nhập mã thủ tục!",
+                },
+                ten_thu_tuc: "Bạn cần nhập tên thủ tục!",
+                ma_linh_vuc: "Bạn cần nhập lĩnh vực",
+                ma_phong_ban: "Bạn cần nhập phòng ban",
+                so_ngay_xl: "Bạn cần nhập số ngày xử lý",
+                so_bo_hs: "Bạn cần nhập số bộ hồ sơ"
+            }
         });
 
+        $('.select2').select2();
+
         $("#nop_online").val($("#nop_online").is(':checked'));
+        if ($("#nop_online").is(':checked')) {
+            $(".tab_thuc_hien").attr("style", "display:flex");
+        } else {
+            $(".tab_thuc_hien").attr("style", "display:none");
+        }
+
         $('#nop_online').change(function() {
             if ($(this).is(':checked')) {
                 $(".tab_thuc_hien").attr("style", "display:flex")
@@ -167,6 +201,13 @@
         });
 
         $("#cho_phep_lien_thong").val($("#cho_phep_lien_thong").is(':checked'));
+
+        if ($('#cho_phep_lien_thong').is(':checked')) {
+            $(".tab_lienthong").attr("style", "display:block")
+        } else {
+            $(".tab_lienthong").attr("style", "display:none")
+        }
+
         $('#cho_phep_lien_thong').change(function() {
             if ($(this).is(':checked')) {
                 $(".tab_lienthong").attr("style", "display:block")
@@ -196,7 +237,7 @@
             $('#chi_tra_kq_kckqlt').val($(this).is(':checked'));
         });
 
-        var ngctxl = "@(Model.thuTuc.don_vi_ltxl)";
+        var ngctxl = "@Model.thuTuc.don_vi_ltxl";
         var arrNgctxl = ngctxl.split(",");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
@@ -237,12 +278,173 @@
             Arr2.pop(e.params.data.id);
             $("#don_vi_ltph").val(Arr2.join(","));
         });
+
+
     });
 
-    function CleadFile() {
-        $("#files").val(null);
-        $("#url_file").val(null);
-        $("#file_dinh_kem").val(null);
+    function ThemVBLQ(ma_thu_tuc) {
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/ThemVBLQ?ma_thu_tuc=" + ma_thu_tuc,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomVBLQ").html(data);
+            }
+        });
+    }
+    function SaveVBLQ() {
+        if ($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null) {
+            $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
+        var data = $("#form_vblq").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveVBLQ",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+    function XoaVBLQ(id) {
+        if (id == "" || id == null) {
+            $("#TitleEform").html("Mã văn bản liên quan không tồn tại !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/XoaVBLQ?id=" + id,
+            data: "",
+            //data: data,
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+    function SaveAndAddVBLQ() {
+        if ($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null) {
+            $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
+        var data = $("#form_vblq").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveAndAddVBLQ",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#NhomVBLQ").html(data);
+                $("#TitleEform").html("Thêm văn bản liên quan thành công!!!");
+                $("#Notifyeform").modal("show");
+            }
+        });
+    }
+    function SuaVBLQ(id, type) {
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/SuaVBLQ?id=" + id + "&type=" + type,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomVBLQ").html(data);
+            }
+        });
+    }
+    //start nhom thanh phan
+    function ThemNhomThanhPhan(ma_thu_tuc) {
+        $.ajax({
+            type: "Get",
+            url: "/ThuTuc/ThemNhomThanhPhan?ma_thu_tuc=" + ma_thu_tuc,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomThanhPhan").html(data);
+            }
+        });
+    }
+    function SaveNhomTP() {
+        var data = $("#form_nhom_tp").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveNhomTP",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+    function SaveAddNhomTP() {
+        var data = $("#form_nhom_tp").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveAddNhomTP",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#NhomThanhPhan").html(data);
+                $("#TitleEform").html("Thêm nhóm thành phần thành công!!!");
+                $("#Notifyeform").modal("show");
+            }
+        });
+    }
+    function SuaNhomTP(id, type) {
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/SuaNhomTP?id=" + id + "&type=" + type,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NhomThanhPhan").html(data);
+            }
+        });
+    }
+    function XoaNhomTP(id) {
+        if (id == "" || id == null) {
+            $("#TitleEform").html("Mã nhóm thành phần không tồn tại !!!");
+            $("#Notifyeform").modal("show");
+            return;
+        }
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/XoaNhomTP?id=" + id,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
+
+            }
+        });
+    }
+    //end Nhom TP
+    function ThemTPKQXL(ma_thu_tuc) {
+        $.ajax({
+            type: "Get",
+            url: "/ThuTuc/ThemTPKQXL?ma_thu_tuc=" + ma_thu_tuc,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#TPKQXL").html(data);
+            }
+        });
     }
 </script>
 <div class="card">
@@ -279,8 +481,7 @@
                     <div class="tab-content" id="myTabContent" style="padding: 15px;">
                         @*TAB Thủ tục hành chính*@
                         <div class="tab-pane fade" id="pills-tthc" role="tabpanel" aria-labelledby="home-tab">
-                            <div class="">
-                                <div class="form-horizontal">
+                                 <div class="form-horizontal">
                                     <!-- Horizontal Form -->
                                     <form id="form_pb" action="/ThuTuc/ThemThuTuc" method="post" enctype="multipart/form-data">
                                         <input name="ma_thu_tuc_old" value="@Model.thuTuc.ma_thu_tuc_old" hidden />
@@ -291,36 +492,40 @@
                                                 {
                                                     foreach (var item in Model.lstLuong)
                                                     {
-                                                        <a href="/Luong/QuyTrinhXuLy?code=@item.ma_luong">@item.ten_luong</a>
+                                                        <a href="/Luong/QuyTrinhXuLy?code=@item.ma_luong">@item.ma_luong</a>
                                                     }
+                                                }
+                                                else
+                                                {
+                                                    <p style="color:red;">Chưa có luồng xử lý</p>
                                                 }
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input type="text" onfocus="CheckMa(this)" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             </div>
                                             <div class="col-sm-1">
-                                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                     Chọn
                                                 </button>
 
-                                                @*     <script>
-                                                function myModalPopup() {
-                                                $.ajax({
-                                                type: "GET",
-                                                url: "../ThuTuc/RenderViewThuTuc",
-                                                data: "",
-                                                contentType: 'application/json; charset=utf-8',
-                                                success: function(data) {
-                                                console.log(data);
-                                                $("#basicModal .modal-body").html(data);
-                                                }
-                                                });
-                                                }
+                                                <script>
+                                                    function myModalPopup() {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: "../ThuTuc/RenderViewThuTuc",
+                                                            data: "",
+                                                            contentType: 'application/json; charset=utf-8',
+                                                            success: function(data) {
+                                                                console.log(data);
+                                                                $("#basicModal .modal-body").html(data);
+                                                            }
+                                                        });
+                                                    }
 
-                                                </script>*@
+                                                </script>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -348,7 +553,7 @@
                                                 <label for="nop_online">Nộp Online</label>
 
                                             </div>
-                                            <div class="col-sm-2">
+                                            <div class="col-sm-4">
                                                 <input type="checkbox" id="hd_online" name="hd_online" value="@Model.thuTuc.hd_online" @(Model.thuTuc.hd_online==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="hd_online">Hướng dẫn Online</label>
 
@@ -361,7 +566,7 @@
                                                 <label for="tthcc">TN tại TTHCC</label>
 
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-4">
                                                 <input type="checkbox" id="tthtks" name="tthtks" value="@Model.thuTuc.tthtks" @(Model.thuTuc.tthtks==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tthtks">Thủ tục hộ tịch khai sinh</label>
 
@@ -505,7 +710,7 @@
 
                                             </div>
                                             <div class="col-sm-3">
-                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="0" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                <input type="checkbox" id="tra_kq_ktn" name="tra_kq_ktn" value="@Model.thuTuc.tra_kq_ktn" @(Model.thuTuc.tra_kq_ktn==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="tra_kq_ktn">Trả kết quả khi tiếp nhận</label>
 
                                             </div>
@@ -531,7 +736,7 @@
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltxl" class="col-sm-2 control-label">Đơn vị liên thông XL</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple data-placeholder="Chọn đơn vị liên thông xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -546,7 +751,7 @@
                                             <div class="row mb-3">
                                                 <label for="don_vi_ltph" class="col-sm-2 control-label">Đơn vị liên thông PH</label>
                                                 <div class="col-sm-8">
-                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple data-placeholder="Chọn đơn vị liên thông phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                         @if (LstDonViLienThong != null)
                                                         {
                                                             foreach (var item in LstDonViLienThong)
@@ -574,7 +779,7 @@
                                             @if (ViewBag.type_view == StatusAction.View.ToString())
                                             {
                                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/ThemThuTuc';">Thêm</button>
-                                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()&active=@ActionThuTuc.ThuTuc.ToString()';">Sửa</button>
                                             }
                                             @if (ViewBag.type_view == StatusAction.Edit.ToString())
                                             {
@@ -583,14 +788,13 @@
 
                                             <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=0')">Xóa</button>
                                             <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=1')">Bãi bỏ TTHC</button>
-                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/ThanhPhan?code=@Model.thuTuc.ma_thu_tuc';">Thành phần</button>
+                                            <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc';">Thành phần</button>
                                             <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/QuanLy';">Đóng</button>
                                         </div>
                                     </form>
 
                                     <!-- End Horizontal Form -->
                                 </div>
-                            </div>
                         </div>
                         @*TAB thành phần *@
                         <div class="tab-pane fade show active" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
@@ -606,7 +810,7 @@
                                                 <span style="color:Red;">(*)</span>
                                             </label>
                                             <div class="col-md-8">
-                                                <input name="ma_thanh_phan" type="text" value="@(Model.thuTuc.ma_thu_tuc+"-"+(Model.thuTuc.count_tp+1).ToString())" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần">
+                                                <input name="ma_thanh_phan" type="text" value="@ViewBag.code_tp" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần">
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">Chọn</button>

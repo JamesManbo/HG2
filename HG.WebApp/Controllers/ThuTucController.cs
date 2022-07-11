@@ -53,7 +53,7 @@ namespace HG.WebApp.Controllers
             {
                 ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted != 1).ToList();
                 ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-                ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n=>n.Deleted != 1).ToList();
+                ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
             }
             ViewBag.BieuMau = tabbieumau;
             return View("~/Views/ThuTuc/QuanLy.cshtml", ds);
@@ -75,7 +75,7 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/QuanLyPaging.cshtml", ds);
             return Content(result);
         }
-        public IActionResult ThemThuTuc(int currentPage = 0, int pageSize = 20)
+        public IActionResult ThemThuTuc(string code = "", int currentPage = 0, int pageSize = 20)
         {
             var ds = _thuTucDao.ThuTuc("", "", "", "", "", currentPage, pageSize);
             //Thành phần
@@ -105,13 +105,14 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstDonViLienThong = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).ToList();
                 ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
+            ViewBag.code = code;
             return View("~/Views/ThuTuc/ThemThuTuc.cshtml", ds);
         }
         [HttpPost]
         public IActionResult ThemThuTuc(DmThuTuc item)
         {
-            item.ma_thu_tuc = String.Concat(HelperString.RemoveSign4VietnameseString(item.ma_thu_tuc).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
-            item.ma_quoc_gia = String.Concat(HelperString.RemoveSign4VietnameseString(item.ma_quoc_gia).ToUpper().Where(c => !Char.IsWhiteSpace(c)));
+            item.ma_thu_tuc = HelperString.CreateCode(item.ma_thu_tuc);
+            item.ma_quoc_gia = HelperString.CreateCode(item.ma_quoc_gia);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var _pb = _thuTucDao.LuuThuTuc(item);
@@ -124,7 +125,7 @@ namespace HG.WebApp.Controllers
             {
                 return RedirectToAction("ThemThuTuc", "ThuTuc", new { code = item.ma_thu_tuc });
             }
-            return RedirectToAction("SuaThuTuc", "ThuTuc", new { code = item.ma_thu_tuc, type = StatusAction.View.ToString() });
+            return RedirectToAction("SuaThuTuc", "ThuTuc", new { code = item.ma_thu_tuc, type = StatusAction.View.ToString(), active = ActionThuTuc.ThuTuc.ToString() });
         }
 
 
@@ -188,9 +189,20 @@ namespace HG.WebApp.Controllers
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/QuanLy" });
         }
 
+        [HttpPost]
+        public JsonResult CheckMaTTHC(string code)
+        {
+            var ds = _thuTucDao.CheckMaThuTuc(code, ActionThuTuc.ThuTuc.ToString());
+            if (ds == 0)
+            {
+                return Json(new { error = 0, href = "/ThuTuc/ThemThuTuc?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
+        }
+
         #region Thành phần
 
-        public IActionResult ThemThanhPhan(string code, string type = "", int currentPage = 0, int pageSize = 20)
+        public IActionResult ThemThanhPhan(string code, string code_tp = "", string type = "", int currentPage = 1, int pageSize = 20)
         {
             var ds = _thuTucDao.ThuTuc(code, "", "", "", "", currentPage, pageSize);
             //Thành phần
@@ -220,13 +232,23 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstDonViLienThong = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).ToList();
                 ViewBag.LstMucDoThucHien = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.Deleted == 0).ToList();
             }
+            if (string.IsNullOrEmpty(code_tp))
+            {
+                ViewBag.code_tp = code + "-" + (ds.thuTuc.count_tp + 1).ToString();
+            }
+            else
+            {
+                ViewBag.code_tp = code_tp;
+            }
             ViewBag.type_view = type;
+
             return View("~/Views/ThuTuc/ThanhPhan/ThemThanhPhan.cshtml", ds);
         }
 
         [HttpPost]
         public IActionResult ThemThanhPhan(ThanhPhan item)
         {
+            item.ma_thanh_phan = HelperString.CreateCode(item.ma_thanh_phan);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             if (item.url_file != null)
@@ -298,7 +320,7 @@ namespace HG.WebApp.Controllers
             {
                 // Xử lý các thông báo lỗi tương ứng
                 return Json(new { error = 1, msg = "Xóa lỗi" });
-            }           
+            }
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/SuaThuTuc?code=" + code + "&type=" + type + "&active=" + ActionThuTuc.ThanhPhan.ToString() });
         }
 
@@ -327,7 +349,16 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
 
-
+        [HttpPost]
+        public JsonResult CheckMaTP(string code, string code_tp, string type)
+        {
+            var ds = _thuTucDao.CheckMaThuTuc(code, ActionThuTuc.ThanhPhan.ToString());
+            if (ds == 0)
+            {
+                return Json(new { error = 0, href = "/ThuTuc/ThemThanhPhan?code=" + code.ToUpper() + "&code_tp=" + code_tp + "&type=" + type });
+            }
+            return Json(new { error = 1, href = "" });
+        }
         #endregion
         [HttpPost]
         public IActionResult ThemBieuMau(string ckedit1, string ten_bieu_mau)
@@ -375,7 +406,7 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewBieuMau(int id, string type = "")
         {
-            if(type == StatusAction.View.ToString())
+            if (type == StatusAction.View.ToString())
             {
                 EAContext db = new EAContext();
                 ViewBag.Template = db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault().mo_ta;
@@ -385,8 +416,8 @@ namespace HG.WebApp.Controllers
             {
                 EAContext db = new EAContext();
                 var obj = db.dm_bieu_mau.Where(n => n.Id == id).FirstOrDefault();
-               
-                if(obj != null)
+
+                if (obj != null)
                 {
                     var abc = obj.mo_ta;
                     foreach (var item in HG.WebApp.Helper.HelperString.ListTemplate())
@@ -400,7 +431,7 @@ namespace HG.WebApp.Controllers
                 }
                 return View(obj);
             }
-          
+
         }
         public string XoaBieuMau(int id)
         {
@@ -426,11 +457,11 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> ThemVBLQ(string ma_thu_tuc = "")
         {
             EAContext db = new EAContext();
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml", new VanBanLQ() { ma_thu_tuc = ma_thu_tuc});
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml", new VanBanLQ() { ma_thu_tuc = ma_thu_tuc });
             return Content(result);
         }
         [HttpPost]
-        public string SaveVBLQ(string Id = "",string ma_thu_tuc = "", string ten_van_ban = "", string mo_ta = "", string file_dinh_kem = "", string stt = "0")
+        public string SaveVBLQ(string Id = "", string ma_thu_tuc = "", string ten_van_ban = "", string mo_ta = "", string file_dinh_kem = "", string stt = "0")
         {
             try
             {
@@ -448,7 +479,7 @@ namespace HG.WebApp.Controllers
                     db.SaveChanges();
                     return "Sửa văn bản liên quan thành công!!!";
                 }
-                
+
                 var obj = db.VanBanLQ.Where(n => n.ten_van_ban == ten_van_ban).Count();
                 VanBanLQ item = new VanBanLQ();
                 item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
@@ -471,12 +502,12 @@ namespace HG.WebApp.Controllers
                     return "Thêm văn bản liên quan thất bại!!!";
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return "Lỗi dữ liệu !!!";
             }
-            
-        } 
+
+        }
         public async Task<IActionResult> SaveAndAddVBLQ(string Id = "", string ma_thu_tuc = "", string ten_van_ban = "", string mo_ta = "", string file_dinh_kem = "", string stt = "")
         {
             try
@@ -523,7 +554,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.MaThuTuc = ma_thu_tuc;
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml", new VanBanLQ() { ma_thu_tuc = ma_thu_tuc });
                 return Content(result);
-                
+
             }
 
         }
@@ -548,13 +579,13 @@ namespace HG.WebApp.Controllers
             }
 
         }
-        public async Task<IActionResult> SuaVBLQ(string id = "",string type = "")
+        public async Task<IActionResult> SuaVBLQ(string id = "", string type = "")
         {
-            if(type == StatusAction.View.ToString())
+            if (type == StatusAction.View.ToString())
             {
                 EAContext db = new EAContext();
                 ViewBag.type_view = StatusAction.View.ToString();
-                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml", db.VanBanLQ.FirstOrDefault(n=>n.Id == Convert.ToInt32(id)));
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemVBLQ.cshtml", db.VanBanLQ.FirstOrDefault(n => n.Id == Convert.ToInt32(id)));
                 return Content(result);
             }
             else
@@ -574,14 +605,14 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemNhomThanhPhan.cshtml", new dm_nhom_tp() { ma_thu_tuc = ma_thu_tuc, ma_nhom = ma_thu_tuc + "-nhom" + (obj + 1).ToString() });
             return Content(result);
         }
-        public string SaveNhomTP(string Id = "", string ma_thu_tuc = "", string ma_nhom = "", string ten_nhom = "", string mo_ta = "",  string Stt = "0")
+        public string SaveNhomTP(string Id = "", string ma_thu_tuc = "", string ma_nhom = "", string ten_nhom = "", string mo_ta = "", string Stt = "0")
         {
             try
             {
                 EAContext db = new EAContext();
                 if (!string.IsNullOrEmpty(Id))
                 {
-                    var objVBLQ = db.dm_nhom_tp.Where(n=>n.Id == Convert.ToInt32(Id)).FirstOrDefault();
+                    var objVBLQ = db.dm_nhom_tp.Where(n => n.Id == Convert.ToInt32(Id)).FirstOrDefault();
                     objVBLQ.UpdatedDateUtc = DateTime.Now;
                     objVBLQ.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
                     objVBLQ.ma_nhom = ma_nhom;
@@ -594,7 +625,7 @@ namespace HG.WebApp.Controllers
                 }
                 dm_nhom_tp item = new dm_nhom_tp();
                 item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
-                item.CreatedDateUtc= DateTime.Now;
+                item.CreatedDateUtc = DateTime.Now;
                 item.Deleted = 0;
                 item.ma_nhom = ma_nhom;
                 item.ma_thu_tuc = ma_thu_tuc;

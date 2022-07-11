@@ -67,8 +67,9 @@
         });
     </script>
 };
-@if(ViewBag.BieuMau == 2){
-     <script>
+@if (ViewBag.BieuMau == 2)
+{
+    <script>
         $(document).ready(function() {
             $('#pills-home-tab').removeClass('active');
             $('#pills-home').removeClass('show');
@@ -77,7 +78,7 @@
             $("#pills-profile").addClass('show');
             $("#pills-profile").addClass('active');
         });
-     </script>
+    </script>
 };
 
 <div class="card">
@@ -192,7 +193,7 @@
                                                         @stt
                                                         <input type="hidden" name="" id="" value="@item.ma_thu_tuc" />
                                                     </td>
-                                                    <td><a href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())">@item.ten_thu_tuc</a></td>
+                                                    <td><a href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">@item.ten_thu_tuc</a></td>
 
                                                     <td>@item.ten_linh_vuc</td>
                                                     <td>@(item.luong?"có":"")</td>
@@ -235,8 +236,8 @@
                                     {
                                         if (CurrentPage > CurrentPage + 2)
                                         {
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if (CurrentPage > 3)
                                         {
@@ -244,11 +245,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -258,11 +259,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
 
@@ -270,8 +271,8 @@
 
                                         if (CurrentPage < CurrentPage + 2)
                                         {
-                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                         };
                                     }
                                     else
@@ -280,11 +281,11 @@
                                         {
                                             if (i == CurrentPage)
                                             {
-                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                             else
                                             {
-                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                         }
                                     }
@@ -296,13 +297,13 @@
                         <input type="submit" name="" value="Thêm" id="" onclick="window.location.href = '/ThuTuc/ThemThuTuc';" class="btn btn-primary" style="width:100px;" />
 
                         <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
-                       
+
                     </p>
                 </div>
                 @*TAB Quản lý biểu mẫu*@
                 <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="profile-tab">
-                   @* <p class="stdformbutton" style="margin-bottom: 10px;">
-                        <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
+                    @* <p class="stdformbutton" style="margin-bottom: 10px;">
+                    <input type="submit" name="ctl08$BtnAdd" value="Thêm" id="" class="btn btn-primary" style="width:100px;" />
                     </p>*@
                     <div id="thembieumau">
                         @using (Html.BeginForm("ThemBieuMau", "ThuTuc", FormMethod.Post, new { @class = "", enctype = "multipart/form-data", id = "form_pb" }))
@@ -326,7 +327,7 @@
                             </div>
                         }
                     </div>
-          
+
                     <table class="table table-bordered responsive">
                         <thead class="widgettitle">
                             <tr>
@@ -344,7 +345,7 @@
                             {
                                 <tr>
                                     <td> <a onclick="SuaBieuMau(@item.Id)" href="#">Sửa</a></td>
-                                    <td> <a onclick="XoaBieuMau(@item.Id)"  href="#">Xóa</a></td>
+                                    <td> <a onclick="XoaBieuMau(@item.Id)" href="#">Xóa</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.Edit.ToString()">@item.ten_bieu_mau</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.Edit.ToString()">@item.url_bieu_mau</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.View.ToString()">Xem</a></td>
@@ -412,7 +413,7 @@
                 $("#TitleEform").html(data);
                 $("#Notifyeform").modal("show");
                 setTimeout(window.location.href = "/ThuTuc/QuanLy?tabbieumau=2", 3000)
-                
+
             }
         });
     }
@@ -427,6 +428,14 @@
             }
         });
     }
+
+    var input = document.getElementById("tu_khoa");
+    input.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            document.getElementById("searchForm").click();
+        }
+    });
     function searchForm() {
         var pageSize = $("#lstPageSize").val();
         var ma_lv = $("#ma_lv").val();
