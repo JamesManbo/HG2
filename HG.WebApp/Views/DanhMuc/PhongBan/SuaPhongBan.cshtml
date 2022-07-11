@@ -53,7 +53,7 @@
                             <div class="col-sm-8">
                                 <select id="ma_don_vi" class="form-select form-control input-default" name="ma_don_vi"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     <option selected="selected" value="">---- Chọn đơn vị ----</option>
-                                    @if (lst_don_vi != null)
+                                        @if (lst_don_vi != null)
                                         foreach (var item in lst_don_vi)
                                         {
                                             if (Model.ma_don_vi != null && Model.ma_don_vi == item.ma_don_vi)
@@ -117,7 +117,7 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Phòng ban cha</label>
                             <div class="col-sm-8">
-                                <select class="form-select form-control input-default" name="phong_ban_cha">
+                                <select class="form-select form-control input-default" name="phong_ban_cha" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     <option selected="selected" value="">---- Chọn phòng ban ----</option>
                                     @if (lst_phong_ban != null)
                                         foreach (var item in lst_phong_ban.Where(n => n.ma_phong_ban != Model.ma_phong_ban))
@@ -181,13 +181,13 @@
                         <div class="row mb-3">
                             <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
+                                <input disabled type="date" class="form-control input-default" id="ngay_sua" value="@(Model.UpdatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.UpdatedDateUtc))">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
+                                <input disabled type="date" class="form-control input-default" id="ngay_tao" value="@(Model.CreatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.CreatedDateUtc))">
                             </div>
                         </div>
                         @if (ViewBag.type_view == StatusAction.View.ToString())
