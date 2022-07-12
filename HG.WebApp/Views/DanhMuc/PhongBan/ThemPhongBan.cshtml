@@ -63,7 +63,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" maxlength="25" value="@ViewBag.code">
+                                <input onfocusout="CheckMa(this)" type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" maxlength="25" value="@ViewBag.code">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -270,7 +270,7 @@
         });
 
         $('#myModalUser').on('shown.bs.modal', function() {
-            var data = { ma_phong_ban: 0 };
+            var data = { ma_phong_ban: "" };
             $.ajax({
                 url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
                 type: "post",
@@ -324,6 +324,18 @@
 
     });
 
+     function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaPb",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                window.location.href = result.href;
+            }
+        });
+    };
 </script>
 
 

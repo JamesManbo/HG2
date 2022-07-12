@@ -51,10 +51,12 @@ namespace HG.Data.Business.DanhMuc
             }
         }
 
-        public int LuuPhongBan(Dm_Phong_Ban item)
+        public Response LuuPhongBan(Dm_Phong_Ban item)
         {
+            var res = new Response();
             try
             {
+
                 DbProvider.SetCommandText2("dm_them_sua_phong_ban", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_phong_ban", item.ma_phong_ban, SqlDbType.VarChar);
                 DbProvider.AddParameter("ten_phong_ban", item.ten_phong_ban, SqlDbType.NVarChar);
@@ -68,14 +70,17 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("uid_name", item.UidName ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("stt", item.Stt ?? null, SqlDbType.Int);
                 DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ten_loi", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
                 // Lấy về danh sách các trường học
                 var obj = DbProvider.ExecuteNonQuery();
-                var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString() ?? "100");
-                return ma_loi;
+                res.ErrorCode = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString() ?? "100");
+                res.ErrorMsg = DbProvider.Command.Parameters["ten_loi"].Value.ToString();
+
+                return res;
             }
             catch (Exception ex)
             {
-                return 101;
+                return new Response();
             }
         }
 

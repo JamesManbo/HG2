@@ -95,13 +95,13 @@ namespace HG.WebApp.Controllers
             {
                 return Json(new { error = 0, href = "/Danhmuc/ThemPhongBan?code=" + code.ToUpper() });
             }
-            return Json(new { error = 1, href = "" });
+            return Json(new { error = 1, href = "/Danhmuc/SuaPhongBan?code=" + code.ToUpper() + "&type=" + StatusAction.Edit.ToString() });
         }
 
         public IActionResult ThemPhongBan(string code = "")
         {
             var modal = new Dm_Phong_Ban();
-            var user = _danhmucDao.DanhSachNguoiDung("0");
+            var user = _danhmucDao.DanhSachNguoiDung("");
             var lstpb = new List<Dm_Phong_Ban>();
             var lstdv = new List<dm_don_vi>();
             using (var db = new EAContext())
@@ -123,14 +123,14 @@ namespace HG.WebApp.Controllers
             pb.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             pb.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuPhongBan(pb);
-            if (_pb > 0)
+            if (_pb.ErrorCode > 0)
             {
                 ViewBag.error = 1;
-                ViewBag.msg = "Tạo phòng ban lỗi";
+                ViewBag.msg = _pb.ErrorMsg;
             }
-            if (pb.type_view == StatusAction.Add.ToString() || _pb > 0)
+            if (pb.type_view == StatusAction.Add.ToString() || _pb.ErrorCode > 0)
             {
-                var user = _danhmucDao.DanhSachNguoiDung("0");
+                var user = _danhmucDao.DanhSachNguoiDung("");
                 var lstpb = new List<Dm_Phong_Ban>();
                 using (var db = new EAContext())
                 {
@@ -148,12 +148,11 @@ namespace HG.WebApp.Controllers
             {
                 return BadRequest();
             }
-
         }
 
         public IActionResult SuaPhongBan(string code, string type)
         {
-            var user = _danhmucDao.DanhSachNguoiDung("0");
+            var user = _danhmucDao.DanhSachNguoiDung("");
             var lstpb = new List<Dm_Phong_Ban>();
             var lstdv = new List<dm_don_vi>();
             using (var db = new EAContext())
@@ -175,11 +174,11 @@ namespace HG.WebApp.Controllers
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuPhongBan(item);
-            if (_pb > 0)
+            if (_pb.ErrorCode > 0)
             {
                 ViewBag.error = 1;
-                ViewBag.msg = "cập nhật phòng ban lỗi";
-                var user = _danhmucDao.DanhSachNguoiDung("0");
+                ViewBag.msg = _pb.ErrorMsg;
+                var user = _danhmucDao.DanhSachNguoiDung("");
                 var lstpb = new List<Dm_Phong_Ban>();
                 using (var db = new EAContext())
                 {
