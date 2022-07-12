@@ -35,7 +35,7 @@
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
-                        <select class="dataTable-selector" onchange="ChangePageSize(this)">
+                        <select class="dataTable-selector" id="dataTable-selector" onchange="ChangePageSize(this)">
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="15">15</option>
@@ -155,16 +155,17 @@
     </div>
 <script>
     function GetListByCurrentPage(id) {
+                var pageSize = document.getElementById("dataTable-selector").options[document.getElementById("dataTable-selector").selectedIndex].value;
+                var tu_khoa = $('#Search').val();
                $.ajax({
                    type: "GET",
-                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=",
+                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=" + tu_khoa + "&pageSize=" + pageSize,
                    data: "",
                    contentType: 'application/json; charset=utf-8',
                    success: function(data) {
-                       console.log(data);
                        $("#dataTable").html(data);
                    }
-               });                             
+               });                                
      }
     function DeleteMultiple() {
         var listData = $("#lstCode").val();

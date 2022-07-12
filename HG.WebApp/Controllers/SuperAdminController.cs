@@ -209,6 +209,7 @@ namespace HG.WebApp.Controllers
             ViewBag.TotalRecords = ds.asp_Nhoms.Count();
             ViewBag.PageSize = pageSize;
             ViewBag.TuKhoa = tu_khoa;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/nhomPaging.cshtml", ds);
             return Content(result);
         }
@@ -504,6 +505,7 @@ namespace HG.WebApp.Controllers
         {
             var totalRecored = 0;
             var result = "";
+            ViewBag.Stt = (currentPage - 1) * pageSize;
             if (string.IsNullOrEmpty(tu_khoa))
             {
                 using (var db = new EAContext())

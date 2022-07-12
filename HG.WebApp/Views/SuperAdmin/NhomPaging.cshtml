@@ -8,7 +8,7 @@
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
-                        <select class="dataTable-selector" onchange="ChangePageSize(this)">
+                        <select class="dataTable-selector" id="dataTable-selector" onchange="ChangePageSize(this)">
                             @foreach (var item in HG.WebApp.Helper.HelperString.ListPageRecords())
                             {
                                 if(item.key == ViewBag.PageSize)
@@ -42,7 +42,7 @@
                         <tbody>
                             @if (Model.asp_Nhoms != null)
                             {
-                                var stt = 1;
+                                var stt = 1 + (int) ViewBag.Stt ;
                                 foreach (var item in Model.asp_Nhoms)
                                 {
                                     <tr>
@@ -132,10 +132,11 @@
 
 <script>
         function GetListByCurrentPage(id) {
+            var pageSize = document.getElementById("dataTable-selector").options[document.getElementById("dataTable-selector").selectedIndex].value;
             var tu_khoa = $('#Search').val();
                $.ajax({
                    type: "GET",
-                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=" + tu_khoa,
+                   url: "../SuperAdmin/NhomPaging?currentPage=" + id + "&tu_khoa=" + tu_khoa + "&pageSize="+ pageSize,
                    data: "",
                    contentType: 'application/json; charset=utf-8',
                    success: function(data) {

@@ -29,10 +29,10 @@
                         Hiển thị
                         <select class="dataTable-selector" id="lstPageSize" onchange="ChangePageSize(this);">
                             <option value="5">5</option>
-                            <option value="10" selected="">10</option>
+                            <option value="10">10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
-                            <option value="25">25</option>
+                            <option value="25" selected>25</option>
                         </select> bản ghi
                     </label>
                 </div>
@@ -147,7 +147,7 @@
         $("#lstPageSize").val(data.value);
         $.ajax({
             type: "GET",
-            url: "/SuperAdmin/VaiTro?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#txtSearch").val(),
+            url: "/SuperAdmin/VaiTroPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#txtSearch").val(),
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
