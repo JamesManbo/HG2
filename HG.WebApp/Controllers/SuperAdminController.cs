@@ -294,6 +294,30 @@ namespace HG.WebApp.Controllers
             }
           
         }
+        public async Task<IActionResult> QuyenPaging(int currentPage = 1, int pageSize = 10, string tu_khoa = "")
+        {
+            EAContext eAContext = new EAContext();
+            ViewBag.TotalPage = Convert.ToInt32(_config.GetSection("AppSetting").GetSection("PageSize").Value);
+            if (!string.IsNullOrEmpty(tu_khoa))
+            {
+                ViewBag.Stt = (currentPage - 1) * pageSize;
+                var totalRecouds = eAContext.AspNetRoles.Where(n => n.Name.Contains(tu_khoa) && n.Deleted != 1).Count();
+                ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/QuyenPaging.cshtml", eAContext.AspNetRoles.Where(n => n.Name.Contains(tu_khoa) && n.Deleted != 1).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList());
+                return Content(result);
+            }
+            else
+            {
+                ViewBag.Stt = (currentPage - 1) * pageSize;
+                var totalRecouds = eAContext.AspNetRoles.Where(n => n.Deleted != 1).Count();
+                ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
+                ViewBag.CurrentPage = 1;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/QuyenPaging.cshtml", eAContext.AspNetRoles.Where(n => n.Deleted != 1).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList());
+                return Content(result);
+            }
+           
+        }
         public IActionResult KiemTraMaQuyen(string code)
         {
             EAContext db = new EAContext();

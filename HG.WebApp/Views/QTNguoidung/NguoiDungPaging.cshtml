@@ -65,75 +65,55 @@
                                                 <a onclick="confirm.BeforDelete('/QTNguoiDung/XoaNnguoiDung2?Id=@item.Id')"  value="">xóa</a></td>
                                         </tr>
                                         stt++;
-            }
+                                 }
                             }
                             
                         
                         </tbody>
                     </table>
-                   
-<script>
-    
-</script>
-<script>
-    function GetListByCurrentPage(id) {
-                var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
-                var trang_thai = 0;
-                var da_xoa = 0;
-               if ($('input[name=Status]:checked').length > 0) {
-                   trang_thai = 1;
-                };
-               if ($('input[name=Deleted]:checked').length > 0) {
-                   da_xoa = 1;
-               };
-               $.ajax({
-                   type: "GET",
-                   url: "../QTNguoiDung/NguoiDungPaging?currentPage=" + id + "&ma_phong_ban="+ ma_phong_ban + "&trang_thai=" + trang_thai + "&da_xoa=" + da_xoa,
-                   data: "",
-                   contentType: 'application/json; charset=utf-8',
-                   success: function(data) {
-                       $("#dyntable_wrapper").html(data);
-                   }
-               });                             
-     }
-    function DeleteMultiple() {
-        var listData = $("#lstCode").val();
-        confirm.BeforDeletePost('/SuperAdmin/XoaNhom?code=' + listData)
-    }
+                   <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến @ViewBag.pageSize của @(ViewBag.TotalRecords) bản ghi</div>
+                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                            @{
+                                var TotalPage = (int) ViewBag.TotalPage;
+                                var CurrentPage = (int)ViewBag.CurrentPage;
+                                if (TotalPage> 5)
+                                {
+					                    if(CurrentPage > CurrentPage + 2 ){
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        };
+                                        if(CurrentPage > 3)
+                                        {
+                                             for(int i = CurrentPage -2; i< CurrentPage+2; i++){
+						                                if(i == CurrentPage){
+                                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+						                                }else{
+                                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+						                                } 
+					                                }
+                                        }else{
+                                                    for(int i = 1 ; i <= 5; i++){
+						                                if(i == CurrentPage){
+                                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+						                                }else{
+                                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+						                                } 
+					                                }
 
-    $(function() {
-        $('#selectAll').click(function() {
-            var val = [];
-            if ($(this).is(':checked')) {
-                $(".ads_Checkbox").prop("checked", true);
-                $(':checkbox:checked').each(function(i) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
-                });
-            }
-            else {
-                $(".ads_Checkbox").prop("checked", false);
-                val = [];
-            }
-            $("#lstCode").val(val);
-        });
-
-
-        $('.ads_Checkbox').click(function() {
-            var val = [];
-            $(':checkbox:checked').each(function(i) {
-                if ($('#selectAll').is(':checked')) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
-                } else {
-                    val[i] = $(this).val();
-                }
-
-            });
-            $("#lstCode").val(val);
-        });
-
-    });
-</script>
+                                        }
+                           
+					                    if(CurrentPage < CurrentPage + 2 ){
+                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
+                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
+					                    };
+                                }else{
+					                    for(int i = 1; i <= TotalPage; i++){
+						                    if(i == CurrentPage){
+                                                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+						                    }else{
+                                                              <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
+						                    } 
+					                    }
+			                    }
+                            }
+                        </div>

@@ -46,14 +46,15 @@ namespace HG.WebApp.Controllers
             ViewBag.CurrentPage = 1;
             return View(ds.asp_Nhoms);
         }
-        public async Task<IActionResult> NguoiDungPaging(int currentPage = 0, string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
-        {
-            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            
+        public async Task<IActionResult> NguoiDungPaging(int currentPage = 0, string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0, int pageSize = 0)
+        {  
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = currentPage, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
-
+            ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
+            ViewBag.CurrentPage = 1;
+            ViewBag.pageSize = pageSize;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoiDung/NguoiDungPaging.cshtml", ds);
             return Content(result);
         }

@@ -70,7 +70,7 @@
                                 <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="UserName" readonly value="@Model.aspNetUsersModel.First().UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
+                                <input name="UserName" disabled value="@Model.aspNetUsersModel.First().UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
                             </div>
                          
 
@@ -94,7 +94,7 @@
                                 <span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-10">
-                                <input readonly name="ho_dem" type="text" id="ho_dem" value="@Model.aspNetUsersModel.First().ho_dem" maxlength="50" class="form-control input-default" placeholder="Họ đêm">
+                                <input disabled name="ho_dem" type="text" id="ho_dem" value="@Model.aspNetUsersModel.First().ho_dem" maxlength="50" class="form-control input-default" placeholder="Họ đêm">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -103,14 +103,14 @@
                                 <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-10">
-                                <input readonly name="ten" type="text" id="ten" maxlength="50" value="@Model.aspNetUsersModel.First().ten" class="form-control input-default" placeholder="Tên">
+                                <input disabled name="ten" type="text" id="ten" maxlength="50" value="@Model.aspNetUsersModel.First().ten" class="form-control input-default" placeholder="Tên">
                             </div>
                         </div>
                        
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Ngày sinh</label>
                             <div class="col-md-10">
-                                <input readonly name="ngay_sinh" type="text" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" value="@Model.aspNetUsersModel.First().ngay_sinh" placeholder="Ngày sinh">
+                                <input disabled name="ngay_sinh" type="text" id="ngay_sinh" class="form-control input-default datepicker hasDatepicker" value="@Model.aspNetUsersModel.First().ngay_sinh" placeholder="Ngày sinh">
                               
                             </div>
                         </div>
@@ -118,20 +118,20 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Điện thoại</label>
                             <div class="col-md-10"> 
-                                <input name="PhoneNumber" readonly type="text" id="PhoneNumber" maxlength="12" value="@Model.aspNetUsersModel.First().PhoneNumber" class="form-control input-default" placeholder="Số điện thoại">
+                                <input name="PhoneNumber" disabled type="text" id="PhoneNumber" maxlength="12" value="@Model.aspNetUsersModel.First().PhoneNumber" class="form-control input-default" placeholder="Số điện thoại">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Email</label>
                             <div class="col-md-10">
-                                <input name="Email" readonly type="text" id="Email" class="form-control input-default" maxlength="50" value="@Model.aspNetUsersModel.First().Email" placeholder="Email">
+                                <input name="Email" disabled type="text" id="Email" class="form-control input-default" maxlength="50" value="@Model.aspNetUsersModel.First().Email" placeholder="Email">
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Phòng ban</label>
                             <div class="col-md-10">
-                                <select readonly name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
+                                <select disabled name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Toàn bộ phòng ban ------------</option>
                                     @if(lst_phong_ban != null)
                                     {
@@ -152,7 +152,7 @@
                             <label class="col-md-2 control-label">Chức vụ 1</label>
                             <div class="col-md-3" style="padding-right: 0px">
 
-                                <select readonly name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
+                                <select disabled name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
                                     <option value="">----------------Chọn-----------------</option>
                                     @if(lst_chuc_vu != null)
                                     {
@@ -176,7 +176,7 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label ">Thêm người vào nhóm</label>
                             <div class="col-md-10">
-                                <select readonly id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Select a State" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                <select disabled id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Thêm người vào nhóm" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                     @if (LstNhom != null)
                                     {
                                         foreach (var item in LstNhom)
@@ -194,20 +194,20 @@
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Thứ tự</label>
                             <div class="col-md-10">
-                                <input readonly name="stt" type="text" id="stt" maxlength="10" value="@Model.aspNetUsersModel.First().stt" class="form-control input-default" placeholder="Số thứ tự">
+                                <input disabled name="stt" type="text" id="stt" maxlength="10" value="@Model.aspNetUsersModel.First().stt" class="form-control input-default" placeholder="Số thứ tự">
                             </div>
                         </div>
                         <div class="form-group" hidden="hidden">
                             <div class="col-md-10">
-                                <input readonly name="Id" type="text" maxlength="50" value="@Model.aspNetUsersModel.First().Id"  class="form-control input-default" placeholder="Mã">
+                                <input disabled name="Id" type="text" maxlength="50" value="@Model.aspNetUsersModel.First().Id"  class="form-control input-default" placeholder="Mã">
                             </div>
                         </div>
-                       @* <div class="form-group row">
-                            <label class="col-md-2 control-label">Khóa tài khoản</label>
-                            <div class="col-md-10">
-                                <input id="ctl08_ctl00_LockUser" type="checkbox" name="ctl08$ctl00$LockUser">
-                            </div>
-                        </div>*@
+                      <div class="form-group row">
+									<label class="col-md-2 control-label">Khóa tài khoản</label>
+									<div class="col-md-10">
+										<input id="LockoutEnabled" type="checkbox" name="LockoutEnabled" @(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? "checked" : "" )  disabled>
+									</div>
+						</div>
                          <div class="text-center">
                            <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/QTNguoiDung/ThemNguoiDung';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/QTNguoiDung/SuaNguoiDung?Id=@Model.aspNetUsersModel.First().Id&type=@StatusAction.Edit.ToString()';">Sửa</button>

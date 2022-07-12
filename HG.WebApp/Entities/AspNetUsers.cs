@@ -20,7 +20,7 @@ namespace HG.WebApp
         public int? stt { get; set; }
         public DateTime? ngay_sinh { get; set; }
         public int? Deleted { get; set; }
+        public int? khoa_tai_khoan { get; set; }
 
-    
     }
 }

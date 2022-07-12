@@ -51,7 +51,7 @@
                                 <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_nhom" id="ma_nhom" value="@Model.ma_nhom" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "")>
                                     Chọn
                                 </button>
                             </div>

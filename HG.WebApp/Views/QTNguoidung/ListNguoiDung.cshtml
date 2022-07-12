@@ -125,8 +125,22 @@
 
                 </div>
             </div>
-            <div id="" class="dataTables_wrapper" role="grid">
-                <table class="table table-bordered responsive dataTable" id="dyntable_wrapper" aria-describedby="dyntable_info">
+             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                <div class="dataTables_length">
+                    <label>
+                        Hiển thị
+                        <select class="dataTable-selector" id="lstPageSize" onchange="ChangePageSize(this);">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25" selected>25</option>
+                        </select> bản ghi
+                    </label>
+                </div>
+                <div id="dataTable" class="dataTables_wrapper" role="grid">
+                         <table class="table table-bordered responsive dataTable" id="dyntable_wrapper" aria-describedby="dyntable_info">
                         <colgroup>
                             <col class="con0" style="width: 20px">
                             <col class="con1" style="width: 2%">
@@ -196,7 +210,7 @@
                         </tbody>
                     </table>
                      <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 25 của @(ViewBag.TotalRecords) bản ghi</div>
-                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                     <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
                                 var TotalPage = (int) ViewBag.TotalPage;
                                 var CurrentPage = (int)ViewBag.CurrentPage;
@@ -241,7 +255,7 @@
 			                    }
                             }
                 </div>
-            </div>
+                </div>
               <p class="stdformbutton" style="margin-bottom: 10px;">
                  <input type="button" value="Thêm" onclick="window.location.href = '/QTNguoiDung/ThemNguoiDung';" class="btn btn-primary" style="width:100px;" />
 
@@ -250,10 +264,11 @@
             </p>
         </div>
     </div>
-
+    </div>
 </div>
 <script>
     function GetListByCurrentPage(id) {
+              var pageSize = document.getElementById("lstPageSize").options[document.getElementById("lstPageSize").selectedIndex].value;
               var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
                 var trang_thai = 0;
                 var da_xoa = 0;
@@ -265,15 +280,50 @@
                };
                $.ajax({
                    type: "GET",
-                   url: "../QTNguoiDung/NguoiDungPaging?currentPage=" + id + "&ma_phong_ban="+ ma_phong_ban + "&trang_thai=" + trang_thai + "&da_xoa=" + da_xoa,
+                   url: "../QTNguoiDung/NguoiDungPaging?currentPage=" + id + "&ma_phong_ban="+ ma_phong_ban + "&trang_thai=" + trang_thai + "&da_xoa=" + da_xoa + "&pageSize="+pageSize,
                    data: "",
                    contentType: 'application/json; charset=utf-8',
                    success: function(data) {
                        console.log(data);
-                       $("#dyntable_wrapper").html(data);
+                       $("#dataTable").html(data);
                    }
                });                             
      }
+    function ChangePageSize(data) {
+              $("#lstPageSize").val(data.value);
+              var pageSize = document.getElementById("lstPageSize").options[document.getElementById("lstPageSize").selectedIndex].value;
+              var ma_phong_ban = document.getElementById("ma_phong_ban_sl").options[document.getElementById("ma_phong_ban_sl").selectedIndex].value;
+              var trang_thai = 0;
+              var da_xoa = 0;
+              if ($('input[name=Status]:checked').length > 0) {
+                  trang_thai = 1;
+              };
+              if ($('input[name=Deleted]:checked').length > 0) {
+                  da_xoa = 1;
+              };
+        $.ajax({
+            type: "GET",
+            url: "../QTNguoiDung/NguoiDungPaging?currentPage=" + 1 + "&ma_phong_ban="+ ma_phong_ban + "&trang_thai=" + trang_thai + "&da_xoa=" + da_xoa + "&pageSize=" + pageSize,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    // function GetListByCurrentPage(id) {
+    //    var pageSize = $("#lstPageSize").val();
+    //    $.ajax({
+    //        type: "GET",
+    //        url: "/SuperAdmin/VaiTroPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=" + $("#txtSearch").val(),
+    //        data: "",
+    //        contentType: 'application/json; charset=utf-8',
+    //        success: function(data) {
+    //            //console.log(data);
+    //            $("#dataTable").html(data);
+    //        }
+    //    });
+    //}
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/QTNguoiDung/XoaNnguoiDung?Id=' + listData)
