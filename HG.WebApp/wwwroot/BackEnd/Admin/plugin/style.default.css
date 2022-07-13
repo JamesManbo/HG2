@@ -648,3 +648,65 @@ element.style {
 .dataTables_paginate .active {
     background: #fff;
 }
+[class^="iconsweets-"], [class*=" iconsweets-"] {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    background-image: url(../Images/iconsweets-icons.png);
+    background-position: -16px -16px;
+    background-repeat: no-repeat;
+}
+
+/* White icons with optional class or on hover/active states of certain elements */
+.iconsweets-white,
+.nav-pills > .active > a > [class^="iconsweets-"],
+.nav-pills > .active > a > [class*=" iconsweets-"],
+.nav-list > .active > a > [class^="iconsweets-"],
+.nav-list > .active > a > [class*=" iconsweets-"],
+.navbar-inverse .nav > .active > a > [class^="iconsweets-"],
+.navbar-inverse .nav > .active > a > [class*=" iconsweets-"],
+.dropdown-menu > li > a:hover > [class^="iconsweets-"],
+.dropdown-menu > li > a:hover > [class*=" iconsweets-"],
+.dropdown-menu > .active > a > [class^="iconsweets-"],
+.dropdown-menu > .active > a > [class*=" iconsweets-"],
+.dropdown-submenu:hover > a > [class^="iconsweets-"],
+.dropdown-submenu:hover > a > [class*=" iconsweets-"] {
+    background-image: url(../images/iconsweets-icons-white.png);
+}
+/*get possision icon*/ 
+.iconsweets-firefox {
+    background-position: -176px -176px;
+}
+
+.iconsweets-chrome {
+    background-position: -208px -176px;
+}
+
+.iconsweets-safari {
+    background-position: -240px -176px;
+}
+
+.iconsweets-loadingbar {
+    background-position: -272px -176px;
+}
+
+.iconsweets-bullseye {
+    background-position: -304px -176px;
+}
+
+.iconsweets-folder {
+    background-position: -16px -208px;
+}
+
+.iconsweets-locked {
+    background-position: -48px -208px;
+}
+
+.iconsweets-locked2 {
+    background-position: -80px -208px;
+}
+
+.iconsweets-unlock {
+    background-position: -112px -208px;
+}

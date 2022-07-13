@@ -33,7 +33,7 @@
                 
                         <tbody role="alert" aria-live="polite" aria-relevant="all">
                             @if(Model.asp_Nhoms != null){
-                            var stt = 1;
+                            var stt = 1 + (int)ViewBag.Stt;
                             foreach(var item in Model.asp_Nhoms)
                                 {
                                         <tr class="gradeX odd">
@@ -71,7 +71,7 @@
                         
                         </tbody>
                     </table>
-                   <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến @ViewBag.pageSize của @(ViewBag.TotalRecords) bản ghi</div>
+                     <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
                     <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
                                 var TotalPage = (int) ViewBag.TotalPage;

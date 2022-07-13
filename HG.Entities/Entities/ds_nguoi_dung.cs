@@ -18,7 +18,7 @@ namespace HG.Entities.Entities
         public string? ten_chuc_vu { get; set; }
         public string? ten_phong_ban { get; set; }
         public int? stt { get; set; }
-        public bool? khoa { get; set; }
+        public int? khoa_tai_khoan { get; set; }
 
     }
     public class ds_nguoi_dung_paging : BaseModel

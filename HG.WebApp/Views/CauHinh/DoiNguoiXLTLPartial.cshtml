@@ -1,7 +1,22 @@
 ﻿@{
         var danhSachNguoiDung = ViewBag.DanhSachNguoiDung as List<HG.WebApp.AspNetUsers>;
 }
-
+         <script>
+                    function LocNguoiXuLyHienTai1() {
+                        var ma_nguoi_xl_hien_tai = document.getElementById("ma_nguoi_xl_hien_tai_tl").options[document.getElementById("ma_nguoi_xl_hien_tai_tl").selectedIndex].value;
+                        var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_thetl").options[document.getElementById("ma_nguoi_dung_thay_thetl").selectedIndex].value;
+                        $.ajax({
+                           type: "GET",
+                           url: "/CauHinh/DoiNguoiXLTLList?ma_nguoi_dung="+ma_nguoi_xl_hien_tai + "&ma_nguoi_dung_thay_the="+ma_nguoi_dung_thay_the,
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                            success: function(data) {
+                                $("#LocNguoiXuLyHienTai").html(data);
+                            }
+                         });
+                    }
+                    
+        </script>
         <div class="form-horizontal">
                 <div class="form-group">
                             <label class="col-md-12 control-label" style="text-align: center; color: red">Chức năng này sẽ thay đổi hoặc xóa Người có thể xử lý ở luồng đã khai báo!!!</label>
@@ -11,7 +26,7 @@
                                 Người xử lý hiện tại:
                             </label>
                             <div class="col-sm-8">
-                                <select name="ma_nguoi_xl_hien_tai" id="ma_nguoi_xl_hien_tai" class="form-control input-default form-select"  placeholder="Chọn xử lý hiện tại">
+                                <select name="ma_nguoi_xl_hien_tai_tl" id="ma_nguoi_xl_hien_tai_tl" class="form-control input-default form-select"  placeholder="Chọn xử lý hiện tại">
                                     <option value="0">Người xử lý hiện tại</option>
                                     @if(danhSachNguoiDung != null)
                                     {
@@ -22,7 +37,7 @@
                                     }
                                 </select>
                             </div>
-                            <div class="col-sm-2"><input type="button" class="btn btn-primary" value="  Lọc  " onclick="LocNguoiXuLyHienTai()"/></div>
+                            <div class="col-sm-2"><input type="button" class="btn btn-primary" value="  Lọc  " onclick="LocNguoiXuLyHienTai1()"/></div>
                 </div>
              
                 <div class="form-group row">
@@ -43,22 +58,7 @@
                             </div>
                             
                 </div>
-                <script>
-                    function LocNguoiXuLyHienTai() {
-                        var ma_nguoi_xl_hien_tai = document.getElementById("ma_nguoi_xl_hien_tai").options[document.getElementById("ma_nguoi_xl_hien_tai").selectedIndex].value;
-                        var ma_nguoi_dung_thay_the = document.getElementById("ma_nguoi_dung_thay_thetl").options[document.getElementById("ma_nguoi_dung_thay_thetl").selectedIndex].value;
-                        $.ajax({
-                           type: "GET",
-                           url: "/CauHinh/DoiNguoiXLTLList?ma_nguoi_dung="+ma_nguoi_xl_hien_tai + "&ma_nguoi_dung_thay_the="+ma_nguoi_dung_thay_the,
-                           data: "",
-                           contentType: 'application/json; charset=utf-8',
-                            success: function(data) {
-                                $("#LocNguoiXuLyHienTai").html(data);
-                            }
-                         });
-                    }
-                    
-                </script>
+           
         </div>
         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                  <div id="LocNguoiXuLyHienTai">

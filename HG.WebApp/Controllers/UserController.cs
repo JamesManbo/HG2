@@ -191,6 +191,14 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string UserName, string PassWord,bool RememberMe = false)
         {
+            EAContext db = new EAContext();
+            var obj = db.AspNetUsers.Where(n => n.UserName == UserName && n.mat_khau == PassWord && n.khoa_tai_khoan == 1).Count();
+            if(obj > 0)
+            {
+                TempData["Fale"] = "Fale";
+                ViewBag.Msg = "Tài khoản đã bị khóa";
+                return RedirectToAction("Login", "User");
+            }
             ViewBag.Msg = "";
             var q = await userManager.Users.CountAsync();
             var checkUser = await userManager.FindByNameAsync(UserName);

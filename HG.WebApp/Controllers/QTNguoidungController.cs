@@ -7,6 +7,7 @@ using HG.WebApp.Data;
 using HG.WebApp.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HG.WebApp.Controllers
 {
@@ -29,7 +30,7 @@ namespace HG.WebApp.Controllers
             _nguoiDungDao = new NguoiDungDao(DbProvider);
         }
 
-        public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0)
+        public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.ma_phong_ban = ma_phong_ban;
@@ -40,21 +41,45 @@ namespace HG.WebApp.Controllers
             HelperString stringHelper = new HelperString();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() {tu_khoa = txtSearch, CurrentPage = 1, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
-
+            ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
             ViewBag.CurrentPage = 1;
             return View(ds.asp_Nhoms);
+        }
+        public string Unlock(string id)
+        {
+            EAContext db = new EAContext();
+            var uid = Guid.Parse(id);
+            var obj = db.AspNetUsers.Where(n => n.Id == uid).FirstOrDefault();
+            if(obj != null)
+            {
+                obj.khoa_tai_khoan = 0;
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+                return "Mở khóa thành công!";
+            }
+            else
+            {
+                return "Mở khóa thất bại!";
+            }
+
         }
         public async Task<IActionResult> NguoiDungPaging(int currentPage = 0, string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0, int pageSize = 0)
         {  
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = currentPage, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
-            ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
+            var totalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
             ViewBag.CurrentPage = 1;
             ViewBag.pageSize = pageSize;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoiDung/NguoiDungPaging.cshtml", ds);
             return Content(result);
         }

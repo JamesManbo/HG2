@@ -36,7 +36,7 @@
              NguoiDungAutoComplete(0, 0)
          }
     }
-     function DaXoaChecked() {
+    function DaXoaChecked() {
          if ($('input[name=Deleted]:checked').length > 0) {
              $("#Status").prop("checked", false);
              NguoiDungAutoComplete(0, 1)
@@ -44,6 +44,20 @@
              NguoiDungAutoComplete(0, 0)
          }
          
+    }
+    function Unlock(abc){
+          $.ajax({
+                   type: "GET",
+                   url: "../QTNguoiDung/Unlock?id=" + abc,
+                   data: "",
+                   contentType: 'application/json; charset=utf-8',
+                   success: function(data) {
+                       $("#NotifyTitle").html(data);
+                       $("#Notify").modal("show");
+                       setTimeout(window.location.href = "/QTNguoiDung/ListNguoiDung" ,3000)
+                   }
+               });         
+        
     }
 </script>
 
@@ -163,8 +177,8 @@
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐẦY ĐỦ: activate to sort column ascending" style="width: 302px;">TÊN ĐẦY ĐỦ</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="CHỨC VỤ: activate to sort column ascending" style="width: 222px;">CHỨC VỤ</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="PHÒNG BAN: activate to sort column ascending" style="width: 494px;">PHÒNG BAN</th>
-                                    @*<th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="KHÓA: activate to sort column ascending" style="width: 62px;">KHÓA</th>*@
-                                    <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="Khôi phục: activate to sort column ascending" style="width: 33px;">Khôi phục</th>
+                                    <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="KHÓA: activate to sort column ascending" style="width: 62px;">KHÓA</th>
+                                    @*<th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="Khôi phục: activate to sort column ascending" style="width: 33px;">Khôi phục</th>*@
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 14px;">#</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 14px;">#</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 39px;">#</th></tr>
@@ -190,11 +204,9 @@
                                                     <a id="ctl08_RepeaterTable_ctl01_HyperLink4" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_chuc_vu == null ? "" : item.ten_chuc_vu)</a></td>
                                                 <td class=" ">
                                                     <a id="ctl08_RepeaterTable_ctl01_HyperLink2" href="/QTNguoiDung/ViewNguoiDung/@item.Id">@(item.ten_phong_ban == null ? "" : item.ten_phong_ban)</a></td>
-                                                <td style="text-align: center;" class=" ">
+                                                <td style="text-align: center;" class="">
+                                                       @(item.khoa_tai_khoan == 1 ? Html.Raw("<i style=\"cursor: pointer\" onclick=\"Unlock('"+@item.Id+"')\" class=\"iconsweets-locked2\"></i>") : "") 
                                                     </td>
-                                                @* <td style="text-align: center;" class=" ">
-                                                    </td>*@
-                       
                                                 <td class=" ">
                                                     <a  title="" data-placement="top" data-toggle="tooltip" href="/QTNguoiDung/ViewNguoiDung/@item.Id"  data-original-title="Xem">Xem</a></td>
                                                 <td class=" ">
@@ -209,7 +221,7 @@
                         
                         </tbody>
                     </table>
-                     <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến 25 của @(ViewBag.TotalRecords) bản ghi</div>
+                     <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến @(ViewBag.TotalRecords) của @(ViewBag.TotalRecords) bản ghi</div>
                      <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
                                 var TotalPage = (int) ViewBag.TotalPage;
@@ -365,3 +377,18 @@
 
     });
 </script>
+<div class="modal fade" id="Notify" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body" id="NotifyTitle">
+               Mở khóa thành công!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
