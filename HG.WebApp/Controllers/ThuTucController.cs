@@ -190,14 +190,14 @@ namespace HG.WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult CheckMaTTHC(string code)
+        public JsonResult CheckMaTTHC(string code, string type)
         {
             var ds = _thuTucDao.CheckMaThuTuc(code, ActionThuTuc.ThuTuc.ToString());
             if (ds == 0)
             {
                 return Json(new { error = 0, href = "/ThuTuc/ThemThuTuc?code=" + code.ToUpper() });
             }
-            return Json(new { error = 1, href = "" });
+            return Json(new { error = 1, href = "/ThuTuc/SuaThuTuc?code=" + code.ToUpper() + "&type=" + type + "&active=" + ActionThuTuc.ThuTuc.ToString() });
         }
 
         #region Thành phần
