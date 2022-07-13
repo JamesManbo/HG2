@@ -1,5 +1,6 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Data.Business.ThuTuc;
+using HG.Entities.Entities;
 using HG.Entities.HoSo;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
@@ -41,11 +42,20 @@ namespace HG.WebApp.Controllers
             return View(new Ho_So());
         }    
         
-        public IActionResult TiepNhanHoSoMoi(Ho_So item, string type_view)
+        public async Task<IActionResult> LayLuongThanhPhanByMaTTHC(string ma_thu_tuc)
+        {
+            var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayLuongThanhPhanByMaTTHC.cshtml", lstObj);
+            return Content(result);
+        }
+        [HttpPost]
+        public IActionResult TiepNhanHoSoMoi(HoSoModels item, string type_view)
         {
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             if(type_view == StatusAction.View.ToString())
             {
+                //lọc insert các thành phần theo thủ tục sau đó insert hồ sơ
+
                 item.trang_thai = 1; //đang tiếp nhận
 
 
@@ -68,7 +78,7 @@ namespace HG.WebApp.Controllers
             return View(item);
         }
 
-
+        [HttpGet]
         public IActionResult HoSoMoiTiepNhan(Ho_So item, string type_view)
         {
            

@@ -9,7 +9,7 @@
 }
 @model HG.Entities.HoSo.Ho_So
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document">-
         <div class="modal-content" style="border: 2px solid #0866c6;">
             <div class="modal-header" style="background-color: #0866c6;">
                 <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
@@ -146,7 +146,7 @@
                                  <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Thủ tục hành chính<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                        <select name="ma_thu_tuc_hc" id="ma_thu_tuc_hc" class="form-control input-default">
+                                        <select name="ma_thu_tuc_hc" id="ma_thu_tuc_hc" class="form-control input-default" onchange="GetLuongByTTHC(this)">
 				                                 <option value="">Chọn thủ tục hành chính</option> 
                                                 @if(LstThuTuc != null)
                                                 {
@@ -158,101 +158,226 @@
 			                            </select>
                                     </div>
                                 </div>
-
-                                <div class="form-group row mb-3">
-                                    <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
-                                    <div class="col-sm-11">
-                                        <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" class="form-control input-default">
-				                                 <option value="">Chọn luồng xử lý</option> 
-                                                @if(LstLuongXL != null)
-                                                {
-                                                    foreach (var item in LstLuongXL)
+                                <script>
+                                    function GetLuongByTTHC(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#LuongXuLy").html(data);
+                                           }
+                                       });          
+                                    }
+                                </script>
+                                <div id="LuongXuLy">
+                                    <div class="form-group row mb-3" hidden>
+                                        <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
+                                        <div class="col-sm-11">
+                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" class="form-control input-default">
+				                                     <option value="">Chọn luồng xử lý</option> 
+                                                    @if(LstLuongXL != null)
                                                     {
-                                                        <option value="@item.ma_luong">@item.ten_luong</option> 
+                                                        foreach (var item in LstLuongXL)
+                                                        {
+                                                            <option value="@item.ma_luong">@item.ten_luong</option> 
+                                                        }
                                                     }
-                                                }
-			                            </select>
+			                                </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row mb-3">
-                                    <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> <span>(Chọn luồng xử lý trước khi đính kèm tệp thành phần)</span>
-                                        <div class="col-sm-11 col-md-11">
-					                        <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse; margin-left: 125px">
-						                        <tbody>
-                                                    <tr style="background-color:#EEEEEE;">
-							                            <th scope="col">STT</th>
-                                                        <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
-                                                            <input type="checkbox" name="" id="selectAll" />
-                                                        </th>
-                                                        <th scope="col">Tên thành phần</th>
-                                                        <th align="center" scope="col" style="white-space: nowrap; text-align: center;">Đính kèm</th>
-                                                        <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
-                                                        <th align="center" scope="col" style="text-align: center;">Bản chính</th>
-                                                        <th align="center" scope="col" style="text-align: center;">Bản sao</th>
-                                                        <th align="center" scope="col" style="text-align: center;">Bản photo</th>
-                                                        <th align="center" scope="col" style="text-align: center;">Ký thành phần</th>
-						                            </tr>
-                                                    @*start body*@
-                                                    <tr>
-							                            <td align="center" style="width:4%;">
-                                                            1
-                                                        </td><td align="center">
-                                                            <div class="checker" id="uniform-cbChon"><span><input id="cbChon" type="checkbox" name="ctl14$gridThanhPhanHoSo$ctl02$cbChon" style="opacity: 0;"></span></div>
-                                                        </td><td>
-                                                            <span id="Label3">Văn bản Thông báo thay đổi phương thức, phạm vi cung cấp dịch vụ trò chơi điện tử G1 trên mạng đã được phê duyệt; Những nội dung thay đổi</span>
+                                    <div class="form-group row mb-3" hidden>
+                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> <span>(Chọn luồng xử lý trước khi đính kèm tệp thành phần)</span>
+                                            <div class="col-sm-11 col-md-11">
+					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse; margin-left: 125px">
+						                            <tbody>
+                                                        <tr style="background-color:#EEEEEE;">
+							                                <th scope="col">STT</th>
+                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
+                                                                <input type="checkbox" name="" id="selectAll" />
+                                                            </th>
+                                                            <th scope="col">Tên thành phần</th>
+                                                            <th align="center" scope="col" style="white-space: nowrap; text-align: center;">Đính kèm</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Bản chính</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Bản sao</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Bản photo</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Ký thành phần</th>
+						                                </tr>
+                                                        @*start body*@
+                                                        <tr>
+							                                <td align="center" style="width:4%;">
+                                                                1
+                                                            </td><td align="center">
+                                                                <div class="checker" id="uniform-cbChon"><span><input id="cbChon" type="checkbox" name="ctl14$gridThanhPhanHoSo$ctl02$cbChon" style="opacity: 0;"></span></div>
+                                                            </td><td>
+                                                                <span id="Label3">Văn bản Thông báo thay đổi phương thức, phạm vi cung cấp dịch vụ trò chơi điện tử G1 trên mạng đã được phê duyệt; Những nội dung thay đổi</span>
                                                          
-                                                        </td><td align="center" style="width:15%;">
-                                                            <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                                <div class="input-append">
-                                                                    <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
-                                                                        <span class="fileupload-exists">Thay đổi</span>
-                                                                        <input type="file" name="ctl14$gridThanhPhanHoSo$ctl02$DinhKem" id="DinhKem"></span>
-                                                                    <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>
+                                                            </td><td align="center" style="width:15%;">
+                                                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                                    <div class="input-append">
+                                                                        <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
+                                                                            <span class="fileupload-exists">Thay đổi</span>
+                                                                            <input type="file" name="ctl14$gridThanhPhanHoSo$ctl02$DinhKem" id="DinhKem"></span>
+                                                                        <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </td><td align="center" style="width:5%;">
+                                                            </td><td align="center" style="width:5%;">
                                                         
-                                                        </td><td style="width:6%;">
-                                                        <input name="ctl14$gridThanhPhanHoSo$ctl02$BanGoc" type="text" value="1" id="BanGoc" class="form-control">
-                                                        </td><td style="width:6%;">
-                                                            <input name="ctl14$gridThanhPhanHoSo$ctl02$BanSao" type="text" value="0" id="BanSao" class="form-control">
-                                                        </td><td style="width:6%;">
-                                                            <input name="ctl14$gridThanhPhanHoSo$ctl02$BanPhoTo" type="text" value="0" id="BanPhoTo" class="form-control">
-                                                        </td><td align="center" style="width:5%;">
-                                                        </td>
-						                            </tr>
-					                            </tbody></table>
+                                                            </td><td style="width:6%;">
+                                                            <input name="ctl14$gridThanhPhanHoSo$ctl02$BanGoc" type="text" value="1" id="BanGoc" class="form-control">
+                                                            </td><td style="width:6%;">
+                                                                <input name="ctl14$gridThanhPhanHoSo$ctl02$BanSao" type="text" value="0" id="BanSao" class="form-control">
+                                                            </td><td style="width:6%;">
+                                                                <input name="ctl14$gridThanhPhanHoSo$ctl02$BanPhoTo" type="text" value="0" id="BanPhoTo" class="form-control">
+                                                            </td><td align="center" style="width:5%;">
+                                                            </td>
+						                                </tr>
+					                                </tbody></table>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label class="col-sm-1 control-label"></label>
                                     <label for="mota" class="col-sm-2 control-label" style="text-align: left;">
-                                        <a href="#" onclick=""><i class="glyphicon glyphicon-plus"></i>&nbsp;Thêm thành phần hồ sơ</a>
+                                        <p style="color:blue; cursor: pointer" onclick="ThemThanhPhanHoSo()"><i class="glyphicon glyphicon-plus"></i>&nbsp;Thêm thành phần hồ sơ</p>
+                                        <input id="ThemTPHS" name="ThemTPHS" value="1" hidden />
+                                        <input id="lstCode" name="lstCode" value="" hidden />
                                     </label>
                                 </div>
-                                <div class="form-group row mb-3" id="1">
+                                <script>
+                                    function ThemThanhPhanHoSo(){
+                                       var _id = $("#ThemTPHS").val();
+                                        if(_id < 6){
+                                             $("#"+ _id +"").show();
+                                             $("input[name=ThemTPHS]").val((parseInt(_id) + 1))
+                                        }
+                                    }
+                                    function XoaThanhPhan(_id) {
+                                       $("#"+ _id +"").css("display", "none");
+                                       $("input[name=ThemTPHS]").val((parseInt(_id) - 1))
+                                    }
+                                </script>
+                                 <div class="form-group row mb-3" id="1" style="display:none">
                                             <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
                                             <div class="col-md-2">
                                                 <input name="" type="text" id="ThanhPhan_1" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
                                                  <input type="file" id="files" name="files" style="display: none">
-                                                 <input type="text" id="avatar1" name="avatar" style="display: none">
+                                                 <input type="text" id="file_dinh_kem1" name="avatar" style="display: none">
                                                  <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                             </div>
                                             <label class="col-md-1 control-label">Bản chính</label>
                                             <div class="col-md-1">
-                                                <input name="" type="text" value="0" id="" class="form-control input-default-sm">
+                                                <input name="" type="text" value="0" id="BanChinh1" class="form-control input-default-sm">
                                             </div>
                                             <label class="col-md-1 control-label">Bản sao</label>
                                             <div class="col-md-1">
-                                                <input name="" type="text" value="0" id="" class="form-control input-default-sm">
+                                                <input name="" type="text" value="0" id="BanSao1" class="form-control input-default-sm">
                                             </div>
                                             <label class="col-md-1 control-label">Bản photo</label>
                                             <div class="col-md-1">
-                                                <input name="" type="text" value="0" id="" class="form-control input-default-sm">
+                                                <input name="" type="text" value="0" id="BanPhoto1" class="form-control input-default-sm">
                                             </div>
-                                            <label class="col-md-1"><a href="#" class="btnremove"><i class="glyphicon glyphicon-remove"></i>&nbsp;Xóa</a></label>
+                                            <label class="col-md-1"><a href="#" onclick="XoaThanhPhan(1)" class="btnremove"><i class="glyphicon glyphicon-remove"></i>&nbsp;Xóa</a></label>
+                                </div>
+                                 <div class="form-group row mb-3" id="2"  style="display:none">
+                                            <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
+                                            <div class="col-md-2">
+                                                <input name="" type="text" id="ThanhPhan_2" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
+                                            </div>
+                                            <div class="col-md-2">
+                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="text" id="file_dinh_kem2" name="avatar" style="display: none">
+                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản chính</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanChinh2" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản sao</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanSao2" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản photo</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanPhoto2" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1"><a href="#" onclick="XoaThanhPhan(2)" class="btnremove"><i class="glyphicon glyphicon-remove"></i>&nbsp;Xóa</a></label>
+                                </div>
+                                 <div class="form-group row mb-3" id="3"  style="display:none">
+                                            <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
+                                            <div class="col-md-2">
+                                                <input name="" type="text" id="ThanhPhan_3" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
+                                            </div>
+                                            <div class="col-md-2">
+                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="text" id="file_dinh_kem3" name="avatar" style="display: none">
+                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản chính</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanChinh3" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản sao</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanSao3" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản photo</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanPhoto3" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1"><a href="#" onclick="XoaThanhPhan(3)" class="btnremove"><i class="glyphicon glyphicon-remove"></i>&nbsp;Xóa</a></label>
+                                </div>
+                                 <div class="form-group row mb-3" id="4"  style="display:none">
+                                            <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
+                                            <div class="col-md-2">
+                                                <input name="" type="text" id="ThanhPhan_4" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
+                                            </div>
+                                            <div class="col-md-2">
+                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="text" id="file_dinh_kem4" name="avatar" style="display: none">
+                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản chính</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanChinh4" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản sao</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanSao4" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản photo</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanPhoto4" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1"><a href="#" onclick="XoaThanhPhan(4)" class="btnremove">Xóa</a></label>
+                                </div>
+                                 <div class="form-group row mb-3" id="5"  style="display:none">
+                                            <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
+                                            <div class="col-md-2">
+                                                <input name="" type="text" id="ThanhPhan_5" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
+                                            </div>
+                                            <div class="col-md-2">
+                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="text" id="file_dinh_kem5" name="avatar" style="display: none">
+                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản chính</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanChinh5" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản sao</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanSao5" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1 control-label">Bản photo</label>
+                                            <div class="col-md-1">
+                                                <input name="" type="text" value="0" id="BanPhoto5" class="form-control input-default-sm">
+                                            </div>
+                                            <label class="col-md-1"><a href="#" onclick="XoaThanhPhan(5)" class="btnremove">Xóa</a></label>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Ghi chú</label>
@@ -442,6 +567,7 @@
                   }
           });           
     }
+     
 </script>
 
 

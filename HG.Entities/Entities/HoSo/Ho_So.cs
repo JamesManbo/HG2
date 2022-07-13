@@ -45,7 +45,10 @@ namespace HG.Entities.HoSo
         public int? nhan_kq_bo_phan_mot_cua { get; set; }
         public int? nhan_kq_qua_buu_chinh { get; set; }
         public int? ho_so_chua_du_dk_tiep_nhan_chinh_thuc { get; set; }
+        public Decimal? le_phi { get; set; }
+        public int? da_thu_phi { get; set; }
         public int? Stt { get; set; }
+        public int trang_thai { get; set; }
       
     }
 }

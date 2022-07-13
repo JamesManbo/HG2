@@ -44,7 +44,7 @@ namespace HG.WebApp.Controllers
 
         #region Nhom
         [HttpGet]
-        public IActionResult ViewNhom(int currentPage = 1,int pageSize = 25, string txtSearch = "")
+        public IActionResult ViewNhom(int currentPage = 1, int pageSize = 25, string txtSearch = "")
         {
             ViewBag.txtSearch = txtSearch;
             if (string.IsNullOrEmpty(txtSearch))
@@ -63,7 +63,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.CurrentPage = 1;
                 return View(eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).ToList());
             }
-           
+
         }
 
         [HttpGet]
@@ -105,7 +105,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.type_view = StatusAction.View.ToString();
                 return View(obj);
             }
-          
+
         }
         [HttpPost]
         public IActionResult SuaNhom(NhomModel item)
@@ -126,7 +126,7 @@ namespace HG.WebApp.Controllers
                     ViewBag.ErrorMsg = ObjId.ReturnMsg;
                     return View(item);
                 }
-               
+
             }
             else
             {
@@ -153,9 +153,9 @@ namespace HG.WebApp.Controllers
         [HttpGet]
         public IActionResult ThemNhom(string ma_nhom = "")
         {
-            var ds = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100});
+            var ds = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 });
             ViewBag.ListNhom = ds.asp_Nhoms;
-            return View(new Asp_nhom() { ma_nhom = ma_nhom});
+            return View(new Asp_nhom() { ma_nhom = ma_nhom });
         }
 
         [HttpPost]
@@ -164,7 +164,7 @@ namespace HG.WebApp.Controllers
             var uid = Guid.Parse(userManager.GetUserId(User));
             var ObjId = _nhomDao.ThemMoiNhom(item, uid);
             ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
-            if (ObjId.ErrorCode == 0 )
+            if (ObjId.ErrorCode == 0)
             {
                 if (item.type_view == StatusAction.Add.ToString())
                 {
@@ -206,10 +206,15 @@ namespace HG.WebApp.Controllers
             NhomSearchItem nhomSearchItem = new NhomSearchItem() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _nhomDao.LayDsNhomPhanTrang(nhomSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
-            ViewBag.TotalRecords = ds.asp_Nhoms.Count();
+            var totalRecored = ds.Pagelist.TotalRecords;
             ViewBag.PageSize = pageSize;
             ViewBag.TuKhoa = tu_khoa;
             ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/nhomPaging.cshtml", ds);
             return Content(result);
         }
@@ -221,22 +226,24 @@ namespace HG.WebApp.Controllers
             EAContext eAContext = new EAContext();
             ViewBag.CurrentPage = 1;
             ViewBag.txtSearch = txtSearch;
-            ViewBag.TotalPage =  Convert.ToInt32(_config.GetSection("AppSetting").GetSection("PageSize").Value);
+            ViewBag.TotalPage = Convert.ToInt32(_config.GetSection("AppSetting").GetSection("PageSize").Value);
             if (!string.IsNullOrEmpty(txtSearch))
             {
                 var totalRecouds = eAContext.AspNetRoles.Where(n => n.Name.Contains(txtSearch) && n.Deleted != 1).Count();
                 ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
                 ViewBag.CurrentPage = 1;
-                return View(eAContext.AspNetRoles.Where(n=>n.Name.Contains(txtSearch) && n.Deleted != 1).ToList());
+                ViewBag.TotalRecords = totalRecouds;
+                return View(eAContext.AspNetRoles.Where(n => n.Name.Contains(txtSearch) && n.Deleted != 1).ToList());
             }
             else
             {
                 var totalRecouds = eAContext.AspNetRoles.Where(n => n.Deleted != 1).Count();
                 ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
                 ViewBag.CurrentPage = 1;
+                ViewBag.TotalRecords = totalRecouds;
                 return View(eAContext.AspNetRoles.Where(n => n.Deleted != 1).ToList());
             }
-            
+
         }
 
         public IActionResult XoaQuyen(string code, string type)
@@ -278,7 +285,7 @@ namespace HG.WebApp.Controllers
                     ViewBag.ErrorCode = 1;
                     ViewBag.ErrorMsg = "Mã đã tồn tại trong hệ thống";
                     return View(item);
-                }; 
+                };
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AspNetRoles> _role = eAContext.AspNetRoles.Add(item);
                 eAContext.SaveChanges();
                 var roleid = _role.Entity.Id;
@@ -288,22 +295,27 @@ namespace HG.WebApp.Controllers
                     return View(item);
                 }
                 return View();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return View(item);
             }
-          
+
         }
         public async Task<IActionResult> QuyenPaging(int currentPage = 1, int pageSize = 10, string tu_khoa = "")
         {
             EAContext eAContext = new EAContext();
-            ViewBag.TotalPage = Convert.ToInt32(_config.GetSection("AppSetting").GetSection("PageSize").Value);
             if (!string.IsNullOrEmpty(tu_khoa))
             {
                 ViewBag.Stt = (currentPage - 1) * pageSize;
                 var totalRecouds = eAContext.AspNetRoles.Where(n => n.Name.Contains(tu_khoa) && n.Deleted != 1).Count();
+                ViewBag.TotalRecored = totalRecouds;
                 ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
                 ViewBag.CurrentPage = 1;
+                ViewBag.TotalPage = (totalRecouds / pageSize) + ((totalRecouds % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecouds : currentPage * pageSize;
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/QuyenPaging.cshtml", eAContext.AspNetRoles.Where(n => n.Name.Contains(tu_khoa) && n.Deleted != 1).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList());
                 return Content(result);
             }
@@ -313,10 +325,15 @@ namespace HG.WebApp.Controllers
                 var totalRecouds = eAContext.AspNetRoles.Where(n => n.Deleted != 1).Count();
                 ViewBag.TotalPage = (totalRecouds / pageSize) + 1;
                 ViewBag.CurrentPage = 1;
+                ViewBag.TotalPage = (totalRecouds / pageSize) + ((totalRecouds % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.TotalRecored = totalRecouds;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecouds : currentPage * pageSize;
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/QuyenPaging.cshtml", eAContext.AspNetRoles.Where(n => n.Deleted != 1).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList());
                 return Content(result);
             }
-           
+
         }
         public IActionResult KiemTraMaQuyen(string code)
         {
@@ -339,7 +356,7 @@ namespace HG.WebApp.Controllers
                     var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
                     ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
                 };
-                if(obj != null && obj.UpdatedUid != null)
+                if (obj != null && obj.UpdatedUid != null)
                 {
                     var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
                     ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
@@ -377,7 +394,7 @@ namespace HG.WebApp.Controllers
             {
                 EAContext db = new EAContext();
                 var obj = db.AspNetRoles.AsNoTracking().Where(n => n.ma_quyen == item.ma_quyen).FirstOrDefault();
-                if (type_view == StatusAction.Add.ToString() && obj != null )
+                if (type_view == StatusAction.Add.ToString() && obj != null)
                 {
                     obj.Name = item.Name;
                     obj.Description = item.Description;
@@ -401,7 +418,7 @@ namespace HG.WebApp.Controllers
                     ViewBag.type_view = StatusAction.View.ToString();
                     return View(item);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -424,8 +441,8 @@ namespace HG.WebApp.Controllers
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             ViewBag.lstQuyen = eAContext.AspNetRoles.Where(n => n.Deleted == 0).ToList();
-            ViewBag.lstVaiTro = eAContext.Asp_dm_vai_tro.Where(n=>n.Deleted == 0).ToList();
-            ViewBag.lstVaiTroChucNangQuyen = eAContext.Asp_vaitro_quyen.Where(n=>n.Deleted == 0).ToList();
+            ViewBag.lstVaiTro = eAContext.Asp_dm_vai_tro.Where(n => n.Deleted == 0).ToList();
+            ViewBag.lstVaiTroChucNangQuyen = eAContext.Asp_vaitro_quyen.Where(n => n.Deleted == 0).ToList();
             return View(ds);
         }
 
@@ -443,7 +460,7 @@ namespace HG.WebApp.Controllers
             phanQuyenModel.RecoredTo = phanQuyenModel.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             phanQuyenModel.AspNetRoles = eAContext.AspNetRoles.Where(n => n.Deleted == 0).ToList();
             phanQuyenModel.Asp_dm_vai_tro = eAContext.Asp_dm_vai_tro.Where(n => n.Deleted == 0).ToList();
-            phanQuyenModel.Asp_vaitro_quyen= eAContext.Asp_vaitro_quyen.Where(n => (n.Deleted == 0 || n.Deleted == null) && n.ma_vai_tro == ma_vai_tro).ToList();
+            phanQuyenModel.Asp_vaitro_quyen = eAContext.Asp_vaitro_quyen.Where(n => (n.Deleted == 0 || n.Deleted == null) && n.ma_vai_tro == ma_vai_tro).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/PhanQuyenChinhSua.cshtml", phanQuyenModel);
             return Content(result);
         }
@@ -455,27 +472,28 @@ namespace HG.WebApp.Controllers
             {
                 foreach (var item in result.objVaitroChucNangQuyen)
                 {
-                    if (item != null) { 
-                            var obj = db.Asp_vaitro_quyen.Where(n => n.ma_vai_tro == item.ma_vai_tro && n.Deleted == 0 && n.ma_chuc_nang == item.ma_chuc_nang).FirstOrDefault();
-                            if (obj != null)
-                            {
-                                obj.ds_ma_quyen = item.ds_quyen_da_chon == null ? "" : item.ds_quyen_da_chon;
-                                obj.UpdatedDateUtc = DateTime.Now;
-                                db.Entry(obj).State = EntityState.Modified;
-                                db.SaveChanges();
-                            }
-                            else
-                            {
-                                Asp_vaitro_quyen asp_Vaitro_Quyen = new Asp_vaitro_quyen() { ma_vai_tro = item.ma_vai_tro, ma_chuc_nang = item.ma_chuc_nang, ds_ma_quyen = item.ds_quyen_da_chon, CreatedDateUtc = DateTime.Now, Deleted = 0 };
-                                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_vaitro_quyen> _role = db.Asp_vaitro_quyen.Add(asp_Vaitro_Quyen);
-                                 db.SaveChanges();
-                            }
+                    if (item != null)
+                    {
+                        var obj = db.Asp_vaitro_quyen.Where(n => n.ma_vai_tro == item.ma_vai_tro && n.Deleted == 0 && n.ma_chuc_nang == item.ma_chuc_nang).FirstOrDefault();
+                        if (obj != null)
+                        {
+                            obj.ds_ma_quyen = item.ds_quyen_da_chon == null ? "" : item.ds_quyen_da_chon;
+                            obj.UpdatedDateUtc = DateTime.Now;
+                            db.Entry(obj).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            Asp_vaitro_quyen asp_Vaitro_Quyen = new Asp_vaitro_quyen() { ma_vai_tro = item.ma_vai_tro, ma_chuc_nang = item.ma_chuc_nang, ds_ma_quyen = item.ds_quyen_da_chon, CreatedDateUtc = DateTime.Now, Deleted = 0 };
+                            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_vaitro_quyen> _role = db.Asp_vaitro_quyen.Add(asp_Vaitro_Quyen);
+                            db.SaveChanges();
+                        }
                     };
                 }
 
             };
             var ds_ma_vai_tro = result.objVaitroChucNangQuyen.FirstOrDefault();
-            return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = (ds_ma_vai_tro == null)? "" : ds_ma_vai_tro.ma_vai_tro });
+            return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = (ds_ma_vai_tro == null) ? "" : ds_ma_vai_tro.ma_vai_tro });
         }
         [HttpGet]
         public async Task<IActionResult> ChucNangQuyenPartial(string ma_trang = "", string ma_vai_tro = "")
@@ -562,7 +580,7 @@ namespace HG.WebApp.Controllers
 
                 }
             }
-           
+
             return Content(result);
         }
         public async Task<IActionResult> VaiTroView(string code, string type)
@@ -572,7 +590,7 @@ namespace HG.WebApp.Controllers
             {
                 vai_Tro = db.Asp_dm_vai_tro.Where(n => n.Deleted == 0 && n.ma_vai_tro == code).FirstOrDefault();
             }
-            if(vai_Tro != null && vai_Tro.UpdatedUid != null)
+            if (vai_Tro != null && vai_Tro.UpdatedUid != null)
             {
                 ViewBag.UidName = await userManager.GetUserNameAsync(await userManager.FindByIdAsync(vai_Tro.UpdatedUid.ToString()));
             }

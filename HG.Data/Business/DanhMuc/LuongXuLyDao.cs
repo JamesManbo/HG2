@@ -35,6 +35,36 @@ namespace HG.Data.Business.DanhMuc
                 return new List<Dm_Thu_Tuc>();
             }
         }
+        public LuongThanhPhanModels LayLuongThanhPhanByMaTTHC(string ma_thu_tuc)
+        {
+            try
+            {
+                var result = new LuongThanhPhanModels();
+                DbProvider.SetCommandText2("[LayLuongVaThanhPhanBoiTTHC]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("ma_thu_tuc", ma_thu_tuc, SqlDbType.VarChar);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.ExecuteReader_ToMyReader();
+                // Lấy về danh sách các người dung
+                result.dm_Luong_Xu_Lies = DbProvider.ExecuteReader_frmMyReader<Dm_Luong_Xu_Ly>();
+                //Lấy về danh sách nhóm
+                DbProvider.ExecuteReader_NextResult();
+                result.dm_thanh_phan = DbProvider.ExecuteReader_frmMyReader<dm_thanh_phan>();
+                DbProvider.ExecuteReader_Close();
+                var ErrCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                if(ErrCode != 0)
+                {
+                    return new LuongThanhPhanModels();
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new LuongThanhPhanModels();
+            }
+        }
         public Dm_Luong_Xu_Ly_paging DanhSanhLuongXuLy(DanhMucModel item)
         {
             try

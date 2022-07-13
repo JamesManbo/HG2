@@ -81,7 +81,7 @@
                         </tbody>
                     </table>
                 </div> 
-                <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến @ViewBag.PageSize của @ViewBag.TotalRecords bản ghi</div>
+                <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
                 <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                             @{
                                 var TotalPage = (int)(Model.Pagelist.TotalRecords/ViewBag.PageSize) + 1;
