@@ -122,7 +122,7 @@
             } else {
                 return true;
             };
-        }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
         $('#form_pb').validate({
             rules: {
@@ -1372,8 +1372,7 @@
 <!-- End Basic Modal-->
 
 <script>
-
-    CKEDITOR.replace('ckedit2');
+      
 
     function CheckMaTP(data, code, type) {
         var dataPost = { code: code, code_tp: data.value, type: type };

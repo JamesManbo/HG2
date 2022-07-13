@@ -33,7 +33,7 @@ namespace HG.Entities.Entities.DanhMuc
         public int total { get; set; }
         public List<Dm_Phong_Ban> lst_phong_ban { get; set; }
         public Dm_Phong_Ban phong_ban { get; set; }
-        public List<DanhSachNguoiDung> lst_nguoi_dung { get; set; }       
+        public List<DanhSachNguoiDung> lst_nguoi_dung { get; set; }
     }
 
     public class DanhSachPhongBanModelV2 : BaseDanhMucModel
@@ -61,6 +61,7 @@ namespace HG.Entities.Entities.DanhMuc
     {
         public Guid id { get; set; }
         public string ten_nguoi_dung { get; set; }
+        public string UserName { get; set; }
         public string ma_phong_ban { get; set; }
     }
 

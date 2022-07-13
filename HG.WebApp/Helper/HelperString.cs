@@ -58,6 +58,20 @@ namespace HG.WebApp.Helper
             return str;
         }
 
+        public static string SerializeObject(object obj)
+        {
+            System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(obj.GetType());
+            using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
+            {
+                serializer.Serialize(ms, obj);
+                ms.Position = 0;
+                xmlDoc.Load(ms);
+                xmlDoc.RemoveChild(xmlDoc.FirstChild);
+                return xmlDoc.InnerXml;
+            }
+        }
+
         public static string CreateCode(string code)
         {
             return String.Concat(RemoveSign4VietnameseString(code).ToUpper().Where(c => !Char.IsWhiteSpace(c)));

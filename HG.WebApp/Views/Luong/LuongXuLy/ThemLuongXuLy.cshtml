@@ -3,6 +3,7 @@
     ViewData["Title"] = "Danh mục khai báo luồng xử lý";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var ThuTuc = ViewBag.ThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
+    var LuongKey = ViewBag.LuongKey as List<HG.Entities.Dm_luong_Key>;
 }
 <script>
     var Arr = [];
@@ -10,8 +11,14 @@
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
         $('#tt_hai_gd').change(function() {
+            if ($(this).is(':checked')) {
+                $(".tab_luong_cha").attr("style", "display:flex")
+            } else {
+                $(".tab_luong_cha").attr("style", "display:none")
+            }
             $('#tt_hai_gd').val($(this).is(':checked'));
         });
+
 
         $('.select2').select2({
             closeOnSelect: false
@@ -19,21 +26,34 @@
 
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
-            $("#ma_thu_tuc").val(Arr.join(","));
+            $("#ma_thu_tuc").val(Arr.join(";"));
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
             Arr.pop(e.params.data.id);
-            $("#ma_thu_tuc").val(Arr.join(","));
+            $("#ma_thu_tuc").val(Arr.join(";"));
         });
+
+        jQuery.validator.addMethod("ma_vaild", function(value, element) {
+            if (/[ `!#$%^&*()+\=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
         $('#form_pb').validate({
             rules: {
-                ma_luong: "required",
+                ma_luong: {
+                    required: true,
+                    ma_vaild: true
+                },
                 ten_luong: "required"
             },
             messages: {
-                ma_luong: "Bạn cần nhập mã luồng!",
+                ma_luong: {
+                    required: "Bạn cần nhập mã luồng!",
+                },
                 ten_luong: "Bạn cần nhập tên luồng!"
             }
         });
@@ -69,7 +89,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../DanhMucChung/RenderViewLuongXuLy",
+                                            url: "../Luong/RenderViewLuongXuLy",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {
@@ -101,7 +121,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC</label>
+                            <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                     @if (ThuTuc != null)
@@ -113,6 +133,22 @@
                                     }
                                 </select>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
+                            </div>
+                        </div>
+                        <div class="row mb-3 tab_luong_cha" style="display:none;">
+                            <label for="luong_cha" class="col-sm-2 control-label">Luồng cha</label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" data-placeholder="Chọn luồng cha">
+                                    <option value="">---Chọn luồng cha--------</option>
+                                    @if (LuongKey != null)
+                                    {
+                                        foreach (var item in LuongKey)
+                                        {
+                                            <option value="@item.ma_luong">@item.ten_luong</option>
+                                        }
+                                    }
+                                </select>
+                                <input id="luong_cha" type="text" name="luong_cha" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3">

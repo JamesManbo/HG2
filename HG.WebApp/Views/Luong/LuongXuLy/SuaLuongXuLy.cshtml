@@ -3,6 +3,7 @@
     ViewData["Title"] = "Danh mục quốc tịch";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var ThuTuc = ViewBag.ThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
+    var LuongKey = ViewBag.LuongKey as List<HG.Entities.Dm_luong_Key>;
 }
 @model HG.Entities.Dm_Luong_Xu_Ly
 
@@ -42,7 +43,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../DanhMucChung/RenderViewluongXuLy",
+                                            url: "../Luong/RenderViewluongXuLy",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {
@@ -70,11 +71,11 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">TT hai giai đoạn </label>
                             <div class="col-sm-8">
-                                <input type="checkbox" name="tt_hai_gd" value="@Model.tt_hai_gd" maxlength="200" @(Model.tt_hai_gd ? "checked=\"checked\"" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="checkbox" id="tt_hai_gd" name="tt_hai_gd" value="@Model.tt_hai_gd" maxlength="200" @(Model.tt_hai_gd ? "checked" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC</label>
+                            <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     @if (ThuTuc != null)
@@ -88,6 +89,30 @@
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
                             </div>
                         </div>
+                        <div class="row mb-3 tab_luong_cha" style="display:none;">
+                            <label for="luong_cha" class="col-sm-2 control-label">Luồng cha</label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" data-placeholder="Chọn luồng cha" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option value="">---Chọn luồng cha--------</option>
+                                    @if (LuongKey != null)
+                                    {
+                                        foreach (var item in LuongKey)
+                                        {
+                                            if (item.ma_luong == Model.ma_luong)
+                                            {
+                                                <option selected value="@item.ma_luong">@item.ten_luong</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_luong">@item.ten_luong</option>
+                                            }
+
+                                        }
+                                    }
+                                </select>
+                                <input id="luong_cha" type="text" name="luong_cha" class="form-control input-default" hidden>
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
@@ -95,41 +120,32 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <label for="ten_pb" class="col-sm-2 control-label">File excel</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="nguoi_sua" value="@Model.UidName">
+                                <input type="file" id="file" class="form-control input-default" placeholder="Chọn file upload" name="file" value="" maxlength="200">
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
-                            <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
-                            <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
-                            </div>
-                        </div>
-                        @if (ViewBag.type_view == StatusAction.View.ToString())
-                        {
-                            <div class="text-center">
+
+                        <div class="text-center">
+                            @if (ViewBag.type_view == StatusAction.View.ToString())
+                            {
+
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ThemLuongXuLy';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/SuaLuongXuLy?code=@Model.ma_luong&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=@Model.ma_luong')">Xóa</button>
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
-                            </div>
-                        }
-                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
-                        {
-                            <div class="text-center">
+                            }
+                            @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                            {
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=@Model.ma_luong')">Xóa</button>
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
-                            </div>
-                        }
+                            }
+                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=@Model.ma_luong')">Xóa</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
+
+                            <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&type=@ViewBag.type_view';">Quy Trình</button>
+                            <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ExportLuong?code=@Model.ma_luong'">Xuất excel</button>
+                            <button type="button" class="btn btn-primary" name="type" onclick="importExcel()">Nhập excel</button>
+
+                        </div>
                         <input name="type_view" hidden value="@ViewBag.type_view" />
                     </form><!-- End Horizontal Form -->
                 </div>
@@ -164,7 +180,18 @@
     $(document).ready(function() {
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
+        if ($('#tt_hai_gd').is(':checked')) {
+            $(".tab_luong_cha").attr("style", "display:flex")
+        } else {
+            $(".tab_luong_cha").attr("style", "display:none")
+        }
+
         $('#tt_hai_gd').change(function() {
+            if ($(this).is(':checked')) {
+                $(".tab_luong_cha").attr("style", "display:flex")
+            } else {
+                $(".tab_luong_cha").attr("style", "display:none")
+            }
             $('#tt_hai_gd').val($(this).is(':checked'));
         });
 
@@ -173,24 +200,23 @@
         });
 
         var ngctxl = "@Model.ma_thu_tuc";
-        var arrNgctxl = ngctxl.split(",");
+        var arrNgctxl = ngctxl.split(";");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
                 Arr.push(i);
-                $("#ma_thu_tuc").val(Arr.join(","));
+                $("#ma_thu_tuc").val(Arr.join(";"));
             });
+            $("#multiselect").val(arrNgctxl).trigger('change');
         }
-
-        $("#multiselect").val(arrNgctxl).trigger('change');
 
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
-            $("#ma_thu_tuc").val(Arr.join(","));
+            $("#ma_thu_tuc").val(Arr.join(";"));
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
             Arr.pop(e.params.data.id);
-            $("#ma_thu_tuc").val(Arr.join(","));
+            $("#ma_thu_tuc").val(Arr.join(";"));
         });
 
 
@@ -205,6 +231,35 @@
             }
         });
     });
+
+    function importExcel() {
+        var myfile = document.getElementById("file");
+        var formData = new FormData();
+
+        if (myfile.files.length > 0) {
+            for (var i = 0; i < myfile.files.length; i++) {
+                formData.append('file', myfile.files[i]);
+            }
+        }
+        $.ajax({
+            url: '/Luong/ReadFileExcel',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: formData,
+            success: function(result) {
+                console.log(result);
+                if (result == 1) {
+                    alert("Cập nhật thành công");
+                    window.location.href = "/Luong/SuaLuongXuLy?code=" +'@Model.ma_luong'+"&type=" + '@ViewBag.type_view';
+                }
+            },
+            error: function(err) {
+                alert(err.statusText);
+            }
+        });
+    }
+
 
 </script>
 

@@ -6,11 +6,16 @@ using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
 using HG.WebApp.Entities;
 using HG.WebApp.Helper;
+using HG.WebApp.Models;
 using HG.WebApp.Models.DanhMuc;
 using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using OfficeOpenXml.Table;
+using System.Xml.Serialization;
 
 namespace HG.WebApp.Controllers
 {
@@ -67,13 +72,16 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemLuongXuLy()
         {
+            var ds = _danhmucDao.DanhSachLuongKey();
             ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
+            ViewBag.LuongKey = ds;
             return View("~/Views/Luong/LuongXuLy/ThemLuongXuLy.cshtml");
         }
 
         [HttpPost]
         public IActionResult ThemLuongXuLy(Dm_Luong_Xu_Ly item)
         {
+            item.ma_luong = HelperString.CreateCode(item.ma_luong);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
             var _pb = _danhmucDao.LuuLuongXuLy(item);
@@ -105,6 +113,11 @@ namespace HG.WebApp.Controllers
             {
                 luong_xu_ly = db.Dm_Luong_Xu_Ly.Where(n => n.Deleted == 0 && n.ma_luong == code).FirstOrDefault();
             }
+            if (luong_xu_ly != null && luong_xu_ly.tt_hai_gd)
+            {
+                var ds = _danhmucDao.DanhSachLuongKey();
+                ViewBag.LuongKey = ds;
+            }
             ViewBag.type_view = type;
             return View("~/Views/Luong/LuongXuLy/SuaLuongXuLy.cshtml", luong_xu_ly);
         }
@@ -134,7 +147,7 @@ namespace HG.WebApp.Controllers
 
         }
         [HttpPost]
-        public IActionResult XoaQuocTich(string code)
+        public IActionResult XoaLuongXuLy(string code)
         {
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _danhmucDao.XoaLuongXuLy(code, uid);
@@ -145,7 +158,7 @@ namespace HG.WebApp.Controllers
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/Luong/LuongXuLy" });
         }
 
-        public async Task<IActionResult> RenderViewQuocTich()
+        public async Task<IActionResult> RenderViewLuongXuLy()
         {
             var lst = new List<Dm_Luong_Xu_Ly>();
             using (var db = new EAContext())
@@ -298,7 +311,7 @@ namespace HG.WebApp.Controllers
 
         #endregion
 
-        #region Bước xử lý       
+        #region Bước thực hiện
         public IActionResult BuocThucHien()
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
@@ -446,7 +459,7 @@ namespace HG.WebApp.Controllers
             QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
             ds.ma_luong = code;
-            var user = _dmDao.DanhSachNguoiDung("0");
+            var user = _dmDao.DanhSachNguoiDung("");
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
             using (var db = new EAContext())
@@ -472,7 +485,7 @@ namespace HG.WebApp.Controllers
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
             ds.ma_luong = code;
             ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.FirstOrDefault(n => n.Id == step);
-            var user = _dmDao.DanhSachNguoiDung("0");
+            var user = _dmDao.DanhSachNguoiDung("");
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
             using (var db = new EAContext())
@@ -523,6 +536,284 @@ namespace HG.WebApp.Controllers
             }
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/luong/QuyTrinhXuLy?code=" + code });
         }
-        #endregion
+        #endregion         
+
+        [HttpPost]
+        public async Task<int> ReadFileExcel(IFormFile file)
+        {
+            var code = 0;
+            var list = new List<string>();
+            var listdata = new List<DataLuong>();
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+                using (var package = new ExcelPackage(stream))
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                    var rowCount = worksheet.Dimension.Rows;
+                    var columnCount = worksheet.Dimension.Columns;
+                    for (int i = 2; i < rowCount + 1; i++)
+                    {
+                        var luong = new DataLuong();
+                        for (int j = 1; j < columnCount + 1; j++)
+                        {
+
+                            if (j == 1)
+                            {
+                                luong.ma_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 2)
+                            {
+                                luong.ten_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 3)
+                            {
+                                luong.mo_ta = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 4)
+                            {
+                                var matt = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+
+                                luong.ma_thu_tuc = matt;
+                            }
+                            else if (j == 5)
+                            {
+                                luong.ten_buoc = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 6)
+                            {
+                                luong.nguoi_xl_mac_dinh = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 7)
+                            {
+                                luong.nguoi_co_the_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 8)
+                            {
+                                luong.nguoi_phoi_hop_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 9)
+                            {
+                                luong.so_ngay_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 10)
+                            {
+                                luong.stt = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                            }
+                            else if (j == 11)
+                            {
+                                luong.buoc_xl_chinh = worksheet.Cells[i, j].Value == null ? false : worksheet.Cells[i, j].Value.ToString() == "X" ? true : false;
+                            }
+                            else
+                            {
+                                if (j == 12)
+                                {
+                                    luong.chuc_nang = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "KYHS," : "") ?? "";
+                                }
+                                else if (j == 13)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "YCBSHS," : "") ?? "";
+                                }
+                                else if (j == 14)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "HSKDK," : "") ?? "";
+                                }
+                                else if (j == 15)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "THUHOIHS," : "") ?? "";
+                                }
+                                else if (j == 16)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "TRALAIHS," : "") ?? "";
+                                }
+                                else if (j == 17)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "CMC," : "") ?? "";
+                                }
+                                else if (j == 18)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "GUIHSLT," : "") ?? "";
+                                }
+                                else if (j == 19)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "KTXL," : "") ?? "";
+                                }
+                                else if (j == 20)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "INPHOIKQ," : "") ?? "";
+                                }
+                                else if (j == 21)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "GUIKQLT," : "") ?? "";
+                                }
+                                else if (j == 22)
+                                {
+                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "THONGBAOCD," : "") ?? "";
+                                }
+                            }
+                        }
+                        if (luong.chuc_nang.Length > 0)
+                        {
+                            luong.chuc_nang = luong.chuc_nang.Remove(luong.chuc_nang.Length - 1, 1);
+                        }
+                        listdata.Add(luong);
+                    }
+                    var item = new Dm_Luong_Xu_Ly();
+                    // Insert luồng
+                    if (listdata.FirstOrDefault() != null)
+                    {
+                        item.ma_luong = listdata.FirstOrDefault().ma_luong;
+                        item.ten_luong = listdata.FirstOrDefault().ten_luong;
+                        item.mo_ta = listdata.FirstOrDefault().mo_ta;
+                        item.tt_hai_gd = false;
+                        item.ma_thu_tuc = listdata.FirstOrDefault().ma_thu_tuc;
+                        item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                        item.UidName = User.Identity.Name;
+                        var _pb = _danhmucDao.LuuLuongXuLy(item);
+                        if (_pb == 0)
+                        {
+                            // Insert quy trình
+                            foreach (var itemlist in listdata)
+                            {
+                                var item2 = new QuyTrinhXuLy();
+                                item2.ma_luong = itemlist.ma_luong;
+                                item2.ten_buoc = itemlist.ten_buoc;
+                                item2.so_ngay_xl = float.Parse(itemlist.so_ngay_xl);
+                                item2.buoc_xl_chinh = itemlist.buoc_xl_chinh;
+                                item2.chuc_nang = itemlist.chuc_nang;
+                                item2.nguoi_xl = itemlist.nguoi_xl_mac_dinh;
+                                item2.nguoi_co_the_xl = itemlist.nguoi_co_the_xl;
+                                item2.nguoi_phoi_hop_xl = itemlist.nguoi_phoi_hop_xl;
+                                item2.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                                item2.UidName = User.Identity.Name;
+                                var _pb2 = _danhmucDao.LuuQuyTrinhXuLyExcel(item2);
+                                if (_pb2.ErrorCode == 0)
+                                {
+                                    code = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return code;
+        }
+
+      
+        public async Task<IActionResult> ExportLuong(string code)
+        {
+            // query data from database  
+            await Task.Yield();
+
+            var stream = new MemoryStream();
+            var list = _danhmucDao.LuongExcel(code);
+            using (var package = new ExcelPackage(stream))
+            {
+                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                var modelTable = workSheet.Cells;
+                modelTable.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                modelTable.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+
+                workSheet.Cells[1, 1].Value = "Mã luồng";
+                workSheet.Cells[1, 2].Value = "Tên luồng";
+                workSheet.Cells[1, 3].Value = "Mô tả";
+                workSheet.Cells[1, 4].Value = "Mã TTHC";
+                workSheet.Cells[1, 5].Value = "Tên bước thực hiện";
+                workSheet.Cells[1, 6].Value = "Người XL";
+                workSheet.Cells[1, 7].Value = "Người có thể XL";
+                workSheet.Cells[1, 8].Value = "Người phối hợp";
+                workSheet.Cells[1, 9].Value = "Số ngày";
+                workSheet.Cells[1, 10].Value = "Thứ tự";
+                workSheet.Cells[1, 11].Value = "Xử lý chính";
+                workSheet.Cells[1, 12].Value = "Ký duyệt";
+                workSheet.Cells[1, 13].Value = "Yêu cầu bổ sung";
+                workSheet.Cells[1, 14].Value = "Không đủ điều kiện";
+                workSheet.Cells[1, 15].Value = "Thu hồi";
+                workSheet.Cells[1, 16].Value = "Trả lại";
+                workSheet.Cells[1, 17].Value = "Chuyển một cửa";
+                workSheet.Cells[1, 18].Value = "Gửi liên thông";
+                workSheet.Cells[1, 19].Value = "Không phải xử lý";
+                workSheet.Cells[1, 20].Value = "In phôi";
+                workSheet.Cells[1, 21].Value = "Hồi đáp KQ Liên thông";
+                workSheet.Cells[1, 22].Value = "Thông báo Email";
+                using (var range = workSheet.Cells["A1:V1"])
+                {
+                    // Set PatternType
+                    range.Style.Font.Bold = true;
+                }
+              
+                // Đỗ dữ liệu từ list vào 
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var item = list[i];
+                    workSheet.Cells[i + 2, 1].Value = item.ma_luong;
+                    workSheet.Cells[i + 2, 2].Value = item.ten_luong;
+                    workSheet.Cells[i + 2, 3].Value = item.mo_ta;
+                    workSheet.Cells[i + 2, 4].Value = item.ma_thu_tuc;
+                    workSheet.Cells[i + 2, 5].Value = item.ten_buoc;
+                    workSheet.Cells[i + 2, 6].Value = item.nguoi_xl_mac_dinh;
+                    workSheet.Cells[i + 2, 7].Value = item.nguoi_co_the_xl;
+                    workSheet.Cells[i + 2, 8].Value = item.nguoi_phoi_hop_xl;
+                    workSheet.Cells[i + 2, 9].Value = item.so_ngay_xl;
+                    workSheet.Cells[i + 2, 10].Value = item.stt;
+                    workSheet.Cells[i + 2, 11].Value = item.buoc_xl_chinh ? "X" : "";
+                    workSheet.Cells[i + 2, 12].Value = item.chuc_nang.Contains("KYHS") ? "X" : "";
+                    workSheet.Cells[i + 2, 13].Value = item.chuc_nang.Contains("YCBSHS") ? "X" : "";
+                    workSheet.Cells[i + 2, 14].Value = item.chuc_nang.Contains("HSKDK") ? "X" : "";
+                    workSheet.Cells[i + 2, 15].Value = item.chuc_nang.Contains("THUHOIHS") ? "X" : "";
+                    workSheet.Cells[i + 2, 16].Value = item.chuc_nang.Contains("TRALAIHS") ? "X" : "";
+                    workSheet.Cells[i + 2, 17].Value = item.chuc_nang.Contains("CMC") ? "X" : "";
+                    workSheet.Cells[i + 2, 18].Value = item.chuc_nang.Contains("GUIHSLT") ? "X" : "";
+                    workSheet.Cells[i + 2, 19].Value = item.chuc_nang.Contains("KTXL") ? "X" : "";
+                    workSheet.Cells[i + 2, 20].Value = item.chuc_nang.Contains("INPHOIKQ") ? "X" : "";
+                    workSheet.Cells[i + 2, 21].Value = item.chuc_nang.Contains("GUIKQLT") ? "X" : "";
+                    workSheet.Cells[i + 2, 22].Value = item.chuc_nang.Contains("THONGBAOCD") ? "X" : "";
+
+
+                }
+
+                // workSheet.Cells.LoadFromCollection(list, true);
+                package.Save();
+
+            }            
+
+            stream.Position = 0;
+            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+            //return File(stream, "application/octet-stream", excelName);  
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
+
+        public class UserInfo
+        {
+            public string UserName { get; set; }
+            public int Age { get; set; }
+        }
+        public async Task<IActionResult> ExportV2(CancellationToken cancellationToken)
+        {
+            // query data from database  
+            await Task.Yield();
+            var list = new List<UserInfo>()
+    {
+        new UserInfo { UserName = "catcher", Age = 18 },
+        new UserInfo { UserName = "james", Age = 20 },
+    };
+            var stream = new MemoryStream();
+
+            using (var package = new ExcelPackage(stream))
+            {
+                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
+                workSheet.Cells.LoadFromCollection(list, true);
+                package.Save();
+            }
+            stream.Position = 0;
+            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+
+            //return File(stream, "application/octet-stream", excelName);  
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+        }
+
     }
 }

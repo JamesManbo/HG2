@@ -27,7 +27,7 @@
     <div class="maincontent">
         <div class="maincontentinner">
             <div>
-                <span class="label label-success" style="font-size:14px;">Luồng lĩnh vực Địa giới hành chính XDCQCS Phòng Nội vụ thủ tục không có thời hạn giải quyết	</span>
+                <span class="label label-success" style="font-size:14px;background-color: #5cb85c;">@Model.ten_luong	</span>
             </div>
             <!-- Table with stripped rows -->
             <div class="tab-primary" style="border: 2px solid #0866c6;overflow: hidden;">
@@ -47,7 +47,7 @@
                     @*Danh sách bước*@
                     <div class="tab-pane fade" id="ds-buoc" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row" style="padding: 15px;">
-                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: 0 ngày/TTHC: 0 ngày </span>
+                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: @Model.tong_ngay_qt ngày/TTHC: @Model.tong_ngay_tt ngày </span>
                             <div class="col-sm-6" align="right">
                                 <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$BtnAdd" value="Thêm bước" id="ctl08_ctl00_grid_trinh_tu_xl_BtnAdd" class="btn btn-primary">
                                 <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$Button1" value="Quy trình đồ họa" id="ctl08_ctl00_grid_trinh_tu_xl_Button1" class="btn btn-primary button" data-toggle="modal" data-target="#myModalLuongXuLy">
@@ -106,8 +106,8 @@
                                     {
                                         if (CurrentPage > CurrentPage + 2)
                                         {
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if (CurrentPage > 3)
                                         {
@@ -115,11 +115,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -129,11 +129,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
 
@@ -141,8 +141,8 @@
 
                                         if (CurrentPage < CurrentPage + 2)
                                         {
-                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                         };
                                     }
                                     else
@@ -151,11 +151,11 @@
                                         {
                                             if (i == CurrentPage)
                                             {
-                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                             else
                                             {
-                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                         }
                                     }
@@ -222,18 +222,18 @@
                                     </label>
                                     <div class="col-md-3">
                                         <select style="width: 100%;" class="select2 form-select form-control input-default" name="nguoi_xl_mac_dinh" id="nguoi_xl_mac_dinh">
-                                            <option selected="selected" value="00000000-0000-0000-0000-000000000000">---- Chọn người đại diện ----</option>
+                                            <option selected="selected" value="">---- Chọn người đại diện ----</option>
                                             @if (NguoiDung != null)
                                             {
                                                 foreach (var item in NguoiDung)
                                                 {
-                                                    if (item.id == Model.quyTrinhXuLy.nguoi_xl_mac_dinh)
+                                                    if (item.UserName == Model.quyTrinhXuLy.nguoi_xl_mac_dinh)
                                                     {
-                                                        <option selected value="@item.id">@item.ten_nguoi_dung</option>
+                                                        <option selected value="@item.UserName">@item.ten_nguoi_dung</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@item.id">@item.ten_nguoi_dung</option>
+                                                        <option value="@item.UserName">@item.ten_nguoi_dung</option>
                                                     }
                                                 }
                                             }
@@ -259,7 +259,7 @@
                                             {
                                                 foreach (var item in NguoiDung)
                                                 {
-                                                    <option value="@item.id">@item.ten_nguoi_dung</option>
+                                                    <option value="@item.UserName">@item.ten_nguoi_dung</option>
                                                 }
                                             }
                                         </select>
@@ -272,57 +272,59 @@
                                 </div>
 
                                 <div id="ctl08_ctl00_pnlNoTNTKQ">
-
-                                    <div class="form-group">
-                                        <label class="col-md-2 control-label"></label>
-                                        <div class="col-md-3">
-                                            <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh" value="@Model.quyTrinhXuLy.buoc_xl_chinh" @(Model.quyTrinhXuLy.buoc_xl_chinh==true?"checked":"")>
-                                            <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
-                                        </div>
-                                        <div class="col-md-1"></div>
-                                        <label class="col-md-2 control-label">Người phối hợp XL</label>
-                                        <div class="col-md-3">
-                                            <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                @if (NguoiDung != null)
-                                                {
-                                                    foreach (var item in NguoiDung)
-                                                    {
-                                                        <option value="@item.id">@item.ten_nguoi_dung</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="submit" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div id="ctl08_ctl00_ctl02">
-
-                                            <label class="col-md-2 control-label">Nhánh</label>
+                                    @if (Model.quyTrinhXuLy.stt > 1)
+                                    {
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label"></label>
                                             <div class="col-md-3">
-                                                <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
-                                                    <option selected="selected" value="">------ Gốc ------</option>
-                                                    @if (NhanhXuLy != null)
+                                                <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh" value="@Model.quyTrinhXuLy.buoc_xl_chinh" @(Model.quyTrinhXuLy.buoc_xl_chinh==true?"checked":"")>
+                                                <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
+                                            </div>
+                                            <div class="col-md-1"></div>
+
+                                            <label class="col-md-2 control-label">Người phối hợp XL</label>
+                                            <div class="col-md-3">
+                                                <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                    @if (NguoiDung != null)
                                                     {
-                                                        foreach (var item in NhanhXuLy)
+                                                        foreach (var item in NguoiDung)
                                                         {
-                                                            <option value="@item.ma_nhanh">@item.ten_nhanh</option>
+                                                            <option value="@item.UserName">@item.ten_nguoi_dung</option>
                                                         }
                                                     }
                                                 </select>
+                                                <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
                                             </div>
-                                            <div class="col-md-1"></div>
-                                            <label class="col-md-2 control-label">Thứ tự bước</label>
-                                            <div class="col-md-3">
-                                                @if (Model.Pagelist.TotalRecords > 1)
-                                                {
+                                            <div class="col-md-1">
+                                                <input type="submit" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div id="ctl08_ctl00_ctl02">
+
+                                                <label class="col-md-2 control-label">Nhánh</label>
+                                                <div class="col-md-3">
+                                                    <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
+                                                        <option selected="selected" value="">------ Gốc ------</option>
+                                                        @if (NhanhXuLy != null)
+                                                        {
+                                                            foreach (var item in NhanhXuLy)
+                                                            {
+                                                                <option value="@item.ma_nhanh">@item.ten_nhanh</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-1"></div>
+                                                <label class="col-md-2 control-label">Thứ tự bước</label>
+                                                <div class="col-md-3">
+
                                                     <select name="stt" id="FIndex" class="form-control input-default-sm">
                                                         @for (int i = 2; i < Model.Pagelist.TotalRecords + 1; i++)
                                                         {
-                                                            if (Model.Pagelist.TotalRecords == i)
+                                                            if (Model.quyTrinhXuLy.stt == i)
                                                             {
                                                                 <option selected value="@i">@i</option>
                                                             }
@@ -332,10 +334,11 @@
                                                             }
                                                         }
                                                     </select>
-                                                }
+
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
 
                                 <div class="form-group">
@@ -356,8 +359,8 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="HSKĐK" type="checkbox" value="HSKĐK" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("HSKĐK") ? "checked" : "")>
-                                                <label for="HSKĐK">Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label>
+                                                <input id="HSKDK" type="checkbox" value="HSKDK" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("HSKĐK") ? "checked" : "")>
+                                                <label for="HSKDK">Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
@@ -466,21 +469,23 @@
                                 <div class="form-group">
                                     <div class="col-md-3"></div>
                                     <div class="col-md-4">
-                                        <input type="button" name="" value="Thêm mới" id="btnAdd" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&action=@StatusAction.Add.ToString()';">
+                                        <input type="button" name="" value="Thêm mới" id="btnAdd" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.Add.ToString()';">
                                         <input type="submit" name="" value="Lưu" id="btnSave" class="btn btn-primary process">
                                         <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
-                                        <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong'">
+                                        <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.View.ToString()'">
                                     </div>
                                     <div class="col-md-5">
                                         <br>
-                                        <span id="TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: 0 Ngày</span>
+                                        <span id="TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: @Model.tong_ngay_tt Ngày</span>
                                         <br>
-                                        <span id="TongSoNgayXL" style="color:Blue;">Tổng số ngày của quy trình: 0 Ngày</span>
+                                        <span id="TongSoNgayXL" style="color:Blue;">Tổng số ngày của quy trình: @Model.tong_ngay_qt Ngày</span>
                                         <br>
                                         <br>
                                     </div>
                                 </div>
-                            </form><!-- End Horizontal Form -->
+                            </form>
+
+                            <!-- End Horizontal Form -->
                         </div>
                     </div>
                 </div>
@@ -506,7 +511,9 @@
             </div>
         </div>
     </div>
-</div><!-- End Basic Modal-->
+</div>
+
+<!-- End Basic Modal-->
 
 
 <div class="modal fade" id="myModalUser">
@@ -604,8 +611,9 @@
 
         $('.ads_Checkbox_cn').click(function() {
             var val = [];
-            $(':checkbox:checked').each(function(i) {
+            $('.ads_Checkbox_cn:checked').each(function(i) {                
                 val[i] = $(this).val();
+                console.log(val[i]);
             });
             $("#chuc_nang").val(val);
         });
@@ -631,34 +639,33 @@
         });
 
         var ngctxl = "@Model.quyTrinhXuLy.nguoi_co_the_xl";
-        var arrNgctxl = ngctxl.split(",");
+        var arrNgctxl = ngctxl.split(";");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
                 //console.log(i);
                 Arr.push(i);
-                $("#nguoi_co_the_xl").val(Arr.join(","));
+                $("#nguoi_co_the_xl").val(Arr.join(";"));
             });
-        }
-        $("#multiselect").val(arrNgctxl).trigger('change');
-
+            $("#multiselect").val(arrNgctxl).trigger('change');
+        }   
 
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
-            $("#nguoi_co_the_xl").val(Arr.join(","));
+            $("#nguoi_co_the_xl").val(Arr.join(";"));
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
             Arr.pop(e.params.data.id);
-            $("#nguoi_co_the_xl").val(Arr.join(","));
+            $("#nguoi_co_the_xl").val(Arr.join(";"));
         });
 
 
         var ngphxl = "@Model.quyTrinhXuLy.nguoi_phoi_hop_xl";
-        var arrNgphxl = ngphxl.split(",");
+        var arrNgphxl = ngphxl.split(";");
         if (arrNgphxl != "") {
             arrNgphxl.forEach(function(i) {
                 Arr2.push(i);
-                $("#nguoi_phoi_hop_xl").val(Arr2.join(","));
+                $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
             });
         }
         $("#multiselect2").val(arrNgphxl).trigger('change');
@@ -666,12 +673,12 @@
 
         $('#multiselect2').on('select2:select', function(e) {
             Arr2.push(e.params.data.id);
-            $("#nguoi_phoi_hop_xl").val(Arr2.join(","));
+            $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
         });
 
         $('#multiselect2').on("select2:unselect", function(e) {
             Arr2.pop(e.params.data.id);
-            $("#nguoi_phoi_hop_xl").val(Arr2.join(","));
+            $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
         });
     });
 </script>
