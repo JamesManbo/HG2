@@ -684,6 +684,7 @@ namespace HG.WebApp.Controllers
                                 item2.nguoi_xl = itemlist.nguoi_xl_mac_dinh;
                                 item2.nguoi_co_the_xl = itemlist.nguoi_co_the_xl;
                                 item2.nguoi_phoi_hop_xl = itemlist.nguoi_phoi_hop_xl;
+                                item2.Stt = Convert.ToInt32(itemlist.stt);
                                 item2.CreatedUid = Guid.Parse(userManager.GetUserId(User));
                                 item2.UidName = User.Identity.Name;
                                 var _pb2 = _danhmucDao.LuuQuyTrinhXuLyExcel(item2);
@@ -699,7 +700,7 @@ namespace HG.WebApp.Controllers
             return code;
         }
 
-      
+
         public async Task<IActionResult> ExportLuong(string code)
         {
             // query data from database  
@@ -743,7 +744,7 @@ namespace HG.WebApp.Controllers
                     // Set PatternType
                     range.Style.Font.Bold = true;
                 }
-              
+
                 // Đỗ dữ liệu từ list vào 
                 for (int i = 0; i < list.Count; i++)
                 {
@@ -777,43 +778,15 @@ namespace HG.WebApp.Controllers
                 // workSheet.Cells.LoadFromCollection(list, true);
                 package.Save();
 
-            }            
-
-            stream.Position = 0;
-            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
-
-            //return File(stream, "application/octet-stream", excelName);  
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
-        }
-
-        public class UserInfo
-        {
-            public string UserName { get; set; }
-            public int Age { get; set; }
-        }
-        public async Task<IActionResult> ExportV2(CancellationToken cancellationToken)
-        {
-            // query data from database  
-            await Task.Yield();
-            var list = new List<UserInfo>()
-    {
-        new UserInfo { UserName = "catcher", Age = 18 },
-        new UserInfo { UserName = "james", Age = 20 },
-    };
-            var stream = new MemoryStream();
-
-            using (var package = new ExcelPackage(stream))
-            {
-                var workSheet = package.Workbook.Worksheets.Add("Sheet1");
-                workSheet.Cells.LoadFromCollection(list, true);
-                package.Save();
             }
+
             stream.Position = 0;
-            string excelName = $"UserList-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}.xlsx";
+            string excelName = code + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
 
             //return File(stream, "application/octet-stream", excelName);  
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
+      
 
     }
 }

@@ -106,8 +106,8 @@
                                     {
                                         if (CurrentPage > CurrentPage + 2)
                                         {
-                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if (CurrentPage > 3)
                                         {
@@ -115,11 +115,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -129,11 +129,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
 
@@ -141,8 +141,8 @@
 
                                         if (CurrentPage < CurrentPage + 2)
                                         {
-                                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                         };
                                     }
                                     else
@@ -151,11 +151,11 @@
                                         {
                                             if (i == CurrentPage)
                                             {
-                                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                             else
                                             {
-                                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                         }
                                     }
@@ -240,7 +240,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-1">
-                                        <input type="submit" name="" value="Chọn" id="btnNguoiMacDinhXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiMacDinhXL" style="width:100%;">
+                                        <input type="button" name="" value="Chọn" id="btnNguoiMacDinhXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiMacDinhXL" style="width:100%;">
                                     </div>
                                 </div>
 
@@ -267,7 +267,7 @@
 
                                     </div>
                                     <div class="col-md-1">
-                                        <input type="submit" name="" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
+                                        <input type="button" name="" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
                                     </div>
                                 </div>
 
@@ -296,7 +296,7 @@
                                                 <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
                                             </div>
                                             <div class="col-md-1">
-                                                <input type="submit" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
+                                                <input type="button" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
                                             </div>
 
                                         </div>
@@ -338,6 +338,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    }
+                                    else
+                                    {
+                                        <input hidden name="stt" value="1" />
                                     }
                                 </div>
 
@@ -611,7 +615,7 @@
 
         $('.ads_Checkbox_cn').click(function() {
             var val = [];
-            $('.ads_Checkbox_cn:checked').each(function(i) {                
+            $('.ads_Checkbox_cn:checked').each(function(i) {
                 val[i] = $(this).val();
                 console.log(val[i]);
             });
@@ -647,7 +651,7 @@
                 $("#nguoi_co_the_xl").val(Arr.join(";"));
             });
             $("#multiselect").val(arrNgctxl).trigger('change');
-        }   
+        }
 
         $('#multiselect').on('select2:select', function(e) {
             Arr.push(e.params.data.id);
