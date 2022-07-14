@@ -12,6 +12,7 @@ using HG.Entities.CauHinh;
 using HG.Entities.DanhMuc.dm_bieu_mau;
 using HG.Entities.Entities.ThuTuc;
 using HG.Entities.HoSo;
+using HG.Entities.Entities.DanhMuc;
 
 namespace HG.WebApp.Data
 {
@@ -62,6 +63,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<VanBanLQ> VanBanLQ { get; set; }
         public virtual DbSet<dm_nhom_tp> dm_nhom_tp { get; set; }
         public virtual DbSet<Ho_So> Ho_So { get; set; }
+        public virtual DbSet<dm_thanh_phan> dm_thanh_phan { get; set; }
         //End TuanTA
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -65,6 +65,24 @@ namespace HG.WebApp.Controllers
             }
 
         }
+        public string ResetPassword(string id)
+        {
+            EAContext db = new EAContext();
+            var uid = Guid.Parse(id);
+            var obj = db.AspNetUsers.Where(n => n.Id == uid).FirstOrDefault();
+            if (obj != null)
+            {
+                obj.mat_khau = "1";
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+                return "Mở khóa thành công!";
+            }
+            else
+            {
+                return "Mở khóa thất bại!";
+            }
+
+        }
         public async Task<IActionResult> NguoiDungPaging(int currentPage = 0, string ma_phong_ban = "", int trang_thai = 0, int da_xoa = 0, int pageSize = 0)
         {  
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = currentPage, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
@@ -115,6 +133,8 @@ namespace HG.WebApp.Controllers
                 user.ma_phong_ban = item.ma_phong_ban;
                 user.ho_dem = item.ho_dem;
                 user.ten = item.ten;
+                user.ngay_sinh = item.ngay_sinh;
+                user.khoa_tai_khoan = item.khoa_tai_khoan;
                 var result = await userManager.CreateAsync(user, user.mat_khau);
                 var db = new EAContext();
                 ViewBag.LstNhom = db.Asp_nhom.ToList();
@@ -198,7 +218,7 @@ namespace HG.WebApp.Controllers
                     }
                     if (item.type_view == StatusAction.View.ToString())
                     {
-                        return RedirectToAction("ListNguoiDung");
+                        return RedirectToAction("ViewNguoiDung", "QTnguoidung", new { Id = item.Id, type = StatusAction.View.ToString() });
                     }
                     else
                     {

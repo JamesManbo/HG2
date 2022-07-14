@@ -17,11 +17,11 @@
                                     {
                                          foreach (var item in danhSachNguoiDung)
                                          {
-                                            if(item.Id.ToString() == ViewBag.ma_nguoi_dung)
+                                            if(item.UserName.ToString() == ViewBag.UserName)
                                             {
-                                                <option value="@item.Id" selected>@(item.ho_dem + " " +item.ten )</option>
+                                                <option value="@item.UserName" selected>@(item.ho_dem + " " +item.ten )</option>
                                             }
-                                            <option value="@item.Id">@(item.ho_dem + " " +item.ten )</option>
+                                            <option value="@item.UserName">@(item.ho_dem + " " +item.ten )</option>
                                          }   
                                     }
                                 </select>
@@ -32,7 +32,7 @@
                         function XoaNguoiCTXLList(obj){
                               $.ajax({
                                         type: "GET",
-                                        url: "/CauHinh/XoaNguoiCTXLList?ma_nguoi_dung=" + obj.value ,
+                                        url: "/CauHinh/XoaNguoiCTXLList?UserName=" + obj.value ,
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {

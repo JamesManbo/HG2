@@ -28,7 +28,7 @@ namespace HG.Entities.Entities
         public string ma_luong_xu_ly { get; set; }
         public string ten_luong_xu_ly { get; set; }
         public string ghi_chu { get; set; }
-        public Guid nguoi_xu_ly { get; set; }
+        public string nguoi_xu_ly { get; set; }
         public string ten_nguoi_xu_ly { get; set; }
         public string? nguoi_phoi_hop { get; set; }
         public DateTime? gio_hen_tra { get; set; }
@@ -47,25 +47,49 @@ namespace HG.Entities.Entities
         public int? da_thu_phi { get; set; }
         public int? Stt { get; set; }
         public int trang_thai { get; set; }
-        public CLThanhPhan_1? ThanhPhan_1   { get; set; }
-        public CLThanhPhan_2? ThanhPhan_2   { get; set; }
+        public string lstCode { get; set; } //thành phần đã tồn tại ở tthc
+
 
     }
-    public class CLThanhPhan_1
+    public class TP_1
     {
         public string ThanhPhan_1 { get; set; }
-        public string? BanSao1 { get; set; }
-        public string? BanChinh1 { get; set; }
-        public string? BanPhoto1 { get; set; }
+        public int? BanSao1 { get; set; }
+        public int? BanChinh1 { get; set; }
+        public int? BanPhoto1 { get; set; }
         public string file_dinh_kem1 { get; set; }
     }
-    public class CLThanhPhan_2
+    public class TP_2
     {
         public string ThanhPhan_2 { get; set; }
-        public string? BanSao2 { get; set; }
-        public string? BanChinh2 { get; set; }
-        public string? BanPhoto2 { get; set; }
+        public int? BanSao2 { get; set; }
+        public int? BanChinh2 { get; set; }
+        public int? BanPhoto2 { get; set; }
         public string file_dinh_kem2 { get; set; }
+    }
+    public class TP_3
+    {
+        public string ThanhPhan_3 { get; set; }
+        public int? BanSao3 { get; set; }
+        public int? BanChinh3 { get; set; }
+        public int? BanPhoto3 { get; set; }
+        public string file_dinh_kem3 { get; set; }
+    }
+    public class TP_4
+    {
+        public string ThanhPhan_4 { get; set; }
+        public int? BanSao4 { get; set; }
+        public int? BanChinh4 { get; set; }
+        public int? BanPhoto4 { get; set; }
+        public string file_dinh_kem4 { get; set; }
+    }
+    public class TP_5
+    {
+        public string ThanhPhan_5 { get; set; }
+        public int? BanSao5 { get; set; }
+        public int? BanChinh5 { get; set; }
+        public int? BanPhoto5 { get; set; }
+        public string file_dinh_kem5 { get; set; }
     }
 
 }

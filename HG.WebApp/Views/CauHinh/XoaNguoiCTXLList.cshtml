@@ -1,5 +1,5 @@
 ﻿            @model List<HG.Entities.Entities.Nguoi_PHXLModel>                    
-                <input id="ma_nguoi_dung" value="@ViewBag.ma_nguoi_dung" hidden/>
+                <input id="UserName" value="@ViewBag.UserName" hidden/>
                 <div class="dataTable-container">
                         <table class="table table-bordered responsive">
                             <thead class="widgettitle">
@@ -39,11 +39,11 @@
             </div>
             <script>
                     function XoaNguoiXuLy() {
-                        var xoa_nguoi_xu_ly = $("#ma_nguoi_dung").val();
+                        var UserName = $("#UserName").val();
                        
                         $.ajax({
                            type: "GET",
-                           url: "/CauHinh/XoaNguoiXuLy?ma_nguoi_dung="+ma_nguoi_dung,
+                           url: "/CauHinh/XoaNguoiXuLy?username="+UserName,
                            data: "",
                            contentType: 'application/json; charset=utf-8',
                            success: function(data) {

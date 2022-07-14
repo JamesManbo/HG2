@@ -19,12 +19,25 @@
             closeOnSelect: false
         });
         $('#multiselect').on('select2:select', function(e) {
+            if (Arr.length == 0) {
+                var lstGroup = $("#lstGroup").val(); 
+                    lstGroup.split(",").forEach(function (item) {
+                   Arr.push(item)
+                });
+            };
             Arr.push(e.params.data.id);
-            $("#lstGroup").val(Arr.join(","));
+            $('input[name="lstGroup"]').attr('value',Arr.join(","));
         });
         $('#multiselect').on("select2:unselect", function(e) {
+            if (Arr.length == 0) {
+                var lstGroup = $("#lstGroup").val(); 
+                    lstGroup.split(",").forEach(function (item) {
+                   Arr.push(item)
+                });
+            };
             Arr.pop(e.params.data.id);
-            $("#lstGroup").val(Arr.join(","));
+            $('input[name="lstGroup"]').attr('value',Arr.join(","));
+            //$("#lstGroup").val(Arr.join(","));
         });
         $('#UserName').on('keypress', function(e) {
             if (e.which == 32){
@@ -46,6 +59,18 @@
                       }
                   }
           });           
+    } 
+    function DatLaiMatKhau(abc){
+         $.ajax({
+                  type: "GET",
+                  url: "/QTNguoidung/ResetPassword?Id=" + abc.value,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                        $("#exampleModalTitle").html("Đặt lại mật khẩu thành công hahaha!")
+                        $("#exampleModal").modal("show");
+                  }
+          });           
     }
 </script>
 
@@ -55,7 +80,7 @@
             <div class="modal-header" style="background-color: #0866c6;">
                 <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" id="exampleModalTitle" >
                 @ViewBag.ErrorMsg
             </div>
             <div class="modal-footer">
@@ -107,6 +132,7 @@
                 <h4 class="widgettitle">Cập nhật thông tin người dùng</h4>
                 <form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/SuaNguoiDung" method="post" enctype="multipart/form-data">
                     <div class="form-horizontal">
+                        <input name="Id" id="Id" value="@Model.aspNetUsersModel.First().Id" hidden/>
                         <div class="form-group row">
                             <label class="col-md-2 control-label">
                                 Tên đăng nhập
@@ -227,12 +253,18 @@
                                         {
                                             if(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()).Contains(item.ma_nhom)){
                                                 <option value="@item.ma_nhom" selected>	@item.ten_nhom</option>
+                                            }else{
+                                                <option value="@item.ma_nhom">	@item.ten_nhom</option>       
                                             }
-                                              <option value="@item.ma_nhom">	@item.ten_nhom</option>                      
+                                                             
                                         }
                                     }
                                 </select>
-                                <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" hidden>
+                                  <script>
+                                    Arr.push(@(Model.asp_nhom.Select(n => n.ma_nhom).ToArray()))
+                                </script>
+                                <input name="lstGroup" type="text" id="lstGroup" value="@(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()))" class="form-control input-default" hidden>
+                              
                             </div>
                         </div>
                         <div class="form-group row">
@@ -249,12 +281,23 @@
                         <div class="form-group row">
 									<label class="col-md-2 control-label">Khóa tài khoản</label>
 									<div class="col-md-10">
-										<input id="LockoutEnabled" type="checkbox" name="LockoutEnabled" @(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? "checked" : "" ) >
+										<input onclick="KhoaTaiKhoan()" id="khoa_tai_khoan" type="checkbox" name="khoa_tai_khoan" @(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? 1 : 0 )" >
 									</div>
+                                    <script>
+                                        function KhoaTaiKhoan() {
+                                            if ($('#khoa_tai_khoan').is(':checked')) {
+                                                $("#khoa_tai_khoan").val(1)
+                                            }else{
+                                                $("#khoa_tai_khoan").val(0)
+                                            }
+                                        }
+                                    </script>
 						</div>
                          <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                            <button type="button" class="btn btn-primary" onclick="DatLaiMatKhau('@Model.aspNetUsersModel.First().Id')">Đặt lại mật khẩu</button>
+                             <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/QTNguoiDung/XoaNnguoiDung2?Id=@Model.aspNetUsersModel.First().Id')">Xóa</button>
                             <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/ListNguoiDung';">Đóng</button>
                         </div>
 

@@ -33,7 +33,8 @@
              $("#Deleted").prop("checked", false);
              NguoiDungAutoComplete(1, 0)
          } else { 
-             NguoiDungAutoComplete(0, 0)
+             $("#Deleted").prop("checked", true);
+             NguoiDungAutoComplete(0, 1)
          }
     }
     function DaXoaChecked() {
@@ -41,7 +42,8 @@
              $("#Status").prop("checked", false);
              NguoiDungAutoComplete(0, 1)
          } else { 
-             NguoiDungAutoComplete(0, 0)
+             $("#Status").prop("checked", true);
+             NguoiDungAutoComplete(1, 0)
          }
          
     }

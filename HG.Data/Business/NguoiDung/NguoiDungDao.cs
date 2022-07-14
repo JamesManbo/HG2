@@ -126,6 +126,7 @@ namespace HG.Data.Business.NguoiDung
                 DbProvider.AddParameter("stt", item.stt, SqlDbType.Int);
                 DbProvider.AddParameter("ngay_sinh", item.ngay_sinh, SqlDbType.DateTime);
                 DbProvider.AddParameter("UserId", guid, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("khoa_tai_khoan", item.khoa_tai_khoan, SqlDbType.Int);
                 // Output params
                 DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);

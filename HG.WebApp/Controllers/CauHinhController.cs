@@ -118,31 +118,31 @@ namespace HG.WebApp.Controllers
             return PartialView();
         }
         
-        public async Task<IActionResult> XoaNguoiCTXLList(string ma_nguoi_dung = "")
+        public async Task<IActionResult> XoaNguoiCTXLList(string UserName = "")
         {
-            ViewBag.ma_nguoi_dung = ma_nguoi_dung;
-            if (!string.IsNullOrEmpty(ma_nguoi_dung))
+            ViewBag.UserName = UserName;
+            if (!string.IsNullOrEmpty(UserName))
             {
                 var fullname = "";
-                var lstObj = _cauHinhDao.LayDsNhomPhanTrang(Guid.Parse(ma_nguoi_dung));
-                var _user = await userManager.FindByIdAsync(ma_nguoi_dung);
+                var lstObj = _cauHinhDao.LayDsNhomPhanTrang(UserName);
+                var _user = await userManager.FindByNameAsync(UserName);
                 fullname = _user != null ? _user.ho_dem + " " + _user.ten : "";
-                ViewBag.ma_nguoi_dung = ma_nguoi_dung;
+                ViewBag.UserName = UserName;
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/XoaNguoiCTXLList.cshtml", lstObj);
                 return Content(result);
             }
             return Content("");
         }
-        public string XoaNguoiXuLy(string ma_nguoi_dung = "")
+        public string XoaNguoiXuLy(string username = "")
         {
-            if (string.IsNullOrWhiteSpace(ma_nguoi_dung))
+            if (string.IsNullOrWhiteSpace(username))
             {
                 return "Mã người dùng không tồn tại!";
             }
             else
             {
                 var UserId = Guid.Parse(userManager.GetUserId(User));
-                return _cauHinhDao.XoaNguoiXL(Guid.Parse(ma_nguoi_dung), UserId);
+                return _cauHinhDao.XoaNguoiXL(username, UserId);
             }
         }
         #endregion
@@ -159,7 +159,7 @@ namespace HG.WebApp.Controllers
             if (!string.IsNullOrEmpty(ma_nguoi_dung_hien_tai) && !string.IsNullOrEmpty(ma_nguoi_dung_thay_the))
             {
                 var UserId = Guid.Parse(userManager.GetUserId(User));
-                var lstObj = _cauHinhDao.ThayTheNguoiXL(Guid.Parse(ma_nguoi_dung_hien_tai), Guid.Parse(ma_nguoi_dung_thay_the), UserId);
+                var lstObj = _cauHinhDao.ThayTheNguoiXL(ma_nguoi_dung_hien_tai, ma_nguoi_dung_thay_the, UserId);
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/DoiNguoiXLList.cshtml", lstObj);
                 return Content(result);
             }
@@ -180,7 +180,7 @@ namespace HG.WebApp.Controllers
             ViewBag.ma_nguoi_dung_thay_the = ma_nguoi_dung_thay_the;
             if (!string.IsNullOrEmpty(ma_nguoi_dung))
             {
-                var lstObj = _cauHinhDao.LayDsNhomPhanTrang(Guid.Parse(ma_nguoi_dung));
+                var lstObj = _cauHinhDao.LayDsNhomPhanTrang(ma_nguoi_dung);
                 ViewBag.ma_nguoi_dung = ma_nguoi_dung;
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/DoiNguoiXLTLList.cshtml", lstObj);
                 return Content(result);
@@ -202,12 +202,14 @@ namespace HG.WebApp.Controllers
             ViewBag.NguoiThayThe = "";
             if (!string.IsNullOrEmpty(ma_nguoi_dung))
             {
-                var objNguoihientai = await userManager.FindByIdAsync(ma_nguoi_dung);
+                EAContext db = new EAContext();
+                var objNguoihientai = db.AspNetUsers.Where(n => n.UserName == ma_nguoi_dung).FirstOrDefault();
                 ViewBag.NguoiHienTai = objNguoihientai.ho_dem + " " + objNguoihientai.ten;
             }
             if (!string.IsNullOrEmpty(ma_nguoi_dung_thay_the))
             {
-                var objNguoihientai = await userManager.FindByIdAsync(ma_nguoi_dung_thay_the);
+                EAContext db = new EAContext();
+                var objNguoihientai = db.AspNetUsers.Where(n => n.UserName == ma_nguoi_dung).FirstOrDefault();
                 ViewBag.NguoiThayThe = objNguoihientai.ho_dem + " " + objNguoihientai.ten;
             }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/CauHinh/LayCacBuocXuLy.cshtml", ds);
@@ -277,7 +279,8 @@ namespace HG.WebApp.Controllers
             ViewBag.NguoiThayThe = "";
             if (!string.IsNullOrEmpty(ma_nguoi_dung))
             {
-                var objNguoihientai = await userManager.FindByIdAsync(ma_nguoi_dung);
+                EAContext db = new EAContext();
+                var objNguoihientai = db.AspNetUsers.Where(n => n.UserName == ma_nguoi_dung).FirstOrDefault();
                 ViewBag.NguoiThemVaoBuoc = objNguoihientai.ho_dem + " " + objNguoihientai.ten;
             }
             

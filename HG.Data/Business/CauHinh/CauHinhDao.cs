@@ -19,7 +19,7 @@ namespace HG.Data.Business.CauHinh
 
         }
 
-        public List<Nguoi_PHXLModel> LayDsNhomPhanTrang(Guid ma_nguoi_dung)
+        public List<Nguoi_PHXLModel> LayDsNhomPhanTrang(string username)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace HG.Data.Business.CauHinh
                 DbProvider.SetCommandText2("LayDanhSachLuongBoiNguoiDung", CommandType.StoredProcedure);
 
                 // Input params
-                DbProvider.AddParameter("@ma_nguoi_dung", ma_nguoi_dung, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("@username", username, SqlDbType.NVarChar);
              
                 // Output params
                 DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
@@ -68,7 +68,7 @@ namespace HG.Data.Business.CauHinh
                 return new List<Nguoi_PHXLModel>();
             }
         }
-        public string XoaNguoiXL(Guid ma_nguoi_dung, Guid uid)
+        public string XoaNguoiXL(string username, Guid uid)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace HG.Data.Business.CauHinh
                 DbProvider.SetCommandText2("XoaNguoiXuLy", CommandType.StoredProcedure);
 
                 // Input params
-                DbProvider.AddParameter("@ma_nguoi_dung", ma_nguoi_dung, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("@username", username, SqlDbType.NVarChar);
                 DbProvider.AddParameter("@uid", uid, SqlDbType.UniqueIdentifier);
 
                 // Output params
@@ -94,7 +94,7 @@ namespace HG.Data.Business.CauHinh
                 return "Xóa thất bại!";
             }
         }
-        public List<Nguoi_PHXLModel> ThayTheNguoiXL(Guid ma_nguoi_dung_hien_tai, Guid ma_nguoi_dung_thay_the, Guid uid)
+        public List<Nguoi_PHXLModel> ThayTheNguoiXL(string ma_nguoi_dung_hien_tai, string ma_nguoi_dung_thay_the, Guid uid)
         {
             try
             {
@@ -102,8 +102,8 @@ namespace HG.Data.Business.CauHinh
                 DbProvider.SetCommandText2("ThayTheNguoiXuLy", CommandType.StoredProcedure);
 
                 // Input params
-                DbProvider.AddParameter("@ma_nguoi_dung", ma_nguoi_dung_hien_tai, SqlDbType.UniqueIdentifier);
-                DbProvider.AddParameter("@ma_nguoi_thay_the", ma_nguoi_dung_thay_the, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("@ma_nguoi_dung", ma_nguoi_dung_hien_tai, SqlDbType.NVarChar);
+                DbProvider.AddParameter("@ma_nguoi_thay_the", ma_nguoi_dung_thay_the, SqlDbType.NVarChar);
                 DbProvider.AddParameter("@uid", uid, SqlDbType.UniqueIdentifier);
 
                 // Output params
