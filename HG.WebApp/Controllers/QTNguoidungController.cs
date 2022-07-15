@@ -316,27 +316,40 @@ namespace HG.WebApp.Controllers
             if (string.IsNullOrEmpty(txtSearch))
             {
                 EAContext eAContext = new EAContext();
-                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count();
+                var totalRecored = eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count();
                 ViewBag.TotalPage = (eAContext.Asp_nhom.Where(n => n.Deleted != 1).Count() / pageSize) + 1;
-                ViewBag.CurrentPage = 1;
+                ViewBag.CurrentPage = currentPage;
                 ViewBag.PageSize = pageSize;
                 ViewBag.txtSearch = txtSearch;
-                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroPaging.cshtml", eAContext.Asp_nhom.Where(n => n.Deleted != 1).ToList());
+                ViewBag.Stt = (currentPage - 1) * pageSize;
+                ViewBag.TotalRecored = totalRecored;
+                ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroPaging.cshtml", eAContext.Asp_nhom.Where(n => n.Deleted != 1).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList());
                 return Content(result);
             }
             else
             {
                 EAContext eAContext = new EAContext();
-                ViewBag.TotalRecords = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count();
+                var totalRecored = eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count();
                 ViewBag.TotalPage = (eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Count() / pageSize) + 1;
-                ViewBag.CurrentPage = 1;
+                ViewBag.CurrentPage = currentPage;
                 ViewBag.PageSize = pageSize;
                 ViewBag.txtSearch = txtSearch;
-                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroPaging.cshtml", eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).ToList());
+                ViewBag.Stt = (currentPage - 1) * pageSize;
+                ViewBag.TotalRecored = totalRecored;
+                ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroPaging.cshtml", eAContext.Asp_nhom.Where(n => n.Deleted != 1 && (n.ten_nhom ?? "").Contains(txtSearch)).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList());
                 return Content(result);
             }
             
         }
+        //lay vai tri chitiet boi ma nhom
         public IActionResult QLNhomVaitroChitiet(string code)
         {
             ViewBag.Status = "";
@@ -349,9 +362,23 @@ namespace HG.WebApp.Controllers
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
             //lấy vai trò theo mã nhóm
             ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
+            //Lấy tất cả các nhóm thuộc tất cả các người dùng: đầu vào User đầu ra nhóm - user khi tạo người dùng
+            var lstUserGroup = _nguoiDungDao.ListNguoiDungByMaNhom(code);
+            var lstFromQTNguoiDung = "";
+            if (lstUserGroup != null)
+            {
+                lstFromQTNguoiDung = String.Join(", ", lstUserGroup.Where(n => (lst_nhom_nguoi_dung.lst_ma_nguoi_dung ?? "").Contains(n.ma_nguoi_dung.ToString()) == false).Select(n => n.ma_nguoi_dung).ToArray());
+            }
             if (lst_nhom_nguoi_dung != null)
             {
-                if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "") { ViewBag.Status = "View"; }
+                if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "") {
+                    lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lst_nhom_nguoi_dung.lst_ma_nguoi_dung + "," + lstFromQTNguoiDung;
+                    ViewBag.Status = "View";
+                }
+                else
+                {
+                    lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung;
+                }
             }
             return View();
         }
@@ -370,8 +397,27 @@ namespace HG.WebApp.Controllers
             {
                 //lấy vai trò theo nhóm
                 ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(item.ma_nhom);
-                ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
+                var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
+                ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
                 ViewBag.Status = "";
+                //Lấy tất cả các nhóm thuộc tất cả các người dùng: đầu vào User đầu ra nhóm - user khi tạo người dùng
+                var lstUserGroup = _nguoiDungDao.ListNguoiDungByMaNhom(item.ma_nhom);
+                var lstFromQTNguoiDung = "";
+                if (lstUserGroup != null)
+                {
+                    lstFromQTNguoiDung = String.Join(", ", lstUserGroup.Where(n => (lst_nhom_nguoi_dung.lst_ma_nguoi_dung ?? "").Contains(n.ma_nguoi_dung.ToString()) == false).Select(n => n.ma_nguoi_dung).ToArray());
+                }
+                if (lst_nhom_nguoi_dung != null)
+                {
+                    if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "")
+                    {
+                        lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lst_nhom_nguoi_dung.lst_ma_nguoi_dung + "," + lstFromQTNguoiDung;
+                    }
+                    else
+                    {
+                        lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung;
+                    }
+                }
                 return View();
             }
             else

@@ -25,13 +25,24 @@
             closeOnSelect: false
         });
         $('#multiselect').on('select2:select', function(e) {
-            console.log(e.params.data);
+            if (Arr.length == 0) {
+                var lstGroup = $("#lstGroup").val(); 
+                    lstGroup.split(",").forEach(function (item) {
+                   Arr.push(item)
+                });
+            };
             Arr.push(e.params.data.id);
-            $("#lstGroup").val(Arr.join(","));
+            $('input[name="lstGroup"]').attr('value',Arr.join(","));
         });
         $('#multiselect').on("select2:unselect", function(e) {
+           if (Arr.length == 0) {
+                var lstGroup = $("#lstGroup").val(); 
+                    lstGroup.split(",").forEach(function (item) {
+                   Arr.push(item)
+                });
+            };
             Arr.pop(e.params.data.id);
-            $("#lstGroup").val(Arr.join(","));
+            $('input[name="lstGroup"]').attr('value',Arr.join(","));
         });
     });
  
@@ -136,7 +147,7 @@
                                        data: "",
                                        contentType: 'application/json; charset=utf-8',
                                        success: function(data) {
-                                           $("#dataTable").html(data);
+                                            $("#dataTable").html(data);
                                             $("#NotifyRole").modal("show");
                                        }
                                    });           
@@ -163,7 +174,8 @@
                                             }
                                         }
                                     </select>
-                                    <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" hidden>
+                                    <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" value="@lst_nhom_nguoi_dung.lst_ma_nguoi_dung" hidden>
+                                     @*<input name="lstGroup" type="text" id="lstGroup" value="@(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()))" class="form-control input-default" hidden>*@
                                 </div>
                             </div>
                              <div class="text-center">
