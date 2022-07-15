@@ -13,7 +13,7 @@ namespace HG.Entities.HoSo
         public string ma_khach_hang { get; set; }
         public string ho_ten { get; set; }
         public DateTime ngay_sinh { get; set; }
-        public int nam_sinh { get; set; }
+        public int? nam_sinh { get; set; }
         public int gioi_tinh { get; set; }
         public int? id_giay_to { get; set; }
         public string? so_giay_to { get; set; }
@@ -37,6 +37,7 @@ namespace HG.Entities.HoSo
         public DateTime ngay_hen_tra { get; set; }
         public int? id_file_dinh_kem { get; set; }
         public string? y_kien { get; set; }
+        public string? lstCode { get; set; }
         public int? id_trang_thai_hs { get; set; }
         public int? id_trang_thai_xl { get; set; }
         public int? id_trang_thai_xl_detail { get; set; }
@@ -50,5 +51,13 @@ namespace HG.Entities.HoSo
         public int? Stt { get; set; }
         public int trang_thai { get; set; }
       
+    }
+    public class Ho_SoPaging
+    {
+        public int Id { get; set; }
+        public string? ma_thu_tuc_hc { get; set; }
+        public string? ho_ten { get; set; }
+        public string? nguoi_xu_ly { get; set; }
+        public DateTime? ngay_hen_tra { get; set; }
     }
 }

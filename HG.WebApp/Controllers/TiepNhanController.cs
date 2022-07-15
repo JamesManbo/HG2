@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using HG.Data.Business.DanhMuc;
 using HG.Data.Business.ThuTuc;
+using HG.Entities;
 using HG.Entities.Entities;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.Model;
 using HG.Entities.HoSo;
+using HG.Entities.SearchModels;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +22,8 @@ namespace HG.WebApp.Controllers
         private readonly UserManager<AspNetUsers> userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LuongXuLyDao _danhmucDao;
+        private readonly ThuTucDao _thuTucDao;
+        private readonly HG.Data.Business.HoSo.HoSoDao _hoso;
         public TiepNhanController(IWebHostEnvironment _environment, ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
         {
@@ -27,6 +32,9 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _danhmucDao = new LuongXuLyDao(DbProvider);
+            _thuTucDao = new ThuTucDao(DbProvider);
+            _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
+
         }
         [HttpGet]
         public async Task<IActionResult> TiepNhanHoSoMoi()
@@ -188,8 +196,7 @@ namespace HG.WebApp.Controllers
 
             if (type_view == StatusAction.View.ToString())
             {
-               
-                return RedirectToAction("SuaHoSo", new { Id = hosoId });
+                return RedirectToAction("HoSoDangTiepNhan");
             }
             else if (type_view == StatusAction.Add.ToString())
             {
@@ -198,7 +205,7 @@ namespace HG.WebApp.Controllers
             else if (type_view == StatusAction.SaveAndTranfer.ToString()) //lưu và chuyển
             {
                 //chuyển hồ sơ về danh sách hồ sơ chờ tiếp nhận
-                return RedirectToAction("DanhSachHoSo");
+                return RedirectToAction("HoSoChuyenChuaXL");
             }
             else if (type_view == StatusAction.TraKQ.ToString())
             {
@@ -207,9 +214,85 @@ namespace HG.WebApp.Controllers
             return RedirectToAction("DanhSachHoSo");
         }
 
+        public async Task<IActionResult> HoSoPaging( int currentPage = 1, string tu_khoa = "", string ma_thu_tuc = "", int tat_ca = 1, int dung_han = 0, int qua_han = 0, int trang_thai = 1, int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = currentPage, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = dung_han, qua_han = qua_han, RecordsPerPage = pageSize, trang_thai_hs = trang_thai };
+            hs = _hoso.HoSoPaging(hoSoPaging,out totalRecored);
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = tu_khoa;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/HoSoPaging.cshtml", hs);
+            return Content(result);
+        }
+        public IActionResult HoSoDangTiepNhan(string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            //hs mới tiếp nhận status = 1
+            var currentPage = 1;
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            if (!string.IsNullOrEmpty(txtSearch))
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.Ho_So.Where(n => n.Deleted != 1 && (n.ten_ho_so ?? "").Contains(txtSearch) && n.trang_thai == 1).ToList();
+                    hs = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+                    totalRecored = ds.Count();
+                }
+            }
+            else
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.Ho_So.Where(n => n.Deleted != 1 && n.trang_thai == 1).ToList();
+                    hs = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+                    totalRecored = ds.Count();
+                }
+            }
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
 
-
-
+        public IActionResult HoSoChuyenChuaXL(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            //hs mới tiếp nhận status = 1
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1,tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 2 };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
         [HttpGet]
         public IActionResult DanhSachHoSo(string txtSearch = "", int pageSize = 25)
         {
@@ -243,14 +326,12 @@ namespace HG.WebApp.Controllers
             ViewBag.txtSearch = txtSearch;
             return View(hs);
         }
-
         [HttpGet]
         public IActionResult HoSoMoiTiepNhan(Ho_So item, string type_view)
         {
            
             return View(new Ho_So());
         }
-
         [HttpGet]
         public IActionResult SuaHoSo(int code)
         {
@@ -259,5 +340,13 @@ namespace HG.WebApp.Controllers
             var obj = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             return View(obj);
         }
+        public async Task<IActionResult> LayThuTucByLinhVuc(string tu_khoa = "", string ma_linh_vuc = "", int pageSize = 25)
+        {
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = ma_linh_vuc, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayThuTucByLinhVuc.cshtml", LstThuTuc);
+            return Content(result);
+        }  
+       
     }
 }

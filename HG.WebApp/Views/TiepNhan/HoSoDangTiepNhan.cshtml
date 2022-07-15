@@ -16,7 +16,7 @@
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
             <h5>Danh sách</h5>
-            <h1>Hồ sơ chuyển chưa xử lý</h1>
+            <h1>Hồ sơ mới tiếp nhận</h1>
         </div>
     </div>
     <div class="maincontent">
@@ -65,7 +65,7 @@
                                     var pageSize = $("#lstPageSize").val();
                                     $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize + "&trang_thai=2" ,
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize,
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {
@@ -153,7 +153,7 @@
                                             <td><a href="/TiepNhan/SuaHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ma_thu_tuc_hc </a></td>
                                             <td><a href="/TiepNhan/SuaHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.nguoi_xu_ly </a></td>
                                             <td><a href="/TiepNhan/SuaHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra)) </a></td>
-                                            <td><a href="#"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
+                                                   <td><a href="#"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
                                         </tr>
                                         stt++;
                                     }

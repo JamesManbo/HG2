@@ -1,0 +1,17 @@
+﻿    @model HG.Entities.Entities.ThuTuc.ThuTucPaging
+    <div class="form-group row">
+        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Lĩnh vực</label>
+        <div class="col-md-8">
+               <select name="ma_thu_tuc" id="ma_thu_tuc" onchange="HoSoPaging(this)" class="form-control input-default">
+                   <option value="" selected>-Chọn thủ tục-</option> 
+                    @if(Model != null)
+                    {
+                         foreach (var item in Model.lstThuTuc)
+                         {
+                              <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option>
+                         }
+                    }
+        </select>
+        </div>
+    </div>
+    
