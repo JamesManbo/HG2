@@ -192,11 +192,11 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> Login(string UserName, string PassWord,bool RememberMe = false)
         {
             EAContext db = new EAContext();
-            var obj = db.AspNetUsers.Where(n => n.UserName == UserName && n.mat_khau == PassWord && n.khoa_tai_khoan == 1).Count();
+            var obj = db.AspNetUsers.Where(n => n.UserName == UserName && n.mat_khau == PassWord && (n.khoa_tai_khoan == 1 || n.Deleted == 1)).Count();
             if(obj > 0)
             {
                 TempData["Fale"] = "Fale";
-                ViewBag.Msg = "Tài khoản đã bị khóa";
+                ViewBag.Msg = "Tài khoản đã bị khóa hoặc đã xóa!";
                 return RedirectToAction("Login", "User");
             }
             ViewBag.Msg = "";

@@ -75,7 +75,6 @@ namespace HG.WebApp.Data
                 .AddJsonFile("appsettings.json")
                 .Build();
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("EAContext"));
-                //optionsBuilder.UseSqlServer("Data Source=WIN-20421CI14U0\\SQLEXPRESS;Initial Catalog=EA; User ID=sa;Password=abcABC123!@#");
             }
         }
 

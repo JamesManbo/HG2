@@ -180,7 +180,7 @@
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="CHỨC VỤ: activate to sort column ascending" style="width: 222px;">CHỨC VỤ</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="PHÒNG BAN: activate to sort column ascending" style="width: 494px;">PHÒNG BAN</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="KHÓA: activate to sort column ascending" style="width: 62px;">KHÓA</th>
-                                    @*<th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="Khôi phục: activate to sort column ascending" style="width: 33px;">Khôi phục</th>*@
+                                    <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="Khôi phục: activate to sort column ascending" style="width: 33px;">Khôi phục</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 14px;">#</th>
                                     <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 14px;">#</th>
                                     <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="#: activate to sort column ascending" style="width: 39px;">#</th></tr>
@@ -209,6 +209,7 @@
                                                 <td style="text-align: center;" class="">
                                                        @(item.khoa_tai_khoan == 1 ? Html.Raw("<i style=\"cursor: pointer\" onclick=\"Unlock('"+@item.Id+"')\" class=\"iconsweets-locked2\"></i>") : "") 
                                                     </td>
+                                                <td style="text-align:center"></td>
                                                 <td class=" ">
                                                     <a  title="" data-placement="top" data-toggle="tooltip" href="/QTNguoiDung/ViewNguoiDung/@item.Id"  data-original-title="Xem">Xem</a></td>
                                                 <td class=" ">
