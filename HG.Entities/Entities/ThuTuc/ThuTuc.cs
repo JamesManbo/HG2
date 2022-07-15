@@ -11,9 +11,9 @@ namespace HG.Entities.Entities.ThuTuc
     {
         public int ma_thu_tuc_old { get; set; }
         public string ma_thu_tuc { get; set; }
-        public string ma_quoc_gia { get; set; }
+        public string? ma_quoc_gia { get; set; }
         public string ten_thu_tuc { get; set; }
-        public string mo_ta { get; set; }
+        public string? mo_ta { get; set; }
         public bool nop_online { get; set; }
         public bool hd_online { get; set; }
         public bool tthcc { get; set; }
@@ -25,10 +25,10 @@ namespace HG.Entities.Entities.ThuTuc
         public decimal le_phi_truoc { get; set; }
         public decimal le_phi_sau { get; set; }
         public int so_bo_hs { get; set; }
-        public string duong_dan_kq { get; set; }
-        public string thong_tin_mo_rong { get; set; }
-        public string noi_dung_hd { get; set; }
-        public int stt { get; set; }
+        public string? duong_dan_kq { get; set; }
+        public string? thong_tin_mo_rong { get; set; }
+        public string? noi_dung_hd { get; set; }
+        public int? stt { get; set; }
         public bool thu_le_phi_knhs { get; set; }
         public bool thuc_hien_hai_gd { get; set; }
         public bool tra_kq_ktn { get; set; }
@@ -40,8 +40,8 @@ namespace HG.Entities.Entities.ThuTuc
         public bool gui_lt_kem_kq_xl { get; set; }
         public bool chi_tra_kq_kckqlt { get; set; }
         public string thuc_hien { get; set; }
-        public string don_vi_ltxl { get; set; }
-        public string don_vi_ltph { get; set; }
+        public string? don_vi_ltxl { get; set; }
+        public string? don_vi_ltph { get; set; }
         public bool thu_le_phi_kckq { get; set; }
         public Guid? CreatedUid { get; set; }
         public bool luong { get; set; }
@@ -55,6 +55,7 @@ namespace HG.Entities.Entities.ThuTuc
     }
     public class ThanhPhan
     {
+        public int ma_thu_tuc_key { get; set; }
         public string ma_thu_tuc { get; set; }
         public string ma_thanh_phan { get; set; }
         public string ten_thanh_phan { get; set; }

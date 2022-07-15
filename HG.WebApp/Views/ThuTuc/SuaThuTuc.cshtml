@@ -34,6 +34,17 @@
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
         jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
             if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
                 return false;
@@ -68,6 +79,8 @@
                 so_bo_hs: "Bạn cần nhập số bộ hồ sơ"
             }
         });
+
+
 
         $('.select2').select2();
 
@@ -204,6 +217,20 @@
 
     });
 
+    // THÀNH PHẦN
+    function ThemThanhPhan(ma_thu_tuc_key, ma_thu_tuc, type_view) {
+        $.ajax({
+            type: "Get",
+            url: "../ThuTuc/ThemTP?code_key=" + ma_thu_tuc_key + "&code=" + ma_thu_tuc + "&type_view=" + type_view,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#TabThanhPhan").html(data);
+            }
+        });
+    }
+
+    //END THÀNH PHẦN
     function ThemVBLQ(ma_thu_tuc) {
         $.ajax({
             type: "Get",
@@ -411,7 +438,7 @@
                                     <div class="row mb-3">
                                         <label for="ten_pb" class="col-sm-2 control-label">Mã luồng xử lý</label>
                                         <div class="col-sm-8">
-                                            @if (Model.lstLuong != null)
+                                            @if (Model.lstLuong != null & Model.lstLuong.Count > 0)
                                             {
                                                 foreach (var item in Model.lstLuong)
                                                 {
@@ -427,7 +454,7 @@
                                     <div class="row mb-3">
                                         <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                         <div class="col-sm-8">
-                                            <input type="text" onfocusout="CheckMa(this,'@ViewBag.type_view')" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                            <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
                                         <div class="col-sm-1">
                                             <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
@@ -565,25 +592,25 @@
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="stt" class="col-sm-2 control-label">Số ngày xử lý</label>
+                                        <label for="so_ngay_xl" class="col-sm-2 control-label">Số ngày xử lý</label>
                                         <div class="col-sm-8">
                                             <input type="number" class="form-control input-default" name="so_ngay_xl" placeholder="Số ngày xử lý" value="@Model.thuTuc.so_ngay_xl" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="stt" class="col-sm-2 control-label">Lệ phí trước</label>
+                                        <label for="le_phi_truoc" class="col-sm-2 control-label">Lệ phí trước</label>
                                         <div class="col-sm-8">
                                             <input type="number" class="form-control input-default" name="le_phi_truoc" placeholder="Lệ phí" value="@Model.thuTuc.le_phi_truoc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="stt" class="col-sm-2 control-label">Lệ phí sau</label>
+                                        <label for="le_phi_sau" class="col-sm-2 control-label">Lệ phí sau</label>
                                         <div class="col-sm-8">
                                             <input type="number" class="form-control input-default" name="le_phi_sau" placeholder="Lệ phí" value="@Model.thuTuc.le_phi_sau" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
-                                        <label for="stt" class="col-sm-2 control-label">Số bộ hồ sơ</label>
+                                        <label for="so_bo_hs" class="col-sm-2 control-label">Số bộ hồ sơ</label>
                                         <div class="col-sm-8">
                                             <input type="number" class="form-control input-default" name="so_bo_hs" placeholder="Số bộ hồ sơ" value="@Model.thuTuc.so_bo_hs" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
@@ -609,7 +636,7 @@
                                     <div class="row mb-3">
                                         <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control input-default" name="stt" value="@Model.thuTuc.stt" placeholder="Thứ thự" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                            <input type="number" class="form-control input-default" name="stt" value="@Model.thuTuc.stt" placeholder="Thứ tự" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -646,7 +673,7 @@
                                     </div>
                                     <div class="tab_lienthong" style="@(Model.thuTuc.cho_phep_lien_thong==true?"display:block":"display:none")">
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label"></label>
+                                            <label for="cho_phep_gui_lien_thong" class="col-sm-2 control-label"></label>
                                             <div class="col-sm-3">
                                                 <input type="checkbox" id="cho_phep_gui_lien_thong" name="cho_phep_gui_lien_thong" value="@Model.thuTuc.cho_phep_gui_lien_thong" @(Model.thuTuc.cho_phep_gui_lien_thong==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="cho_phep_gui_lien_thong">Cho phép gửi liên thông</label>
@@ -687,8 +714,8 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label"></label>
-                                            <div class="col-sm-3">
+                                            <label for="gui_lt_kem_kq_xl" class="col-sm-2 control-label"></label>
+                                            <div class="col-sm-4">
                                                 <input type="checkbox" id="gui_lt_kem_kq_xl" name="gui_lt_kem_kq_xl" value="@Model.thuTuc.gui_lt_kem_kq_xl" @(Model.thuTuc.gui_lt_kem_kq_xl==true?"checked":"") @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                                 <label for="gui_lt_kem_kq_xl">Gửi liên thông kèm kết quả xử lý</label>
                                             </div>
@@ -702,16 +729,16 @@
                                         @if (ViewBag.type_view == StatusAction.View.ToString())
                                         {
                                             <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/ThemThuTuc';">Thêm</button>
-                                            <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()&active=@ActionThuTuc.ThuTuc.ToString()';">Sửa</button>
+                                            <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/ThuTuc/SuaThuTuc?code_key=@Model.thuTuc.ma_thu_tuc_old&code=@Model.thuTuc.ma_thu_tuc&type=@StatusAction.Edit.ToString()&active=@ActionThuTuc.ThuTuc.ToString()';">Sửa</button>
                                         }
                                         @if (ViewBag.type_view == StatusAction.Edit.ToString())
                                         {
                                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
                                         }
 
-                                        <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=0')">Xóa</button>
-                                        <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@Model.thuTuc.ma_thu_tuc&type=1')">Bãi bỏ TTHC</button>
-                                        <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc';">Thành phần</button>
+                                        <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@(Model.thuTuc.ma_thu_tuc+"|"+Model.thuTuc.ma_thu_tuc_old.ToString())&type=0')">Xóa</button>
+                                        <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?&code=@(Model.thuTuc.ma_thu_tuc+"|"+Model.thuTuc.ma_thu_tuc_old.ToString())&type=1')">Bãi bỏ TTHC</button>
+                                        <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/SuaThuTuc?code_key=@Model.thuTuc.ma_thu_tuc_old&code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view&active=@ActionThuTuc.ThanhPhan.ToString()';">Thành phần</button>
                                         <button type="button" class="btn btn-primary" onclick="window.location.href='/Thutuc/QuanLy';">Đóng</button>
                                     </div>
                                 </form>
@@ -721,146 +748,150 @@
                         </div>
                         @*TAB thành phần *@
                         <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.ThanhPhan.ToString())?"show active":"")" id="pills-tp" role="tabpanel" aria-labelledby="profile-tab">
-                            <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view';" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" value="Xóa" onclick="DeleteMultipleTP('@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
-                                <input hidden id="lstCode_tp" />
-                            </p>
-                            <select name="" onchange="" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
+
+                            <div id="TabThanhPhan">
+                                <p class="stdformbutton" style="margin-bottom: 10px;">
+                                    <input type="button" value="Thêm" onclick="ThemThanhPhan('@Model.thuTuc.ma_thu_tuc_old','@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
+                                    <input type="button" value="Xóa" onclick="DeleteMultipleTP('@Model.thuTuc.ma_thu_tuc','@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
+                                    <input hidden id="lstCode_tp" />
+                                </p>
+                                @*<select name="" onchange="" id="MaNhomTT" class="form-control input-default form-nhom" placeholder="Chọn nhóm...">
                                 <option selected="selected" value="0">------------- Chọn nhóm thành phần hồ sơ -------------</option>
-                            </select>
-                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-                                <div class="dataTable-container">
-                                    <table class="table table-bordered responsive">
-                                        <thead class="widgettitle">
-                                            <tr>
-                                                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                    <input type="checkbox" name="" id="selectAll_tp" />
-                                                </th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.lstThanhPhan != null)
-                                            {
-                                                var stt_tp = 1;
-                                                foreach (var item in Model.lstThanhPhan)
+                                </select>*@
+                                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                    <div class="dataTable-container">
+                                        <table class="table table-bordered responsive">
+                                            <thead class="widgettitle">
+                                                <tr>
+                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                        <input type="checkbox" name="" id="selectAll_tp" />
+                                                    </th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.lstThanhPhan != null)
                                                 {
-                                                    <tr>
-                                                        <td><input type="checkbox" class="ads_Checkbox_tp" value="@item.ma_thanh_phan" /></td>
-                                                        <td scope="row">
-                                                            @stt_tp
-                                                            <input type="hidden" value="@item.ma_thanh_phan" />
-                                                        </td>
-                                                        <td><a href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(ViewBag.type_view)&type_tp=@(StatusAction.View.ToString())">@item.ten_thanh_phan</a></td>
+                                                    var stt_tp = 1;
+                                                    foreach (var item in Model.lstThanhPhan)
+                                                    {
+                                                        <tr>
+                                                            <td><input type="checkbox" class="ads_Checkbox_tp" value="@item.ma_thanh_phan" /></td>
+                                                            <td scope="row">
+                                                                @stt_tp
+                                                                <input type="hidden" value="@item.ma_thanh_phan" />
+                                                            </td>
+                                                            <td><a href="javascript:void(0)" onclick="CheckMaTP(0,'','@item.ma_thanh_phan','@StatusAction.View.ToString()','@ViewBag.type_view')">@item.ten_thanh_phan</a></td>
 
-                                                        <td>@item.mo_ta</td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(ViewBag.type_view)&type_tp=@(StatusAction.View.ToString())">
-                                                                <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/Thutuc/SuaThanhPhan?code=@Model.thuTuc.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(ViewBag.type_view)&type_tp=@(StatusAction.Edit.ToString())">
-                                                                <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                            </a>
-                                                        </td>
-                                                        <td>
-                                                            <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code=@item.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@ViewBag.type_view')"
-                                                       title=""
-                                                       data-placement="top"
-                                                       data-toggle="tooltip"
-                                                       data-original-title="Xóa"
-                                                       href="#">
-                                                                <span class="glyphicon glyphicon-trash">Xóa</span>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                    stt_tp++;
+                                                            <td>@item.mo_ta</td>
+                                                            <td>
+                                                                <a id="" href="javascript:void(0)" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" onclick="CheckMaTP(0,'','@item.ma_thanh_phan','@StatusAction.View.ToString()','@ViewBag.type_view')">
+                                                                    <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a id="" href="javascript:void(0)" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" onclick="CheckMaTP(0,'','@item.ma_thanh_phan','@StatusAction.Edit.ToString()','@ViewBag.type_view')">
+                                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                </a>
+                                                            </td>
+                                                            <td>
+                                                                <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code_key=@Model.thuTuc.ma_thu_tuc_old&code=@item.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@ViewBag.type_view')"
+                                                           title=""
+                                                           data-placement="top"
+                                                           data-toggle="tooltip"
+                                                           data-original-title="Xóa"
+                                                           href="#">
+                                                                    <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                        stt_tp++;
+                                                    }
+
                                                 }
-
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistThanhPhan.RecoredFrom đến  @Model.PagelistThanhPhan.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
-                                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                    @{
-                                        var TotalPage = Model.PagelistThanhPhan.TotalPage;
-                                        var CurrentPage = Model.PagelistThanhPhan.CurrentPage;
-                                        if (TotalPage > 5)
-                                        {
-                                            if (CurrentPage > CurrentPage + 2)
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistThanhPhan.RecoredFrom đến  @Model.PagelistThanhPhan.RecoredTo của @Model.PagelistThanhPhan.TotalRecords bản ghi</div>
+                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                        @{
+                                            var TotalPage = Model.PagelistThanhPhan.TotalPage;
+                                            var CurrentPage = Model.PagelistThanhPhan.CurrentPage;
+                                            if (TotalPage > 5)
                                             {
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                            };
-                                            if (CurrentPage > 3)
-                                            {
-                                                for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                if (CurrentPage > CurrentPage + 2)
                                                 {
-                                                    if (i == CurrentPage)
-                                                    {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                    else
-                                                    {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                for (int i = 1; i <= 5; i++)
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                };
+                                                if (CurrentPage > 3)
                                                 {
-                                                    if (i == CurrentPage)
+                                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
                                                     {
-                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        if (i == CurrentPage)
+                                                        {
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                    }
-                                                }
-
-                                            }
-
-                                            if (CurrentPage < CurrentPage + 2)
-                                            {
-                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                            };
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= TotalPage; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i == CurrentPage)
+                                                        {
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+
+                                                }
+
+                                                if (CurrentPage < CurrentPage + 2)
+                                                {
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                };
+                                            }
+                                            else
+                                            {
+                                                for (int i = 1; i <= TotalPage; i++)
+                                                {
+                                                    if (i == CurrentPage)
+                                                    {
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
+                                    </div>
+
+                                    <!-- End Table with stripped rows -->
+
                                 </div>
+                                <p class="stdformbutton" style="margin-bottom: 10px;">
+                                    <input type="button" value="Thêm" onclick="ThemThanhPhan('@Model.thuTuc.ma_thu_tuc_old','@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
+                                    <input type="button" value="Xóa" onclick="DeleteMultipleTP('@Model.thuTuc.ma_thu_tuc_old','@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
 
-                                <!-- End Table with stripped rows -->
-
+                                </p>
                             </div>
-                            <p class="stdformbutton" style="margin-bottom: 10px;">
-                                <input type="button" value="Thêm" onclick="window.location.href='/Thutuc/ThemThanhPhan?code=@Model.thuTuc.ma_thu_tuc&type=@ViewBag.type_view';" class="btn btn-primary" style="width:100px;" />
-                                <input type="button" value="Xóa" onclick="DeleteMultipleTP('@Model.thuTuc.ma_thu_tuc','@ViewBag.type_view')" class="btn btn-primary" style="width:100px;" />
 
-                            </p>
                         </div>
                         @*TAB Văn bản liên quan *@
                         <div class="tab-pane fade @(ViewBag.active.Contains(ActionThuTuc.VanBanLQ.ToString())?"show active":"")" id="pills-vblq" role="tabpanel" aria-labelledby="profile-tab">
@@ -1293,8 +1324,8 @@
 <script>
 
     CKEDITOR.replace('ckedit2');
-    function CheckMa(data, type) {
-        var dataPost = { code: data.value, type: type };
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
         $.ajax({
             url: "/ThuTuc/CheckMaTTHC",
             type: "post",
@@ -1302,6 +1333,20 @@
             data: dataPost,
             success: function(result) {
                 window.location.href = result.href;
+            }
+        });
+    };
+
+    function CheckMaTP(code_key, code, data, type_view_tp, type_view) {
+        var dataPost = { code_key: 0, code: "", code_tp: data, type_view_tp: type_view_tp, type_view: type_view };
+        $.ajax({
+            url: "/ThuTuc/CheckMaTP",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                console.log(1);
+                $("#TabThanhPhan").html(result);
             }
         });
     };
@@ -1359,6 +1404,23 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+<div class="modal fade" id="basicModal_TP" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body basicModaltp_ct">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

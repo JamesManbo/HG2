@@ -29,4 +29,9 @@ namespace HG.WebApp
         NhomTP,
         TPKQXL
     }
+
+    public enum TableCheck
+    {
+        LuongXuLy         
+    }
 }

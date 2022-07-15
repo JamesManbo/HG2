@@ -7,6 +7,7 @@
 }
 <script>
     var Arr = [];
+    var Arr_map = [];
     $(document).ready(function() {
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
@@ -25,14 +26,28 @@
         });
 
         $('#multiselect').on('select2:select', function(e) {
+            var id = $(e.params.data.element).data('id');         
             Arr.push(e.params.data.id);
+            Arr_map.push(e.params.data.id + "|" + id);
             $("#ma_thu_tuc").val(Arr.join(";"));
+            $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
+            var id = $(e.params.data.element).data('id');           
             Arr.pop(e.params.data.id);
+            Arr_map.pop(e.params.data.id + "|" + id);
             $("#ma_thu_tuc").val(Arr.join(";"));
+            $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
+
+        jQuery.validator.addMethod("tieng_viet_vaild", function(value, element) {
+            if ("ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ".includes(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nên nhập tiếng việt");
 
         jQuery.validator.addMethod("ma_vaild", function(value, element) {
             if (/[ `!#$%^&*()+\=\[\]{};':"\\|,<>\/?~]/.test(value)) {
@@ -40,24 +55,40 @@
             } else {
                 return true;
             };
-        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
 
         $('#form_pb').validate({
             rules: {
                 ma_luong: {
                     required: true,
-                    ma_vaild: true
+                    ma_vaild: true,
+                    tieng_viet_vaild: true
                 },
+                ma_thu_tuc: "required",
                 ten_luong: "required"
             },
             messages: {
                 ma_luong: {
                     required: "Bạn cần nhập mã luồng!",
                 },
+                ten_luong: "Bạn cần chọn luồng!",
                 ten_luong: "Bạn cần nhập tên luồng!"
             }
         });
     });
+
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/Luong/CheckMaLuong",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                window.location.href = result.href;
+            }
+        });
+    };
 
 </script>
 <div class="col-lg-12">
@@ -78,7 +109,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã luồng <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã luồng" name="ma_luong" maxlength="25" value="">
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã luồng" name="ma_luong" maxlength="25" value="@ViewBag.code">
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -128,11 +159,12 @@
                                     {
                                         foreach (var item in ThuTuc)
                                         {
-                                            <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option>
+                                            <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
                                         }
                                     }
                                 </select>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden >
                             </div>
                         </div>
                         <div class="row mb-3 tab_luong_cha" style="display:none;">

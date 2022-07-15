@@ -14,7 +14,7 @@
                     {
                         <tr>
                             <td align="center">
-                                <a href="/ThuTuc/SuaThanhPhan?code=@item.ma_thu_tuc&code_tp=@item.ma_thanh_phan&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                <a href="#" onclick="CheckMaTP('@item.ma_thu_tuc_key','@item.ma_thu_tuc','@item.ma_thanh_phan','@StatusAction.Edit.ToString()','@ViewBag.type_view')">Chọn</a>
                             </td>
                             <td>
                                 @item.ten_thanh_phan
@@ -28,5 +28,17 @@
     </div>
 </div>
 <script>
-
+    function CheckMaTP(code_key, code, code_tp, type_view_tp, type_view) {
+        var dataPost = { code_key: code_key, code: code, code_tp: code_tp, type_view_tp: type_view_tp, type_view: type_view };
+        $.ajax({
+            url: "/ThuTuc/CheckMaTP",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                $("#TabThanhPhan").html(result);
+                $("#basicModal_TP").modal("hide");
+            }
+        });
+    };
 </script>

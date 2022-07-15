@@ -22,7 +22,7 @@ namespace HG.Entities
     public class Dm_Thanh_Phan_Key
     {
 
-
+        public int ma_thu_tuc_key { get; set; }
         public string ma_thu_tuc { get; set; }
         public string ten_thanh_phan { get; set; }
         public string ma_thanh_phan { get; set; }

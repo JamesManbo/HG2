@@ -1,133 +1,135 @@
 ﻿@using HG.WebApp
 @model HG.Entities.Entities.ThuTuc.ThuTucPaging
+@{
+    var CurrentPage = (int)ViewBag.CurrentPage;
+    var TotalPage = (int)ViewBag.TotalPage;
+}
+<div class="dataTable-container">
+    <table class="table table-bordered responsive">
+        <thead class="widgettitle">
+            <tr>
+                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                    <input type="checkbox" name="" id="selectAll" />
+                </th>
 
-      <div class="dataTable-container">
-                                <table class="table table-bordered responsive">
-                                    <thead class="widgettitle">
-                                        <tr>
-                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                <input type="checkbox" name="" id="selectAll" />
-                                            </th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 45%;">TÊN</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 20%;">LĨNH VỰC</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 5%;">LUỒNG</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">OL</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 5%;">LT</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.lstThuTuc != null)
+            {
+                var stt = 1;
+                foreach (var item in Model.lstThuTuc)
+                {
+                    <tr>
+                        <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old" /></td>
+                        <td scope="row">
+                            @(stt+TotalPage*(CurrentPage-1))
+                            <input type="hidden" name="" id="" value="@item.ma_thu_tuc" />
+                        </td>
+                        <td><a href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">@item.ten_thu_tuc</a></td>
 
-                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                            <th class="head1" scope="col" data-sortable="" style="width: 45%;">TÊN</th>
-                                            <th class="head0" scope="col" data-sortable="" style="width: 20%;">LĨNH VỰC</th>
-                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">LUỒNG</th>
-                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">OL</th>
-                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">LT</th>
-                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (Model.lstThuTuc != null)
-                                        {
-                                            var stt = 1;
-                                            foreach (var item in Model.lstThuTuc)
-                                            {
-                                                <tr>
-                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thu_tuc" /></td>
-                                                    <td scope="row">
-                                                        @stt
-                                                        <input type="hidden" name="" id="" value="@item.ma_thu_tuc" />
-                                                    </td>
-                                                    <td><a href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">@item.ten_thu_tuc</a></td>
+                        <td>@item.ten_linh_vuc</td>
+                        <td>@(item.luong?"có":"")</td>
+                        <td>@(item.nop_online?"có":"")</td>
+                        <td>@(item.cho_phep_lien_thong?"có":"")</td>
+                        <td>
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
+                                <span class="glyphicon glyphicon-list-alt">Xem</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
+                                <span class="glyphicon glyphicon-edit">Sửa</span>
+                            </a>
+                        </td>
+                        <td>
+                            <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@(item.ma_thu_tuc+'|'+item.ma_thu_tuc_old)')"
+                       title=""
+                       data-placement="top"
+                       data-toggle="tooltip"
+                       data-original-title="Xóa"
+                       href="#">
+                                <span class="glyphicon glyphicon-trash">Xóa</span>
+                            </a>
+                        </td>
+                    </tr>
+                    stt++;
+                }
+            }
+        </tbody>
+    </table>
+</div>
 
-                                                    <td>@item.ten_linh_vuc</td>
-                                                    <td>@(item.luong?"có":"")</td>
-                                                    <td>@(item.nop_online?"có":"")</td>
-                                                    <td>@(item.cho_phep_lien_thong?"có":"")</td>
-                                                    <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
-                                                            <span class="glyphicon glyphicon-list-alt">Xem</span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
-                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@item.ma_thu_tuc')"
-                                                   title=""
-                                                   data-placement="top"
-                                                   data-toggle="tooltip"
-                                                   data-original-title="Xóa"
-                                                   href="#">
-                                                            <span class="glyphicon glyphicon-trash">Xóa</span>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                stt++;
-                                            }
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
+<div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
+<div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+    @{
 
-                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
-                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                @{
-                                    var TotalPage = (int)ViewBag.TotalPage;
-                                    var CurrentPage = (int)ViewBag.CurrentPage;
-                                    if (TotalPage > 5)
-                                    {
-                                        if (CurrentPage > CurrentPage + 2)
-                                        {
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                        };
-                                        if (CurrentPage > 3)
-                                        {
-                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= 5; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
+        if (TotalPage > 5)
+        {
+            if (CurrentPage > CurrentPage + 2)
+            {
+                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+            };
+            if (CurrentPage > 3)
+            {
+                for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                {
+                    if (i == CurrentPage)
+                    {
+                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                    else
+                    {
+                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 1; i <= 5; i++)
+                {
+                    if (i == CurrentPage)
+                    {
+                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                    else
+                    {
+                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                    }
+                }
 
-                                        }
+            }
 
-                                        if (CurrentPage < CurrentPage + 2)
-                                        {
-                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                        };
-                                    }
-                                    else
-                                    {
-                                        for (int i = 1; i <= TotalPage; i++)
-                                        {
-                                            if (i == CurrentPage)
-                                            {
-                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                            }
-                                            else
-                                            {
-                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                            }
-                                        }
-                                    }
-                                }
-                            </div>
+            if (CurrentPage < CurrentPage + 2)
+            {
+                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+            };
+        }
+        else
+        {
+            for (int i = 1; i <= TotalPage; i++)
+            {
+                if (i == CurrentPage)
+                {
+                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                }
+                else
+                {
+                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                }
+            }
+        }
+    }
+</div>
 <!-- End Table with stripped rows -->

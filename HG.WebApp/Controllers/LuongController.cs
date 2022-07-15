@@ -1,4 +1,5 @@
 ﻿using HG.Data.Business.DanhMuc;
+using HG.Data.Business.ThuTuc;
 using HG.Entities;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.Luong;
@@ -30,6 +31,7 @@ namespace HG.WebApp.Controllers
         Sercutiry sercutiry = new Sercutiry();
         private readonly LuongXuLyDao _danhmucDao;
         private readonly DanhMucDao _dmDao;
+        private readonly ThuTucDao _thuTucDao;
 
         //extend sys identity
         public LuongController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -41,6 +43,7 @@ namespace HG.WebApp.Controllers
             this._httpContextAccessor = httpContextAccessor;
             _danhmucDao = new LuongXuLyDao(DbProvider);
             _dmDao = new DanhMucDao(DbProvider);
+            _thuTucDao = new ThuTucDao(DbProvider);
         }
 
         #region Khai báo luồng xử lý 
@@ -70,11 +73,12 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
 
-        public IActionResult ThemLuongXuLy()
+        public IActionResult ThemLuongXuLy(string code = "")
         {
             var ds = _danhmucDao.DanhSachLuongKey();
             ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
             ViewBag.LuongKey = ds;
+            ViewBag.code = code;
             return View("~/Views/Luong/LuongXuLy/ThemLuongXuLy.cshtml");
         }
 
@@ -167,6 +171,17 @@ namespace HG.WebApp.Controllers
             }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/LuongXuLy/ViewLuongXuLy.cshtml", lst);
             return Content(result);
+        }
+
+        [HttpPost]
+        public JsonResult CheckMaLuong(string code)
+        {
+            var ds = _thuTucDao.CheckMaThuTuc(code, TableCheck.LuongXuLy.ToString());
+            if (ds == 0)
+            {
+                return Json(new { error = 0, href = "/Luong/ThemLuongXuLy?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "/Luong/SuaLuongXuLy?code=" + code.ToUpper() + "&type=" + StatusAction.Edit.ToString() });
         }
 
         #endregion
@@ -786,7 +801,7 @@ namespace HG.WebApp.Controllers
             //return File(stream, "application/octet-stream", excelName);  
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
-      
+
 
     }
 }

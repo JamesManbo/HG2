@@ -19,6 +19,7 @@ namespace HG.Entities
         public bool tt_hai_gd { get; set; }
         public string? file_excel { get; set; }
         public string ma_thu_tuc { get; set; }
+        public string ma_thu_tuc_map { get; set; }
         public string? luong_cha { get; set; }
 
         [NotMapped]

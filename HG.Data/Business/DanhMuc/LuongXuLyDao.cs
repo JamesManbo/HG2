@@ -111,12 +111,13 @@ namespace HG.Data.Business.DanhMuc
         {
             try
             {
-                DbProvider.SetCommandText2("dm_them_sua_luong_xu_ly", CommandType.StoredProcedure);
+                DbProvider.SetCommandText2("dm_them_sua_luong_xu_ly_v2", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_luong", item.ma_luong, SqlDbType.VarChar);
                 DbProvider.AddParameter("ten_luong", item.ten_luong, SqlDbType.NVarChar);
                 DbProvider.AddParameter("mo_ta", item.mo_ta ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("tt_hai_gd", item.tt_hai_gd, SqlDbType.Bit);
                 DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_thu_tuc_map", item.ma_thu_tuc_map, SqlDbType.NVarChar);
                 DbProvider.AddParameter("luong_cha", item.luong_cha ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("file_excel", item.file_excel ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("uid", item.CreatedUid ?? Guid.Empty, SqlDbType.UniqueIdentifier);

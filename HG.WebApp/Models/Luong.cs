@@ -1,0 +1,4 @@
+﻿namespace HG.WebApp.Models
+{   
+    
+}

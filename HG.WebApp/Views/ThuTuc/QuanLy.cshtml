@@ -6,6 +6,8 @@
     var LstPhongBan = ViewBag.LstPhongBan as List<HG.Entities.Dm_Phong_Ban>;
     var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
     var LstBieuMau = ViewBag.lstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau.dm_bieu_mau>;
+    var CurrentPage = (int)ViewBag.CurrentPage;
+    var TotalPage = (int)ViewBag.TotalPage;
 }
 @model HG.Entities.Entities.ThuTuc.ThuTucPaging
 <style>
@@ -188,29 +190,29 @@
                                             foreach (var item in Model.lstThuTuc)
                                             {
                                                 <tr>
-                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thu_tuc" /></td>
+                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old" /></td>
                                                     <td scope="row">
-                                                        @stt
+                                                        @(stt+TotalPage*(CurrentPage-1))
                                                         <input type="hidden" name="" id="" value="@item.ma_thu_tuc" />
                                                     </td>
-                                                    <td><a href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">@item.ten_thu_tuc</a></td>
+                                                    <td><a href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">@item.ten_thu_tuc</a></td>
 
                                                     <td>@item.ten_linh_vuc</td>
                                                     <td>@(item.luong?"có":"")</td>
                                                     <td>@(item.nop_online?"có":"")</td>
                                                     <td>@(item.cho_phep_lien_thong?"có":"")</td>
                                                     <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
                                                             <span class="glyphicon glyphicon-list-alt">Xem</span>
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
+                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.Edit.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">
                                                             <span class="glyphicon glyphicon-edit">Sửa</span>
                                                         </a>
                                                     </td>
                                                     <td>
-                                                        <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@item.ma_thu_tuc')"
+                                                        <a onclick="confirm.BeforDeletePost('/ThuTuc/XoaThuTuc?code=@(item.ma_thu_tuc+'|'+item.ma_thu_tuc_old)')"
                                                    title=""
                                                    data-placement="top"
                                                    data-toggle="tooltip"
@@ -230,8 +232,8 @@
                             <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
                             <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
                                 @{
-                                    var TotalPage = (int)ViewBag.TotalPage;
-                                    var CurrentPage = (int)ViewBag.CurrentPage;
+
+
                                     if (TotalPage > 5)
                                     {
                                         if (CurrentPage > CurrentPage + 2)
@@ -526,7 +528,8 @@
                 $(".ads_Checkbox").prop("checked", true);
                 $(':checkbox:checked').each(function(i) {
                     if (i > 0) {
-                        val[i - 1] = $(this).val();
+                        console.log($(this).val() + '|' + $(this).data("id"));
+                        val[i - 1] = $(this).val() + '|' + $(this).data("id");
                     }
                 });
             }
@@ -538,18 +541,10 @@
             //console.log(val);
         });
 
-
         $('.ads_Checkbox').click(function() {
             var val = [];
-            $(':checkbox:checked').each(function(i) {
-                if ($('#selectAll').is(':checked')) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
-                } else {
-                    val[i] = $(this).val();
-                }
-
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val() + '|' + $(this).data("id");
             });
             $("#lstCode").val(val);
             //  console.log(val);

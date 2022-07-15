@@ -223,7 +223,7 @@
                                         <div class="row mb-3">
                                             <label for="ma_pb" class="col-sm-2 control-label">Mã thủ tục <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input onfocusout="CheckMa(this,'@ViewBag.type_view')" type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@ViewBag.code">
+                                                <input onfocusout="CheckMa(this)" type="text" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@ViewBag.code">
                                             </div>
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -336,25 +336,25 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label">Số ngày xử lý <span style="color:red">(*)</span></label>
+                                            <label for="so_ngay_xl" class="col-sm-2 control-label">Số ngày xử lý <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
                                                 <input type="number" class="form-control input-default" placeholder="Số ngày xử lý" name="so_ngay_xl" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label">Lệ phí trước</label>
+                                            <label for="le_phi_truoc" class="col-sm-2 control-label">Lệ phí trước</label>
                                             <div class="col-sm-8">
                                                 <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_truoc" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label">Lệ phí sau</label>
+                                            <label for="le_phi_sau" class="col-sm-2 control-label">Lệ phí sau</label>
                                             <div class="col-sm-8">
                                                 <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_sau" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <label for="stt" class="col-sm-2 control-label">Số bộ hồ sơ <span style="color:red">(*)</span></label>
+                                            <label for="so_bo_hs" class="col-sm-2 control-label">Số bộ hồ sơ <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
                                                 <input type="number" class="form-control input-default" placeholder="Số bộ hồ sơ" name="so_bo_hs" value="1">
                                             </div>
@@ -417,7 +417,7 @@
                                         </div>
                                         <div class="tab_lienthong" style="display:none">
                                             <div class="row mb-3">
-                                                <label for="stt" class="col-sm-2 control-label"></label>
+                                                <label for="cho_phep_gui_lien_thong" class="col-sm-2 control-label"></label>
                                                 <div class="col-sm-3">
                                                     <input type="checkbox" id="cho_phep_gui_lien_thong" name="cho_phep_gui_lien_thong" value="0">
                                                     <label for="cho_phep_gui_lien_thong">Cho phép gửi liên thông</label>
@@ -458,8 +458,8 @@
                                                 </div>
                                             </div>
                                             <div class="row mb-3">
-                                                <label for="stt" class="col-sm-2 control-label"></label>
-                                                <div class="col-sm-3">
+                                                <label for="gui_lt_kem_kq_xl" class="col-sm-2 control-label"></label>
+                                                <div class="col-sm-4">
                                                     <input type="checkbox" id="gui_lt_kem_kq_xl" name="gui_lt_kem_kq_xl" value="0">
                                                     <label for="gui_lt_kem_kq_xl">Gửi liên thông kèm kết quả xử lý</label>
                                                 </div>
@@ -1037,8 +1037,8 @@
 
     CKEDITOR.replace('ckedit2');
 
-    function CheckMa(data, type) {
-        var dataPost = { code: data.value, type: type };
+    function CheckMa(data) {
+        var dataPost = { code: data.value};
         $.ajax({
             url: "/ThuTuc/CheckMaTTHC",
             type: "post",

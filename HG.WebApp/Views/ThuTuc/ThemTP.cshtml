@@ -1,0 +1,344 @@
+﻿@using HG.WebApp
+@model HG.Entities.Entities.ThuTuc.ThanhPhan
+<script>
+
+    $(document).ready(function() {
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
+            if (/[ `!#$%^&*()+\=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
+        $('#form_tptt').validate({
+            rules: {
+                ma_thanh_phan: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
+                ten_thanh_phan: "required",
+                ban_sao: {
+                    required: true,
+                    number: true
+                },
+                ban_pho_to: {
+                    required: true,
+                    number: true
+                },
+                ban_goc: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                ma_thanh_phan: {
+                    required: "Bạn cần nhập mã thành phần!",
+                },
+                ten_thanh_phan: "Bạn cần nhập tên thành phần!",
+                ban_sao: {
+                    required: 'Bạn cần nhập số lượng bản sao.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                },
+                ban_pho_to: {
+                    required: 'Bạn cần nhập số lượng bản phô tô.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                },
+                ban_goc: {
+                    required: 'Bạn cần nhập số lượng bản chính.',
+                    number: 'Chỉ được nhập số từ 0 - 9'
+                }
+            }
+        });
+
+        //$('#btnAdd').on('click', function() {
+        //    if ($("#form_tptt").valid()) {
+        //        var type = $("#btnAdd").val();
+        //        $.ajax({
+        //            url: "/ThuTuc/LuuThanhPhan",
+        //            type: "post",
+        //            dataType: 'json',
+        //            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        //            data: $("#form_tptt").serialize() + "&type=" + type,
+        //            success: function(result) {
+        //                console.log(result);
+        //                $("#TabThanhPhan").html(result);
+        //            }
+        //        });
+        //    }
+        //});
+    });
+
+    $("#files").on('change', function() {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+            // Adding one more key to FormData object
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=TPTT',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    console.log(result);
+                    $("#xoatep").attr("style", "display:inline-flex");
+                    for (var i = 0; i < result.files.length; i++) {
+                        $('#url_file').val("" + result.files[i] + "");
+                    }
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+
+    function CleadFile() {
+        $("#files").val(null);
+        $("#url_file").val(null);
+        $("#file_dinh_kem").val(null);
+    }
+
+    function CheckMaTP(code_key, code, code_tp, type_view_tp, type_view) {
+        var dataPost = { code_key: code_key, code: code, code_tp: code_tp, type_view_tp: type_view_tp, type_view: type_view };
+        $.ajax({
+            url: "/ThuTuc/CheckMaTP",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                console.log(1);
+                $("#TabThanhPhan").html(result);
+            }
+        });
+    };
+    function CheckMaTPFocus(code_key, code, code_tp, type_view_tp, type_view) {
+        var dataPost = { code_key: code_key, code: code, code_tp: code_tp.value, type_view_tp: type_view_tp, type_view: type_view };
+        $.ajax({
+            url: "/ThuTuc/CheckMaTP",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                console.log(1);
+                $("#TabThanhPhan").html(result);
+            }
+        });
+    };
+
+    function SaveTP(data) {
+        if ($("#form_tptt").valid()) {
+            var dataPost = $("#form_tptt").serialize() + "&type=" + data.value;
+            $.ajax({
+                url: "/ThuTuc/LuuThanhPhan",
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: dataPost,
+                success: function(result) {
+                    $("#TabThanhPhan").html(result);
+                }
+            });
+        }
+    }
+</script>
+
+<div id="ctl14_ctl00_ctl02_Form">
+    @if (Model != null)
+    {
+        <form id="form_tptt">
+
+            <div class="form-horizontal">
+                <input name="ma_thu_tuc" hidden value="@Model.ma_thu_tuc" />
+                <input name="ma_thu_tuc_key" hidden value="@Model.ma_thu_tuc_key" />
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Mã thành phần<span style="color:Red;">(*)</span></label>
+                    <div class="col-md-8">
+                        <input name="ma_thanh_phan" onfocusout="CheckMaTPFocus('@Model.ma_thu_tuc_key','@Model.ma_thu_tuc',this,'@ViewBag.type_view_tp','@ViewBag.type_view')" type="text" value="@ViewBag.code" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+
+                    </div>
+                    <div class="col-sm-1">
+                        <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal_TP">Chọn</button>
+                        <script>
+                            function myModalPopup() {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "../ThuTuc/RenderViewThanhPhan?code_key=0&code=@Model.ma_thu_tuc&type_view=@ViewBag.type_view",
+                                    data: "",
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function(data) {
+                                        console.log(data);
+                                        $("#basicModal_TP .modal-body").html(data);
+                                    }
+                                });
+                            }
+
+                        </script>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">
+                        Tên thành phần<span style="color:Red;">(*)</span>
+                    </label>
+                    <div class="col-md-8">
+                        <input name="ten_thanh_phan" type="text" value="@(Model.ten_thanh_phan)" id="ten_thanh_phan" class="form-control input-default" placeholder="Tên thành phần" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Bắt buộc</label>
+                    <div class="col-md-8">
+                        <table id="" border="0">
+                            <tbody>
+                                <tr>
+                                    <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0" @(Model.bat_buoc==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_1">Không</label></td>
+                                    <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" @(Model.bat_buoc==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_2">Có</label></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Mô tả</label>
+                    <div class="col-md-8">
+                        <textarea name="mo_ta" rows="2" cols="20" id="mo_ta" class="form-control input-default" placeholder="Mô tả" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>@(Model.mo_ta)</textarea>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputPassword" class="col-md-2 control-label">Đính kèm</label>
+                    <div class="col-md-4">
+                        <input type="file" id="files" hidden>
+                        <input name="file_dinh_kem" id="file_dinh_kem" class="form-control" value="@(Model.file_dinh_kem)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                        <input name="url_file" id="url_file" hidden value="@(Model.url_file)">
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" onclick="$('#files').click();" class="btn btn-default" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
+                    </div>
+                    <div class="col-md-1">
+                        <input type="button" name="" value="Xóa tệp" onclick="CleadFile()" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;display:none">
+                    </div>
+                    <div class="col-md-1">
+                        @if (!String.IsNullOrEmpty(Model.url_file))
+                        {
+                            <input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePostAlert('/ThuTuc/XoaFileThanhPhan?code_tp=@Model.ma_thanh_phan')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">
+                        }
+                    </div>
+                    <div class="col-md-1"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Có biểu mẫu không</label>
+                    <div class="col-md-2">
+
+                        <table id="=" border="0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" @(Model.bieu_mau==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                        <label for="bieu_mau1">Không</label>
+                                    </td>
+                                    <td>
+                                        <input id="bieu_mau2" type="radio" name="bieu_mau" value="1" @(Model.bieu_mau==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                        <label for="bieu_mau2">Có</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <label class="col-md-1 control-label">Bắt đầu </label>
+                    <div class="col-md-2">
+                        <input name="ngay_bat_dau" type="date" id="ngay_bat_dau" class="form-control  datepicker hasDatepicker" value="@(Model.ngay_bat_dau)" placeholder="ngày/tháng/năm" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                    <label class="col-md-1 control-label">Kết thúc</label>
+                    <div class="col-md-2">
+                        <input name="ngay_ket_thuc" type="date" id="ngay_ket_thuc" class="form-control  datepicker hasDatepicker" value="@(Model.ngay_ket_thuc)" placeholder="ngày/tháng/năm" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                    <div class="col-md-2">
+                        <span style="color:#0026ff">  Thời gian áp dụng biểu mẫu</span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Tên form nhập</label>
+                    <div class="col-md-8">
+                        <input name="ten_form_nhap" type="text" id="ten_form_nhap" class="form-control input-default" value="@(Model.ten_form_nhap)" placeholder="Tên form nhập" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Đường dẫn form nhập</label>
+                    <div class="col-md-8">
+                        <input name="duong_dan_form_nhap" type="text" id="duong_dan_form_nhap" class="form-control input-default" value="@(Model.duong_dan_form_nhap)" placeholder="(Đường dẫn file)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">
+                        Bản chính
+                    </label>
+                    <div class="col-md-2">
+                        <input name="ban_goc" type="text" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính" value="@(Model.ban_goc??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                    <label class="col-md-1 control-label">
+                        Bản sao
+                    </label>
+                    <div class="col-md-2">
+                        <input name="ban_sao" type="text" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao" value="@(Model.ban_sao??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                    <label class="col-md-1 control-label">
+                        Bản phô tô
+                    </label>
+                    <div class="col-md-2">
+                        <input name="ban_pho_to" type="text" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô" value="@(Model.ban_pho_to??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-md-2 control-label">Thứ tự</label>
+                    <div class="col-md-8">
+                        <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự" value="@(Model.Stt)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                    </div>
+                </div>
+                <input name="type_view" value="@ViewBag.type_view" hidden />
+                <div class="text-center">
+                    @if (ViewBag.type_view_tp == StatusAction.View.ToString())
+                    {
+                        <button type="button" class="btn btn-primary" onclick="ThemThanhPhan('@Model.ma_thu_tuc_key','@Model.ma_thu_tuc','@StatusAction.Add.ToString()')">Thêm</button>
+                        <button type="button" class="btn btn-primary" onclick="CheckMaTP('@Model.ma_thu_tuc_key','@Model.ma_thu_tuc','@Model.ma_thanh_phan','@StatusAction.Edit.ToString()','@ViewBag.type_view')">Sửa</button>
+                        <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code_key=@Model.ma_thu_tuc_key&code=@Model.ma_thu_tuc&code_tp=@Model.ma_thanh_phan&type=@ViewBag.type_view')">Xóa</button>
+                    }
+                    @if (ViewBag.type_view_tp == StatusAction.Edit.ToString())
+                    {
+                        <button type="button" class="btn btn-primary" onclick="SaveTP(this)" value="@StatusAction.Add.ToString()">Lưu và Thêm</button>
+                        <button type="button" class="btn btn-primary" onclick="SaveTP(this)" value="@StatusAction.Edit.ToString()">Lưu</button>
+                        <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/ThuTuc/XoaThanhPhan?code_key=@Model.ma_thu_tuc_key&code=@Model.ma_thu_tuc&code_tp=@Model.ma_thanh_phan&type=@ViewBag.type_view')">Xóa</button>
+                    }
+                    @if (ViewBag.type_view_tp == StatusAction.Add.ToString())
+                    {
+                        <button type="button" class="btn btn-primary" onclick="SaveTP(this)" value="@StatusAction.Add.ToString()">Lưu và Thêm</button>
+                        <button type="button" class="btn btn-primary" onclick="SaveTP(this)" value="@StatusAction.Edit.ToString()">Lưu</button>
+
+                    }
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='/ThuTuc/SuaThuTuc?code_key=@Model.ma_thu_tuc_key&code=@Model.ma_thu_tuc&type=@ViewBag.type_view&active=@(ActionThuTuc.ThanhPhan.ToString())';">Đóng</button>
+                </div>
+            </div>
+        </form>
+    }
+</div>

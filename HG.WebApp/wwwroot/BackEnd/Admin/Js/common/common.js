@@ -82,7 +82,30 @@ confirm.BeforDeletePost = function (action) {
 						alert(data.msg);
 					} else {
 						window.location.href = data.href;
-					}					
+					}
+				});
+			}
+		}
+	});
+};
+
+confirm.BeforDeletePostAlert = function (action) {
+	bootbox.confirm({
+		message: "Bạn có muốn xóa không?",
+		buttons: {
+			confirm: {
+				label: 'Có',
+				className: 'btn-success'
+			},
+			cancel: {
+				label: 'Không',
+				className: 'btn-danger'
+			}
+		},
+		callback: function (result) {
+			if (result) {
+				AjaxService.POST(action, "", function (data) {
+					alert(data);
 				});
 			}
 		}
