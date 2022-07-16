@@ -418,6 +418,7 @@ namespace HG.WebApp.Controllers
                         lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung;
                     }
                 }
+                ViewBag.type_view = StatusAction.Edit.ToString();
                 return View();
             }
             else

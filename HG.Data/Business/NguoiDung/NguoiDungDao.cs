@@ -304,6 +304,27 @@ namespace HG.Data.Business.NguoiDung
                 return new Nhom_Vaitro();
             }
         }
+        public List<Nhom_NguoiDung> ListNguoiDungByMaNhom(string ma_nhom)
+        {
+            try
+            {
+                List<Nhom_NguoiDung> result = new List<Nhom_NguoiDung>();
+                DbProvider.SetCommandText2("[ListNguoiDungByMaNhom]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("ma_nhom", ma_nhom, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                result = DbProvider.ExecuteListObject<Nhom_NguoiDung>();
+                // Lấy về danh sách các người dung
+                var ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<Nhom_NguoiDung>();
+            }
+        }
 
     }
 }

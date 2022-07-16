@@ -126,7 +126,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <script>
+                                <script>
                                 function NhomComplete(){
                                     var ma_phong_ban = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
                                     $.ajax({
@@ -174,8 +174,15 @@
                                             }
                                         }
                                     </select>
-                                    <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" value="@lst_nhom_nguoi_dung.lst_ma_nguoi_dung" hidden>
-                                     @*<input name="lstGroup" type="text" id="lstGroup" value="@(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()))" class="form-control input-default" hidden>*@
+                                        @if (lst_nhom_nguoi_dung != null)
+                                        {
+                                            <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" value="@(lst_nhom_nguoi_dung.lst_ma_nguoi_dung == null ? "" : lst_nhom_nguoi_dung.lst_ma_nguoi_dung)" hidden>
+                                        } @*<input name="lstGroup" type="text" id="lstGroup" value="@(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()))" class="form-control input-default" hidden>*@
+                                </div>
+                                <div class="col-sm-1" @(ViewBag.type_view == StatusAction.Edit.ToString() ? "" :"hidden")>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#basicModal">
+                                        Chọn
+                                    </button>
                                 </div>
                             </div>
                              <div class="text-center">
@@ -268,3 +275,75 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Danh sách cán bộ</h5>
+            </div>
+            <div class="modal-body">
+                <div class="widget">
+                    <h4 class="widgettitle">Chọn cán bộ</h4>
+                    <div class="widgetcontent">
+                        <div class="form-group">
+                            <select name="ctl14$ctl00$ddlPhongBan" id="ddlPhongBan" class="form-control input-default">
+			                <option selected="selected" value="">------------ Chọn ------------</option>
+			                <option value="186">Công nghệ hạ tầng</option>
+			                <option value="178">Lãnh đạo Sở</option>
+			                <option value="182">Phòng Bưu chính</option>
+			                <option value="CNTT">Phòng Công nghệ Thông tin</option>
+			                <option value="183">Phòng Công nghệ thông tin</option>
+			                <option value="KSTTHC">Phòng Kiểm soát TTHC - Văn phòng UBND tỉnh</option>
+			                <option value="180">Thanh tra</option>
+			                <option value="TTHCQG">Thủ tục hành chính lấy về từ DVC QG</option>
+			                <option value="184">Truyền thông</option>
+			                <option value="179">Văn phòng</option>
+
+		                </select>
+                        </div>
+                        <div class="form-group">
+                            <span id="dualselect" class="dualselect" style="display:flex">
+                                <select class="form-control input-default select-inline" name="select3" multiple="multiple" size="15" style="width: 185px">
+                                    <option value="bvchung.stttt">Bàn Vũ Chung</option>
+                                    <option value="lddien.stttt">Lã Đình Điền</option>
+                                    <option value="tkngoc.stttt">Trần Kim Ngọc</option>
+                                    <option value="dthoa.stttt">Đỗ Thái Hòa</option>
+                                    <option value="ddhuong.hcc">Đoàn Diệu Hương</option>
+                                    <option value="hotromotcua">Hỗ trợ Một cửa</option>
+                                    <option value="lanhdaocoquan">Lãnh đạo cơ quan test</option>
+                                    <option value="ndmanh.vpubnd">Nguyễn Đức Mạnh</option>
+                                    <option value="kstthc.hcc">Phòng Kiểm soát thủ tục hành chính Trung tâm Phục vụ hành chính công</option>
+                                    <option value="quantristttt">Quản Trị DVC</option></select>
+                                <span class="ds_arrow" style="    vertical-align: top; padding-top: 60px;margin: 0 10px;">
+                                    <button class="btn btn-inverse ds_prev" type="button"><i class="iconfa-chevron-left"></i></button>
+                                    <br>
+                                    <button class="btn btn-inverse ds_next" type="button"><i class="iconfa-chevron-right"></i></button>
+                                </span>
+                                <select class="form-control input-default select-inline" name="select4" multiple="multiple" size="15" style="width: 185px">
+                                    <option value="ntthanh.stttt">Ngô Tiến Thành</option>
+                                    <option value="nhtrang.stttt">Nguyễn Huyền Trang</option>
+                                    <option value="ntlinh.stttt">Nguyễn Thùy Linh</option>
+                                    <option value="quantri">Quản trị</option>
+                                    <option value="ttthanh.stttt">Trần Thị Thanh</option>
+                                    <option value="vthoa.stttt">Vương Thị Hoa</option>
+                                    <option value="thuyan">Nguyễn Thụy An</option>
+                                    <option value="bophantiepnhan">Cán bộ Tiếp Nhận test</option>
+                                    <option value="hvkien.stttt">Hoàng Văn Kiến</option>
+                                    <option value="nthau.stttt">Nguyễn Thị Hậu</option>
+                                    <option value="ntnhai.stttt">Nguyễn Thị Nhài</option>
+                                    <option value="bpmc.stt">Nguyễn Thị Nhịp</option>
+                                    <option value="nttlinh.stttt">Nguyễn Thị Thùy Linh</option>
+                                    <option value="nvtuan.stttt">Nguyễn Văn Tuấn</option></select>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+

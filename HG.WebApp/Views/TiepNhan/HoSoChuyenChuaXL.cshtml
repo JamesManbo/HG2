@@ -73,7 +73,56 @@
                                         }
                                     });
                                 }
-                         
+                                function HSCCXLAutoComplete(tatca, dunghan, quahan){
+                                         var tu_khoa = $("#txtSearch").val();
+                                         var ma_thu_tuc = document.getElementById("ma_thu_tuc").options[document.getElementById("ma_thu_tuc").selectedIndex].value;
+                                         var pageSize = $("#lstPageSize").val();
+                                         $.ajax({
+                                            type: "GET",
+                                            url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + tatca + "&dung_han="+ dunghan + "&qua_han=" + quahan + "&pageSize=" + pageSize + "&trang_thai=2",
+                                            data: "",
+                                            contentType: 'application/json; charset=utf-8',
+                                            success: function(data) {
+                                                $("#dataTable").html(data);
+                                            }
+                                        });
+
+                                }
+                                function TatCaChecked() {
+                                     if ($('input[name=checkboxAll]:checked').length > 0) {
+                                         $("#checkboxEndDate").prop("checked", false);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSCCXLAutoComplete(1, 0, 0)
+                                     } else { 
+                                         $("#checkboxEndDate").prop("checked", true);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSCCXLAutoComplete(0, 1, 0)
+                                     }
+                                }
+                                function DungHanChecked() {
+                                     if ($('input[name=checkboxEndDate]:checked').length > 0) {
+                                         $("#checkboxAll").prop("checked", false);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSCCXLAutoComplete(0, 1, 0)
+                                     } else { 
+                                         $("#checkboxAll").prop("checked", true);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSCCXLAutoComplete(1, 0, 0)
+                                     }
+         
+                                }
+                               function QuaHanChecked() {
+                                     if ($('input[name=checkboxLateDate]:checked').length > 0) {
+                                         $("#checkboxAll").prop("checked", false);
+                                         $("#checkboxEndDate").prop("checked", false);
+                                         HSCCXLAutoComplete(0,0, 1)
+                                     } else { 
+                                         $("#checkboxAll").prop("checked", true);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSCCXLAutoComplete(1, 0, 0)
+                                     }
+         
+                                }
                         </script>
                             <div id="thutucbylinhvuc">
                                 <div class="row mb-3">
@@ -84,15 +133,15 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="stt" class="col-sm-2 control-label" style="text-align: right">Trạng thái</label>
+                                 <label for="stt" class="col-sm-2 control-label" style="text-align: right">Trạng thái</label>
                                 <div class="col-sm-1">
-                                    <input type="checkbox" name="checkboxAll" value="" id="checkboxAll"> Tất cả
+                                    <input type="checkbox" name="checkboxAll" onclick="TatCaChecked()" value="" id="checkboxAll"> Tất cả
                                 </div>
                                 <div class="col-sm-1">
-                                    <input type="checkbox" name="checkboxEndDate" value="" id="checkboxEndDate"> Đúng hạn
+                                    <input type="checkbox" name="checkboxEndDate" onclick="DungHanChecked()" value="" id="checkboxEndDate"> Đúng hạn
                                 </div>
                                 <div class="col-sm-1">
-                                    <input type="checkbox" name="checkboxLateDate" value="" id="checkboxLateDate"> Quá hạn
+                                    <input type="checkbox" name="checkboxLateDate" onclick="QuaHanChecked()" value="" id="checkboxLateDate"> Quá hạn
                                 </div>
                             </div>
                       </div>
