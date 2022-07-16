@@ -53,6 +53,16 @@
             };
         }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
+        $('#form_pb').submit(function() {
+            if ($("#cho_phep_lien_thong").is(':checked')) {
+                if (($("#don_vi_ltxl").val() == '') && ($("#don_vi_ltph").val() == '')) {
+                    alert('Bank phải chọn đơn vị liên thông phối hợp hoặc xử lý.');
+                    return false;
+                }
+            }
+            $("#form_pb").valid();
+        });
+
         $('#form_pb').validate({
             rules: {
                 ma_thu_tuc: {
@@ -456,27 +466,31 @@
                                         <div class="col-sm-8">
                                             <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã thủ tục" name="ma_thu_tuc" value="@Model.thuTuc.ma_thu_tuc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
-                                        <div class="col-sm-1">
-                                            <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                                Chọn
-                                            </button>
+                                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                                        {
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    Chọn
+                                                </button>
 
-                                            <script>
-                                                function myModalPopup() {
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        url: "../ThuTuc/RenderViewThuTuc",
-                                                        data: "",
-                                                        contentType: 'application/json; charset=utf-8',
-                                                        success: function(data) {
-                                                            console.log(data);
-                                                            $("#basicModal .modal-body").html(data);
-                                                        }
-                                                    });
-                                                }
+                                                <script>
+                                                    function myModalPopup() {
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            url: "../ThuTuc/RenderViewThuTuc",
+                                                            data: "",
+                                                            contentType: 'application/json; charset=utf-8',
+                                                            success: function(data) {
+                                                                console.log(data);
+                                                                $("#basicModal .modal-body").html(data);
+                                                            }
+                                                        });
+                                                    }
 
-                                            </script>
-                                        </div>
+                                                </script>
+                                            </div>
+                                        }
+
                                     </div>
                                     <div class="row mb-3">
                                         <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>

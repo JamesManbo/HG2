@@ -45,6 +45,16 @@
             };
         }, "Mã thử tục không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
+        $('#form_pb').submit(function() {
+            if ($("#cho_phep_lien_thong").is(':checked')) {
+                if (($("#don_vi_ltxl").val() == '') && ($("#don_vi_ltph").val() == '')) {
+                    alert('Bank phải chọn đơn vị liên thông phối hợp hoặc xử lý.');
+                    return false;
+                }
+            }
+            $("#form_pb").valid();
+        });
+
         $('#form_pb').validate({
             rules: {
                 ma_thu_tuc: {
@@ -58,7 +68,7 @@
                 ma_linh_vuc: "required",
                 ma_phong_ban: "required",
                 so_ngay_xl: "required",
-                so_bo_hs: "required"
+                so_bo_hs: "required",
             },
             messages: {
                 ma_thu_tuc: {
@@ -1038,7 +1048,7 @@
     CKEDITOR.replace('ckedit2');
 
     function CheckMa(data) {
-        var dataPost = { code: data.value};
+        var dataPost = { code: data.value };
         $.ajax({
             url: "/ThuTuc/CheckMaTTHC",
             type: "post",

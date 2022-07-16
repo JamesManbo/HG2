@@ -38,8 +38,15 @@ namespace HG.Data.Business.ThuTuc
                 // Output params
                 DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
 
+                DbProvider.ExecuteReader_ToMyReader();
                 // Lấy về danh sách các người dung
-                menu.lstThuTuc = DbProvider.ExecuteListObject<DmThuTuc>();
+                menu.lstThuTuc = DbProvider.ExecuteReader_frmMyReader<DmThuTuc>();
+                DbProvider.ExecuteReader_NextResult();
+                menu.lstPhongBan = DbProvider.ExecuteReader_frmMyReader<ThuTucPhongBan>();
+                DbProvider.ExecuteReader_NextResult();
+                menu.lstLinhVuc = DbProvider.ExecuteReader_frmMyReader<ThuTucLinhVuc>();
+                DbProvider.ExecuteReader_Close();
+                // Lấy về danh sách các người dung               
                 menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
                 return menu;
             }

@@ -49,10 +49,10 @@ namespace HG.WebApp.Controllers
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            ViewBag.LstPhongBan = ds.lstPhongBan;
+            ViewBag.LstLinhVuc = ds.lstLinhVuc;
             using (var db = new EAContext())
             {
-                ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted != 1).ToList();
-                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
                 ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
             }
             ViewBag.BieuMau = tabbieumau;
@@ -66,6 +66,7 @@ namespace HG.WebApp.Controllers
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
             ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+            ViewBag.PageSize = (currentPage - 1) * pageSize;
             ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
             using (var db = new EAContext())
             {
@@ -115,6 +116,15 @@ namespace HG.WebApp.Controllers
             item.ma_quoc_gia = HelperString.CreateCode(item.ma_quoc_gia);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
+            if (item.cho_phep_lien_thong)
+            {
+                if (String.IsNullOrEmpty(item.don_vi_ltph) && String.IsNullOrEmpty(item.don_vi_ltxl))
+                {
+                    ViewBag.error = 2;
+                    ViewBag.msg = "Cần chọn đơn vị liên thông phối hợp hoặc xử lý";
+                    return RedirectToAction("ThemThuTuc", "ThuTuc", new { code = item.ma_thu_tuc });
+                }
+            }
             var _pb = _thuTucDao.LuuThuTuc(item);
             if (_pb.ErrorCode > 0)
             {
@@ -190,14 +200,14 @@ namespace HG.WebApp.Controllers
         }
 
         [HttpPost]
-        public JsonResult CheckMaTTHC(int code_key, string code)
+        public JsonResult CheckMaTTHC(string code)
         {
             var ds = _thuTucDao.CheckMaThuTuc(code, ActionThuTuc.ThuTuc.ToString());
             if (ds == 0)
             {
                 return Json(new { error = 0, href = "/ThuTuc/ThemThuTuc?code=" + code.ToUpper() });
             }
-            return Json(new { error = 1, href = "/ThuTuc/SuaThuTuc?code_key=" + code_key.ToString() + "&code=" + code.ToUpper() + "&type=" + StatusAction.Edit.ToString() + "&active=" + ActionThuTuc.ThuTuc.ToString() });
+            return Json(new { error = 1, href = "/ThuTuc/SuaThuTuc?code_key=" + ds.ToString() + "&code=" + code.ToUpper() + "&type=" + StatusAction.Edit.ToString() + "&active=" + ActionThuTuc.ThuTuc.ToString() });
         }
         #region Thành phần Edit
         public async Task<IActionResult> ThemTP(int code_key = 0, string code = "", string type_view = "")

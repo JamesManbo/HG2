@@ -111,7 +111,21 @@ namespace HG.Entities.Entities.ThuTuc
     public class ThuTucPaging
     {
         public List<DmThuTuc> lstThuTuc { get; set; }
+        public List<ThuTucPhongBan> lstPhongBan { get; set; }
+        public List<ThuTucLinhVuc> lstLinhVuc { get; set; }
         public Pagelist Pagelist { get; set; } = new Pagelist();
+    }
+
+    public class ThuTucPhongBan
+    {
+        public string ma_phong_ban { get; set; }
+        public string ten_phong_ban { get; set; }
+    }
+
+    public class ThuTucLinhVuc
+    {
+        public string ma_linh_vuc { get; set; }
+        public string ten_linh_vuc { get; set; }
     }
     public class ThuTucModel
     {
