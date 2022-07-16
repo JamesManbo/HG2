@@ -1,0 +1,41 @@
+﻿@model List<HG.WebApp.AspNetUsers>
+    @{
+        var lst_ma_nguoi_dung = ViewBag.lst_nhom_nguoi_dung as string;
+    }   
+   <script>
+         $(document).ready(function() {
+             $('.select2').select2({
+                 closeOnSelect: false
+             });
+             $('#multiselect').on('select2:select', function(e) {
+                 console.log(e.params.data);
+                 Arr.push(e.params.data.id);
+                 $("#lstGroup").val(Arr.join(","));
+             });
+             $('#multiselect').on("select2:unselect", function(e) {
+                 Arr.pop(e.params.data.id);
+                 $("#lstGroup").val(Arr.join(","));
+             });
+         });
+         
+   </script>
+   <select id="multiselect" class="select2 form-select form-control input-default" multiple="" @(ViewBag.Status == "View" ? "disabled" :"")  data-placeholder="Chọn một người dùng" style="width: 100%;" tabindex="-1" aria-hidden="true">
+       @if (Model != null)
+       {
+           foreach (var item in Model)
+           {
+
+                   if ((lst_ma_nguoi_dung ?? "").Contains(item.Id.ToString()))
+                   {
+                        <option value="@item.Id" selected>@(item.ho_dem + " " + item.ten)</option>
+                   }else{
+                        <option value="@item.Id">@(item.ho_dem + " " + item.ten)</option>
+                   }    
+              
+           }
+       }
+   </select>
+   @if (lst_ma_nguoi_dung != null)
+   {
+       <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" value="@(lst_ma_nguoi_dung)" hidden>
+   }

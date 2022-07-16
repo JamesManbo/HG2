@@ -351,7 +351,7 @@ namespace HG.WebApp.Controllers
         }
         //lay vai tri chitiet boi ma nhom
         public IActionResult QLNhomVaitroChitiet(string code)
-        {
+         {
             ViewBag.Status = "";
             EAContext eAContext = new EAContext();
             ViewBag.ma_nhom = code;
@@ -528,6 +528,23 @@ namespace HG.WebApp.Controllers
                 return Content("");
             }
            
+        }
+
+        public async Task<IActionResult> ThayDoiNhomNguoiDung(string lstUsershaschecked = "")
+        {
+            try
+            {
+                EAContext db = new EAContext();
+                var lstUsers = db.AspNetUsers.ToList();
+                ViewBag.lst_nhom_nguoi_dung = lstUsershaschecked;
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/ThayDoiNhomNguoiDung.cshtml", lstUsers);
+                return Content(result);
+            }
+            catch (Exception e)
+            {
+                return Content("");
+            }
+
         }
         #endregion
         #region Thống kê truy cập

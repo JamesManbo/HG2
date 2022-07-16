@@ -1,0 +1,12 @@
+﻿
+@model List<HG.WebApp.AspNetUsers>
+@{
+    if(Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <option onclick="ChonChonChoHaKhong()" value="@item.Id">@(item.ho_dem + " " + item.ten)</option>
+        }
+    }
+}
+  

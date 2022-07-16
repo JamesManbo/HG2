@@ -159,7 +159,7 @@
                             </script>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Thêm người vào nhóm</label>
-                                <div class="col-md-8">
+                                <div class="col-md-8" id="ThayDoiNhomNguoiDung">
                                     <select id="multiselect" class="select2 form-select form-control input-default" multiple="" @(ViewBag.Status == "View" ? "disabled" :"")  data-placeholder="Chọn một người dùng" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                         @if (lst_nguoi_dung != null)
                                         {
@@ -169,11 +169,11 @@
                                                 {
                                                     if ((lst_nhom_nguoi_dung.lst_ma_nguoi_dung == null ? "" : lst_nhom_nguoi_dung.lst_ma_nguoi_dung).Contains(item.Id.ToString()))
                                                     {
-                                                         <option value="@item.Id" selected>	@item.UserName</option>
+                                                         <option value="@item.Id" selected>@(item.ho_dem + " " + item.ten)</option>
                                                     }else{
-                                                         <option value="@item.Id">	@item.UserName</option>
+                                                         <option value="@item.Id">@(item.ho_dem + " " + item.ten)</option>
                                                     }    
-                                                }else{ <option value="@item.Id">	@item.UserName</option>}
+                                                }else{ <option value="@item.Id">@(item.ho_dem + " " + item.ten)</option>}
                                             }
                                         }
                                     </select>
@@ -281,10 +281,30 @@
 
 <script>
     function GetUserChecked(){
-        //$("#Nguoidungtimkiem :selected").each(function() {
-        //    alert(this.value);
-        //});
+            $("#Nguoidungtimkiem :selected").each(function() {
+                if (Arr.length == 0) {
+                    var lstGroup = $("#lstGroup").val(); 
+                        lstGroup.split(",").forEach(function (item) {
+                       Arr.push(item)
+                    });
+                };
+                Arr.push(this.value);
+                $('input[name="lstGroup"]').attr('value',Arr.join(","));
+            });
     }
+
+    function ThayDoiNhomNguoiDung() {
+         $.ajax({
+               type: "GET",
+               url: "../QTNguoiDung/ThayDoiNhomNguoiDung?lstUsershaschecked=" + $("#lstGroup").val() ,
+               data: "",
+               contentType: 'application/json; charset=utf-8',
+               success: function(data) {
+                   $("#ThayDoiNhomNguoiDung").html(data);
+               }
+        });      
+    }
+
     function ChonPhongBan(data) {
         $.ajax({
                type: "GET",
@@ -297,38 +317,51 @@
         });      
     }
     function ChonHA() {
-            $("#Nguoidungtimkiem :selected").each(function() {
-              if (Arr.length == 0) {
-                var lstGroup = $("#lstGroup").val(); 
-                    lstGroup.split(",").forEach(function (item) {
-                   Arr.push(item)
-                });
-             };
-             Arr.push(this.value);
-        });
-        $('input[name="lstGroup"]').attr('value',Arr.join(","));
-        $("#basicModal").modal("hide");
+            debugger
+            ThayDoiNhomNguoiDung();
+            $("#basicModal").modal("hide");
     }
     function ChonChonHa() {
         $("#Nguoidungtimkiem :selected").each(function() {
+             if (Arr.length == 0) {
+                    var lstGroup = $("#lstGroup").val(); 
+                        lstGroup.split(",").forEach(function (item) {
+                       Arr.push(item)
+                    });
+             };
              Arr.push(this.value);
+             $('input[name="lstGroup"]').attr('value',Arr.join(","));
         });
-        $('input[name="lstGroup"]').attr('value',Arr.join(","));
         $.ajax({
                type: "GET",
-               url: "../QTNguoiDung/Nguoidungbyphongban?ma_phong_ban=" + data.value + "&lstUsershaschecked=" + $("#lstGroup").val() ,
+               url: "../QTNguoiDung/Nguoidungbyphongban?ma_phong_ban=" + $("#ddlPhongBan").val() + "&lstUsershaschecked=" + $("#lstGroup").val() ,
                data: "",
                contentType: 'application/json; charset=utf-8',
                success: function(data) {
                    $("#Nguoidungtimkiem").html(data);
+                   $.ajax({
+                       type: "GET",
+                       url: "../QTNguoiDung/FETCHUSERS?lstUsershaschecked=" + $("#lstGroup").val() ,
+                       data: "",
+                       contentType: 'application/json; charset=utf-8',
+                       success: function(data) {
+                           $("#Nguoidungdachon").html(data);
+                       }
+                });      
                }
         });      
     }
     function ChonChonHaKhong() {
          $("#Nguoidungdachon :selected").each(function() {
+               if (Arr.length == 0) {
+                    var lstGroup = $("#lstGroup").val(); 
+                        lstGroup.split(",").forEach(function (item) {
+                       Arr.push(item)
+                    });
+             };
              Arr.pop(this.value);
+            $('input[name="lstGroup"]').attr('value',Arr.join(","));
         });
-        $('input[name="lstGroup"]').attr('value',Arr.join(","));
         $.ajax({
                type: "GET",
                url: "../QTNguoiDung/FETCHUSERS?lstUsershaschecked=" + $("#lstGroup").val() ,
@@ -336,24 +369,20 @@
                contentType: 'application/json; charset=utf-8',
                success: function(data) {
                    $("#Nguoidungdachon").html(data);
+                    $.ajax({
+                           type: "GET",
+                           url: "../QTNguoiDung/Nguoidungbyphongban?ma_phong_ban=" + $("#ddlPhongBan").val() + "&lstUsershaschecked=" + $("#lstGroup").val() ,
+                           data: "",
+                           contentType: 'application/json; charset=utf-8',
+                           success: function(data) {
+                               $("#Nguoidungtimkiem").html(data);
+                  
+                           }
+                    });      
                }
         });      
     }
-    function ChonChonChoHaKhong() {
-        //$("#Nguoidungdachon :selected").each(function() {
-        //     Arr.pop(this.value);
-        //});
-        //$('input[name="lstGroup"]').attr('value',Arr.join(","));
-        //$.ajax({
-        //       type: "GET",
-        //       url: "../QTNguoiDung/FETCHUSERS?lstUsershaschecked=" + $("#lstGroup").val() ,
-        //       data: "",
-        //       contentType: 'application/json; charset=utf-8',
-        //       success: function(data) {
-        //           $("#Nguoidungdachon").html(data);
-        //       }
-        //});      
-    }
+    
 </script>
 
 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -370,6 +399,7 @@
                             <select name="ddlPhongBan" id="ddlPhongBan" class="form-control input-default" onchange="ChonPhongBan(this)">
 			                @if(list_phong_ban != null)
                                 {
+                                    <option value="">Chọn phòng ban</option>
                                     foreach (var item in list_phong_ban)
                                     {  
                                         <option onclick="ChonChonChoHaKhong()" value="@item.ma_phong_ban">@item.ten_phong_ban</option>
@@ -383,9 +413,9 @@
                                 <select id="Nguoidungtimkiem" class="form-control input-default select-inline" name="select3" multiple="multiple" size="15" style="width: 185px">
                                 </select>
                                 <span class="ds_arrow" style="    vertical-align: top; padding-top: 60px;margin: 0 10px;">
-                                    <button class="btn btn-inverse ds_prev" type="button" style="background: #333; color: #fff;" onclick="ChonChonHa()"><i class="iconfa-chevron-left"></i></button>
+                                    <button class="btn btn-inverse ds_prev" type="button" style="background: #333; color: #fff;" onclick="ChonChonHaKhong()"><i class="iconfa-chevron-left"></i></button>
                                     <br>
-                                    <button class="btn btn-inverse ds_next" type="button" style="background: #333; color: #fff;" onclick="ChonChonHaKhong()"><i class="iconfa-chevron-right"></i></button>
+                                    <button class="btn btn-inverse ds_next" type="button" style="background: #333; color: #fff;" onclick="ChonChonHa()"><i class="iconfa-chevron-right"></i></button>
                                 </span>
                                 <select id="Nguoidungdachon" class="form-control input-default select-inline" name="select4" multiple="multiple" size="15" style="width: 185px">
                                     @if (lst_nhom_nguoi_dung_obj != null)
