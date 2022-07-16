@@ -29,7 +29,7 @@ namespace HG.WebApp.Controllers
             this._httpContextAccessor = httpContextAccessor;
             _nguoiDungDao = new NguoiDungDao(DbProvider);
         }
-
+        #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
@@ -119,7 +119,7 @@ namespace HG.WebApp.Controllers
 
             return PartialView(new NguoiDungModels() { UserName = UserName});
         }
-        #region nguoidung
+
         [HttpPost]
         public async Task<IActionResult> ThemNguoiDung(NguoiDungModels item)
         {
@@ -360,6 +360,7 @@ namespace HG.WebApp.Controllers
             var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
             ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
+            ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
             //lấy vai trò theo mã nhóm
             ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
             //Lấy tất cả các nhóm thuộc tất cả các người dùng: đầu vào User đầu ra nhóm - user khi tạo người dùng
@@ -382,8 +383,6 @@ namespace HG.WebApp.Controllers
             }
             return View();
         }
-
-       
         [HttpPost]
         public IActionResult QLNhomVaitroChitiet(phong_ban_nhom_nguoi_dung item)
         {
@@ -393,6 +392,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
             ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
+            ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
             if (item.type_view == "Edit")
             {
                 //lấy vai trò theo nhóm
@@ -403,6 +403,7 @@ namespace HG.WebApp.Controllers
                 //Lấy tất cả các nhóm thuộc tất cả các người dùng: đầu vào User đầu ra nhóm - user khi tạo người dùng
                 var lstUserGroup = _nguoiDungDao.ListNguoiDungByMaNhom(item.ma_nhom);
                 var lstFromQTNguoiDung = "";
+                ViewBag.ListUsers = null;
                 if (lstUserGroup != null)
                 {
                     lstFromQTNguoiDung = String.Join(", ", lstUserGroup.Where(n => (lst_nhom_nguoi_dung.lst_ma_nguoi_dung ?? "").Contains(n.ma_nguoi_dung.ToString()) == false).Select(n => n.ma_nguoi_dung).ToArray());
@@ -412,6 +413,8 @@ namespace HG.WebApp.Controllers
                     if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "")
                     {
                         lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lst_nhom_nguoi_dung.lst_ma_nguoi_dung + "," + lstFromQTNguoiDung;
+                        //chuyển string lst Users sang List Asp User
+                        ViewBag.ListUsers = ListNguoiDungDaDuocAddVaoNhom(lst_nhom_nguoi_dung.lst_ma_nguoi_dung);
                     }
                     else
                     {
@@ -470,6 +473,62 @@ namespace HG.WebApp.Controllers
 
         }
 
+        public List<AspNetUsers> ListNguoiDungDaDuocAddVaoNhom(string lstusersbynhom)
+        {
+            EAContext db = new EAContext();
+            var result = new List<AspNetUsers>();
+            if(lstusersbynhom != null && !string.IsNullOrEmpty(lstusersbynhom))
+            {
+                var abc = lstusersbynhom.Split(",");
+                foreach (var item in lstusersbynhom.Split(","))
+                {
+                    var obj = db.AspNetUsers.Where(n => n.Id == Guid.Parse(item)).FirstOrDefault();
+                    if(obj != null) { result.Add(obj); }
+                }
+                return result;
+            }
+            return new List<AspNetUsers>();
+        }
+
+        public async Task<IActionResult> Nguoidungbyphongban(string ma_phong_ban = "", string lstUsershaschecked = "")
+        {
+            try
+            {
+                EAContext db = new EAContext();
+                var lstUsers = db.AspNetUsers.Where(n => n.ma_phong_ban == ma_phong_ban && (lstUsershaschecked ?? "").Contains(n.Id.ToString()) == false).ToList();
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungByPhongBan.cshtml", lstUsers);
+                return Content(result);
+            }
+            catch (Exception e)
+            {
+                return Content("");
+            }
+           
+        } 
+        public async Task<IActionResult> FETCHUSERS(string lstUsershaschecked = "")
+        {
+            try
+            {
+                EAContext db = new EAContext();
+                var result = new List<AspNetUsers>();
+                if (lstUsershaschecked != null && !string.IsNullOrEmpty(lstUsershaschecked))
+                {
+                    var abc = lstUsershaschecked.Split(",");
+                    foreach (var item in lstUsershaschecked.Split(","))
+                    {
+                        var obj = db.AspNetUsers.Where(n => n.Id == Guid.Parse(item)).FirstOrDefault();
+                        if (obj != null) { result.Add(obj); }
+                    }
+                }
+                var resultC = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungDaChon.cshtml", result);
+                return Content(resultC);
+            }
+            catch (Exception e)
+            {
+                return Content("");
+            }
+           
+        }
         #endregion
         #region Thống kê truy cập
         public IActionResult ThongKeTruyCap()

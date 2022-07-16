@@ -5,8 +5,11 @@
     var lst_nhom = ViewBag.lst_nhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
     var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.WebApp.AspNetUsers>;
     var lst_nhom_nguoi_dung = ViewBag.lst_nhom_nguoi_dung as HG.Entities.Entities.phong_ban_nhom_nguoi_dung;
+    var lst_nhom_nguoi_dung_obj = ViewBag.ListUsers as List<HG.WebApp.AspNetUsers>;
     var lst_vaitro = ViewBag.ls_vai_tro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro> ;
     var lst_nhom_vai_tro = ViewBag.lst_nhom_vaitro as HG.Entities.Entities.Nhom_Vaitro;
+    var list_phong_ban = ViewBag.ListPhongBan as List<HG.Entities.Dm_Phong_Ban>;
+
 }
 @model HG.Entities.Entities.phong_ban_nhom_nguoi_dung
 <script>
@@ -276,6 +279,77 @@
     </div>
 </div>
 
+<script>
+    function GetUserChecked(){
+        //$("#Nguoidungtimkiem :selected").each(function() {
+        //    alert(this.value);
+        //});
+    }
+    function ChonPhongBan(data) {
+        $.ajax({
+               type: "GET",
+               url: "../QTNguoiDung/Nguoidungbyphongban?ma_phong_ban=" + data.value + "&lstUsershaschecked=" + $("#lstGroup").val() ,
+               data: "",
+               contentType: 'application/json; charset=utf-8',
+               success: function(data) {
+                   $("#Nguoidungtimkiem").html(data);
+               }
+        });      
+    }
+    function ChonHA() {
+         $("#Nguoidungtimkiem :selected").each(function() {
+             Arr.push(this.value);
+        });
+        $('input[name="lstGroup"]').attr('value',Arr.join(","));
+        $("#basicModal").modal("hide");
+    }
+    function ChonChonHa() {
+        $("#Nguoidungtimkiem :selected").each(function() {
+             Arr.push(this.value);
+        });
+        $('input[name="lstGroup"]').attr('value',Arr.join(","));
+        $.ajax({
+               type: "GET",
+               url: "../QTNguoiDung/Nguoidungbyphongban?ma_phong_ban=" + data.value + "&lstUsershaschecked=" + $("#lstGroup").val() ,
+               data: "",
+               contentType: 'application/json; charset=utf-8',
+               success: function(data) {
+                   $("#Nguoidungtimkiem").html(data);
+               }
+        });      
+    }
+    function ChonChonHaKhong() {
+         $("#Nguoidungdachon :selected").each(function() {
+             Arr.pop(this.value);
+        });
+        $('input[name="lstGroup"]').attr('value',Arr.join(","));
+        $.ajax({
+               type: "GET",
+               url: "../QTNguoiDung/FETCHUSERS?lstUsershaschecked=" + $("#lstGroup").val() ,
+               data: "",
+               contentType: 'application/json; charset=utf-8',
+               success: function(data) {
+                   $("#Nguoidungdachon").html(data);
+               }
+        });      
+    }
+    function ChonChonChoHaKhong() {
+        //$("#Nguoidungdachon :selected").each(function() {
+        //     Arr.pop(this.value);
+        //});
+        //$('input[name="lstGroup"]').attr('value',Arr.join(","));
+        //$.ajax({
+        //       type: "GET",
+        //       url: "../QTNguoiDung/FETCHUSERS?lstUsershaschecked=" + $("#lstGroup").val() ,
+        //       data: "",
+        //       contentType: 'application/json; charset=utf-8',
+        //       success: function(data) {
+        //           $("#Nguoidungdachon").html(data);
+        //       }
+        //});      
+    }
+</script>
+
 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 2px solid #0866c6;">
@@ -287,60 +361,44 @@
                     <h4 class="widgettitle">Chọn cán bộ</h4>
                     <div class="widgetcontent">
                         <div class="form-group">
-                            <select name="ctl14$ctl00$ddlPhongBan" id="ddlPhongBan" class="form-control input-default">
-			                <option selected="selected" value="">------------ Chọn ------------</option>
-			                <option value="186">Công nghệ hạ tầng</option>
-			                <option value="178">Lãnh đạo Sở</option>
-			                <option value="182">Phòng Bưu chính</option>
-			                <option value="CNTT">Phòng Công nghệ Thông tin</option>
-			                <option value="183">Phòng Công nghệ thông tin</option>
-			                <option value="KSTTHC">Phòng Kiểm soát TTHC - Văn phòng UBND tỉnh</option>
-			                <option value="180">Thanh tra</option>
-			                <option value="TTHCQG">Thủ tục hành chính lấy về từ DVC QG</option>
-			                <option value="184">Truyền thông</option>
-			                <option value="179">Văn phòng</option>
+                            <select name="ddlPhongBan" id="ddlPhongBan" class="form-control input-default" onchange="ChonPhongBan(this)">
+			                @if(list_phong_ban != null)
+                                {
+                                    foreach (var item in list_phong_ban)
+                                    {  
+                                        <option onclick="ChonChonChoHaKhong()" value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                    }
+                                }
 
 		                </select>
                         </div>
                         <div class="form-group">
                             <span id="dualselect" class="dualselect" style="display:flex">
-                                <select class="form-control input-default select-inline" name="select3" multiple="multiple" size="15" style="width: 185px">
-                                    <option value="bvchung.stttt">Bàn Vũ Chung</option>
-                                    <option value="lddien.stttt">Lã Đình Điền</option>
-                                    <option value="tkngoc.stttt">Trần Kim Ngọc</option>
-                                    <option value="dthoa.stttt">Đỗ Thái Hòa</option>
-                                    <option value="ddhuong.hcc">Đoàn Diệu Hương</option>
-                                    <option value="hotromotcua">Hỗ trợ Một cửa</option>
-                                    <option value="lanhdaocoquan">Lãnh đạo cơ quan test</option>
-                                    <option value="ndmanh.vpubnd">Nguyễn Đức Mạnh</option>
-                                    <option value="kstthc.hcc">Phòng Kiểm soát thủ tục hành chính Trung tâm Phục vụ hành chính công</option>
-                                    <option value="quantristttt">Quản Trị DVC</option></select>
+                                <select id="Nguoidungtimkiem" class="form-control input-default select-inline" name="select3" multiple="multiple" size="15" style="width: 185px">
+                                    <option onclick="GetUserChecked()" value="">-------- Chọn người dùng --------</option>
+                                   
+                                </select>
                                 <span class="ds_arrow" style="    vertical-align: top; padding-top: 60px;margin: 0 10px;">
-                                    <button class="btn btn-inverse ds_prev" type="button"><i class="iconfa-chevron-left"></i></button>
+                                    <button class="btn btn-inverse ds_prev" type="button" style="background: #333; color: #fff;" onclick="ChonChonHa()"><i class="iconfa-chevron-left"></i></button>
                                     <br>
-                                    <button class="btn btn-inverse ds_next" type="button"><i class="iconfa-chevron-right"></i></button>
+                                    <button class="btn btn-inverse ds_next" type="button" style="background: #333; color: #fff;" onclick="ChonChonHaKhong()"><i class="iconfa-chevron-right"></i></button>
                                 </span>
-                                <select class="form-control input-default select-inline" name="select4" multiple="multiple" size="15" style="width: 185px">
-                                    <option value="ntthanh.stttt">Ngô Tiến Thành</option>
-                                    <option value="nhtrang.stttt">Nguyễn Huyền Trang</option>
-                                    <option value="ntlinh.stttt">Nguyễn Thùy Linh</option>
-                                    <option value="quantri">Quản trị</option>
-                                    <option value="ttthanh.stttt">Trần Thị Thanh</option>
-                                    <option value="vthoa.stttt">Vương Thị Hoa</option>
-                                    <option value="thuyan">Nguyễn Thụy An</option>
-                                    <option value="bophantiepnhan">Cán bộ Tiếp Nhận test</option>
-                                    <option value="hvkien.stttt">Hoàng Văn Kiến</option>
-                                    <option value="nthau.stttt">Nguyễn Thị Hậu</option>
-                                    <option value="ntnhai.stttt">Nguyễn Thị Nhài</option>
-                                    <option value="bpmc.stt">Nguyễn Thị Nhịp</option>
-                                    <option value="nttlinh.stttt">Nguyễn Thị Thùy Linh</option>
-                                    <option value="nvtuan.stttt">Nguyễn Văn Tuấn</option></select>
+                                <select id="Nguoidungdachon" class="form-control input-default select-inline" name="select4" multiple="multiple" size="15" style="width: 185px">
+                                    @if (lst_nhom_nguoi_dung_obj != null)
+                                    {
+                                        foreach (var item in lst_nhom_nguoi_dung_obj)
+                                        {
+                                            <option value="@item.Id">@(item.ho_dem + " " + item.ten) </option>
+                                        }
+                                    }
+                                </select>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary modal-footer-btnclose" onclick="ChonHA()" data-bs-dismiss="modal">Chọn</button>
                 <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
