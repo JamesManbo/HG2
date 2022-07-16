@@ -297,7 +297,13 @@
         });      
     }
     function ChonHA() {
-         $("#Nguoidungtimkiem :selected").each(function() {
+            $("#Nguoidungtimkiem :selected").each(function() {
+              if (Arr.length == 0) {
+                var lstGroup = $("#lstGroup").val(); 
+                    lstGroup.split(",").forEach(function (item) {
+                   Arr.push(item)
+                });
+             };
              Arr.push(this.value);
         });
         $('input[name="lstGroup"]').attr('value',Arr.join(","));
@@ -375,8 +381,6 @@
                         <div class="form-group">
                             <span id="dualselect" class="dualselect" style="display:flex">
                                 <select id="Nguoidungtimkiem" class="form-control input-default select-inline" name="select3" multiple="multiple" size="15" style="width: 185px">
-                                    <option onclick="GetUserChecked()" value="">-------- Chọn người dùng --------</option>
-                                   
                                 </select>
                                 <span class="ds_arrow" style="    vertical-align: top; padding-top: 60px;margin: 0 10px;">
                                     <button class="btn btn-inverse ds_prev" type="button" style="background: #333; color: #fff;" onclick="ChonChonHa()"><i class="iconfa-chevron-left"></i></button>
@@ -398,8 +402,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary modal-footer-btnclose" onclick="ChonHA()" data-bs-dismiss="modal">Chọn</button>
-                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="ChonHA()" data-bs-dismiss="modal">Chọn</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
