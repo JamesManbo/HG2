@@ -1,0 +1,32 @@
+﻿@using HG.WebApp
+@model List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>
+
+<select id='pre-selected-options' multiple='multiple'>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+
+            <option value="@item.UserName">@item.ten_nguoi_dung</option>
+
+        }
+    }
+</select>
+<script>
+    $('#pre-selected-options').multiSelect({
+        afterSelect: function(values) {
+            String(values).split(",").forEach(function(item) {
+                ArrUser.push(item);
+            });
+            $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
+        },
+        afterDeselect: function(values) {
+            String(values).split(",").forEach(function(item) {
+                ArrUser.pop(item);
+            });
+            alert(ArrUser);
+            $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
+        }
+    });
+    $('#pre-selected-options').multiSelect();
+</script>

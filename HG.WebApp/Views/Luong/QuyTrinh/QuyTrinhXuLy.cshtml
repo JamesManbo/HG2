@@ -6,6 +6,7 @@
     var PhongBan = ViewBag.PhongBan as List<HG.Entities.Dm_Phong_Ban>;
     var NhanhXuLy = ViewBag.NhanhXuLy as List<HG.Entities.Dm_Nhanh_Xu_Ly>;
 }
+<script src="https://cdn.rawgit.com/crlcu/multiselect/v2.5.1/dist/js/multiselect.min.js"></script>
 @model HG.Entities.Entities.Luong.QuyTrinhXuLy_paging
 <style>
     .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11 {
@@ -98,92 +99,100 @@
                                 </table>
                             </div>
                             <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
-                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                @{
-                                    var TotalPage = (int)ViewBag.TotalPage;
-                                    var CurrentPage = (int)ViewBag.CurrentPage;
-                                    if (TotalPage > 5)
-                                    {
-                                        if (CurrentPage > CurrentPage + 2)
-                                        {
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                        };
-                                        if (CurrentPage > 3)
-                                        {
-                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= 5; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-
-                                        }
-
-                                        if (CurrentPage < CurrentPage + 2)
-                                        {
-                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                        };
-                                    }
-                                    else
-                                    {
-                                        for (int i = 1; i <= TotalPage; i++)
-                                        {
-                                            if (i == CurrentPage)
-                                            {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                            }
-                                            else
-                                            {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                            }
-                                        }
-                                    }
-                                }
-                            </div>
+                           
                         </div>
                     </div>
 
                     @*Nhánh *@
                     <div class="tab-pane fade" id="nhanh" role="tabpanel" aria-labelledby="profile-tab">
-                        <div class="row">
-                            <label class="col-sm-1 control-label">
-                                Mã nhánh
-                            </label>
-                            <div class="col-sm-2">
-                                <input name="ctl08$ctl00$txtMaNhanh" type="text" id="txtMaNhanh" class="form-control input-default-sm" placeholder="Nhập mã nhánh">
-                            </div>
-                            <label class="col-sm-1 control-label">
-                                Tên nhánh
-                            </label>
-                            <div class="col-sm-5">
-                                <input name="ctl08$ctl00$txtTenNhanh" type="text" id="txtTenNhanh" class="form-control input-default-sm" placeholder="Nhập tên nhánh">
-                            </div>
-                            <div class="col-sm-2">
-                                <input type="submit" name="ctl08$ctl00$btnThemNhanh" value="Thêm nhánh" id="btnThemNhanh" class="btn btn-primary">
+                        <div class="row" style="padding-bottom: 20px;">
+                            <form id="form_nhanh">
+                                <input hidden name="ma_luong" value="@Model.ma_luong" />
+                                <div class="row">
+                                    <label class="col-sm-1 control-label">
+                                        Mã nhánh
+                                    </label>
+                                    <div class="col-sm-2">
+                                        <input name="ma_nhanh" type="text" id="ma_nhanh" class="form-control input-default-sm" placeholder="Nhập mã nhánh">
+                                    </div>
+                                    <label class="col-sm-1 control-label">
+                                        Tên nhánh
+                                    </label>
+                                    <div class="col-sm-5">
+                                        <input name="ten_nhanh" type="text" id="ten_nhanh" class="form-control input-default-sm" placeholder="Nhập tên nhánh">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" onclick="ThemNhanh(this)" class="btn btn-primary">Thêm nhánh</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id="Tab_Nhanh">
+                            <div class="dataTable-container">
+                                <table class="table table-bordered responsive">
+                                    <thead class="widgettitle">
+                                        <tr>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 10%;">MÃ NHÁNH</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 75%;">TÊN NHÁNH </th>
+
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">MÃ NHÁNH</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
+                                        {
+                                            var stt_nhanh = 1;
+                                            foreach (var item in Model.lstNhanhXuLy)
+                                            {
+                                                <tr>
+                                                    <td scope="row">
+                                                        @stt_nhanh
+                                                    </td>
+                                                    <td><a href="#">@item.ma_nhanh</a></td>
+
+                                                    <td>
+                                                        @if (ViewBag.code == item.ma_nhanh)
+                                                        {
+                                                            <input id="ten_nhanh_@(item.ma_nhanh)" value="@item.ten_nhanh" class="form-control input-default-sm">
+                                                        }
+                                                        else
+                                                        {
+                                                            @item.ten_nhanh
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        @if (ViewBag.code == item.ma_nhanh)
+                                                        {
+                                                            <a href="#" onclick="LuuNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                                                <span class="glyphicon glyphicon-edit">Lưu</span>
+                                                            </a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a href="#" onclick="SuaNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                                                <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                            </a>
+                                                        }
+
+                                                    </td>
+                                                    <td>
+                                                        <a href="#" onclick="XoaNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                                            <span class="glyphicon glyphicon-edit">Xóa</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                stt_nhanh++;
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
+
                     @*Thông tin bước *@
                     <div class="tab-pane fade @(ViewBag.Views.Contains(StatusAction.Add.ToString())?"show active":"")" id="tt-buoc" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="form-horizontal">
@@ -234,7 +243,9 @@
                                         </select>
                                     </div>
                                     <div class="col-md-1">
-                                        <input type="button" name="" value="Chọn" id="btnNguoiMacDinhXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiMacDinhXL" style="width:100%;">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModalUser">
+                                            Chọn
+                                        </button>
                                     </div>
                                 </div>
 
@@ -243,7 +254,7 @@
                                         Số ngày xử lý
                                     </label>
                                     <div class="col-md-3">
-                                        <input name="so_ngay_xl" type="text" value="0" id="so_ngay_xl" class="form-control input-default-sm" placeholder="Nhập số ngày xử lý">
+                                        <input name="so_ngay_xl" type="text" id="so_ngay_xl" class="form-control input-default-sm" placeholder="Nhập số ngày xử lý">
                                     </div>
                                     <div class="col-md-1"></div>
                                     <label class="col-md-2 control-label">Người có thể XL</label>
@@ -259,10 +270,14 @@
                                             }
                                         </select>
                                         <input id="nguoi_co_the_xl" type="text" name="nguoi_co_the_xl" class="form-control input-default" hidden>
+                                        <input id="nguoi_co_the_xl2" type="text" name="nguoi_co_the_xl2" class="form-control input-default" hidden>
+
 
                                     </div>
                                     <div class="col-md-1">
-                                        <input type="button" name="" value="Chọn" id="btnNguoiCoTheXL" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiCoTheXL" style="width:100%;">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalXL">
+                                            Chọn
+                                        </button>
                                     </div>
                                 </div>
 
@@ -287,9 +302,12 @@
                                                 }
                                             </select>
                                             <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
+                                            <input id="nguoi_phoi_hop_xl2" type="text" name="nguoi_phoi_hop_xl2" class="form-control input-default" hidden>
                                         </div>
                                         <div class="col-md-1">
-                                            <input type="button" name="" value="Chọn" id="btnNguoiPH" class="btn btn-primary" data-toggle="modal" data-target="#popNguoiPH" style="width:100%;">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalPH">
+                                                Chọn
+                                            </button>
                                         </div>
                                     </div>
 
@@ -300,9 +318,9 @@
                                             <div class="col-md-3">
                                                 <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
                                                     <option selected="selected" value="">------ Gốc ------</option>
-                                                    @if (NhanhXuLy != null)
+                                                    @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
                                                     {
-                                                        foreach (var item in NhanhXuLy)
+                                                        foreach (var item in Model.lstNhanhXuLy)
                                                         {
                                                             <option value="@item.ma_nhanh">@item.ten_nhanh</option>
                                                         }
@@ -538,20 +556,140 @@
     <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="basicModalPH" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="widget">
+                    <h4 class="widgettitle">Chọn cán bộ</h4>
+                    <div class="widgetcontent">
+                        <div class="form-group">
+                            <select name="ddlPhongBan" id="ddlPhongBan" class="form-control input-default" onchange="ChonPhongBan(this)">
+                                @if (PhongBan != null && PhongBan.Count > 0)
+                                {
+                                    <option value="">Chọn phòng ban</option>
+                                    foreach (var item in PhongBan)
+                                    {
+                                        <option onclick="ChonChonChoHaKhong()" value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div class="form-group" id="Nguoidungtimkiem">
+                            <select id='pre-selected-options' multiple='multiple'>
+                                @if (NguoiDung != null)
+                                {
+                                    foreach (var item in NguoiDung)
+                                    {
+
+                                        <option value="@item.UserName">@item.ten_nguoi_dung</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="ChonNguoiDung()" data-bs-dismiss="modal">Chọn</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+
+<div class="modal fade" id="basicModalXL" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="widget">
+                    <h4 class="widgettitle">Chọn cán bộ</h4>
+                    <div class="widgetcontent">
+                        <div class="form-group">
+                            <select name="ddlPhongBan" id="ddlPhongBan" class="form-control input-default" onchange="ChonPhongBanXL(this)">
+                                @if (PhongBan != null && PhongBan.Count > 0)
+                                {
+                                    <option value="">Chọn phòng ban</option>
+                                    foreach (var item in PhongBan)
+                                    {
+                                        <option onclick="Chon_XL()" value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div class="form-group" id="Nguoidungtimkiem_XL">
+                            <select id='Nguoi_XL' multiple='multiple'>
+                                @if (NguoiDung != null)
+                                {
+                                    foreach (var item in NguoiDung)
+                                    {
+
+                                        <option value="@item.UserName">@item.ten_nguoi_dung</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="ChonNguoiDung_XL()" data-bs-dismiss="modal">Chọn</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+<link rel="stylesheet" type="text/css" href="../FrontEnd/multi-select.css">
+
+<script src="../FrontEnd/jquery.multi-select.js"></script>
+
+
+
 <script>
-    function GetListByCurrentPage(id) {
-        var pageSize = $("#lstPageSize").val();
+
+
+    function ChonPhongBan(data) {
         $.ajax({
             type: "GET",
-            url: "../Luong/LuongXuLyPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
+            url: "../Luong/NguoiDungPhongBan?code=" + data.value + "&type=PH",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                //console.log(data);
-                $("#dataTable").html(data);
+                $("#Nguoidungtimkiem").html(data);
+                $('#pre-selected-options').multiSelect('select', $("#nguoi_phoi_hop_xl").val().split(";"));
             }
         });
     }
+
+
+    function ChonPhongBanXL(data) {
+        $.ajax({
+            type: "GET",
+            url: "../Luong/NguoiDungPhongBan?code=" + data.value + "&type=XL",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#Nguoidungtimkiem_XL").html(data);
+                $('#Nguoi_XL').multiSelect('select', $("#nguoi_co_the_xl").val().split(";"));
+            }
+        });
+    }
+
+
     function changePageSize(data) {
         $("#lstPageSize").val(data.value);
         $.ajax({
@@ -601,7 +739,59 @@
     });
     var Arr = [];
     var Arr2 = [];
+
+
     $(document).ready(function() {
+        $('#form_pb').validate({
+            rules: {
+                ten_buoc: {
+                    required: true
+                },
+                so_ngay_xl: "required",
+                nguoi_xl_mac_dinh: "required"
+            },
+            messages: {
+                ten_buoc: {
+                    required: "Bạn cần nhập tên bước!",
+                },
+                so_ngay_xl: "Bạn cần nhập số ngày xử lý!",
+                nguoi_xl_mac_dinh: "Bạn cần nhập người xử lý mặc định!"
+            }
+        });
+
+        $('#so_ngay_xl').keypress(function(event) {
+            if (event.which != 46 && (event.which < 47 || event.which > 59)) {
+                event.preventDefault();
+                if ((event.which == 46) && ($(this).indexOf('.') != -1)) {
+                    event.preventDefault();
+                }
+            }
+        });
+
+        jQuery.validator.addMethod("ma_vaild", function(value, element) {
+            if (/[ `!#$%^&*()+\=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
+
+        $('#form_nhanh').validate({
+            rules: {
+                ma_nhanh: {
+                    required: true,
+                    ma_vaild: true
+                },
+                ten_nhanh: "required",
+            },
+            messages: {
+                ma_nhanh: {
+                    required: "Bạn cần nhập mã nhánh!",
+                },
+                ten_nhanh: "Bạn cần nhập tên nhánh !",
+            }
+        });
+
         $('.select2').select2({
             closeOnSelect: false
         });
@@ -631,5 +821,175 @@
             Arr2.pop(e.params.data.id);
             $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
         });
+
+        $('#myModalUser').on('shown.bs.modal', function() {
+            var data = { ma_phong_ban: "" };
+            $.ajax({
+                url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: data,
+                success: function(result) {
+                    $("#singleselect").html(result);
+                }
+            });
+        })
+
     });
+    var ArrUser = [];
+    $('#basicModalPH').on('shown.bs.modal', function() {
+        $('#pre-selected-options').multiSelect('deselect_all');
+        $('#pre-selected-options').multiSelect('select', $("#nguoi_phoi_hop_xl").val().split(";"));
+    })
+
+    function ChonNguoiDung() {
+        var lstGroup = $("#nguoi_phoi_hop_xl2").val();
+        lstGroup.split(";").forEach(function(item) {
+            Arr2.push(item);
+        });
+        $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
+        $("#multiselect2").val($("#nguoi_phoi_hop_xl2").val().split(";")).trigger('change');
+    }
+
+    $('#pre-selected-options').multiSelect({
+        afterSelect: function(values) {
+            String(values).split(",").forEach(function(item) {
+                ArrUser.push(item);
+            });
+            $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
+        },
+        afterDeselect: function(values) {
+            String(values).split(",").forEach(function(item) {
+                ArrUser.pop(item);
+            });
+            $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
+        }
+    });
+    $('#pre-selected-options').multiSelect();
+
+    var ArrUserXL = [];
+    $('#basicModalXL').on('shown.bs.modal', function() {
+        $('#Nguoi_XL').multiSelect('deselect_all');
+        $('#Nguoi_XL').multiSelect('select', $("#nguoi_co_the_xl").val().split(";"));
+    })
+
+    function ChonNguoiDung_XL() {
+        var lstGroup = $("#nguoi_co_the_xl2").val();
+        lstGroup.split(";").forEach(function(item) {
+            Arr.push(item);
+        });
+        $("#nguoi_co_the_xl").val(Arr.join(";"));
+        $("#multiselect").val($("#nguoi_co_the_xl2").val().split(";")).trigger('change');
+    }
+
+    $('#Nguoi_XL').multiSelect({
+        afterSelect: function(values) {
+            String(values).split(",").forEach(function(item) {
+                ArrUserXL.push(item);
+            });
+            $("#nguoi_co_the_xl2").val(ArrUserXL.join(";"));
+        },
+        afterDeselect: function(values) {
+            String(values).split(",").forEach(function(item) {
+                ArrUserXL.pop(item);
+            });
+            $("#nguoi_co_the_xl2").val(ArrUserXL.join(";"));
+        }
+    });
+    $('#Nguoi_XL').multiSelect();
+
+    function SuaNhanh(ma_luong, ma_nhanh) {
+        var dataPost = "ma_luong=" + ma_luong + "&ma_nhanh=" + ma_nhanh;
+        $.ajax({
+            url: "/Luong/SuaNhanh",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: dataPost,
+            success: function(result) {
+                $("#Tab_Nhanh").html(result);
+            }
+        });
+    }
+
+    function getUserByPb(data) {
+        var data = { ma_phong_ban: data.value };
+        $.ajax({
+            url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: data,
+            success: function(result) {
+                $("#singleselect").html(result);
+            }
+        });
+    }
+    function getUser(data) {
+        $('#nguoi_xl_mac_dinh').val($(':selected', data).attr("data-id"));
+        $('#nguoi_xl_mac_dinh').select2().trigger('change');
+        $("#myModalUser").modal("hide");
+    }
+
+    function LuuNhanh(ma_luong, ma_nhanh) {
+        var ten_nhanh = $("#ten_nhanh_" + ma_nhanh).val();
+        var dataPost = "ma_luong=" + ma_luong + "&ma_nhanh=" + ma_nhanh + "&ten_nhanh=" + ten_nhanh;
+
+        $.ajax({
+            url: "/Luong/LuuNhanh",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: dataPost,
+            success: function(result) {
+                $("#Tab_Nhanh").html(result);
+            }
+        });
+    }
+
+    function ThemNhanh() {
+        if ($("#form_nhanh").valid()) {
+            var dataPost = $("#form_nhanh").serialize();
+            $.ajax({
+                url: "/Luong/LuuNhanh",
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: dataPost,
+                success: function(result) {
+                    console.log(result);
+                    $("#Tab_Nhanh").html(result);
+                }
+            });
+        }
+    }
+
+    function XoaNhanh(ma_luong, ma_nhanh) {
+        bootbox.confirm({
+            message: "Bạn có muốn xóa không?",
+            buttons: {
+                confirm: {
+                    label: 'Có',
+                    className: 'btn-success'
+                },
+                cancel: {
+                    label: 'Không',
+                    className: 'btn-danger'
+                }
+            },
+            callback: function(result) {
+                if (result) {
+                    var dataPost = "ma_luong=" + ma_luong + "&ma_nhanh=" + ma_nhanh;
+                    $.ajax({
+                        url: "/Luong/XoaNhanh",
+                        type: "post",
+                        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                        data: dataPost,
+                        success: function(result) {
+                            console.log(result);
+                            $("#Tab_Nhanh").html(result);
+                        }
+                    });
+                }
+            }
+        });
+    }
 </script>
+
+

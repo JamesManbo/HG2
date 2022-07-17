@@ -89,6 +89,7 @@
             // Looping over all files and add it to FormData object
             for (var i = 0; i < files.length; i++) {
                 fileData.append(files[i].name, files[i]);
+                $('#file_dinh_kem').val(files[i].name);
             }
             // Adding one more key to FormData object
             $.ajax({
@@ -176,24 +177,28 @@
                         <input name="ma_thanh_phan" onfocusout="CheckMaTPFocus('@Model.ma_thu_tuc_key','@Model.ma_thu_tuc',this,'@ViewBag.type_view_tp','@ViewBag.type_view')" type="text" value="@ViewBag.code" id="ma_thanh_phan" class="form-control input-default" placeholder="Mã thành phần" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
 
                     </div>
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal_TP">Chọn</button>
-                        <script>
-                            function myModalPopup() {
-                                $.ajax({
-                                    type: "GET",
-                                    url: "../ThuTuc/RenderViewThanhPhan?code_key=0&code=@Model.ma_thu_tuc&type_view=@ViewBag.type_view",
-                                    data: "",
-                                    contentType: 'application/json; charset=utf-8',
-                                    success: function(data) {
-                                        console.log(data);
-                                        $("#basicModal_TP .modal-body").html(data);
-                                    }
-                                });
-                            }
+                    @if ((ViewBag.type_view_tp == StatusAction.Edit.ToString()) || (ViewBag.type_view_tp == StatusAction.Add.ToString()))
+                    {
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal_TP">Chọn</button>
+                            <script>
+                                function myModalPopup() {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "../ThuTuc/RenderViewThanhPhan?code_key=0&code=@Model.ma_thu_tuc&type_view=@ViewBag.type_view",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            console.log(data);
+                                            $("#basicModal_TP .modal-body").html(data);
+                                        }
+                                    });
+                                }
 
-                        </script>
-                    </div>
+                            </script>
+                        </div>
+                    }
+
                 </div>
 
                 <div class="row mb-3">
@@ -234,12 +239,12 @@
                         <button type="button" onclick="$('#files').click();" class="btn btn-default" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
                     </div>
                     <div class="col-md-1">
-                        <input type="button" name="" value="Xóa tệp" onclick="CleadFile()" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;display:none">
+                        <input type="button" name="" value="Xóa tệp" onclick="CleadFile()" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;display:none" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                     </div>
                     <div class="col-md-1">
                         @if (!String.IsNullOrEmpty(Model.url_file))
                         {
-                            <input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePostAlert('/ThuTuc/XoaFileThanhPhan?code_tp=@Model.ma_thanh_phan')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">
+                            <input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePostAlert('/ThuTuc/XoaFileThanhPhan?code_tp=@Model.ma_thanh_phan')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                         }
                     </div>
                     <div class="col-md-1"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>

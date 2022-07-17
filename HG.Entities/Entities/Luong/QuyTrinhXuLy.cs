@@ -10,7 +10,7 @@ namespace HG.Entities.Entities.Luong
     {
         public int Id { get; set; }
         public string ma_luong { get; set; }
-        public string ma_buoc { get; set; }
+        public string? ma_buoc { get; set; }
         public string ten_buoc { get; set; }
         public float so_ngay_xl { get; set; }
         public bool buoc_xl_chinh { get; set; }
@@ -38,7 +38,7 @@ namespace HG.Entities.Entities.Luong
         public int tong_ngay_qt { get; set; }
         public int tong_ngay_tt { get; set; }
         public List<QuyTrinhXuLy>? lstQuyTrinhXuLy { get; set; }
-        public List<NhanhXuLy>? lstNhanhXuLy { get; set; }
+        public List<Dm_Nhanh_Xu_Ly>? lstNhanhXuLy { get; set; }
         public QuyTrinhXuLy quyTrinhXuLy { get; set; }
         public Pagelist Pagelist { get; set; } = new Pagelist();
     }

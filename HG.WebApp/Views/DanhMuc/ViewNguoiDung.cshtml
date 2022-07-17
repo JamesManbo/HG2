@@ -3,6 +3,6 @@
 <select onchange="getUser(this);" id="lstuser" style="width: 100%;height: 200px;" class="form-control" name="select3" size="15">
     @foreach (var item in Model)
     {
-        <option value="@item.id">@item.ten_nguoi_dung</option>
+        <option value="@item.id" data-id="@item.UserName">@item.ten_nguoi_dung</option>
     }
 </select>

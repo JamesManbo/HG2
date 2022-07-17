@@ -203,7 +203,7 @@ namespace HG.Data.Business.DanhMuc
                 menu.lstQuyTrinhXuLy = DbProvider.ExecuteReader_frmMyReader<QuyTrinhXuLy>();
 
                 DbProvider.ExecuteReader_NextResult();
-                menu.lstNhanhXuLy = DbProvider.ExecuteReader_frmMyReader<NhanhXuLy>();
+                menu.lstNhanhXuLy = DbProvider.ExecuteReader_frmMyReader<Dm_Nhanh_Xu_Ly>();
                 DbProvider.ExecuteReader_Close();
 
                 menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
@@ -226,7 +226,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.SetCommandText2("dm_them_sua_quy_trinh_xu_ly", CommandType.StoredProcedure);
                 DbProvider.AddParameter("id", item.Id, SqlDbType.Int);
                 DbProvider.AddParameter("ma_luong", item.ma_luong, SqlDbType.VarChar);
-                DbProvider.AddParameter("ma_buoc", item.ma_buoc, SqlDbType.VarChar);
+                DbProvider.AddParameter("ma_buoc", item.ma_buoc ?? "", SqlDbType.VarChar);
                 DbProvider.AddParameter("ten_buoc", item.ten_buoc, SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_nhanh", item.ma_nhanh ?? "", SqlDbType.VarChar);
                 DbProvider.AddParameter("so_ngay_xl", item.so_ngay_xl, SqlDbType.Float);

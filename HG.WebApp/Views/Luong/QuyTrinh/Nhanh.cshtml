@@ -1,0 +1,64 @@
+﻿@using HG.WebApp
+@model List<HG.Entities.Dm_Nhanh_Xu_Ly>
+
+<div class="dataTable-container">
+    <table class="table table-bordered responsive">
+        <thead class="widgettitle">
+            <tr>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 10%;">MÃ NHÁNH</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 75%;">TÊN NHÁNH </th>
+
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">MÃ NHÁNH</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                var stt_nhanh = 1;
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td scope="row">
+                            @stt_nhanh
+                        </td>
+                        <td><a href="#">@item.ma_nhanh</a></td>
+
+                        <td>
+                            @if (ViewBag.code == item.ma_nhanh)
+                            {
+                                <input id="ten_nhanh_@(item.ma_nhanh)" value="@item.ten_nhanh" class="form-control input-default-sm">
+                            }
+                            else
+                            {
+                                @item.ten_nhanh
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.code == item.ma_nhanh)
+                            {
+                                <a href="#" onclick="LuuNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                    <span class="glyphicon glyphicon-edit">Lưu</span>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="#" onclick="SuaNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                </a>
+                            }
+
+                        </td>
+                        <td>
+                             <a href="#" onclick="XoaNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                                            <span class="glyphicon glyphicon-edit">Xóa</span>
+                                                        </a>
+                        </td>
+                    </tr>
+                    stt_nhanh++;
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -13,6 +13,7 @@ using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
@@ -471,7 +472,7 @@ namespace HG.WebApp.Controllers
         public IActionResult QuyTrinhXuLy(string code, string views = "View")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
+            QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = 50 };
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
             ds.ma_luong = code;
             var user = _dmDao.DanhSachNguoiDung("");
@@ -480,7 +481,6 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
-                nhanhXuLy = db.Dm_Nhanh_Xu_Ly.Where(n => n.Deleted == 0).ToList();
             }
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
@@ -551,8 +551,83 @@ namespace HG.WebApp.Controllers
             }
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/luong/QuyTrinhXuLy?code=" + code });
         }
-        #endregion         
+        #endregion
+        #region Nhánh xử lý
+        public async Task<IActionResult> LuuNhanh(Dm_Nhanh_Xu_Ly item)
+        {
+            EAContext db = new EAContext();
 
+            try
+            {
+                var objNhanh = db.Dm_Nhanh_Xu_Ly.FirstOrDefault(n => n.ma_nhanh == item.ma_nhanh);
+                if (objNhanh != null)
+                {
+                    objNhanh.UpdatedDateUtc = DateTime.Now;
+                    objNhanh.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                    objNhanh.ma_nhanh = HelperString.CreateCode(item.ma_nhanh);
+                    objNhanh.ten_nhanh = item.ten_nhanh;
+
+                    db.Entry(objNhanh).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var itemAdd = new Dm_Nhanh_Xu_Ly();
+                    itemAdd.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                    itemAdd.CreatedDateUtc = DateTime.Now;
+                    itemAdd.Deleted = 0;
+                    itemAdd.ma_luong = item.ma_luong;
+                    itemAdd.ma_nhanh = HelperString.CreateCode(item.ma_nhanh);
+                    itemAdd.ten_nhanh = item.ten_nhanh;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Dm_Nhanh_Xu_Ly> _role = db.Dm_Nhanh_Xu_Ly.Add(itemAdd);
+                    db.SaveChanges();
+                }
+                var ds = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_luong == item.ma_luong).ToList();
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/Nhanh.cshtml", ds);
+                return Content(result);
+            }
+            catch (Exception e)
+            {
+                var ds = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_luong == item.ma_luong).ToList();
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/Nhanh.cshtml", ds);
+                return Content(result);
+            }
+        }
+
+        public async Task<IActionResult> XoaNhanh(string ma_luong, string ma_nhanh)
+        {
+            EAContext db = new EAContext();
+
+            try
+            {
+                var obj = db.Dm_Nhanh_Xu_Ly.Find(ma_nhanh);
+                if (obj != null)
+                {
+                    db.Dm_Nhanh_Xu_Ly.Attach(obj);
+                    db.Dm_Nhanh_Xu_Ly.Remove(obj);
+                    db.SaveChanges();
+                }
+                var ds = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_luong == ma_luong).ToList();
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/Nhanh.cshtml", ds);
+                return Content(result);
+            }
+            catch (Exception ex)
+            {
+                var ds = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_luong == ma_luong).ToList();
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/Nhanh.cshtml", ds);
+                return Content(result);
+            }
+
+        }
+        public async Task<IActionResult> SuaNhanh(string ma_luong, string ma_nhanh)
+        {
+            EAContext db = new EAContext();
+            var ds = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_luong == ma_luong).ToList();
+            ViewBag.code = ma_nhanh;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/Nhanh.cshtml", ds);
+            return Content(result);
+        }
+        #endregion
         [HttpPost]
         public async Task<int> ReadFileExcel(IFormFile file)
         {
@@ -802,6 +877,20 @@ namespace HG.WebApp.Controllers
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
         }
 
+        public async Task<IActionResult> NguoiDungPhongBan(string code, string type)
+        {
+            var user = _dmDao.DanhSachNguoiDung(code);
+            if (type == "PH")
+            {
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/NguoiDungPhongBan.cshtml", user);
+                return Content(result);
+            }
+            else
+            {
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/NguoiDungPhongBanXL.cshtml", user);
+                return Content(result);
+            }
 
+        }
     }
 }
