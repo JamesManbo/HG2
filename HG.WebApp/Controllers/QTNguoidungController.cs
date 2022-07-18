@@ -351,7 +351,9 @@ namespace HG.WebApp.Controllers
         }
         //lay vai tri chitiet boi ma nhom
         public IActionResult QLNhomVaitroChitiet(string code)
-         {
+          {
+            int pageSize = 25;
+            var currentPage = 1;
             ViewBag.Status = "";
             EAContext eAContext = new EAContext();
             ViewBag.ma_nhom = code;
@@ -361,12 +363,20 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
+            //paging vaitro
+            var totalRecored = eAContext.Asp_dm_vai_tro.Count();
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
             //lấy vai trò theo mã nhóm
             ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
             //Lấy tất cả các nhóm thuộc tất cả các người dùng: đầu vào User đầu ra nhóm - user khi tạo người dùng
             var lstUserGroup = _nguoiDungDao.ListNguoiDungByMaNhom(code);
             var lstFromQTNguoiDung = "";
-            if (lstUserGroup != null)
+            if (lstUserGroup != null && lst_nhom_nguoi_dung != null)
             {
                 lstFromQTNguoiDung = String.Join(", ", lstUserGroup.Where(n => (lst_nhom_nguoi_dung.lst_ma_nguoi_dung ?? "").Contains(n.ma_nguoi_dung.ToString()) == false).Select(n => n.ma_nguoi_dung).ToArray());
             }
@@ -374,11 +384,12 @@ namespace HG.WebApp.Controllers
             {
                 if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "") {
                     lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lst_nhom_nguoi_dung.lst_ma_nguoi_dung + "," + lstFromQTNguoiDung;
-                    ViewBag.Status = "View";
+                    ViewBag.type_view = StatusAction.View.ToString();
                 }
                 else
                 {
                     lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung;
+                    ViewBag.type_view = StatusAction.Add.ToString();
                 }
             }
             return View();
@@ -386,6 +397,10 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult QLNhomVaitroChitiet(phong_ban_nhom_nguoi_dung item)
         {
+            
+            
+            int pageSize = 25;
+            var currentPage = 1;
             var UserId = Guid.Parse(userManager.GetUserId(User));
             item.CreatedUid = UserId;
             EAContext eAContext = new EAContext();
@@ -393,7 +408,15 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
-            if (item.type_view == "Edit")
+            var totalRecored = eAContext.Asp_dm_vai_tro.Count();
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.ma_nhom = item.ma_nhom;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            if (item.type_view == StatusAction.Edit.ToString())
             {
                 //lấy vai trò theo nhóm
                 ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(item.ma_nhom);
@@ -421,25 +444,32 @@ namespace HG.WebApp.Controllers
                         lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung;
                     }
                 }
-                ViewBag.type_view = StatusAction.Edit.ToString();
+                ViewBag.type_view = StatusAction.Add.ToString();
                 return View();
             }
             else
             {
+                if (string.IsNullOrEmpty(item.lstGroup))
+                {
+                    ViewBag.type_view = StatusAction.View.ToString();
+                    return View();
+                }
                 var obj = _nguoiDungDao.ThemMoiNhomNguoiDung(item);
                 ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
                 if (obj.ErrorCode == 0)
                 {
                     item.type_view = StatusAction.View.ToString();
+                    ViewBag.type_view = StatusAction.View.ToString();
                 }
                 else
                 {
                     item.type_view = StatusAction.Edit.ToString();
+                    ViewBag.type_view = StatusAction.Edit.ToString();
                 }
                 return View(item);
             }
         }
-        public IActionResult QLNhomVaitroChitietPaging(string code)
+        public IActionResult QLNhomVaitroChitietPaging(int currentPage = 1, string code = "", int pageSize = 25)
         {
             EAContext eAContext = new EAContext();
             ViewBag.ma_nhom = code;
@@ -447,21 +477,76 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
             var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
             ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
-            ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
+            ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
             //lấy vai trò theo mã nhóm
             ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
+            var totalRecored = eAContext.Asp_dm_vai_tro.Count();
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.PageSize = pageSize;
+            if (lst_nhom_nguoi_dung != null)
+            {
+                ViewBag.type_view = StatusAction.View.ToString();
+            }
+            else
+            {
+                ViewBag.type_view = StatusAction.Add.ToString();
+            }
             return PartialView();
         }
-        public async Task<IActionResult> ThemNhomVaitro(string code, string lstvaitro = "")
+        public async Task<IActionResult> QLNhomVaitroChitietPaging2(int currentPage = 1, string code = "", int pageSize = 25)
+        {
+            EAContext eAContext = new EAContext();
+            ViewBag.ma_nhom = code;
+            ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
+            ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
+            ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
+            ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+            //lấy vai trò theo mã nhóm
+            ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
+            var totalRecored = eAContext.Asp_dm_vai_tro.Count();
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+            ViewBag.PageSize = pageSize;
+            if (lst_nhom_nguoi_dung != null)
+            {
+                ViewBag.type_view = StatusAction.View.ToString();
+            }
+            else
+            {
+                ViewBag.type_view = StatusAction.Add.ToString();
+            }
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/QLNhomVaitroChitietPaging2.cshtml");
+            return Content(result);
+        }
+        public async Task<IActionResult> ThemNhomVaitro(int currentPage = 1,string code="", string lstvaitro = "", int pageSize = 25)
         {
             VaitroModel vaitroModel = new VaitroModel();
             EAContext eAContext = new EAContext();
             ViewBag.ma_nhom = code;
             ViewBag.lst_nhom_vaitro = lstvaitro;
-            vaitroModel.asp_Dm_Vai_Tro = eAContext.Asp_dm_vai_tro.ToList();
+            vaitroModel.asp_Dm_Vai_Tro = eAContext.Asp_dm_vai_tro.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
             vaitroModel.danh_sach_nhom_vai_tro = lstvaitro;
             var res = _nguoiDungDao.ThemNhomVaitro(code, lstvaitro);
-            if(res.ErrorCode == 0)
+            ViewBag.lst_nhom_vaitro = _nguoiDungDao.LayVaitroThemMaNhom(code);
+            var totalRecored = eAContext.Asp_dm_vai_tro.Count();
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.PageSize = pageSize;
+            if (res.ErrorCode == 0)
             {
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/ThemNhomVaitro.cshtml", vaitroModel);
                 return Content(result);
@@ -480,10 +565,13 @@ namespace HG.WebApp.Controllers
             if(lstusersbynhom != null && !string.IsNullOrEmpty(lstusersbynhom))
             {
                 var abc = lstusersbynhom.Split(",");
-                foreach (var item in lstusersbynhom.Split(","))
+                for (var item  = 0; item < abc.Count(); item++)
                 {
-                    var obj = db.AspNetUsers.Where(n => n.Id == Guid.Parse(item)).FirstOrDefault();
-                    if(obj != null) { result.Add(obj); }
+                    if (abc[item] != "")
+                    {
+                        var obj = db.AspNetUsers.Where(n => n.Id == Guid.Parse(abc[item].ToString())).FirstOrDefault();
+                        if (obj != null) { result.Add(obj); }
+                    }
                 }
                 return result;
             }
@@ -495,9 +583,18 @@ namespace HG.WebApp.Controllers
             try
             {
                 EAContext db = new EAContext();
-                var lstUsers = db.AspNetUsers.Where(n => n.ma_phong_ban == ma_phong_ban && (lstUsershaschecked ?? "").Contains(n.Id.ToString()) == false).ToList();
-                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungByPhongBan.cshtml", lstUsers);
-                return Content(result);
+                if (string.IsNullOrEmpty(ma_phong_ban))
+                {
+                    var lstUsers = db.AspNetUsers.Where(n => (lstUsershaschecked ?? "").Contains(n.Id.ToString()) == false).ToList();
+                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungByPhongBan.cshtml", lstUsers.Distinct().ToList());
+                    return Content(result);
+                }
+                else
+                {
+                    var lstUsers = db.AspNetUsers.Where(n => n.ma_phong_ban == ma_phong_ban && (lstUsershaschecked ?? "").Contains(n.Id.ToString()) == false).ToList();
+                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungByPhongBan.cshtml", lstUsers.Distinct().ToList());
+                    return Content(result);
+                }
             }
             catch (Exception e)
             {
@@ -516,11 +613,15 @@ namespace HG.WebApp.Controllers
                     var abc = lstUsershaschecked.Split(",");
                     foreach (var item in lstUsershaschecked.Split(","))
                     {
-                        var obj = db.AspNetUsers.Where(n => n.Id == Guid.Parse(item)).FirstOrDefault();
-                        if (obj != null) { result.Add(obj); }
+                        if(item != "")
+                        {
+                            var obj = db.AspNetUsers.Where(n => n.Id == Guid.Parse(item)).FirstOrDefault();
+                            if (obj != null && result.Where(n=>n.Id == obj.Id).Count() == 0) { result.Add(obj); }
+                        }
+                       
                     }
                 }
-                var resultC = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungDaChon.cshtml", result);
+                var resultC = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/NguoiDungDaChon.cshtml", result.Distinct().ToList());
                 return Content(resultC);
             }
             catch (Exception e)

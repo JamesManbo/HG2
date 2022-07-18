@@ -6,7 +6,19 @@ namespace HG.WebApp.Helper
     public class HelperSql
     {
         readonly static EAContext db = new EAContext();
-       
+
+        public static string GetFullName(Guid? id)
+        {
+            try
+            {
+                var countrecord = db.AspNetUsers.Where(n => n.Id == id).FirstOrDefault();
+                return countrecord == null ? "" : countrecord.ho_dem + " " + countrecord.ten;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
         public static string GetRoleName(Guid? roleid)
         {
             try

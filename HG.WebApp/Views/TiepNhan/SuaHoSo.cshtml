@@ -59,7 +59,7 @@
             <h4 class="widgettitle">Tiếp nhận hồ sơ</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
-                    <!-- Horizontal Form -->
+                    <a href="/Luong/SuaLuongXuLy?code=@Model.ma_luong_xu_ly&type=View" style="text-decoration:none"> Luồng xử lý hồ sơ</a>
                     <form id="form_tiepnhan" action="/TiepNhan/TiepNhanHoSoMoi" method="post" enctype="multipart/form-data" class="row">
                             <div class="underline-partion">
                                      <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin khách hàng</p>
@@ -67,7 +67,7 @@
                                 <div class="form-group row mb-3">
                                         <label for="ma_pb" class="col-sm-1 control-label">Mã khách hàng</label>
                                         <div class="col-sm-3">
-                                            <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_khach_hang"  id="ma_khach_hang" value="@Model.ma_khach_hang" placeholder="Nhập CMT hoặc mã khách hàng đã có">
+                                            <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_khach_hang"  id="ma_khach_hang" value="@Model.ma_khach_hang" placeholder="Nhập CMT hoặc mã khách hàng đã có" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                         </div>
                                         <label for="ten_pb" class="col-sm-1 control-label">Tìm kiếm </label>
                                         <div class="col-sm-7">
@@ -77,15 +77,15 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Họ và tên<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input  type="text" id="ho_ten" name="ho_ten" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ tên">
+                                       <input  type="text" id="ho_ten" name="ho_ten" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ tên" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Ngày sinh <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input type="date" class="form-control input-default" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh">
+                                        <input type="date" class="form-control input-default" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giới tính <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                         <select class="dataTable-selector form-control" name="gioi_tinh" id="gioi_tinh" >
+                                         <select class="dataTable-selector form-control" name="gioi_tinh" id="gioi_tinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             <option value="0" selected>Chọn giới tính</option>
                                             <option value="1">Nam</option>
                                             <option value="2">Nữ</option>
@@ -96,27 +96,27 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Số giấy tờ<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="text" id="so_giay_to" name="so_giay_to" class="form-control input-default" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ">
+                                       <input maxlength="50" type="text" id="so_giay_to" name="so_giay_to" class="form-control input-default" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Điện thoại <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input maxlength="50" type="text" id="dien_thoai" class="form-control input-default" name="dien_thoai" value="@Model.dien_thoai" placeholder="Nhập điện thoại">
+                                        <input maxlength="50" type="text" id="dien_thoai" class="form-control input-default" name="dien_thoai" value="@Model.dien_thoai" placeholder="Nhập điện thoại" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Email <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="text" class="form-control input-default" id="email" name="email" value="@Model.email" placeholder="Nhập email" />
+                                       <input maxlength="50" type="text" class="form-control input-default" id="email" name="email" value="@Model.email" placeholder="Nhập email" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")/>
                                     </div>
                                 </div>
                                  <div class="form-group row mb-3">
                                     <label for="dia_chi" class="col-sm-1 control-label">Địa chỉ <span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                        <input maxlength="250" type="text" class="form-control input-default" id="dia_chi" name="dia_chi" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ">
+                                        <input maxlength="250" type="text" class="form-control input-default" id="dia_chi" name="dia_chi" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="ten_to_chuc" class="col-sm-1 control-label">Tên cơ quan</label>
                                     <div class="col-sm-11">
-                                        <input maxlength="50" type="text" class="form-control input-default" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên cơ quan">
+                                        <input maxlength="50" type="text" class="form-control input-default" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên cơ quan" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                 </div>
                             <div class="underline-partion">
@@ -125,19 +125,27 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Tên hồ sơ<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                       <input maxlength="50" type="text" id="ten_ho_so" name="ten_ho_so" class="form-control input-default" value="@Model.ten_ho_so" placeholder="Nhập tên hồ sơ">
+                                       <input maxlength="50" type="text" id="ten_ho_so" name="ten_ho_so" class="form-control input-default" value="@Model.ten_ho_so" placeholder="Nhập tên hồ sơ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Lĩnh vực<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                           <select name="ma_linh_vuc" id="ma_linh_vuc" class="form-control input-default">
+                                           <select name="ma_linh_vuc" id="ma_linh_vuc" class="form-control input-default" onchange="LayThuTucByLinhVuc(this)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
 				                                 <option value="">Chọn lĩnh vực</option> 
                                                 @if(LstLinhVuc != null)
                                                 {
                                                     foreach (var item in LstLinhVuc)
                                                     {
-                                                        <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option> 
+                                                        if(Model.ma_linh_vuc == item.ma_linh_vuc)
+                                                        {
+                                                            <option value="@item.ma_linh_vuc" selected>@item.ten_linh_vuc</option> 
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option> 
+                                                        }
+                                            
                                                     }
                                                 }
 			                                </select>
@@ -146,102 +154,70 @@
                                  <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Thủ tục hành chính<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                        <select name="ma_thu_tuc_hc" id="ma_thu_tuc_hc" class="form-control input-default" onchange="GetLuongByTTHC(this)">
+                                        <select name="ma_thu_tuc_hc" id="ma_thu_tuc_hc" class="form-control input-default" onchange="GetLuongByTTHC(this)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
 				                                 <option value="">Chọn thủ tục hành chính</option> 
                                                 @if(LstThuTuc != null)
                                                 {
                                                     foreach (var item in LstThuTuc)
                                                     {
-                                                        <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option> 
+                                                        if (Model.ma_thu_tuc_hc == item.ma_thu_tuc)
+                                                        {
+                                                            <option value="@item.ma_thu_tuc" selected>@item.ten_thu_tuc</option> 
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option> 
+                                                        }
+                                            
                                                     }
                                                 }
 			                            </select>
                                     </div>
                                 </div>
                                 <script>
+                                     function LayThuTucByLinhVuc(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#ThuTucXL").html(data);
+                                           }
+                                       });          
+                                    }
                                     function GetLuongByTTHC(data){
                                         $.ajax({
                                            type: "GET",
-                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value,
+                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value + "&type=Add" + "&ma_luong=" + $("#ma_luong_xu_ly").val(),
                                            data: "",
                                            contentType: 'application/json; charset=utf-8',
                                            success: function(data) {
                                                $("#LuongXuLy").html(data);
                                            }
                                        });          
+                                    } 
+                                    function GetNguoiXLNguoiPH(ma_luong_data) {
+                                          $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/GetNguoiXLNguoiPH?ma_luong=" + ma_luong_data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                              //$("#nguoi_xu_ly select").val(data.nguoi_xl_mac_dinh).change();
+                                              console.log(data.nguoi_xl_mac_dinh)
+                                              $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                           }
+                                       });        
                                     }
                                 </script>
-                                <div id="LuongXuLy">
-                                    <div class="form-group row mb-3" hidden>
-                                        <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
-                                        <div class="col-sm-11">
-                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" class="form-control input-default">
-				                                     <option value="">Chọn luồng xử lý</option> 
-                                                    @if(LstLuongXL != null)
-                                                    {
-                                                        foreach (var item in LstLuongXL)
-                                                        {
-                                                            <option value="@item.ma_luong">@item.ten_luong</option> 
-                                                        }
-                                                    }
-			                                </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row mb-3" hidden>
-                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> <span>(Chọn luồng xử lý trước khi đính kèm tệp thành phần)</span>
-                                            <div class="col-sm-11 col-md-11">
-					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse; margin-left: 125px">
-						                            <tbody>
-                                                        <tr style="background-color:#EEEEEE;">
-							                                <th scope="col">STT</th>
-                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
-                                                                <input type="checkbox" name="" id="selectAll" />
-                                                            </th>
-                                                            <th scope="col">Tên thành phần</th>
-                                                            <th align="center" scope="col" style="white-space: nowrap; text-align: center;">Đính kèm</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản chính</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản sao</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản photo</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Ký thành phần</th>
-						                                </tr>
-                                                        @*start body*@
-                                                        <tr>
-							                                <td align="center" style="width:4%;">
-                                                                1
-                                                            </td><td align="center">
-                                                                <div class="checker" id="uniform-cbChon"><span><input id="cbChon" type="checkbox" name="ctl14$gridThanhPhanHoSo$ctl02$cbChon" style="opacity: 0;"></span></div>
-                                                            </td><td>
-                                                                <span id="Label3">Văn bản Thông báo thay đổi phương thức, phạm vi cung cấp dịch vụ trò chơi điện tử G1 trên mạng đã được phê duyệt; Những nội dung thay đổi</span>
-                                                         
-                                                            </td><td align="center" style="width:15%;">
-                                                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                                    <div class="input-append">
-                                                                        <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
-                                                                            <span class="fileupload-exists">Thay đổi</span>
-                                                                            <input type="file" name="ctl14$gridThanhPhanHoSo$ctl02$DinhKem" id="DinhKem"></span>
-                                                                        <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>
-                                                                    </div>
-                                                                </div>
-                                                            </td><td align="center" style="width:5%;">
-                                                        
-                                                            </td><td style="width:6%;">
-                                                            <input name="ctl14$gridThanhPhanHoSo$ctl02$BanGoc" type="text" value="1" id="BanGoc" class="form-control">
-                                                            </td><td style="width:6%;">
-                                                                <input name="ctl14$gridThanhPhanHoSo$ctl02$BanSao" type="text" value="0" id="BanSao" class="form-control">
-                                                            </td><td style="width:6%;">
-                                                                <input name="ctl14$gridThanhPhanHoSo$ctl02$BanPhoTo" type="text" value="0" id="BanPhoTo" class="form-control">
-                                                            </td><td align="center" style="width:5%;">
-                                                            </td>
-						                                </tr>
-					                                </tbody></table>
-                                        </div>
-                                    </div>
+                                <div id="LuongXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.View.ToString()})
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label class="col-sm-1 control-label"></label>
                                     <label for="mota" class="col-sm-2 control-label" style="text-align: left;">
-                                        <p style="color:blue; cursor: pointer" onclick="ThemThanhPhanHoSo()"><i class="glyphicon glyphicon-plus"></i>&nbsp;Thêm thành phần hồ sơ</p>
+                                        <p style="color:blue; cursor: pointer" onclick="ThemThanhPhanHoSo()" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-plus"></i>&nbsp;Thêm thành phần hồ sơ</p>
                                         <input id="ThemTPHS" name="ThemTPHS" value="1" hidden />
                                         <input id="lstCode" name="lstCode" value="" hidden />
                                     </label>
@@ -386,34 +362,72 @@
                                     </div>
                                 </div>
 
-                                 <div class="form-group row mb-3">
+                                <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-3 control-label">Đăng ký nhận kết quả</label>
                                    <label for="mota" class="col-sm-2 control-label">Nhận kết quả trực tuyến</label>
                                     <div class="col-md-1">
-                                       <input  type="checkbox" id="so_giay_to" name="so_giay_to" value="@Model.nhan_kq_truc_tuyen">
+                                       <input  type="checkbox" id="nhan_kq_truc_tuyen" onclick="NhanKQTT()" name="nhan_kq_truc_tuyen" @(Model.nhan_kq_truc_tuyen == 1 ? "checked": "") value="@Model.nhan_kq_truc_tuyen" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="stt" class="col-sm-2 control-label">Bộ phận một cửa</label>
                                     <div class="col-md-1">
-                                        <input maxlength="50" type="checkbox" id="dien_thoai" c name="dien_thoai" value="@Model.nhan_kq_bo_phan_mot_cua">
+                                        <input maxlength="50" type="checkbox" onclick="NhanKQBPMC()" id="nhan_kq_bo_phan_mot_cua" @(Model.nhan_kq_bo_phan_mot_cua == 1 ? "checked": "") name="nhan_kq_bo_phan_mot_cua" value="@Model.nhan_kq_bo_phan_mot_cua" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-2 control-label">Qua bưu chính</label>
                                     <div class="col-md-1">
-                                       <input maxlength="50" type="checkbox" id="email" name="email" value="@Model.nhan_kq_qua_buu_chinh"  />
+                                       <input maxlength="50" type="checkbox" onclick="NhanKQQABC()" id="nhan_kq_qua_buu_chinh" @(Model.nhan_kq_qua_buu_chinh == 1 ? "checked": "") name="nhan_kq_qua_buu_chinh" value="@Model.nhan_kq_qua_buu_chinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") />
                                     </div>
                                 </div>
+                                <script>
+                                    function NhanKQTT(){
+                                         if ($('input[name=nhan_kq_truc_tuyen]:checked').length > 0) {
+                                            $("#nhan_kq_truc_tuyen").val(1)
+                                         } else { 
+                                             ("#nhan_kq_truc_tuyen").val(0)
+                                         }
+                                    } function NhanKQBPMC(){
+                                         if ($('input[name=nhan_kq_bo_phan_mot_cua]:checked').length > 0) {
+                                            $("#nhan_kq_bo_phan_mot_cua").val(1)
+                                         } else { 
+                                             ("#nhan_kq_bo_phan_mot_cua").val(0)
+                                         }
+                                    } function NhanKQQABC(){
+                                         if ($('input[name=nhan_kq_qua_buu_chinh]:checked').length > 0) {
+                                            $("#nhan_kq_qua_buu_chinh").val(1)
+                                         } else { 
+                                             ("#nhan_kq_qua_buu_chinh").val(0)
+                                         }
+                                    } function DaThuPhi(){
+                                        if ($('input[name=le_phi]:checked').length > 0) {
+                                            $("#le_phi").val(1)
+                                         } else { 
+                                             ("#le_phi").val(0)
+                                         }
+                                    } function ChuaDuDieuKien() {
+                                        if ($('input[name=ho_so_chua_du_dk_tiep_nhan_chinh_thuc]:checked').length > 0) {
+                                            $("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(1)
+                                         } else { 
+                                             ("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(0)
+                                         } 
+                                    }
+                                </script>
                             <div class="underline-partion">
                                      <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin chuyển xử lý</p>
                             </div>  
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Người xử lý</label>
                                     <div class="col-sm-11">
-                                        <select name="nguoi_xu_ly" id="nguoi_xu_ly" class="form-control input-default">
+                                        <select name="nguoi_xu_ly" id="nguoi_xu_ly" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
 				                                 <option value="">Chọn người xử lý</option> 
                                                 @if(LstNguoiDung != null)
                                                 {
                                                     foreach (var item in LstNguoiDung)
                                                     {
-                                                        <option value="@item.UserName">@(item.ho_dem + item.ten)</option> 
+                                                        if (item.Id ==  Guid.Parse(Model.nguoi_xu_ly))
+                                                        {
+                                                            <option value="@item.Id" selected>@(item.ho_dem + item.ten)</option> 
+                                                        }else{
+                                                            <option value="@item.Id">@(item.ho_dem + item.ten)</option> 
+                                                        }
                                                     }
                                                 }
 			                            </select>
@@ -422,13 +436,18 @@
                                  <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Người phối hợp</label>
                                     <div class="col-sm-11">
-                                         <select name="nguoi_phoi_hop" id="nguoi_phoi_hop" class="form-control input-default">
+                                         <select name="nguoi_phoi_hop" id="nguoi_phoi_hop" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
 				                                <option value="">Chọn người phối hợp</option> 
                                                 @if(LstNguoiDung != null)
                                                 {
                                                     foreach (var item in LstNguoiDung)
                                                     {
-                                                        <option value="@item.UserName">@(item.ho_dem + item.ten)</option> 
+                                                       if ((Model.nguoi_phoi_hop ?? "").ToLower().Contains(item.Id.ToString()))
+                                                        {
+                                                            <option value="@item.Id" selected>@(item.ho_dem + item.ten)</option> 
+                                                        }else{
+                                                            <option value="@item.Id">@(item.ho_dem + item.ten)</option> 
+                                                        }
                                                     }
                                                 }
 			                            </select>
@@ -437,27 +456,27 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Người tiếp nhận<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                        <input maxlength="50" disabled type="text" id="nguoi_tiep_nhan" name="nguoi_tiep_nhan" class="form-control input-default" value="@ViewBag.UserCreated" placeholder="Nhập người tiếp nhận">
+                                        <input maxlength="50" disabled type="text" id="nguoi_tiep_nhan" name="nguoi_tiep_nhan" class="form-control input-default" value="@(HG.WebApp.Helper.HelperSql.GetFullName(Model.CreatedUid) )" placeholder="Nhập người tiếp nhận" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Ngày tiếp nhận<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="date" disabled id="CreatedDateUtc" name="CreatedDateUtc" class="form-control input-default" value="@(ViewBag.NgayTiepNhan == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)ViewBag.NgayTiepNhan))" placeholder="Nhập số giấy tờ">
+                                       <input maxlength="50" type="date" disabled id="CreatedDateUtc" name="CreatedDateUtc" class="form-control input-default" value="@(HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.CreatedDateUtc))" placeholder="Nhập số giấy tờ">
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Ngày hẹn trả <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input maxlength="50" type="date" id="ngay_hen_tra" class="form-control input-default" name="ngay_hen_tra" value="@Model.ngay_hen_tra" placeholder="Nhập điện thoại">
+                                        <input maxlength="50" type="date" id="ngay_hen_tra" class="form-control input-default" name="ngay_hen_tra" value="@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.ngay_hen_tra)" placeholder="Nhập điện thoại" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giờ hẹn trả <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@Model.gio_hen_tra" placeholder="Nhập giờ hẹn trả" />
+                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@Model.gio_hen_tra" placeholder="Nhập giờ hẹn trả" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") />
                                     </div>
                                 </div>
                                  <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-3 control-label" style="color:red">Hồ sơ chưa đủ điều kiện tiếp nhận chính thức</label>
                                     <div class="col-sm-8">
-                                        <input type="checkbox" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" placeholder="Nhập người tiếp nhận">
+                                        <input type="checkbox" onclick="ChuaDuDieuKien()" @(Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc == 1 ? "Checked": "") value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" placeholder="Nhập người tiếp nhận" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") />
                                     </div>
                                 </div>
                                 <div class="underline-partion">
@@ -466,21 +485,45 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Lệ phí<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="number" id="le_phi" name="le_phi" class="form-control input-default" value="@Model.le_phi" placeholder="Nhập số giấy tờ">
+                                       <input maxlength="50" type="number" id="le_phi" onclick="DaThuPhi()" name="le_phi" class="form-control input-default" value="@Model.le_phi" placeholder="Nhập lệ phí">
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Đã thu phí <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input type="checkbox" id="da_thu_phi"  name="da_thu_phi" value="@Model.da_thu_phi" >
+                                        <input type="checkbox" id="da_thu_phi"  name="da_thu_phi" @(Model.da_thu_phi == 1 ? "Checked": "") value="@Model.da_thu_phi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label"><a href="#" style="color:blue">Biên lai thu phí</a></label>
                                 </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Lưu và Chuyển</button>
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">Trả KQ</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/DanhSachHoSo';">Đóng</button>
+                            
+                            
+                            
+                            
+                            
                         </div>
+                         @if (ViewBag.type_view == StatusAction.View.ToString())
+                        {
+                            <div class="text-center">
+                               <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Thêm</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Chuyển xử lý</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu hẹn</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu chuyển</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">Trả kết quả</button>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/HoSoDangTiepNhan';">Đóng</button>
+                            </div>
+                        }
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        {
+                            <div class="text-center">
+                               <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Lưu</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Chuyển xử lý</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu hẹn</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu chuyển</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">Trả kết quả</button>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/HoSoDangTiepNhan';">Đóng</button>
+                            </div>
+                        }
                     </form><!-- End Horizontal Form -->
                 </div>
 

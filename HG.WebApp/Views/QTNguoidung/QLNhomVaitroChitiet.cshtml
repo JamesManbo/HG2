@@ -64,7 +64,8 @@
                 $(".ads_Checkbox").prop("checked", false);
                 val = [];
             }
-            $("#lstCode").val(val);
+             $('input[name="lstCode"]').attr('value',val);
+            //$("#lstCode").val(val);
         });
 
 
@@ -80,7 +81,7 @@
                 }
 
             });
-            $("#lstCode").val(val);
+            $('input[name="lstCode"]').attr('value',val);
         });
 
     });
@@ -131,22 +132,19 @@
                             </div>
                                 <script>
                                 function NhomComplete(){
-                                    var ma_phong_ban = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
-                                    $.ajax({
-                                       type: "GET",
-                                       url: "../QTNguoidung/QLNhomVaitroChitietPaging?Code=" + ma_phong_ban,
-                                       data: "",
-                                       contentType: 'application/json; charset=utf-8',
-                                       success: function(data) {
-                                           $("#myTabContent").html(data);
-                                       }
-                                   });           
+                                    var ma_nhom = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
+                                    window.location.href = '/QTNguoiDung/QLNhomVaitroChitiet?code=' + ma_nhom;
+                                 
                                 }
                                 function SaveNhomVaitro(){
-                                    var ma_phong_ban = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
+                                    if ($("#lstCode").val() == "" || $("#lstCode").val() == undefined || $("#lstCode").val() == 0) {
+                                        alert("Bạn cần chọn vai trò!");
+                                        return;
+                                    }
+                                    var ma_nhom = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
                                      $.ajax({
                                        type: "GET",
-                                       url: "../QTNguoidung/ThemNhomVaitro?code=" + ma_phong_ban + "&lstvaitro="+ $("#lstCode").val(),
+                                       url: "../QTNguoidung/ThemNhomVaitro?code=" + ma_nhom + "&lstvaitro="+ $("#lstCode").val() + "&pageSize=" + $("#lstPageSize").val(),
                                        data: "",
                                        contentType: 'application/json; charset=utf-8',
                                        success: function(data) {
@@ -155,12 +153,38 @@
                                        }
                                    });           
                                 }
-                             
+                              function ChangePageSize(data) {
+
+                                    $("#lstPageSize").val(data.value);
+                                    var ma_nhom = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/QTNguoidung/QLNhomVaitroChitietPaging2?currentPage=" + 1 + "&pageSize=" + data.value + "&code=" + ma_nhom,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable2").html(data);
+                                        }
+                                    });
+                                }
+                                function GetListByCurrentPage(id) {
+                                    var pageSize = $("#lstPageSize").val();
+                                    var ma_nhom = document.getElementById("ma_nhom").options[document.getElementById("ma_nhom").selectedIndex].value;
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/QTNguoidung/QLNhomVaitroChitietPaging2?currentPage=" + id + "&pageSize=" +pageSize + "&code=" + ma_nhom,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable2").html(data);
+                                        }
+                                    });
+                                }
                             </script>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">Thêm người vào nhóm</label>
                                 <div class="col-md-8" id="ThayDoiNhomNguoiDung">
-                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" @(ViewBag.Status == "View" ? "disabled" :"")  data-placeholder="Chọn một người dùng" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" :"")  data-placeholder="Chọn một người dùng" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                         @if (lst_nguoi_dung != null)
                                         {
                                             foreach (var item in lst_nguoi_dung)
@@ -180,16 +204,18 @@
                                         @if (lst_nhom_nguoi_dung != null)
                                         {
                                             <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" value="@(lst_nhom_nguoi_dung.lst_ma_nguoi_dung == null ? "" : lst_nhom_nguoi_dung.lst_ma_nguoi_dung)" hidden>
-                                        } @*<input name="lstGroup" type="text" id="lstGroup" value="@(String.Join(", ", Model.asp_nhom.Select(n => n.ma_nhom).ToArray()))" class="form-control input-default" hidden>*@
+                                        }else{
+                                            <input name="lstGroup" type="text" id="lstGroup" class="form-control input-default" value="" hidden>
+                                        }
                                 </div>
-                                <div class="col-sm-1" @(ViewBag.type_view == StatusAction.Edit.ToString() ? "" :"hidden")>
+                                <div class="col-sm-1" @((ViewBag.type_view == StatusAction.Edit.ToString() || ViewBag.type_view == StatusAction.Add.ToString()) ? "" :"hidden")>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"  data-bs-target="#basicModal">
                                         Chọn
                                     </button>
                                 </div>
                             </div>
                              <div class="text-center">
-                                    @if(ViewBag.Status == "View")
+                                    @if( ViewBag.type_view == @StatusAction.View.ToString())
                                         {
                                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Edit.ToString())">Sửa</button>
                                                 <button type="button" class="btn btn-primary"  onclick="ActiveVaiTro()" >Vai trò</button>
@@ -207,52 +233,116 @@
                     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <!-- Table with stripped rows -->
                                 <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="dataTable">
-                                    <input hidden id="lstCode" />
+                                    
                                     <div class="dataTables_length">
                                         <label>
                                             Hiển thị
-                                            <select class="dataTable-selector">
+                                            <select class="dataTable-selector" id="lstPageSize" onchange="ChangePageSize(this);">
                                                 <option value="5">5</option>
-                                                <option value="10" selected="">10</option>
+                                                <option value="10" >10</option>
                                                 <option value="15">15</option>
                                                 <option value="20">20</option>
-                                                <option value="25">25</option>
+                                                <option value="25" selected>25</option>
                                             </select> bản ghi
                                         </label>
                                     </div>
-                                    <div class="dataTable-container">
-                                        <table class="table table-bordered responsive">
-                                            <thead class="widgettitle">
-                                                <tr>
-                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                        <input type="checkbox" name="" id="selectAll" />
-                                                    </th>
+                                    <div id="dataTable2">
+                                        <input hidden id="lstCode" name="lstCode" />
+                                         <div class="dataTable-container">
+                                            <table class="table table-bordered responsive">
+                                                <thead class="widgettitle">
+                                                    <tr>
+                                                        <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                                        <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                                        <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                            <input type="checkbox" name="" id="selectAll" />
+                                                        </th>
                               
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (lst_vaitro != null)
-                                                {
-                                                    var stt = 1;
-                                                    foreach (var item in lst_vaitro)
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (lst_vaitro != null)
                                                     {
-                                                        <tr>
-                                                        
-                                
-                                                            <td><a href="#" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "style=color:red": "")>@item.ten_vai_tro</a></td>
-
-                                                            <td><a href="#" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "style=color:red": "")>@item.mo_ta</a></td>
-                                                             <td><input type="checkbox" class="ads_Checkbox" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "checked": "") value="@item.ma_vai_tro" /></td>
+                                                        var stt = 1 + (int)ViewBag.Stt;
+                                                        foreach (var item in lst_vaitro)
+                                                        {
+                                                            <tr>
+                                                                <td><a href="#" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "style=color:red": "")>@item.ten_vai_tro</a></td>
+                                                                <td><a href="#" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "style=color:red": "")>@item.mo_ta</a></td>
+                                                                <td><input type="checkbox" class="ads_Checkbox" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "checked": "") value="@item.ma_vai_tro" /></td>
                                        
-                                                        </tr>
-                                                        stt++;
+                                                            </tr>
+                                                            stt++;
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div> 
+                                        <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                                        <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                            @{
+                                                var TotalPage = (int)ViewBag.TotalPage;
+                                                var CurrentPage = (int)ViewBag.CurrentPage;
+                                                if (TotalPage > 5)
+                                                {
+                                                    if (CurrentPage > CurrentPage + 2)
+                                                    {
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                    };
+                                                    if (CurrentPage > 3)
+                                                    {
+                                                        for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                        {
+                                                            if (i == CurrentPage)
+                                                            {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        for (int i = 1; i <= 5; i++)
+                                                        {
+                                                            if (i == CurrentPage)
+                                                            {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                    if (CurrentPage < CurrentPage + 2)
+                                                    {
+                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                    };
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 1; i <= TotalPage; i++)
+                                                    {
+                                                        if (i == CurrentPage)
+                                                        {
+                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
                                                     }
                                                 }
-                                            </tbody>
-                                        </table>
-                                    </div> 
+                                            }
+                                        </div>
+                                    </div>
                                     <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())" onclick="SaveNhomVaitro()">Lưu</button>
                                     <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/QLNhomVaitro';">Đóng</button>
                                 </div>
@@ -282,17 +372,23 @@
 <script>
     function GetUserChecked(){
             $("#Nguoidungtimkiem :selected").each(function() {
-                if (Arr.length == 0) {
-                    var lstGroup = $("#lstGroup").val(); 
-                        lstGroup.split(",").forEach(function (item) {
-                       Arr.push(item)
-                    });
-                };
-                Arr.push(this.value);
-                $('input[name="lstGroup"]').attr('value',Arr.join(","));
+                var lstGroup = $("#lstGroup").val();
+                  debugger
+                if (lstGroup === undefined || lstGroup === null || lstGroup === "") {
+                  
+                   if(Arr.includes(this.value) == false) { Arr.push(this.value) } 
+                    $('input[name="lstGroup"]').attr('value', Arr.join(","));
+                } else {
+                    lstGroup.split(",").forEach(function(item) {
+                            if(Arr.includes(item) == false) { Arr.push(item) }
+                     });
+                      if(Arr.includes(this.value) == false) { Arr.push(this.value) } 
+                    $('input[name="lstGroup"]').attr('value', Arr.join(","));
+                }
+                
             });
     }
-
+    //thay đổi người dùng ban đầu
     function ThayDoiNhomNguoiDung() {
          $.ajax({
                type: "GET",
@@ -324,10 +420,11 @@
     function ChonChonHa() {
         $("#Nguoidungtimkiem :selected").each(function() {
              if (Arr.length == 0) {
-                    var lstGroup = $("#lstGroup").val(); 
-                        lstGroup.split(",").forEach(function (item) {
-                       Arr.push(item)
-                    });
+                        var lstGroup = $("#lstGroup").val(); 
+                         lstGroup.split(",").forEach(function (item) {
+                              if(Arr.includes(item) == false) { Arr.push(item) }
+                            });
+                    
              };
              Arr.push(this.value);
              $('input[name="lstGroup"]').attr('value',Arr.join(","));
@@ -346,17 +443,19 @@
                        contentType: 'application/json; charset=utf-8',
                        success: function(data) {
                            $("#Nguoidungdachon").html(data);
+                           ThayDoiNhomNguoiDung();
                        }
                 });      
                }
-        });      
+        });  
+         
     }
     function ChonChonHaKhong() {
          $("#Nguoidungdachon :selected").each(function() {
                if (Arr.length == 0) {
                     var lstGroup = $("#lstGroup").val(); 
                         lstGroup.split(",").forEach(function (item) {
-                       Arr.push(item)
+                        if(Arr.includes(item) == false) { Arr.push(item) }
                     });
              };
              Arr.pop(this.value);
@@ -376,11 +475,12 @@
                            contentType: 'application/json; charset=utf-8',
                            success: function(data) {
                                $("#Nguoidungtimkiem").html(data);
-                  
+                                ThayDoiNhomNguoiDung();
                            }
                     });      
                }
-        });      
+        });     
+         
     }
     
 </script>
@@ -402,7 +502,7 @@
                                     <option value="">Chọn phòng ban</option>
                                     foreach (var item in list_phong_ban)
                                     {  
-                                        <option onclick="ChonChonChoHaKhong()" value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
                                     }
                                 }
 
@@ -411,6 +511,25 @@
                         <div class="form-group">
                             <span id="dualselect" class="dualselect" style="display:flex">
                                 <select id="Nguoidungtimkiem" class="form-control input-default select-inline" name="select3" multiple="multiple" size="15" style="width: 185px">
+                                    @if (lst_nguoi_dung != null)
+                                    {
+                                        if(lst_nhom_nguoi_dung_obj == null)
+                                        {
+                                             foreach (var item in lst_nguoi_dung)
+                                            {
+                                                <option onclick="GetUserChecked()" value="@item.Id">@(item.ho_dem + " " + item.ten) </option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var lstObjStr = String.Join(",", lst_nhom_nguoi_dung_obj.Select(n => n.Id).ToArray());
+                                             foreach (var item in lst_nguoi_dung.Where(n=>(lstObjStr).Contains(n.Id.ToString()) == false).ToList())
+                                            {
+                                                <option onclick="GetUserChecked()" value="@item.Id">@(item.ho_dem + " " + item.ten) </option>
+                                            }
+                                        }
+
+                                    }
                                 </select>
                                 <span class="ds_arrow" style="    vertical-align: top; padding-top: 60px;margin: 0 10px;">
                                     <button class="btn btn-inverse ds_prev" type="button" style="background: #333; color: #fff;" onclick="ChonChonHaKhong()"><i class="iconfa-chevron-left"></i></button>

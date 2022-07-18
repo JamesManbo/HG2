@@ -1,33 +1,33 @@
 ﻿                                    @model HG.Entities.LuongThanhPhanModels
-                                     
+                                    @using HG.WebApp;
                                     <div class="form-group row mb-3">
                                         <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
                                         <div class="col-sm-11">
-                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" class="form-control input-default">
+                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" onchange="GetNguoiXLNguoiPH(this)" class="form-control input-default" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
 				                                     <option value="">Chọn luồng xử lý</option> 
                                                     @if(@Model.dm_Luong_Xu_Lies != null)
                                                     {
                                                         for (var item = 0; item < @Model.dm_Luong_Xu_Lies.Count(); item++)
                                                         {
-                                                            if(item == 0)
+                                                            @*if(item == 0)
                                                             {
                                                                 <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong" selected>@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
                                                             }
                                                             else
                                                             {
                                                                  <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
-                                                            }
-                   
+                                                            }*@
+                                                            <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
                                                         }
                                                     }
 			                                </select>
                                         </div>
                                     </div>
                                     <div class="form-group row mb-3">
-                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> <span style="font-size: 12px">(Chọn luồng xử lý trước khi đính kèm tệp thành phần)</span>
-                                            <div class="col-sm-11 col-md-11">
-					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse; margin-left: 125px">
-						                            <tbody>
+                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label>
+                                            <div class="col-sm-11">
+					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
+						                            <tbody @(ViewBag.view_type == "view"? "Disabled" : "")>
                                                         <tr style="background-color:#EEEEEE;">
 							                                <th scope="col">STT</th>
                                                             <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
@@ -51,29 +51,28 @@
                                                                     <td align="center" style="width:4%;">
                                                                         @stt
                                                                     </td>
-                                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thanh_phan" /></td>
+                                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thanh_phan"  @(ViewBag.view_type == StatusAction.View.ToString()? "Checked" : "") @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")/></td>
                                                                     <td>
                                                                         <span id="Label3">@item.ten_thanh_phan</span>
                                                                     </td><td align="center" style="width:15%;">
                                                                         <div class="fileupload fileupload-new" data-provides="fileupload">
                                                                             <div class="input-append">
                                                                                 <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
-                                                                                    <span class="fileupload-exists">Thay đổi</span>
                                                                                     <input type="file" name="DinhKem" id="DinhKem"></span>
-                                                                                <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>
+                                                                               @* <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>*@
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                     <td align="center" style="width:5%;">
                                                                     </td>
                                                                     <td style="width:6%;">
-                                                                    <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control">
+                                                                    <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
                                                                     </td>
                                                                     <td style="width:6%;">
-                                                                        <input name="BanSao" type="text" value="@item.ban_sao" id="BanSao" class="form-control">
+                                                                        <input name="BanSao" type="text" value="@item.ban_sao" id="BanSao" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
                                                                     </td>
                                                                     <td style="width:6%;">
-                                                                        <input name="BanPhoTo" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control">
+                                                                        <input name="BanPhoTo" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
                                                                     </td>
                                                                     <td align="center" style="width:5%;">
                                                                     </td>

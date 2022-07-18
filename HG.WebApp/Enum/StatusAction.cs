@@ -12,7 +12,10 @@ namespace HG.WebApp
         View,
         Role,
         SaveAndTranfer,
-        TraKQ
+        TraKQ,
+        InPhieuHen,
+        InPhieuChuyen,
+        ChuyenXuLy
     }
 
     public enum ActionSave
@@ -29,7 +32,6 @@ namespace HG.WebApp
         NhomTP,
         TPKQXL
     }
-
     public enum TableCheck
     {
         LuongXuLy         

@@ -12,4 +12,11 @@ namespace HG.Entities
         public List<Dm_Luong_Xu_Ly> dm_Luong_Xu_Lies { get; set; }
         public List<dm_thanh_phan> dm_thanh_phan { get; set; }
     }
+    public class NguoiXL
+    {
+        public int Id { get; set; }
+        public string? nguoi_xl_mac_dinh { get; set; }
+        public string? nguoi_co_the_xl { get; set; }
+        public string? nguoi_phoi_hop_xl { get; set; }
+    }
 }

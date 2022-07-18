@@ -96,7 +96,7 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Số giấy tờ<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="text" id="so_giay_to" name="so_giay_to" class="form-control input-default" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ">
+                                       <input maxlength="50" type="number" id="so_giay_to" name="so_giay_to" class="form-control input-default" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ">
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Điện thoại <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
@@ -131,7 +131,7 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Lĩnh vực<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                           <select name="ma_linh_vuc" id="ma_linh_vuc" class="form-control input-default">
+                                           <select name="ma_linh_vuc" id="ma_linh_vuc" class="form-control input-default" onchange="LayThuTucByLinhVuc(this)">
 				                                 <option value="">Chọn lĩnh vực</option> 
                                                 @if(LstLinhVuc != null)
                                                 {
@@ -143,7 +143,8 @@
 			                                </select>
                                     </div>
                                 </div>
-                                 <div class="form-group row mb-3">
+                                
+                                 <div class="form-group row mb-3" id="ThuTucXL">
                                     <label for="mota" class="col-sm-1 control-label">Thủ tục hành chính<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
                                         <select name="ma_thu_tuc_hc" id="ma_thu_tuc_hc" class="form-control input-default" onchange="GetLuongByTTHC(this)">
@@ -159,16 +160,40 @@
                                     </div>
                                 </div>
                                 <script>
+                                    function LayThuTucByLinhVuc(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#ThuTucXL").html(data);
+                                           }
+                                       });          
+                                    }
                                     function GetLuongByTTHC(data){
                                         $.ajax({
                                            type: "GET",
-                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value,
+                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value + "&type=Add" + "&ma_luong=" + $("#ma_luong_xu_ly").val(),
                                            data: "",
                                            contentType: 'application/json; charset=utf-8',
                                            success: function(data) {
                                                $("#LuongXuLy").html(data);
                                            }
                                        });          
+                                    } 
+                                    function GetNguoiXLNguoiPH(ma_luong_data) {
+                                          $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/GetNguoiXLNguoiPH?ma_luong=" + ma_luong_data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                              //$("#nguoi_xu_ly select").val(data.nguoi_xl_mac_dinh).change();
+                                              console.log(data.nguoi_xl_mac_dinh)
+                                              $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                           }
+                                       });        
                                     }
                                 </script>
                                 <div id="LuongXuLy">
@@ -188,9 +213,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group row mb-3" hidden>
-                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> <span>(Chọn luồng xử lý trước khi đính kèm tệp thành phần)</span>
-                                            <div class="col-sm-11 col-md-11">
-					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse; margin-left: 125px">
+                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> 
+                                            <div class="col-sm-11">
+					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
 						                            <tbody>
                                                         <tr style="background-color:#EEEEEE;">
 							                                <th scope="col">STT</th>
@@ -256,7 +281,7 @@
                                     }
                                     function XoaThanhPhan(_id) {
                                        $("#"+ _id +"").css("display", "none");
-                                       $("input[name=ThemTPHS]").val((parseInt(_id) - 1))
+                                        $("input[name=ThemTPHS]").val((parseInt(_id) - 1))
                                     }
                                 </script>
                                  <div class="form-group row mb-3" id="1" style="display:none">
@@ -390,17 +415,50 @@
                                     <label for="mota" class="col-sm-3 control-label">Đăng ký nhận kết quả</label>
                                    <label for="mota" class="col-sm-2 control-label">Nhận kết quả trực tuyến</label>
                                     <div class="col-md-1">
-                                       <input  type="checkbox" id="so_giay_to" name="so_giay_to" value="@Model.nhan_kq_truc_tuyen">
+                                       <input  type="checkbox" id="nhan_kq_truc_tuyen" onclick="NhanKQTT()" name="nhan_kq_truc_tuyen" value="@Model.nhan_kq_truc_tuyen">
                                     </div>
                                      <label for="stt" class="col-sm-2 control-label">Bộ phận một cửa</label>
                                     <div class="col-md-1">
-                                        <input maxlength="50" type="checkbox" id="dien_thoai" c name="dien_thoai" value="@Model.nhan_kq_bo_phan_mot_cua">
+                                        <input maxlength="50" type="checkbox" onclick="NhanKQBPMC()" id="nhan_kq_bo_phan_mot_cua" name="nhan_kq_bo_phan_mot_cua" value="@Model.nhan_kq_bo_phan_mot_cua">
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-2 control-label">Qua bưu chính</label>
                                     <div class="col-md-1">
-                                       <input maxlength="50" type="checkbox" id="email" name="email" value="@Model.nhan_kq_qua_buu_chinh"  />
+                                       <input maxlength="50" type="checkbox" onclick="NhanKQQABC()" id="nhan_kq_qua_buu_chinh" name="nhan_kq_qua_buu_chinh" value="@Model.nhan_kq_qua_buu_chinh"  />
                                     </div>
                                 </div>
+                                <script>
+                                    function NhanKQTT(){
+                                         if ($('input[name=nhan_kq_truc_tuyen]:checked').length > 0) {
+                                            $("#nhan_kq_truc_tuyen").val(1)
+                                         } else { 
+                                             ("#nhan_kq_truc_tuyen").val(0)
+                                         }
+                                    } function NhanKQBPMC(){
+                                         if ($('input[name=nhan_kq_bo_phan_mot_cua]:checked').length > 0) {
+                                            $("#nhan_kq_bo_phan_mot_cua").val(1)
+                                         } else { 
+                                             ("#nhan_kq_bo_phan_mot_cua").val(0)
+                                         }
+                                    } function NhanKQQABC(){
+                                         if ($('input[name=nhan_kq_qua_buu_chinh]:checked').length > 0) {
+                                            $("#nhan_kq_qua_buu_chinh").val(1)
+                                         } else { 
+                                             ("#nhan_kq_qua_buu_chinh").val(0)
+                                         }
+                                    }function DaThuPhi(){
+                                        if ($('input[name=le_phi]:checked').length > 0) {
+                                            $("#le_phi").val(1)
+                                         } else { 
+                                             ("#le_phi").val(0)
+                                         }
+                                    } function ChuaDuDieuKien() {
+                                        if ($('input[name=ho_so_chua_du_dk_tiep_nhan_chinh_thuc]:checked').length > 0) {
+                                            $("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(1)
+                                         } else { 
+                                             ("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(0)
+                                         } 
+                                    }
+                                </script>
                             <div class="underline-partion">
                                      <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin chuyển xử lý</p>
                             </div>  
@@ -413,7 +471,7 @@
                                                 {
                                                     foreach (var item in LstNguoiDung)
                                                     {
-                                                        <option value="@item.UserName">@(item.ho_dem + item.ten)</option> 
+                                                        <option value="@item.Id">@(item.ho_dem + item.ten)</option> 
                                                     }
                                                 }
 			                            </select>
@@ -422,13 +480,13 @@
                                  <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Người phối hợp</label>
                                     <div class="col-sm-11">
-                                         <select name="nguoi_phoi_hop" id="nguoi_phoi_hop" class="form-control input-default">
+                                         <select name="nguoi_phoi_hop" id="nguoi_phoi_hop" class="form-control input-default"  @*id="multiselect" class="select2 form-select form-control input-default" multiple=""*@>
 				                                <option value="">Chọn người phối hợp</option> 
                                                 @if(LstNguoiDung != null)
                                                 {
                                                     foreach (var item in LstNguoiDung)
                                                     {
-                                                        <option value="@item.UserName">@(item.ho_dem + item.ten)</option> 
+                                                        <option value="@item.Id">@(item.ho_dem + item.ten)</option> 
                                                     }
                                                 }
 			                            </select>
@@ -457,7 +515,7 @@
                                  <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-3 control-label" style="color:red">Hồ sơ chưa đủ điều kiện tiếp nhận chính thức</label>
                                     <div class="col-sm-8">
-                                        <input type="checkbox" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" placeholder="Nhập người tiếp nhận">
+                                        <input type="checkbox" name="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" conclick="ChuaDuDieuKien()"id="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" placeholder="Nhập người tiếp nhận">
                                     </div>
                                 </div>
                                 <div class="underline-partion">
@@ -470,7 +528,7 @@
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Đã thu phí <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input type="checkbox" id="da_thu_phi"  name="da_thu_phi" value="@Model.da_thu_phi" >
+                                        <input type="checkbox" id="da_thu_phi" onclick="DaThuPhi()"  name="da_thu_phi" value="@Model.da_thu_phi" >
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label"><a href="#" style="color:blue">Biên lai thu phí</a></label>
                                 </div>

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using HG.WebApp.Data;
 using HG.Data.SqlService;
+using HG.Entities.Entities.HoSo;
+using Microsoft.EntityFrameworkCore;
 
 namespace HG.WebApp.Controllers
 {
@@ -48,24 +50,38 @@ namespace HG.WebApp.Controllers
         {
             get { return Configuration["User:CookiePicture"]; }
         }
-
+        public void SaveLogHS(int ma_ho_so, string noi_dung_xl, int trangthaitruoc, int trangthaisau, Guid manguoiupdate)
+        {
+            using (var db = new EAContext())
+            {
+                Ho_So_History ho_So_History = new Ho_So_History();
+                ho_So_History.ma_ho_so = ma_ho_so;
+                ho_So_History.noi_dung_xu_ly = noi_dung_xl;
+                ho_So_History.tra_thai_xu_ly_truoc = trangthaitruoc;
+                ho_So_History.tra_thai_xu_ly_sau = trangthaisau;
+                ho_So_History.CreatedUid = manguoiupdate;
+                ho_So_History.CreatedDateUtc = DateTime.Now;
+                db.Entry(ho_So_History).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+         }
         /// <summary>
         /// add by Tuanta
         /// get user ip of customer when them login to website
         /// </summary>
-        ////public string GetUserIP()
-        ////{
-        ////    var userIp = string.Empty;
-        ////    if (System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
-        ////    {
-        ////        userIp = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-        ////    }
-        ////    else if (!string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.UserHostAddress))
-        ////    {
-        ////        userIp = System.Web.HttpContext.Current.Request.UserHostAddress;
-        ////    }
-        ////    return userIp;
-        ////}
+        //public string GetUserIP()
+        //{
+        //    var userIp = string.Empty;
+        //    if (System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
+        //    {
+        //        userIp = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+        //    }
+        //    else if (!string.IsNullOrEmpty(System.Web.HttpContext.Current.Request.UserHostAddress))
+        //    {
+        //        userIp = System.Web.HttpContext.Current.Request.UserHostAddress;
+        //    }
+        //    return userIp;
+        //}
 
         /// <summary>
         /// add by Tuanta
