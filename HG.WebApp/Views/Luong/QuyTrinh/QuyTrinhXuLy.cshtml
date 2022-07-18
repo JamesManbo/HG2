@@ -281,70 +281,68 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-
-                                    <div class="row">
-                                        <label class="col-md-2 control-label"></label>
-                                        <div class="col-md-3">
-                                            <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh">
-                                            <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
-                                        </div>
-                                        <div class="col-md-1"></div>
-                                        <label class="col-md-2 control-label">Người phối hợp XL</label>
-                                        <div class="col-md-3">
-                                            <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn người phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                @if (NguoiDung != null)
+                                <div class="row" style="padding-top: 10px; padding-bottom: 10px;">
+                                    <label class="col-md-2 control-label"></label>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh">
+                                        <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
+                                    </div>
+                                    <div class="col-md-1"></div>
+                                    <label class="col-md-2 control-label">Người phối hợp XL</label>
+                                    <div class="col-md-3">
+                                        <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn người phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                            @if (NguoiDung != null)
+                                            {
+                                                foreach (var item in NguoiDung)
                                                 {
-                                                    foreach (var item in NguoiDung)
+                                                    <option value="@item.UserName">@item.ten_nguoi_dung</option>
+                                                }
+                                            }
+                                        </select>
+                                        <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
+                                        <input id="nguoi_phoi_hop_xl2" type="text" name="nguoi_phoi_hop_xl2" class="form-control input-default" hidden>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalPH">
+                                            Chọn
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div id="ctl08_ctl00_ctl02">
+
+                                        <label class="col-md-2 control-label">Nhánh</label>
+                                        <div class="col-md-3">
+                                            <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
+                                                <option selected="selected" value="">------ Gốc ------</option>
+                                                @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
+                                                {
+                                                    foreach (var item in Model.lstNhanhXuLy)
                                                     {
-                                                        <option value="@item.UserName">@item.ten_nguoi_dung</option>
+                                                        <option value="@item.ma_nhanh">@item.ten_nhanh</option>
                                                     }
                                                 }
                                             </select>
-                                            <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
-                                            <input id="nguoi_phoi_hop_xl2" type="text" name="nguoi_phoi_hop_xl2" class="form-control input-default" hidden>
                                         </div>
-                                        <div class="col-md-1">
-                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalPH">
-                                                Chọn
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div id="ctl08_ctl00_ctl02">
-
-                                            <label class="col-md-2 control-label">Nhánh</label>
-                                            <div class="col-md-3">
-                                                <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
-                                                    <option selected="selected" value="">------ Gốc ------</option>
-                                                    @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
+                                        <div class="col-md-1"></div>
+                                        <label class="col-md-2 control-label">Thứ tự bước</label>
+                                        <div class="col-md-3">
+                                            <select name="stt" id="FIndex" class="form-control input-default-sm">
+                                                <option value="@(Model.Pagelist.TotalRecords + 1)">@(Model.Pagelist.TotalRecords + 1)</option>
+                                                @if (Model.Pagelist.TotalRecords > 1)
+                                                {
+                                                    for (int i = Model.Pagelist.TotalRecords; i > 1; i--)
                                                     {
-                                                        foreach (var item in Model.lstNhanhXuLy)
-                                                        {
-                                                            <option value="@item.ma_nhanh">@item.ten_nhanh</option>
-                                                        }
+                                                        <option value="@i">@i</option>
                                                     }
-                                                </select>
-                                            </div>
-                                            <div class="col-md-1"></div>
-                                            <label class="col-md-2 control-label">Thứ tự bước</label>
-                                            <div class="col-md-3">
-                                                <select name="stt" id="FIndex" class="form-control input-default-sm">
-                                                    <option value="@(Model.Pagelist.TotalRecords + 1)">@(Model.Pagelist.TotalRecords + 1)</option>
-                                                    @if (Model.Pagelist.TotalRecords > 1)
-                                                    {
-                                                        for (int i = Model.Pagelist.TotalRecords; i > 1; i--)
-                                                        {
-                                                            <option value="@i">@i</option>
-                                                        }
-                                                    }
-                                                </select>
+                                                }
+                                            </select>
 
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="form-group">
                                     <label class="col-md-12">Các chức năng được sử dụng:</label>
