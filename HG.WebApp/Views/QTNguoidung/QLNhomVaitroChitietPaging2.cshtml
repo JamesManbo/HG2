@@ -1,0 +1,145 @@
+﻿                 @using HG.WebApp
+                            @{
+                                var lst_nhom = ViewBag.lst_nhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
+                                var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.WebApp.AspNetUsers>;
+                                var lst_nhom_nguoi_dung = ViewBag.lst_nhom_nguoi_dung as HG.Entities.Entities.phong_ban_nhom_nguoi_dung;
+                                var lst_vaitro = ViewBag.ls_vai_tro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro> ;
+                                var lst_nhom_vai_tro =   ViewBag.lst_nhom_vaitro as HG.Entities.Entities.Nhom_Vaitro;
+                            }
+                                <script>
+                                     $(document).ready(function() {
+                                         $('#selectAll').click(function() {
+                                            var val = [];
+                                            if ($(this).is(':checked')) {
+                                                $(".ads_Checkbox").prop("checked", true);
+                                                $(':checkbox:checked').each(function(i) {
+                                                    if (i > 0) {
+                                                        val[i - 1] = $(this).val();
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                $(".ads_Checkbox").prop("checked", false);
+                                                val = [];
+                                            }
+                                             $('input[name="lstCode"]').attr('value',val);
+                                            //$("#lstCode").val(val);
+                                        });
+                                        $('.ads_Checkbox').click(function() {
+                                            var val = [];
+                                            $(':checkbox:checked').each(function(i) {
+                                                if ($('#selectAll').is(':checked')) {
+                                                    if (i > 0) {
+                                                        val[i - 1] = $(this).val();
+                                                    }
+                                                } else {
+                                                    val[i] = $(this).val();
+                                                }
+
+                                            });
+                                            $('input[name="lstCode"]').attr('value',val);
+                                        });
+                                    });
+                                </script>
+                                <div id="dataTable2">
+                                    <input hidden id="lstCode" name="lstCode" value="@(lst_nhom_vai_tro == null ? "" :lst_nhom_vai_tro.ma_vai_tro)" />
+                                        <div class="dataTable-container">
+                                        <table class="table table-bordered responsive">
+                                            <thead class="widgettitle">
+                                                <tr>
+                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                        <input type="checkbox" name="" id="selectAll" />
+                                                    </th>
+                              
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (lst_vaitro != null)
+                                                {
+                                                    var stt = 1 + (int)ViewBag.Stt;
+                                                    foreach (var item in lst_vaitro)
+                                                    {
+                                                        <tr>
+                                                        
+                                
+                                                           <td><a href="#" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "style=color:red": "")>@item.ten_vai_tro</a></td>
+
+                                                                <td><a href="#" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "style=color:red": "")>@item.mo_ta</a></td>
+                                                                 <td><input type="checkbox" class="ads_Checkbox" @(lst_nhom_vai_tro == null ? "" : lst_nhom_vai_tro.ma_vai_tro.Contains(item.ma_vai_tro) ? "checked": "") value="@item.ma_vai_tro" /></td>
+                                       
+                                                        </tr>
+                                                        stt++;
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div> 
+                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                        @{
+                                            var TotalPage = (int)ViewBag.TotalPage;
+                                            var CurrentPage = (int)ViewBag.CurrentPage;
+                                            if (TotalPage > 5)
+                                            {
+                                                if (CurrentPage > CurrentPage + 2)
+                                                {
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                };
+                                                if (CurrentPage > 3)
+                                                {
+                                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                    {
+                                                        if (i == CurrentPage)
+                                                        {
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i == CurrentPage)
+                                                        {
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        }
+                                                    }
+
+                                                }
+
+                                                if (CurrentPage < CurrentPage + 2)
+                                                {
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                };
+                                            }
+                                            else
+                                            {
+                                                for (int i = 1; i <= TotalPage; i++)
+                                                {
+                                                    if (i == CurrentPage)
+                                                    {
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </div>
+
+
+                                    </div>

@@ -81,6 +81,35 @@ namespace HG.Data.Business.DanhMuc
                 return new LuongThanhPhanModels();
             }
         }
+        public NguoiXL LayNguoiXLNguoiPHXLByMaLuong(string ma_luong, string ten_buoc)
+        {
+            try
+            {
+                var result = new NguoiXL();
+                DbProvider.SetCommandText2("[LayNguoiXL$NguoiPHXLByMaLuong]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("ma_luong", ma_luong, SqlDbType.VarChar);
+                DbProvider.AddParameter("ten_buoc", ten_buoc, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+              
+                // Lấy về danh sách các người dung
+                result = DbProvider.ExecuteObject<NguoiXL>();
+                //Lấy về danh sách nhóm
+              
+                var ErrCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                if (ErrCode != 0)
+                {
+                    return new NguoiXL();
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new NguoiXL();
+            }
+        }
 
         public Dm_Luong_Xu_Ly_paging DanhSanhLuongXuLy(DanhMucModel item)
         {
