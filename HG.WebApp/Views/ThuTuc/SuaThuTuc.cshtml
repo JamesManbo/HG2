@@ -1339,30 +1339,35 @@
 
     CKEDITOR.replace('ckedit2');
     function CheckMa(data) {
-        var dataPost = { code: data.value };
-        $.ajax({
-            url: "/ThuTuc/CheckMaTTHC",
-            type: "post",
-            contentType: 'application/x-www-form-urlencoded',
-            data: dataPost,
-            success: function(result) {
-                window.location.href = result.href;
-            }
-        });
+        if (data.value != "") {
+            var dataPost = { code: data.value };
+            $.ajax({
+                url: "/ThuTuc/CheckMaTTHC",
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: dataPost,
+                success: function(result) {
+                    window.location.href = result.href;
+                }
+            });
+        }
     };
 
     function CheckMaTP(code_key, code, data, type_view_tp, type_view) {
-        var dataPost = { code_key: 0, code: "", code_tp: data, type_view_tp: type_view_tp, type_view: type_view };
-        $.ajax({
-            url: "/ThuTuc/CheckMaTP",
-            type: "post",
-            contentType: 'application/x-www-form-urlencoded',
-            data: dataPost,
-            success: function(result) {
-                console.log(1);
-                $("#TabThanhPhan").html(result);
-            }
-        });
+        if (data != "") {
+            var dataPost = { code_key: 0, code: "", code_tp: data, type_view_tp: type_view_tp, type_view: type_view };
+            $.ajax({
+                url: "/ThuTuc/CheckMaTP",
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: dataPost,
+                success: function(result) {
+                    console.log(1);
+                    $("#TabThanhPhan").html(result);
+                }
+            });
+        }
+
     };
 
     function DeleteMultipleTP(code, type) {

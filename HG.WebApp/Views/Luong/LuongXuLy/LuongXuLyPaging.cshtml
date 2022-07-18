@@ -11,11 +11,11 @@
                 </th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 35%;">TÊN</th>
-                <th class="head0" scope="col" data-sortable="" style="width: 5%;">NGÀY QT/NGÀY TTHC </th>
+                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGÀY QT/NGÀY TTHC </th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">BƯỚC XỬ LÝ CHÍNH </th>
-                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
-                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
-                <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 2%;">#</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 2%;">#</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 2%;">#</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
             </tr>
         </thead>
@@ -28,13 +28,13 @@
                     <tr>
                         <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_luong" /></td>
                         <td scope="row">
-                            @stt
+                            @(stt+ViewBag.PageSize)
                             <input type="hidden" name="" id="" value="@item.ma_luong" />
                         </td>
                         <td><a href="/Luong/SuaLuongXuLy?code=@item.ma_luong&type=@(StatusAction.View.ToString())">@item.ten_luong</a></td>
 
-                        <td></td>
-                        <td>@item.buoc_xl_chinh</td>
+                        <td>@(item.tong_ngay_qt +" ngày " + item.tong_ngay_tt +" ngày")</td>
+                        <td>@(item.buoc_xl_chinh=true?"Có":"")</td>
                         <td>
                             <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Luong/SuaLuongXuLy?code=@item.ma_luong&type=@(StatusAction.View.ToString())">
                                 <span class="glyphicon glyphicon-list-alt">Xem</span>

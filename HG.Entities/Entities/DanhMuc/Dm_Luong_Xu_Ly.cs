@@ -17,6 +17,10 @@ namespace HG.Entities
         public string ten_luong { get; set; }
         public string? mo_ta { get; set; }
         public bool tt_hai_gd { get; set; }
+        [NotMapped]
+        public int tong_ngay_tt { get; set; }
+        [NotMapped]
+        public float tong_ngay_qt { get; set; }
         public string? file_excel { get; set; }
         public string ma_thu_tuc { get; set; }
         public string? ma_thu_tuc_map { get; set; }
@@ -38,7 +42,7 @@ namespace HG.Entities
     public class Dm_luong_Key
     {
         public string ma_luong { get; set; }
-        public string ten_luong { get; set; }       
+        public string ten_luong { get; set; }
 
     }
 }

@@ -56,21 +56,23 @@ namespace HG.WebApp.Controllers
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
+            ViewBag.PageSize = 0;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             return View("~/Views/Luong/LuongXuLy/LuongXuLy.cshtml", ds.lstLuongXuLy);
 
         }
 
-        public async Task<IActionResult> ChuyenMucPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        public async Task<IActionResult> LuongXuLyPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
         {
             DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhLuongXuLy(nhomSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
-            ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+            ViewBag.PageSize = (currentPage - 1) * pageSize;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize + 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/LuongXuLy/LuongXuLy.cshtml", ds);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/LuongXuLy/LuongXuLyPaging.cshtml", ds.lstLuongXuLy);
             return Content(result);
         }
 
@@ -118,11 +120,8 @@ namespace HG.WebApp.Controllers
             {
                 luong_xu_ly = db.Dm_Luong_Xu_Ly.Where(n => n.Deleted == 0 && n.ma_luong == code).FirstOrDefault();
             }
-            if (luong_xu_ly != null && luong_xu_ly.tt_hai_gd)
-            {
-                var ds = _danhmucDao.DanhSachLuongKey();
-                ViewBag.LuongKey = ds;
-            }
+            var ds = _danhmucDao.DanhSachLuongKey();
+            ViewBag.LuongKey = ds;
             ViewBag.type_view = type;
             return View("~/Views/Luong/LuongXuLy/SuaLuongXuLy.cshtml", luong_xu_ly);
         }
@@ -474,6 +473,14 @@ namespace HG.WebApp.Controllers
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = 50 };
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
+            ViewBag.BuocXuLyChinh = false;
+            foreach (var item in ds.lstQuyTrinhXuLy)
+            {
+                if (item.buoc_xl_chinh)
+                {
+                    ViewBag.BuocXuLyChinh = true;
+                }
+            }
             ds.ma_luong = code;
             var user = _dmDao.DanhSachNguoiDung("");
             var lstpb = new List<Dm_Phong_Ban>();
@@ -482,6 +489,7 @@ namespace HG.WebApp.Controllers
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
             }
+            ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
             ViewBag.PhongBan = lstpb;
@@ -498,6 +506,14 @@ namespace HG.WebApp.Controllers
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             QuyTrinhModel nhomSearchItem = new QuyTrinhModel() { CurrentPage = 1, ma_luong = code, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhQuyTrinhXuLy(nhomSearchItem);
+            ViewBag.BuocXuLyChinh = false;
+            foreach (var item in ds.lstQuyTrinhXuLy)
+            {
+                if (item.buoc_xl_chinh)
+                {
+                    ViewBag.BuocXuLyChinh = true;
+                }
+            }
             ds.ma_luong = code;
             ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.FirstOrDefault(n => n.Id == step);
             var user = _dmDao.DanhSachNguoiDung("");
@@ -508,6 +524,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
                 nhanhXuLy = db.Dm_Nhanh_Xu_Ly.Where(n => n.Deleted == 0).ToList();
             }
+            ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
             ViewBag.PhongBan = lstpb;
@@ -530,14 +547,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.error = 1;
                 ViewBag.msg = response.ErrorMsg;
             }
-            if (response.ErrorCode > 0)
-            {
-                return View("~/Views/Luong/QuyTrinh/ThemQuyTrinhXuLy.cshtml", item);
-            }
-            else
-            {
-                return RedirectToAction("QuyTrinhXuLy", "Luong", new { code = item.ma_luong });
-            }
+            return RedirectToAction("QuyTrinhXuLy", "Luong", new { code = item.ma_luong });
         }
 
         public IActionResult XoaQuyTrinhXuLy(int id, string code)

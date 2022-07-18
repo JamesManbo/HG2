@@ -48,7 +48,7 @@
                     @*Danh sách bước*@
                     <div class="tab-pane fade @(ViewBag.Views.Contains(StatusAction.View.ToString())?"show active":"")" id="ds-buoc" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row" style="padding: 15px;">
-                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: @Model.tong_ngay_qt ngày/TTHC: @Model.tong_ngay_tt ngày </span>
+                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: @Model.tong_ngay_qt ngày/TTHC: @Model.tong_ngay_tt ngày <span style="color:red">@(ViewBag.BuocXuLyChinh?"":"( Chưa có bước xử lý chính )")</span></span>
                             <div class="col-sm-6" align="right">
                                 <button type="button" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.Add.ToString()'">Thêm bước</button>
                                 <button type="button" class="btn btn-primary button" data-toggle="modal" data-target="#myModalLuongXuLy">Quy trình đồ họa</button>
@@ -99,7 +99,7 @@
                                 </table>
                             </div>
                             <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
-                           
+
                         </div>
                     </div>
 
@@ -260,7 +260,7 @@
                                     <label class="col-md-2 control-label">Người có thể XL</label>
                                     <div class="col-md-3">
 
-                                        <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn người có thể xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                             @if (NguoiDung != null)
                                             {
                                                 foreach (var item in NguoiDung)
@@ -281,9 +281,9 @@
                                     </div>
                                 </div>
 
-                                <div id="ctl08_ctl00_pnlNoTNTKQ">
+                                <div class="row">
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh">
@@ -292,7 +292,7 @@
                                         <div class="col-md-1"></div>
                                         <label class="col-md-2 control-label">Người phối hợp XL</label>
                                         <div class="col-md-3">
-                                            <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                            <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn người phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                                 @if (NguoiDung != null)
                                                 {
                                                     foreach (var item in NguoiDung)
@@ -311,7 +311,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <div id="ctl08_ctl00_ctl02">
 
                                             <label class="col-md-2 control-label">Nhánh</label>
@@ -353,7 +353,7 @@
                                 <div id="ctl08_ctl00_pnlChucNang">
                                     <input type="hidden" name="chuc_nang" id="chuc_nang">
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
@@ -371,7 +371,7 @@
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <input id="THUHOIHS" type="checkbox" value="THUHOIHS" class="ads_Checkbox_cn">
@@ -387,7 +387,7 @@
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
@@ -405,7 +405,7 @@
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <input id="GUIHSLT" type="checkbox" value="GUIHSLT" class="ads_Checkbox_cn">
@@ -421,7 +421,7 @@
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
@@ -439,7 +439,7 @@
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <input id="THONGBAOCD" type="checkbox" value="THONGBAOCD" class="ads_Checkbox_cn">
@@ -454,7 +454,7 @@
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
@@ -471,7 +471,7 @@
 
                                 </div>
 
-                                <div class="form-group">
+                                <div class="row" style="padding-top: 15px;">
                                     <div class="col-md-3"></div>
                                     <div class="col-md-4">
                                         <input type="submit" name="" value="Lưu" id="btnSave" class="btn btn-primary process">
@@ -483,6 +483,7 @@
                                         <br>
                                         <span id="TongSoNgayXL" style="color:Blue;">Tổng số ngày của quy trình:  @Model.tong_ngay_qt Ngày</span>
                                         <br>
+                                        <span style="color:red;">@((Model.tong_ngay_qt> Model.tong_ngay_tt) ?"Tổng số ngày của quy trình lớn hơn tổng số ngày của thủ tục":"")</span>
                                         <br>
                                     </div>
                                 </div>
@@ -653,9 +654,8 @@
         </div>
     </div>
 </div><!-- End Basic Modal-->
-<link rel="stylesheet" type="text/css" href="../FrontEnd/multi-select.css">
-
-<script src="../FrontEnd/jquery.multi-select.js"></script>
+<link rel="stylesheet" type="text/css" href="../BackEnd/Admin/DualSelect/multi-select.css">
+<script src="../BackEnd/Admin/DualSelect/jquery.multi-select.js"></script>
 
 
 

@@ -35,25 +35,28 @@
                                 <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã luồng" name="ma_luong" maxlength="25" value="@Model.ma_luong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
-                                    Chọn
-                                </button>
+                                @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                        Chọn
+                                    </button>
 
-                                <script>
-                                    function myModalPopup() {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: "../Luong/RenderViewluongXuLy",
-                                            data: "",
-                                            contentType: 'application/json; charset=utf-8',
-                                            success: function(data) {
-                                                console.log(data);
-                                                $("#basicModal .modal-body").html(data);
-                                            }
-                                        });
-                                    }
+                                    <script>
+                                        function myModalPopup() {
+                                            $.ajax({
+                                                type: "GET",
+                                                url: "../Luong/RenderViewluongXuLy",
+                                                data: "",
+                                                contentType: 'application/json; charset=utf-8',
+                                                success: function(data) {
+                                                    console.log(data);
+                                                    $("#basicModal .modal-body").html(data);
+                                                }
+                                            });
+                                        }
 
-                                </script>
+                                    </script>
+                                }
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -93,13 +96,13 @@
                         <div class="row mb-3 tab_luong_cha" style="display:none;">
                             <label for="luong_cha" class="col-sm-2 control-label">Luồng cha</label>
                             <div class="col-sm-8">
-                                <select class="form-select form-control input-default" data-placeholder="Chọn luồng cha" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <select class="form-select form-control input-default" id="luong_cha" name="luong_cha" data-placeholder="Chọn luồng cha" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                     <option value="">---Chọn luồng cha--------</option>
                                     @if (LuongKey != null)
                                     {
                                         foreach (var item in LuongKey)
                                         {
-                                            if (item.ma_luong == Model.ma_luong)
+                                            if (item.ma_luong == Model.luong_cha)
                                             {
                                                 <option selected value="@item.ma_luong">@item.ten_luong</option>
                                             }
@@ -110,8 +113,7 @@
 
                                         }
                                     }
-                                </select>
-                                <input id="luong_cha" type="text" name="luong_cha" class="form-control input-default" hidden>
+                                </select>                               
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -217,7 +219,7 @@
             ma_tt_map.forEach(function(i) {
                 Arr_map.push(i);
                 $("#ma_thu_tuc_map").val(Arr_map.join(";"));
-            });           
+            });
         }
 
         $('#multiselect').on('select2:select', function(e) {
@@ -260,18 +262,24 @@
                     ma_vaild: true,
                     tieng_viet_vaild: true
                 },
-                ma_thu_tuc: "required",
                 ten_luong: "required"
             },
             messages: {
                 ma_luong: {
                     required: "Bạn cần nhập mã luồng!",
                 },
-                ten_luong: "Bạn cần chọn luồng!",
                 ten_luong: "Bạn cần nhập tên luồng!"
             }
         });
 
+    });
+
+    $('#form_pb').submit(function() {
+        if (($("#ma_thu_tuc").val() == '')) {
+            alert('Bank cần nhập mã thủ tục.');
+            return false;
+        }
+        $("#form_pb").valid();
     });
 
     function importExcel() {
@@ -303,16 +311,18 @@
     }
 
     function CheckMa(data) {
-        var dataPost = { code: data.value };
-        $.ajax({
-            url: "/ThuTuc/CheckMaLuong",
-            type: "post",
-            contentType: 'application/x-www-form-urlencoded',
-            data: dataPost,
-            success: function(result) {
-                window.location.href = result.href;
-            }
-        });
+        if (data.value != "") {
+            var dataPost = { code: data.value };
+            $.ajax({
+                url: "/Luong/CheckMaLuong",
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: dataPost,
+                success: function(result) {
+                    window.location.href = result.href;
+                }
+            });
+        }
     };
 </script>
 

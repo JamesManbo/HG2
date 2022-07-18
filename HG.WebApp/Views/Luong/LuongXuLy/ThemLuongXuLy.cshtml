@@ -26,7 +26,7 @@
         });
 
         $('#multiselect').on('select2:select', function(e) {
-            var id = $(e.params.data.element).data('id');         
+            var id = $(e.params.data.element).data('id');
             Arr.push(e.params.data.id);
             Arr_map.push(e.params.data.id + "|" + id);
             $("#ma_thu_tuc").val(Arr.join(";"));
@@ -34,7 +34,7 @@
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
-            var id = $(e.params.data.element).data('id');           
+            var id = $(e.params.data.element).data('id');
             Arr.pop(e.params.data.id);
             Arr_map.pop(e.params.data.id + "|" + id);
             $("#ma_thu_tuc").val(Arr.join(";"));
@@ -64,32 +64,68 @@
                     ma_vaild: true,
                     tieng_viet_vaild: true
                 },
-                ma_thu_tuc: "required",
                 ten_luong: "required"
             },
             messages: {
                 ma_luong: {
                     required: "Bạn cần nhập mã luồng!",
                 },
-                ten_luong: "Bạn cần chọn luồng!",
                 ten_luong: "Bạn cần nhập tên luồng!"
             }
         });
     });
 
+    $('#form_pb').submit(function() {
+        if (($("#ma_thu_tuc").val() == '')) {
+            alert('Bank cần nhập mã thủ tục.');
+            return false;
+        }
+        $("#form_pb").valid();
+    });
+
+
     function CheckMa(data) {
-        var dataPost = { code: data.value };
-        $.ajax({
-            url: "/Luong/CheckMaLuong",
-            type: "post",
-            contentType: 'application/x-www-form-urlencoded',
-            data: dataPost,
-            success: function(result) {
-                window.location.href = result.href;
-            }
-        });
+        if (data.value != "") {
+            var dataPost = { code: data.value };
+            $.ajax({
+                url: "/Luong/CheckMaLuong",
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: dataPost,
+                success: function(result) {
+                    window.location.href = result.href;
+                }
+            });
+        }
     };
 
+    function importExcel() {
+        var myfile = document.getElementById("file");
+        var formData = new FormData();
+
+        if (myfile.files.length > 0) {
+            for (var i = 0; i < myfile.files.length; i++) {
+                formData.append('file', myfile.files[i]);
+            }
+        }
+        $.ajax({
+            url: '/Luong/ReadFileExcel',
+            type: "POST",
+            contentType: false, // Not to set any content header
+            processData: false, // Not to process data
+            data: formData,
+            success: function(result) {
+                console.log(result);
+                if (result == 1) {
+                    alert("Cập nhật thành công");
+                    window.location.href = "/Luong/ThemLuongXuLy";
+                }
+            },
+            error: function(err) {
+                alert(err.statusText);
+            }
+        });
+    }
 </script>
 <div class="col-lg-12">
     <div class="pageheader">
@@ -164,13 +200,13 @@
                                     }
                                 </select>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
-                                <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden >
+                                <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3 tab_luong_cha" style="display:none;">
                             <label for="luong_cha" class="col-sm-2 control-label">Luồng cha</label>
                             <div class="col-sm-8">
-                                <select class="form-select form-control input-default" data-placeholder="Chọn luồng cha">
+                                <select class="form-select form-control input-default" id="luong_cha" name="luong_cha" data-placeholder="Chọn luồng cha">
                                     <option value="">---Chọn luồng cha--------</option>
                                     @if (LuongKey != null)
                                     {
@@ -179,8 +215,7 @@
                                             <option value="@item.ma_luong">@item.ten_luong</option>
                                         }
                                     }
-                                </select>
-                                <input id="luong_cha" type="text" name="luong_cha" class="form-control input-default" hidden>
+                                </select>                              
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -195,29 +230,12 @@
                                 <input type="file" class="form-control input-default" placeholder="Chọn file upload" name="file_excel" value="" maxlength="200">
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
-                            <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
-                            <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
-                            <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="">
-                            </div>
-                        </div>
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
                             <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
+                            <button type="button" class="btn btn-primary" name="type" onclick="importExcel()">Nhập excel</button>
                         </div>
                     </form><!-- End Horizontal Form -->
                 </div>

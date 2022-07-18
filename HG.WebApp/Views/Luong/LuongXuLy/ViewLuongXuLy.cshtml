@@ -9,7 +9,7 @@
                     <tr class="widgettitle">
                         <th align="center" scope="col">CHỌN</th>
                         <th scope="col">TÊN</th>
-                        <th scope="col">MÃ ĐƠN VỊ</th>
+                        <th scope="col">MÔ TẢ</th>
                     </tr>
                     @foreach (var item in Model)
                     {
@@ -20,7 +20,9 @@
                             <td>
                                 @item.ten_luong
                             </td>
-                            <td style="width: 25%;"></td>
+                            <td>
+                                @item.mo_ta
+                            </td>                           
                         </tr>
                     }
                 </tbody>

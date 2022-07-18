@@ -51,6 +51,7 @@ namespace HG.WebApp.Controllers
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             ViewBag.LstPhongBan = ds.lstPhongBan;
             ViewBag.LstLinhVuc = ds.lstLinhVuc;
+            ViewBag.PageSize = 0;
             using (var db = new EAContext())
             {
                 ViewBag.lstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
@@ -65,7 +66,7 @@ namespace HG.WebApp.Controllers
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
-            ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize + 1;
             ViewBag.PageSize = (currentPage - 1) * pageSize;
             ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
             using (var db = new EAContext())

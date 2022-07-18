@@ -81,6 +81,7 @@ namespace HG.Data.Business.DanhMuc
                 return new LuongThanhPhanModels();
             }
         }
+
         public NguoiXL LayNguoiXLNguoiPHXLByMaLuong(string ma_luong, string ten_buoc)
         {
             try
@@ -93,11 +94,11 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("ten_buoc", ten_buoc, SqlDbType.NVarChar);
                 // Output params
                 DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-              
+
                 // Lấy về danh sách các người dung
                 result = DbProvider.ExecuteObject<NguoiXL>();
                 //Lấy về danh sách nhóm
-              
+
                 var ErrCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
                 if (ErrCode != 0)
                 {
@@ -110,7 +111,6 @@ namespace HG.Data.Business.DanhMuc
                 return new NguoiXL();
             }
         }
-
         public Dm_Luong_Xu_Ly_paging DanhSanhLuongXuLy(DanhMucModel item)
         {
             try
@@ -118,7 +118,7 @@ namespace HG.Data.Business.DanhMuc
                 Dm_Luong_Xu_Ly_paging menu = new Dm_Luong_Xu_Ly_paging();
                 menu.Pagelist = new Pagelist();
                 DbProvider.SetCommandText2("dm_danh_sach_luong_xu_ly", CommandType.StoredProcedure);
-                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa ?? "", SqlDbType.NVarChar);
                 // Input params
                 DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
                 DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);

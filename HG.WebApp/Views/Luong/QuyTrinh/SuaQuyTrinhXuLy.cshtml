@@ -47,11 +47,11 @@
                     @*Danh sách bước*@
                     <div class="tab-pane fade" id="ds-buoc" role="tabpanel" aria-labelledby="home-tab">
                         <div class="row" style="padding: 15px;">
-                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: @Model.tong_ngay_qt ngày/TTHC: @Model.tong_ngay_tt ngày </span>
+                            <span id="ctl08_ctl00_grid_trinh_tu_xl_labNgayLuong" class="col-sm-6 Csslab">Quy trình: @Model.tong_ngay_qt ngày/TTHC: @Model.tong_ngay_tt ngày <span style="color:red">@(ViewBag.BuocXuLyChinh?"":"( Chưa có bước xử lý chính )")</span></span>
                             <div class="col-sm-6" align="right">
-                                <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$BtnAdd" value="Thêm bước" id="ctl08_ctl00_grid_trinh_tu_xl_BtnAdd" class="btn btn-primary">
-                                <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$Button1" value="Quy trình đồ họa" id="ctl08_ctl00_grid_trinh_tu_xl_Button1" class="btn btn-primary button" data-toggle="modal" data-target="#myModalLuongXuLy">
-                                <input type="submit" name="ctl08$ctl00$grid_trinh_tu_xl$btnClose" value="Đóng" id="ctl08_ctl00_grid_trinh_tu_xl_btnClose" class="btn btn-primary button">
+                                <button type="button" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.Add.ToString()'">Thêm bước</button>
+                                <button type="button" class="btn btn-primary button" data-toggle="modal" data-target="#myModalLuongXuLy">Quy trình đồ họa</button>
+                                <button type="button" class="btn btn-primary" onclick="window.location.href='/Luong/SuaLuongXuLy?code=@Model.ma_luong&type=View'">Đóng</button>
 
                             </div>
                         </div>
@@ -326,7 +326,7 @@
                                     <div class="col-md-1"></div>
                                     <label class="col-md-2 control-label">Người có thể XL</label>
                                     <div class="col-md-3">
-                                        <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn người có thể xử lý" style="width: 100%;" tabindex="-1" aria-hidden="true">
                                             @if (NguoiDung != null)
                                             {
                                                 foreach (var item in NguoiDung)
@@ -345,143 +345,143 @@
                                     </div>
                                 </div>
 
-                                <div id="ctl08_ctl00_pnlNoTNTKQ">
-                                    @if (Model.quyTrinhXuLy.stt > 1)
-                                    {
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label"></label>
-                                            <div class="col-md-3">
-                                                <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh" value="@Model.quyTrinhXuLy.buoc_xl_chinh" @(Model.quyTrinhXuLy.buoc_xl_chinh==true?"checked":"")>
-                                                <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
-                                            </div>
-                                            <div class="col-md-1"></div>
 
-                                            <label class="col-md-2 control-label">Người phối hợp XL</label>
-                                            <div class="col-md-3">
-                                                <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                                    @if (NguoiDung != null)
+                                @if (Model.quyTrinhXuLy.stt > 1)
+                                {
+                                    <div class="row" style="padding: 10px;">
+                                        <label class="col-md-2 control-label"></label>
+                                        <div class="col-md-3">
+                                            <input type="checkbox" id="buoc_xl_chinh" name="buoc_xl_chinh" value="@Model.quyTrinhXuLy.buoc_xl_chinh" @(Model.quyTrinhXuLy.buoc_xl_chinh==true?"checked":"")>
+                                            <label for="buoc_xl_chinh">Bước xử lý chính trong quy trình</label>
+                                        </div>
+                                        <div class="col-md-1"></div>
+
+                                        <label class="col-md-2 control-label">Người phối hợp XL</label>
+                                        <div class="col-md-3">
+                                            <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn người phối hợp" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                                @if (NguoiDung != null)
+                                                {
+                                                    foreach (var item in NguoiDung)
                                                     {
-                                                        foreach (var item in NguoiDung)
+                                                        <option value="@item.UserName">@item.ten_nguoi_dung</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
+                                            <input id="nguoi_phoi_hop_xl2" type="text" name="nguoi_phoi_hop_xl2" class="form-control input-default" hidden>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalPH">
+                                                Chọn
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div id="ctl08_ctl00_ctl02">
+
+                                            <label class="col-md-2 control-label">Nhánh</label>
+                                            <div class="col-md-3">
+                                                <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
+                                                    <option selected="selected" value="">------ Gốc ------</option>
+                                                    @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.lstNhanhXuLy)
                                                         {
-                                                            <option value="@item.UserName">@item.ten_nguoi_dung</option>
+                                                            <option value="@item.ma_nhanh">@item.ten_nhanh</option>
                                                         }
                                                     }
                                                 </select>
-                                                <input id="nguoi_phoi_hop_xl" type="text" name="nguoi_phoi_hop_xl" class="form-control input-default" hidden>
-                                                <input id="nguoi_phoi_hop_xl2" type="text" name="nguoi_phoi_hop_xl2" class="form-control input-default" hidden>
                                             </div>
-                                            <div class="col-md-1">
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModalPH">
-                                                    Chọn
-                                                </button>
-                                            </div>
+                                            <div class="col-md-1"></div>
+                                            <label class="col-md-2 control-label">Thứ tự bước</label>
+                                            <div class="col-md-3">
 
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div id="ctl08_ctl00_ctl02">
-
-                                                <label class="col-md-2 control-label">Nhánh</label>
-                                                <div class="col-md-3">
-                                                    <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
-                                                        <option selected="selected" value="">------ Gốc ------</option>
-                                                        @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
+                                                <select name="stt" id="FIndex" class="form-control input-default-sm">
+                                                    @for (int i = 2; i < Model.Pagelist.TotalRecords + 1; i++)
+                                                    {
+                                                        if (Model.quyTrinhXuLy.stt == i)
                                                         {
-                                                            foreach (var item in Model.lstNhanhXuLy)
-                                                            {
-                                                                <option value="@item.ma_nhanh">@item.ten_nhanh</option>
-                                                            }
+                                                            <option selected value="@i">@i</option>
                                                         }
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-1"></div>
-                                                <label class="col-md-2 control-label">Thứ tự bước</label>
-                                                <div class="col-md-3">
-
-                                                    <select name="stt" id="FIndex" class="form-control input-default-sm">
-                                                        @for (int i = 2; i < Model.Pagelist.TotalRecords + 1; i++)
+                                                        else
                                                         {
-                                                            if (Model.quyTrinhXuLy.stt == i)
-                                                            {
-                                                                <option selected value="@i">@i</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@i">@i</option>
-                                                            }
+                                                            <option value="@i">@i</option>
                                                         }
-                                                    </select>
+                                                    }
+                                                </select>
 
-                                                </div>
                                             </div>
                                         </div>
-                                    }
-                                    else
-                                    {
-                                        <input hidden name="stt" value="1" />
-                                    }
-                                </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <input hidden name="stt" value="1" />
+                                }
 
-                                <div class="form-group">
+
+                                <div class="row">
                                     <label class="col-md-12">Các chức năng được sử dụng:</label>
                                 </div>
 
                                 <div id="ctl08_ctl00_pnlChucNang">
                                     <input type="hidden" name="chuc_nang" id="chuc_nang">
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input type="checkbox" value="YCBSHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("YCBSHS") ? "checked" : " ")>
+                                                <input type="checkbox" value="YCBSHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("YCBSHS") ? "checked" : " ") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="YCBSHS">Yêu cầu bổ sung hồ sơ</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="HSKDK" type="checkbox" value="HSKDK" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("HSKDK") ? "checked" : "")>
+                                                <input id="HSKDK" type="checkbox" value="HSKDK" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("HSKDK") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="HSKDK">Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
-                                            <input id="THUHOIHS" type="checkbox" value="THUHOIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("THUHOIHS") ? "checked" : "")>
+                                            <input id="THUHOIHS" type="checkbox" value="THUHOIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("THUHOIHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"":"disabled")>
                                             <label for="THUHOIHS">Thu hồi hồ sơ đã chuyển</label>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span disabled="disabled">
-                                                <input id="TRALAIHS" type="checkbox" value="TRALAIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRALAIHS") ? "checked" : "")>
+                                                <input id="TRALAIHS" type="checkbox" value="TRALAIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRALAIHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"":"disabled")>
                                                 <label for="TRALAIHS">Trả lại hồ sơ cho người chuyển</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input id="KYHS" type="checkbox" value="KYHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KYHS") ? "checked" : "")>
+                                                <input id="KYHS" type="checkbox" value="KYHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KYHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="KYHS">Ký duyệt hồ sơ</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="CMC" type="checkbox" value="CMC" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("CMC") ? "checked" : "")>
+                                                <input id="CMC" type="checkbox" value="CMC" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("CMC") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="CMC">Chuyển hồ sơ ra một cửa để trả KQ xử lý</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <input id="GUIHSLT" type="checkbox" value="GUIHSLT" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GUIHSLT") ? "checked" : "")>
@@ -490,32 +490,32 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="KTXL" type="checkbox" value="KTXL" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KTXL") ? "checked" : "")>
+                                                <input id="KTXL" type="checkbox" value="KTXL" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KTXL") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="KTXL">Hồ sơ không phải xử lý (Kết thúc xử lý)</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input id="INPHOIKQ" type="checkbox" value="INPHOIKQ" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("INPHOIKQ") ? "checked" : "")>
+                                                <input id="INPHOIKQ" type="checkbox" value="INPHOIKQ" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("INPHOIKQ") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="INPHOIKQ">In phôi kết quả xử lý</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="GUIKQLT" type="checkbox" value="GUIKQLT" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GUIKQLT") ? "checked" : "")>
+                                                <input id="GUIKQLT" type="checkbox" value="GUIKQLT" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GUIKQLT") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="GUIKQLT">Gửi hồi đáp kết quả xử lý cho đơn vị gửi liên thông</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
 
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <input id="THONGBAOCD" type="checkbox" value="THONGBAOCD" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("THONGBAOCD") ? "checked" : "")>
@@ -524,17 +524,17 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="TRATB" type="checkbox" value="TRATB" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRATB") ? "checked" : "")>
+                                                <input id="TRATB" type="checkbox" value="TRATB" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRATB") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="TRATB">Trả thông báo</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input id="GIAHAN" type="checkbox" value="GIAHAN" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GIAHAN") ? "checked" : "")>
+                                                <input id="GIAHAN" type="checkbox" value="GIAHAN" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GIAHAN") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="GIAHAN">Gia hạn xử lý</label>
                                             </span>
                                         </div>
@@ -543,11 +543,9 @@
                                         </div>
                                         <div class="col-md-1"></div>
                                     </div>
-
-
                                 </div>
 
-                                <div class="form-group">
+                                <div class="row" style="padding-top: 15px;">
                                     <div class="col-md-3"></div>
                                     <div class="col-md-4">
                                         <input type="button" name="" value="Thêm mới" id="btnAdd" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.Add.ToString()';">
@@ -560,6 +558,8 @@
                                         <span id="TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: @Model.tong_ngay_tt Ngày</span>
                                         <br>
                                         <span id="TongSoNgayXL" style="color:Blue;">Tổng số ngày của quy trình: @Model.tong_ngay_qt Ngày</span>
+                                        <br>
+                                        <span style="color:red;">@((Model.tong_ngay_qt> Model.tong_ngay_tt) ?"Tổng số ngày của quy trình lớn hơn tổng số ngày của thủ tục":"")</span>
                                         <br>
                                         <br>
                                     </div>
@@ -735,9 +735,8 @@
         </div>
     </div>
 </div><!-- End Basic Modal-->
-<link rel="stylesheet" type="text/css" href="../FrontEnd/multi-select.css">
-
-<script src="../FrontEnd/jquery.multi-select.js"></script>
+<link rel="stylesheet" type="text/css" href="../BackEnd/Admin/DualSelect/multi-select.css">
+<script src="../BackEnd/Admin/DualSelect/jquery.multi-select.js"></script>
 
 <script>
     function ChonPhongBan(data) {
@@ -972,7 +971,7 @@
     });
     $('#pre-selected-options').multiSelect();
 
-     var ArrUserXL = [];
+    var ArrUserXL = [];
     $('#basicModalXL').on('shown.bs.modal', function() {
         $('#Nguoi_XL').multiSelect('deselect_all');
         $('#Nguoi_XL').multiSelect('select', $("#nguoi_co_the_xl").val().split(";"));
