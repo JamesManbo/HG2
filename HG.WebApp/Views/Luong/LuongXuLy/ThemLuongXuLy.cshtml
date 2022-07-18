@@ -57,6 +57,14 @@
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
 
+        $('#form_pb').submit(function() {
+            if (($("#ma_thu_tuc").val() == '')) {
+                alert('Bank cần nhập mã thủ tục.');
+                return false;
+            }
+            $("#form_pb").valid();
+        });
+
         $('#form_pb').validate({
             rules: {
                 ma_luong: {
@@ -75,13 +83,7 @@
         });
     });
 
-    $('#form_pb').submit(function() {
-        if (($("#ma_thu_tuc").val() == '')) {
-            alert('Bank cần nhập mã thủ tục.');
-            return false;
-        }
-        $("#form_pb").valid();
-    });
+
 
 
     function CheckMa(data) {
@@ -215,7 +217,7 @@
                                             <option value="@item.ma_luong">@item.ten_luong</option>
                                         }
                                     }
-                                </select>                              
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
