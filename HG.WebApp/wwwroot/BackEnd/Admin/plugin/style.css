@@ -47,17 +47,17 @@ img {
   text-align: justify;
 }
 .top-title-frame {
-  height: 35px;
-  line-height: 35px;
-  width: 100%;
-  background: url("../public/img/box1-title-bgr.png") repeat-x #1e5d80;
-  color: white;
-  font-weight: bold;
-  font-size: 12px;
-  font-family: "Arial";
-  padding-left: 12px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+    height: 35px;
+    line-height: 35px;
+    width: 100%;
+    background: url("../../assets/img/box1-title-bgr.png") repeat-x #1e5d80;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    font-family: "Arial";
+    padding-left: 12px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .important-box {
   margin-top: 5px;
@@ -88,8 +88,8 @@ img {
 }
 /* Header */
 .banner-top {
-  background: url("../public/img/header-bgr.png") repeat-x;
-  padding: 7px 15px;
+    background: url("../../assets/img/header-bgr.png") repeat-x;
+    padding: 7px 15px;
 }
 .banner-top .title-logo {
   float: left;
@@ -127,7 +127,7 @@ a.logo img {
   margin-bottom: 1rem;
 }
 .topsite-navbar {
-  background: url("../public/img/menu-bgr.png") repeat-x;
+    background: url("../../assets/img/menu-bgr.png") repeat-x;
 }
 .topsite-navbar .navbar {
   min-height: 35px;
@@ -178,9 +178,9 @@ a.logo img {
   font-family: "Arial";
 }
 .btn-login {
-  background: url("../public/img/box1-title-bgr.png") repeat-x #1e5d80;
-  float: left;
-  transition: 0.3s;
+    background: url("../../assets/img/box1-title-bgr.png") repeat-x #1e5d80;
+    float: left;
+    transition: 0.3s;
 }
 .btn-login:hover {
   color: #1e79b0;
@@ -332,9 +332,9 @@ ul.list_news_a {
 
 /* Footer */
 footer {
-  color: white;
-  height: 110px;
-  background: url("../public/img/footer-bgr.png") repeat-x #1e5d80;
+    color: white;
+    height: 110px;
+    background: url("../../assets/img/footer-bgr.png") repeat-x #1e5d80;
 }
 
 footer .web-fter {
@@ -346,10 +346,10 @@ footer .web-fter {
 
 /* Nav bar */
 .navbar {
-  background: url("../public/img/menu-bgr.png");
-  padding: 0 16px;
-  margin-bottom: 0.5rem;
-  white-space: nowrap;
+    background: url("../../assets/img/menu-bgr.png");
+    padding: 0 16px;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -371,11 +371,11 @@ footer .web-fter {
 }
 
 .navbar .dropdown .dropdown-menu {
-  background: transparent;
-  margin-top: 0;
-  border-top: none;
-  border-radius: 0;
-  background: url("../public/img/menu-bgr-mobile.png");
+    background: transparent;
+    margin-top: 0;
+    border-top: none;
+    border-radius: 0;
+    background: url("../../assets/img/menu-bgr-mobile.png");
 }
 .navbar .dropdown .dropdown-menu a {
   color: white;
@@ -404,10 +404,10 @@ footer .web-fter {
   }
 }
 @media (max-width: 1000px) {
-  .navbar {
-    background: url("../public/img/menu-bgr-mobile.png");
-    padding: 8px 16px;
-  }
+    .navbar {
+        background: url("../../assets/img/menu-bgr-mobile.png");
+        padding: 8px 16px;
+    }
   .navbar .dropdown .dropdown-toggle {
     color: white;
     padding: 0 10px;
@@ -458,11 +458,11 @@ footer .web-fter {
 .form-group label {
   font-weight: bold;
 }
-.form-group select {
-  line-height: 25px;
-  appearance: none;
-  background: url("../public/img/dropdow-bgr.png") white no-repeat 100% !important;
-}
+    .form-group select {
+        line-height: 25px;
+        appearance: none;
+        background: url("../../assets/img/dropdow-bgr.png") white no-repeat 100% !important;
+    }
 .form-group input {
   line-height: 25px;
 }
@@ -487,13 +487,13 @@ footer .web-fter {
   color: #06599f;
 }
 .form-group .btn-search {
-  width: 74px;
-  height: 23px;
-  background: url("../public/img/btn-search-bgr.png") repeat-x;
-  color: white;
-  font-weight: bold;
-  border: none;
-  transition: all 0.5s;
+    width: 74px;
+    height: 23px;
+    background: url("../../assets/img/btn-search-bgr.png") repeat-x;
+    color: white;
+    font-weight: bold;
+    border: none;
+    transition: all 0.5s;
 }
 .form-group .btn-search:hover {
   color: #d41f18;
@@ -526,8 +526,8 @@ footer .web-fter {
   border-top: none;
 }
 .result-top-title {
-  background: url("../public/img/box2-title-bgr.png") repeat-x !important;
-  color: #d41f18;
+    background: url("../../assets/img/box2-title-bgr.png") repeat-x !important;
+    color: #d41f18;
 }
 .table-result {
   color: Black;
