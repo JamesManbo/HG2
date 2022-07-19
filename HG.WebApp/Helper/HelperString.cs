@@ -229,7 +229,10 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
-
+        public static string GetListSchool()
+        {
+            return "";
+        }
         public static List<Tempalte> ListTemplate()
         {
             List<Tempalte> items = new List<Tempalte>
