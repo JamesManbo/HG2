@@ -382,16 +382,20 @@ namespace HG.WebApp.Controllers
             }
             if (lst_nhom_nguoi_dung != null)
             {
+                ViewBag.type_view = StatusAction.View.ToString();
                 if (lst_nhom_nguoi_dung.lst_ma_nguoi_dung != "") {
                     lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lst_nhom_nguoi_dung.lst_ma_nguoi_dung + "," + lstFromQTNguoiDung;
-                    ViewBag.type_view = StatusAction.View.ToString();
                 }
                 else
                 {
-                    lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung;
-                    ViewBag.type_view = StatusAction.Add.ToString();
+                    lst_nhom_nguoi_dung.lst_ma_nguoi_dung = lstFromQTNguoiDung; 
                 }
             }
+            else
+            {
+                ViewBag.type_view = StatusAction.Add.ToString();
+            }
+           
             return View();
         }
         [HttpPost]
@@ -449,11 +453,11 @@ namespace HG.WebApp.Controllers
             }
             else
             {
-                if (string.IsNullOrEmpty(item.lstGroup))
-                {
-                    ViewBag.type_view = StatusAction.View.ToString();
-                    return View();
-                }
+                //if (string.IsNullOrEmpty(item.lstGroup))
+                //{
+                //    ViewBag.type_view = StatusAction.View.ToString();
+                //    return View();
+                //}
                 var obj = _nguoiDungDao.ThemMoiNhomNguoiDung(item);
                 ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
                 if (obj.ErrorCode == 0)

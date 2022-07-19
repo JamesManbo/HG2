@@ -1,90 +1,8 @@
 ﻿                                    @model HG.Entities.LuongThanhPhanModels
                                     @using HG.WebApp;
-                                    <div class="form-group row mb-3">
-                                        <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
-                                        <div class="col-sm-11">
-                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" onchange="GetNguoiXLNguoiPH(this)" class="form-control input-default" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
-				                                     <option value="">Chọn luồng xử lý</option> 
-                                                    @if(@Model.dm_Luong_Xu_Lies != null)
-                                                    {
-                                                        for (var item = 0; item < @Model.dm_Luong_Xu_Lies.Count(); item++)
-                                                        {
-                                                            @*if(item == 0)
-                                                            {
-                                                                <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong" selected>@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
-                                                            }
-                                                            else
-                                                            {
-                                                                 <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
-                                                            }*@
-                                                            <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
-                                                        }
-                                                    }
-			                                </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row mb-3">
-                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label>
-                                            <div class="col-sm-11">
-					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
-						                            <tbody @(ViewBag.view_type == "view"? "Disabled" : "")>
-                                                        <tr style="background-color:#EEEEEE;">
-							                                <th scope="col">STT</th>
-                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
-                                                                <input type="checkbox" name="" id="selectAll" />
-                                                            </th>
-                                                            <th scope="col">Tên thành phần</th>
-                                                            <th align="center" scope="col" style="white-space: nowrap; text-align: center;">Đính kèm</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản chính</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản sao</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản photo</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Ký thành phần</th>
-						                                </tr>
-                                                        @*start body*@
-                                                        
-                                                            @if(@Model.dm_thanh_phan != null){
-                                                                var stt = 1;
-                                                                foreach (var item in Model.dm_thanh_phan)
-                                                                {
-                                                                    <tr>
-                                                                    <td align="center" style="width:4%;">
-                                                                        @stt
-                                                                    </td>
-                                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thanh_phan"  @(ViewBag.view_type == StatusAction.View.ToString()? "Checked" : "") @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")/></td>
-                                                                    <td>
-                                                                        <span id="Label3">@item.ten_thanh_phan</span>
-                                                                    </td><td align="center" style="width:15%;">
-                                                                        <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                                            <div class="input-append">
-                                                                                <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
-                                                                                    <input type="file" name="DinhKem" id="DinhKem"></span>
-                                                                               @* <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>*@
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td align="center" style="width:5%;">
-                                                                    </td>
-                                                                    <td style="width:6%;">
-                                                                    <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
-                                                                    </td>
-                                                                    <td style="width:6%;">
-                                                                        <input name="BanSao" type="text" value="@item.ban_sao" id="BanSao" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
-                                                                    </td>
-                                                                    <td style="width:6%;">
-                                                                        <input name="BanPhoTo" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
-                                                                    </td>
-                                                                    <td align="center" style="width:5%;">
-                                                                    </td>
-                                                                    </tr>
-                                                                }
-                                                            }   
-					                                </tbody></table>
-                                        </div>
-                                    </div>
                                     <script>
                                         $(document).ready(function() {
-                                        $('#selectAll').click(function() {
+                                         $('#selectAll').click(function() {
                                             var val = [];
                                             if ($(this).is(':checked')) {
                                                 $(".ads_Checkbox").prop("checked", true);
@@ -98,8 +16,7 @@
                                                 $(".ads_Checkbox").prop("checked", false);
                                                 val = [];
                                             }
-                                              console.log(val)
-                                            $('input[name="lstCode"]').attr('value',val);
+                                             $('input[name="lstThanhPhan"]').attr('value',val);
                                             //$("#lstCode").val(val);
                                         });
 
@@ -116,9 +33,105 @@
                                                 }
 
                                             });
-                                            console.log(val)
-                                             $('input[name="lstCode"]').attr('value',val);
+                                            $('input[name="lstThanhPhan"]').attr('value',val);
                                         });
-
                                     });
                                     </script>
+                                    @{
+                                        var danhsachThanhPhan = ViewBag.lstThanhPhan as string;
+                                        var maluongdachon = ViewBag.ma_luong as string;
+                                    }
+                                    <div class="form-group row mb-3">
+                                        <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
+                                        <div class="col-sm-11">
+                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" onchange="GetNguoiXLNguoiPH(this)" class="form-control input-default" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
+				                                     <option value="">Chọn luồng xử lý</option> 
+                                                    @if(@Model.dm_Luong_Xu_Lies != null)
+                                                    {
+                                                        for (var item = 0; item < @Model.dm_Luong_Xu_Lies.Count(); item++)
+                                                        {
+                                                            if(@Model.dm_Luong_Xu_Lies[item].ma_luong == maluongdachon)
+                                                            {
+                                                                <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong" selected>@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
+                                                            }
+                                                            else
+                                                            {
+                                                                 <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option> 
+                                                            }
+                                                            @*<option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option> *@
+                                                        }
+                                                    }
+			                                </select>
+                                        </div>
+                                    </div>
+                                    <input id="lstThanhPhan" name="lstThanhPhan" value="@danhsachThanhPhan" hidden />
+                                    
+                                    <div class="form-group row mb-3">
+                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label>
+                                            <div class="col-sm-11">
+					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
+						                            <tbody @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
+                                                        <tr style="background-color:#EEEEEE;">
+							                                <th scope="col">STT</th>
+                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
+                                                                <input type="checkbox" name="" id="selectAll" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "") />
+                                                            </th>
+                                                            <th align="center">Tên thành phần</th>
+                                                            <th align="center" scope="col" style="white-space: nowrap; text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Đính kèm</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
+                                                            <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản chính</th>
+                                                            <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản sao</th>
+                                                            <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản photo</th>
+                                                            <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Ký thành phần</th>
+						                                </tr>
+                                                        @*start body*@
+                                                        
+                                                            @if(@Model.dm_thanh_phan != null){
+                                                                var stt = 1;
+                                                                foreach (var item in Model.dm_thanh_phan)
+                                                                {
+                                                                    <tr>
+                                                                    <td align="center" style="width:4%;">
+                                                                        @stt
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="checkbox" class="ads_Checkbox" id="addData-@(item.ma_thanh_phan)" name="@item.ma_thanh_phan" @((danhsachThanhPhan ?? "").ToString().Contains(item.ma_thanh_phan) ? "checked" : "" ) value="@item.ma_thanh_phan" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")/></td>
+                                                                        @*<input id="addData-@(item.ma_thanh_phan)" name="addData-@(item.ma_thanh_phan)" hidden />*@
+                                                                    <td>
+                                                                        <span id="Label3">@item.ten_thanh_phan</span>
+                                                                    </td>
+                                                                    <td align="center" style="width:15%;"  @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                                                                            <div class="input-append">
+                                                                                <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
+                                                                                <input type="file" name="DinhKem" id="DinhKem"></span>
+                                                                               @* <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>*@
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td align="center" style="width:5%;" >
+                                                                        <button type="button" class="btn btn-primary" @((danhsachThanhPhan ?? "").ToString().Contains(item.ma_thanh_phan) ? "" : "disabled" ) data-bs-toggle="modal" id="addData-@(item.ma_thanh_phan)" data-bs-target="#ChonBieuMau" @(ViewBag.view_type == StatusAction.View.ToString()? "" : "hidden") >Chọn</button>
+                                                                        <script>
+                                                                            $('#addData-@(item.ma_thanh_phan)').click(function () {
+                                                                            
+                                                                            });
+                                                                        </script>
+                                                                    </td>
+                                                                    <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                    <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                    </td>
+                                                                    <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                        <input name="BanSao" type="text" value="@item.ban_sao" id="BanSao" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                    </td>
+                                                                    <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                        <input name="BanPhoTo" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                    </td>
+                                                                    <td align="center" style="width:5%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                                                    </td>
+                                                                    </tr>
+                                                                }
+                                                            }   
+					                                </tbody></table>
+                                        </div>
+                                    </div>
+                                    

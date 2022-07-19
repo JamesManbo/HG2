@@ -1,7 +1,7 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Data.Business.ThuTuc;
 using HG.Entities;
-using HG.Entities.DanhMuc.dm_bieu_mau;
+using HG.Entities.DanhMuc;
 using HG.Entities.Entities.Model;
 using HG.Entities.Entities.ThuTuc;
 using HG.WebApp.Data;

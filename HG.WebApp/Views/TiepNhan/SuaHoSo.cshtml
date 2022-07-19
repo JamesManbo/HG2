@@ -212,14 +212,14 @@
                                     }
                                 </script>
                                 <div id="LuongXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.View.ToString()})
+                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.View.ToString(), ma_luong = Model.ma_luong_xu_ly , lstThanhPhan = Model.lstThanhPhan})
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label class="col-sm-1 control-label"></label>
                                     <label for="mota" class="col-sm-2 control-label" style="text-align: left;">
                                         <p style="color:blue; cursor: pointer" onclick="ThemThanhPhanHoSo()" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")><i class="glyphicon glyphicon-plus"></i>&nbsp;Thêm thành phần hồ sơ</p>
                                         <input id="ThemTPHS" name="ThemTPHS" value="1" hidden />
-                                        <input id="lstCode" name="lstCode" value="" hidden />
+                                        <input id="lstThanhPhan" name="lstThanhPhan" value="@Model.lstThanhPhan" hidden />
                                     </label>
                                 </div>
                                 <script>
@@ -505,7 +505,7 @@
                             <div class="text-center">
                                <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Thêm</button>
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Chuyển xử lý</button>
-                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>
+                               @*<button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>*@
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu hẹn</button>
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu chuyển</button>
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">Trả kết quả</button>
@@ -517,7 +517,7 @@
                             <div class="text-center">
                                <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Lưu</button>
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Chuyển xử lý</button>
-                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>
+                               @*<button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>*@
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu hẹn</button>
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">In phiếu chuyển</button>
                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.TraKQ.ToString())">Trả kết quả</button>

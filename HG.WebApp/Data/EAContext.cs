@@ -9,10 +9,10 @@ using HG.Entities.Entities.SuperAdmin;
 using HG.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.DanhMuc.DonVi;
 using HG.Entities.CauHinh;
-using HG.Entities.DanhMuc.dm_bieu_mau;
 using HG.Entities.Entities.ThuTuc;
 using HG.Entities.HoSo;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.DanhMuc;
 
 namespace HG.WebApp.Data
 {

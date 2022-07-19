@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HG.Entities.DanhMuc.dm_bieu_mau
+namespace HG.Entities.DanhMuc
 {
     [Table("dm_bieu_mau")]
     public class dm_bieu_mau : BaseEntities

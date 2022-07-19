@@ -23,12 +23,12 @@ namespace HG.WebApp
     }
     public enum StatusTraKetQua
     {
-        HoSoChoTraKQ = 1,
-        HoSoChuaDenNhanKQ = 2,
-        HoSoChoTraKS = 3,
-        HoSoDaTraKQ = 4,
-        HoSoNhanKQGD1 = 5,
-        HoSoNhanKQQuaBC = 6,
-        HoSoChuyenPhatTC = 7,
+        HoSoChoTraKQ = 10,
+        HoSoChuaDenNhanKQ = 11,
+        HoSoChoTraKS = 12,
+        HoSoDaTraKQ = 13,
+        HoSoNhanKQGD1 = 14,
+        HoSoNhanKQQuaBC = 15,
+        HoSoChuyenPhatTC = 16,
     }
 }

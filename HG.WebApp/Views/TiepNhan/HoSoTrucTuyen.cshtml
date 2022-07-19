@@ -47,7 +47,7 @@
                                 function LayThuTucByLinhVuc(obj){
                                     $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + obj.value ,
+                                        url: "/TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + obj.value + "&LaTimKiem=LaTimKiem",
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {
@@ -65,7 +65,7 @@
                                     var pageSize = $("#lstPageSize").val();
                                     $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=" + @StatusTiepNhanHoSo.HoSoTrucTuyen,
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=5",
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {
@@ -79,7 +79,7 @@
                                      var pageSize = $("#lstPageSize").val();
                                      $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + tatca + "&dung_han="+ dunghan + "&qua_han=" + quahan + "&pageSize=" + pageSize + "&trang_thai=" + @StatusTiepNhanHoSo.HoSoTrucTuyen,
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + tatca + "&dung_han="+ dunghan + "&qua_han=" + quahan + "&pageSize=" + pageSize + "&trang_thai=5",
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {
@@ -201,7 +201,7 @@
                                             <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
                                             <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ma_thu_tuc_hc </a></td>
                                             <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.nguoi_xu_ly </a></td>
-                                            <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra)) </a></td>
+                                            <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra) </a></td>
                                             <td><a href="#"><span class="glyphicon glyphicon-print">Chuyển CBXL</span> </a></td>
                                             <td><a href="#"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
                                         </tr>

@@ -47,7 +47,7 @@
                                 function LayThuTucByLinhVuc(obj){
                                     $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + obj.value ,
+                                        url: "/TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + obj.value + "&LaTimKiem=LaTimKiem" ,
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {

@@ -10,6 +10,7 @@ using HG.Entities.SearchModels;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HG.WebApp.Controllers
 {
@@ -50,13 +51,14 @@ namespace HG.WebApp.Controllers
             ViewBag.LstLuongXL = db.Dm_Luong_Xu_Ly.Where(n => n.Deleted != 1).ToList();
             ViewBag.LstNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
             return View(new HoSoModels());
-        }    
-        
-        public async Task<IActionResult> LayLuongThanhPhanByMaTTHC(string ma_thu_tuc, string type, string ma_luong = "")
+        }
+
+        public async Task<IActionResult> LayLuongThanhPhanByMaTTHC(string ma_thu_tuc, string type, string lstThanhPhan = "", string ma_luong = "")
         {
             var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
-            //var lstNguoiXl = _danhmucDao.LayNguoiXLNguoiPHXLByMaLuong(lstObj != null ? lstObj.dm_Luong_Xu_Lies[0].ma_luong : "");
             ViewBag.view_type = type;
+            ViewBag.lstThanhPhan = lstThanhPhan;
+            ViewBag.ma_luong = ma_luong;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayLuongThanhPhanByMaTTHC.cshtml", lstObj);
             return Content(result);
         } 
@@ -399,22 +401,58 @@ namespace HG.WebApp.Controllers
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            //Lấy biểu mẫu
+            ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
+
             return View(hoso);
         }
-        public async Task<IActionResult> LayThuTucByLinhVuc(string tu_khoa = "", string ma_linh_vuc = "", int pageSize = 25)
+        public async Task<IActionResult> LayThuTucByLinhVuc(string tu_khoa = "", string ma_linh_vuc = "", int pageSize = 25, string LaTimKiem = "")
         {
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = ma_linh_vuc, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ViewBag.LaTimKiem = LaTimKiem;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayThuTucByLinhVuc.cshtml", LstThuTuc);
             return Content(result);
         }  
-        public string TiepNhanHoSo(int IdHS)
+        public string TiepNhanHoSoOnline(int code)
         {
-            //update trạng thái lên = 1
-            //Lưu log
-            SaveLogHS(IdHS, "HoSoTiepNhan", 4, 1, Guid.Parse(userManager.GetUserId(User)));
-            return "";
+            EAContext db = new EAContext();
+            var obj = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+            if (obj != null)
+            {
+                obj.trang_thai = (int)StatusTiepNhanHoSo.HoSoDangTiepNhan;
+                obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                obj.UpdatedDateUtc = DateTime.Now;
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+                SaveLogHS(code, "Tiếp nhận từ hồ sơ online", (int)StatusTiepNhanHoSo.HoSoTrucTuyen, (int)StatusTiepNhanHoSo.HoSoDangTiepNhan, Guid.Parse(userManager.GetUserId(User)));
+                return "Tiếp nhận hồ sơ thành công!";
+            }
+            else
+            {
+                return "Tiếp nhận hồ sơ lỗi !";
+            }
         }
+        public string LoaiHoSo(int code)
+        {
+            EAContext db = new EAContext();
+            var obj = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+            if (obj != null)
+            {
+                obj.trang_thai = (int)StatusTiepNhanHoSo.HoSoBiThuHoi;
+                obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                obj.UpdatedDateUtc = DateTime.Now;
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+                SaveLogHS(code, "Loại Hồ Sơ", (int)StatusTiepNhanHoSo.HoSoTrucTuyen, (int)StatusTiepNhanHoSo.HoSoBiThuHoi, Guid.Parse(userManager.GetUserId(User)));
+                return "Loại hồ sơ thành công!";
+            }
+            else
+            {
+                return "Loại hồ sơ lỗi !";
+            }
+        }
+
     }
 }
