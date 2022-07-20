@@ -80,17 +80,32 @@
                         <div class="row mb-3">
                             <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @if (ThuTuc != null)
-                                    {
-                                        foreach (var item in ThuTuc)
+                                <div id="tt_gd1">
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ThuTuc != null)
                                         {
-                                            <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            foreach (var item in ThuTuc)
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
                                         }
-                                    }
-                                </select>
+                                    </select>
+                                </div>
+                                <div id="tt_gd2">
+                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ThuTuc != null)
+                                        {
+                                            foreach (var item in ThuTuc.Where(n => n.thuc_hien_hai_gd == true))
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
                                 <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc2" type="text" name="ma_thu_tuc2" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc_map2" type="text" name="ma_thu_tuc_map2" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3 tab_luong_cha" style="display:none;">
@@ -186,6 +201,8 @@
 <script>
     var Arr = [];
     var Arr_map = [];
+    var Arr2 = [];
+    var Arr_map2 = [];
     $(document).ready(function() {
         $("#files").on('change', function() {
             var fileUpload = $(this).get(0);
@@ -202,40 +219,68 @@
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
         if ($('#tt_hai_gd').is(':checked')) {
-            $(".tab_luong_cha").attr("style", "display:flex")
+            $("#tt_gd2").attr("style", "display:flex");
+            $("#tt_gd1").attr("style", "display:none");
+            $(".tab_luong_cha").attr("style", "display:flex");
         } else {
-            $(".tab_luong_cha").attr("style", "display:none")
+            $(".tab_luong_cha").attr("style", "display:none");
+            $("#tt_gd1").attr("style", "display:flex");
+            $("#tt_gd2").attr("style", "display:none");
         }
 
         $('#tt_hai_gd').change(function() {
             if ($(this).is(':checked')) {
+                $("#tt_gd2").attr("style", "display:flex");
+                $("#tt_gd1").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:flex")
             } else {
+                $("#tt_gd1").attr("style", "display:flex");
+                $("#tt_gd2").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:none")
             }
             $('#tt_hai_gd').val($(this).is(':checked'));
         });
 
+
         $('.select2').select2({
             closeOnSelect: false
         });
-
+        console.log('@Model.tt_hai_gd');
         var ngctxl = "@Model.ma_thu_tuc";
         var arrNgctxl = ngctxl.split(";");
         if (arrNgctxl != "") {
-            arrNgctxl.forEach(function(i) {
-                Arr.push(i);
-                $("#ma_thu_tuc").val(Arr.join(";"));
-            });
-            $("#multiselect").val(arrNgctxl).trigger('change');
+            if ('@Model.tt_hai_gd' == "True") {
+                alert('@Model.tt_hai_gd');
+                arrNgctxl.forEach(function(i) {
+                    Arr2.push(i);
+                    console.log(i);
+                    $("#ma_thu_tuc2").val(Arr2.join(";"));
+                });
+                $("#multiselect2").val(arrNgctxl).trigger('change');
+            } else {
+                arrNgctxl.forEach(function(i) {
+                    Arr.push(i);
+                    console.log("1Y" + i);
+                    $("#ma_thu_tuc").val(Arr.join(";"));
+                });
+                $("#multiselect").val(arrNgctxl).trigger('change');
+            }
+
         }
+
+
 
         var ma_tt = "@Model.ma_thu_tuc_map";
         var ma_tt_map = ma_tt.split(";");
         if (ma_tt_map != "") {
             ma_tt_map.forEach(function(i) {
-                Arr_map.push(i);
-                $("#ma_thu_tuc_map").val(Arr_map.join(";"));
+               if ('@Model.tt_hai_gd' == "True") {
+                    Arr_map2.push(i);
+                    $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+                } else {
+                    Arr_map.push(i);
+                    $("#ma_thu_tuc_map").val(Arr_map.join(";"));
+                }
             });
         }
 
@@ -254,7 +299,21 @@
             $("#ma_thu_tuc").val(Arr.join(";"));
             $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
+        $('#multiselect2').on('select2:select', function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.push(e.params.data.id);
+            Arr_map2.push(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
 
+        $('#multiselect2').on("select2:unselect", function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.pop(e.params.data.id);
+            Arr_map2.pop(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
 
         jQuery.validator.addMethod("tieng_viet_vaild", function(value, element) {
             if ("ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ".includes(value)) {
@@ -272,15 +331,20 @@
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
         $('#form_pb').submit(function() {
-            if (($("#ma_thu_tuc").val() == '')) {
-                alert('Chưa chọn TTHC.');
-                return false;
-            }
-            if (($("#tt_hai_gd").val() == true)) {
+            if (($("#tt_hai_gd").val() == 'true')) {
                 if ($("#luong_cha").val() == '') {
                     alert('Chưa chọn luông cha.');
+                    return false;
                 }
-                return false;
+                if (($("#ma_thu_tuc2").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
+            } else {
+                if (($("#ma_thu_tuc").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
             }
             $("#form_pb").valid();
         });
@@ -334,7 +398,7 @@
         });
     }
 
-     function validate_fileupload(fileName) {
+    function validate_fileupload(fileName) {
         var allowed_extensions = new Array("xlsx", "xls", "xlsm");
         var file_extension = fileName.split('.').pop().toLowerCase(); // split function will split the filename by dot(.), and pop function will pop the last element from the array which will give you the extension as well. If there will be no extension then it will return the filename.
 

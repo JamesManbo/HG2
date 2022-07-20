@@ -81,7 +81,7 @@ namespace HG.WebApp.Controllers
         public IActionResult ThemLuongXuLy(string code = "")
         {
             var ds = _danhmucDao.DanhSachLuongKey();
-            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc().Where(n => n.thuc_hien_hai_gd).ToList();
+            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
             ViewBag.LuongKey = ds;
             ViewBag.code = code;
             return View("~/Views/Luong/LuongXuLy/ThemLuongXuLy.cshtml");
@@ -90,6 +90,11 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemLuongXuLy(Dm_Luong_Xu_Ly item)
         {
+            if (item.tt_hai_gd)
+            {
+                item.ma_thu_tuc_map = item.ma_thu_tuc_map2;
+                item.ma_thu_tuc = item.ma_thu_tuc2;
+            }
             item.ma_luong = HelperString.CreateCode(item.ma_luong);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
@@ -117,7 +122,7 @@ namespace HG.WebApp.Controllers
         public IActionResult SuaLuongXuLy(string code, string type)
         {
             var luong_xu_ly = new Dm_Luong_Xu_Ly();
-            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc().Where(n => n.thuc_hien_hai_gd).ToList();
+            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
             using (var db = new EAContext())
             {
                 luong_xu_ly = db.Dm_Luong_Xu_Ly.Where(n => n.Deleted == 0 && n.ma_luong == code).FirstOrDefault();
@@ -133,7 +138,17 @@ namespace HG.WebApp.Controllers
         {
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
+            if (item.tt_hai_gd)
+            {
+                item.ma_thu_tuc_map = item.ma_thu_tuc_map2;
+                item.ma_thu_tuc = item.ma_thu_tuc2;
+            }
+            else
+            {
+                item.luong_cha = "";
+            }
             var response = _danhmucDao.LuuLuongXuLy(item);
+
             if (response > 0)
             {
                 // Xử lý các thông báo lỗi tương ứng
@@ -913,7 +928,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> NguoiDungPhongBan(string code, string type)
         {
-            var user = _dmDao.DanhSachNguoiDung(code,1);
+            var user = _dmDao.DanhSachNguoiDung(code, 1);
             if (type == "PH")
             {
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/NguoiDungPhongBan.cshtml", user);

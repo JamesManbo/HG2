@@ -31,6 +31,10 @@ namespace HG.Entities
 
         [NotMapped]
         public bool buoc_xl_chinh { get; set; }
+        [NotMapped]
+        public string ma_thu_tuc2 { get; set; }
+        [NotMapped]
+        public string? ma_thu_tuc_map2 { get; set; }
     }
 
     public class Dm_Luong_Xu_Ly_paging

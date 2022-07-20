@@ -8,6 +8,8 @@
 <script>
     var Arr = [];
     var Arr_map = [];
+    var Arr2 = [];
+    var Arr_map2 = [];
     $(document).ready(function() {
         $("#files").on('change', function() {
             var fileUpload = $(this).get(0);
@@ -25,8 +27,12 @@
 
         $('#tt_hai_gd').change(function() {
             if ($(this).is(':checked')) {
+                $("#tt_gd2").attr("style", "display:flex");
+                $("#tt_gd1").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:flex")
             } else {
+                $("#tt_gd1").attr("style", "display:flex");
+                $("#tt_gd2").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:none")
             }
             $('#tt_hai_gd').val($(this).is(':checked'));
@@ -53,6 +59,22 @@
             $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
 
+        $('#multiselect2').on('select2:select', function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.push(e.params.data.id);
+            Arr_map2.push(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
+
+        $('#multiselect2').on("select2:unselect", function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.pop(e.params.data.id);
+            Arr_map2.pop(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
+
         jQuery.validator.addMethod("tieng_viet_vaild", function(value, element) {
             if ("ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ".includes(value)) {
                 return false;
@@ -69,16 +91,21 @@
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
 
-        $('#form_pb').submit(function() {
-            if (($("#ma_thu_tuc").val() == '')) {
-                alert('Chưa chọn TTHC.');
-                return false;
-            }
-            if (($("#tt_hai_gd").val() == true)) {
+        $('#form_pb').submit(function() {           
+            if (($("#tt_hai_gd").val() == 'true')) {
                 if ($("#luong_cha").val() == '') {
                     alert('Chưa chọn luông cha.');
+                    return false;
                 }
-                return false;
+                if (($("#ma_thu_tuc2").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
+            } else {
+                if (($("#ma_thu_tuc").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
             }
             $("#form_pb").valid();
         });
@@ -222,17 +249,32 @@
                         <div class="row mb-3">
                             <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                    @if (ThuTuc != null)
-                                    {
-                                        foreach (var item in ThuTuc)
+                                <div id="tt_gd1">
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;display:none" tabindex="-1" aria-hidden="true">
+                                        @if (ThuTuc != null)
                                         {
-                                            <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            foreach (var item in ThuTuc)
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
                                         }
-                                    }
-                                </select>
+                                    </select>
+                                </div>
+                                <div id="tt_gd2" style="display:none">
+                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        @if (ThuTuc != null)
+                                        {
+                                            foreach (var item in ThuTuc.Where(n => n.thuc_hien_hai_gd == true))
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
                                 <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc2" type="text" name="ma_thu_tuc2" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc_map2" type="text" name="ma_thu_tuc_map2" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3 tab_luong_cha" style="display:none;">
