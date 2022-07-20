@@ -249,23 +249,19 @@
         var ngctxl = "@Model.ma_thu_tuc";
         var arrNgctxl = ngctxl.split(";");
         if (arrNgctxl != "") {
-            if ('@Model.tt_hai_gd' == "True") {
-                alert('@Model.tt_hai_gd');
+            if ('@Model.tt_hai_gd' == "True") {              
                 arrNgctxl.forEach(function(i) {
-                    Arr2.push(i);
-                    console.log(i);
+                    Arr2.push(i);                 
                     $("#ma_thu_tuc2").val(Arr2.join(";"));
                 });
                 $("#multiselect2").val(arrNgctxl).trigger('change');
             } else {
                 arrNgctxl.forEach(function(i) {
-                    Arr.push(i);
-                    console.log("1Y" + i);
+                    Arr.push(i);                  
                     $("#ma_thu_tuc").val(Arr.join(";"));
                 });
                 $("#multiselect").val(arrNgctxl).trigger('change');
             }
-
         }
 
 
