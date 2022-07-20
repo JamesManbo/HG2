@@ -1,0 +1,388 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục"; Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>;
+    var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Ghs_Tuyen_Sinh_Cap_Mam_Non>;
+    var lst_don_vi = ViewBag.lst_don_vi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+}
+@model HG.Entities.Ghs_Tuyen_Sinh_Cap_Mam_Non
+
+<div></div>
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Phòng ban</h1>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="border: 2px solid #0866c6;">
+                <div class="modal-header" style="background-color: #0866c6;">
+                    <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+                </div>
+                <div class="modal-body">
+                    @ViewBag.msg
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (ViewBag.error > 0)
+    {
+        <script>
+            $(document).ready(function() {
+                $("#exampleModal").modal("show");
+            });
+        </script>
+    }
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin phòng ban</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_pb" action="/DanhMuc/SuaPhongBan?code=@Model.ma_ho_so&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Đơn vị <span style="color:red">(*)</span> </label>
+                            <div class="col-sm-8">
+                                <select id="ma_don_vi" class="form-select form-control input-default" name="ma_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option selected="selected" value="">---- Chọn đơn vị ----</option>
+                                  @*  @if (lst_don_vi != null)
+                                        foreach (var item in lst_don_vi)
+                                        {
+                                            if (Model.ma_don_vi != null && Model.ma_don_vi == item.ma_don_vi)
+                                            {
+                                                <option value="@item.ma_don_vi" selected>@item.ten_don_vi</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                            }
+
+                                        }*@
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã phòng ban <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input onfocusout="CheckMa(this)" type="text" class="form-control input-default" placeholder="Mã phòng ban" name="ma_phong_ban" id="ma_pb" maxlength="25" value="@Model.ma_ho_so" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                            <div class="col-sm-1">
+                                @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                                {
+                                    <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                        Chọn
+                                    </button>
+                                }
+
+                                <script>
+                                    function myModalPopup() {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "../DanhMuc/RenderViewPhongBan",
+                                            data: "",
+                                            contentType: 'application/json; charset=utf-8',
+                                            success: function(data) {
+                                                console.log(data);
+                                                $("#basicModal .modal-body").html(data);
+                                            }
+                                        });
+                                    }
+
+                                </script>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên phòng ban <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Tên phòng ban" name="ten_phong_ban" id="ten_pb" maxlength="200" value="@Model.thong_tin_chi_tiet" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Mã định danh phòng ban</label>
+                            <div class="col-sm-8">
+                                @*<input type="text" class="form-control input-default" placeholder="Mã định danh phòng ban theo chuẩn quốc gia" name="ma_dinh_danh_pb" maxlength="50" value="@Model.ma_dinh_danh_pb" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>*@
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="tk_thanh_toan" class="col-sm-2 control-label">Có tài khoản thanh toán</label>
+                            <div class="col-sm-2">
+                                @*<input id="tk_thanh_toan" name="tk_thanh_toan" type="checkbox" value="@Model.tk_thanh_toan" class="ads_Checkbox_cn" @(Model.tk_thanh_toan ? "checked" : "" ) @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>*@
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Phòng ban cha</label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" name="phong_ban_cha" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option selected="selected" value="">---- Chọn phòng ban ----</option>
+                                   @* @if (lst_phong_ban != null)
+                                        foreach (var item in lst_phong_ban.Where(n => n.ma_phong_ban != Model.ma_phong_ban))
+                                        {
+                                            if (Model.phong_ban_cha == item.ma_phong_ban)
+                                            {
+                                                <option selected value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                            }
+                                        }*@
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                @*<textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>*@
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="stt" id="stt" maxlength="10" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Người đại diện</label>
+                            <div class="col-sm-8">
+                                <select class="select2 form-select form-control input-default" id="nguoi_dai_dien" name="nguoi_dai_dien" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option selected="selected" value="00000000-0000-0000-0000-000000000000">---- Chọn người đại diện ----</option>
+                                    @if (lst_nguoi_dung != null)
+                                    {
+                                        foreach (var item in lst_nguoi_dung)
+                                        {
+                                          @*  if (@Model.nguoi_dai_dien == item.id)
+                                            {
+                                                <option selected value="@item.id">@item.ten_nguoi_dung</option>
+
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.id">@item.ten_nguoi_dung</option>
+                                            }*@
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                            {
+                                <div class="col-sm-1">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModalUser">Chọn</button>
+                                </div>
+                            }
+                        </div>
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="nguoi_sua" value="@Model.UidName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="date" class="form-control input-default" id="ngay_sua" value="@(Model.UpdatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.UpdatedDateUtc))">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="date" class="form-control input-default" id="ngay_tao" value="@(Model.CreatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.CreatedDateUtc))">
+                            </div>
+                        </div>
+                        @if (ViewBag.type_view == StatusAction.View.ToString())
+                        {
+                           @* <div class="text-center">
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href = '/Danhmuc/ThemPhongBan';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaPhongBan?code=@Model.ma_phong_ban&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaPhongBan?code=@Model.ma_phong_ban')">
+                                    Xóa
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/PhongBan';">Đóng</button>
+                            </div>*@
+                        }
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        {
+                           @* <div class="text-center">
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMuc/XoaPhongBan?code=@Model.ma_phong_ban')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/PhongBan';">Đóng</button>
+                            </div>*@
+                        }
+                        <input name="type_view" hidden value="@ViewBag.type_view" />
+                    </form><!-- End Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+
+<div class="modal fade" id="myModalUser">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="padding-bottom: 0;">
+                <div class="widget">
+                    <h4 class="widgettitle">Chọn cán bộ</h4>
+                    <div class="widgetcontent">
+                        <div class="form-group">
+                            <select onchange="getUserByPb(this);" name="" id="ddlPhongBan1" class="form-control input-default">
+                                <option value="0">------------ Toàn bộ phòng ban ------------</option>
+                                @foreach (var item in lst_phong_ban)
+                                {
+                                    @*<option value="@item.ma_phong_ban">@item.ten_phong_ban</option>*@
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <span id="singleselect" class="">
+
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+    function getUserByPb(data) {
+        var data = { ma_phong_ban: data.value };
+        $.ajax({
+            url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: data,
+            success: function(result) {
+                $("#singleselect").html("");
+                $("#singleselect").html(result);
+            }
+        });
+    }
+    function getUser(data) {
+        debugger
+        $('#nguoi_dai_dien').val(data.value);
+        console.log(data.value);
+        $('#nguoi_dai_dien').select2().trigger('change');
+        $("#myModalUser").modal("hide");
+    }
+
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaPb",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                window.location.href = result.href;
+            }
+        });
+    };
+
+</script>
+
+<script>
+    $(document).ready(function() {
+        $("#tk_thanh_toan").val($("#tk_thanh_toan").is(':checked'));
+
+        $('#tk_thanh_toan').change(function() {
+            $('#tk_thanh_toan').val($(this).is(':checked'));
+        });
+
+        $('.select2').select2({
+            closeOnSelect: false
+        });
+
+        $('#myModalUser').on('shown.bs.modal', function() {
+            var data = { ma_phong_ban: "" };
+            $.ajax({
+                url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: data,
+                success: function(result) {
+                    $("#singleselect").html("");
+                    $("#singleselect").html(result);
+                }
+            });
+        })
+
+        jQuery.validator.addMethod("ma_thu_tuc_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
+        $('#form_pb').validate({
+            rules: {
+                ma_phong_ban: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
+                ten_phong_ban: "required",
+                ma_don_vi: "required"
+            },
+            messages: {
+                ma_phong_ban: {
+                    required: "Bạn cần nhập mã phòng ban!"
+                },
+                ten_phong_ban: "Bạn cần nhập tên phòng ban!",
+                ma_don_vi: "Bạn chưa chọn đơn vị!"
+            }
+        });
+
+
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+    });
+
+</script>
+
+
+

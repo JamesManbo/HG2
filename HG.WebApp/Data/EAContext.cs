@@ -65,6 +65,10 @@ namespace HG.WebApp.Data
         public virtual DbSet<Ho_So> Ho_So { get; set; }
         public virtual DbSet<dm_thanh_phan> dm_thanh_phan { get; set; }
         //End TuanTA
+
+        // AnTX Gửi hồ sơ 
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Mam_Non> Ghs_Tuyen_Sinh_Cap_Mam_Non { get; set; }
+        // End Antx -----
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
