@@ -3,7 +3,8 @@
     ViewData["Title"] = "Tiếp nhận hồ sơ"; 
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
-   var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
+   //var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
+   var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
 }
@@ -212,7 +213,7 @@
                                     }
                                 </script>
                                 <div id="LuongXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.View.ToString(), ma_luong = Model.ma_luong_xu_ly , lstThanhPhan = Model.lstThanhPhan})
+                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.Edit.ToString(), ma_luong = Model.ma_luong_xu_ly , lstThanhPhan = Model.lstThanhPhan})
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label class="col-sm-1 control-label"></label>
@@ -470,7 +471,7 @@
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giờ hẹn trả <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@Model.gio_hen_tra" placeholder="Nhập giờ hẹn trả" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") />
+                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@(HG.WebApp.Common.HelperDateTime.DateTimeToHHmm((DateTime)Model.gio_hen_tra))" placeholder="Nhập giờ hẹn trả" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") />
                                     </div>
                                 </div>
                                  <div class="form-group row mb-3">

@@ -16,19 +16,21 @@ namespace HG.WebApp
        HoSoDangXL = 3,
        HoSoBiThuHoi = 4,
        HoSoTrucTuyen = 5,
-       HoSoChoXL = 6,
-       HoSoChuyenDaXL = 7,
-       HoSoLienThong = 8,
-       HoSoChoTiepNhanGD2 = 9,
+       HoSoChoBoSung = 6,
+       HoSoChoXL = 7,
+       HoSoChuyenDaXL = 8,
+       HoSoLienThong = 9,
+       HoSoChoTiepNhanGD2 = 10,
+       HoSoChoTiepNhanChuaChinhThuc = 11,
+
     }
     public enum StatusTraKetQua
     {
-        HoSoChoTraKQ = 10,
-        HoSoChuaDenNhanKQ = 11,
-        HoSoChoTraKS = 12,
-        HoSoDaTraKQ = 13,
-        HoSoNhanKQGD1 = 14,
-        HoSoNhanKQQuaBC = 15,
-        HoSoChuyenPhatTC = 16,
+        HoSoDaTraKQ = 12,
+        HoSoChuaDenNhanKQ = 13,
+        HoSoChoTraKS = 14,
+        HoSoNhanKQGD1 = 15,
+        HoSoNhanKQQuaBC = 16,
+        HoSoChuyenPhatTC = 17,
     }
 }

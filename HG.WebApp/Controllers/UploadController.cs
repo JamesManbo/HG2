@@ -27,6 +27,7 @@ namespace HG.WebApp.Controllers
             var files = HttpContext.Request.Form.Files;
             if (HttpContext.Request.Form.Files.Count <= 0) return Json(new { status = false, msg = "Bạn chưa chọn file." });
             var lstFiles = new List<string>();
+            var lstFilesName = new List<string>();
             var virtualPath = string.Format(_iconfiguration.GetSection("AppSetting").GetSection("TestUrl").Value + "{0}\\{1}\\{2}\\{3}\\", folder, now.Year,
                 now.Month, now.Day);
             string webRootPath = Environment.WebRootPath;
@@ -43,12 +44,14 @@ namespace HG.WebApp.Controllers
                 {
                     fileItem.CopyToAsync(fileStream);
                     lstFiles.Add(string.Format("{0}\\{1}", path, filename));
+                    lstFilesName.Add(filename);
                 }
             }
-            return Json(new { status = true, msg = "Upload thành công", files = lstFiles });
+            return Json(new { status = true, msg = "Upload thành công", files = lstFiles, names = lstFilesName });
         }
-        public JsonResult UploadFilesReviews(string folder, string Id)
+        public JsonResult UploadFilesTP(string folder, int Id)
         {
+            EAContext db = new EAContext();
             var now = DateTime.Now;
             var files = HttpContext.Request.Form.Files;
             if (HttpContext.Request.Form.Files.Count <= 0) return Json(new { status = false, msg = "Bạn chưa chọn file." });
@@ -72,10 +75,18 @@ namespace HG.WebApp.Controllers
                     fileItem.CopyToAsync(fileStream);
                     lstFiles.Add(string.Format("{0}\\{1}", path, filename));
                     lstFilesName.Add(filename);
+                    var obj = db.dm_thanh_phan.Where(n => n.Id == Id).FirstOrDefault();
+                    if(obj != null)
+                    {
+                        obj.file_dinh_kem = lstFiles[0];
+                        obj.UpdatedDateUtc = DateTime.Now; 
+                        db.Entry(obj).State = EntityState.Modified;
+                        db.SaveChanges(); 
+                    }
                 }
             }
             return Json(new { status = true, msg = "Upload thành công", files = lstFiles, names = lstFilesName });
-        }
+        } 
      
     }
 }
