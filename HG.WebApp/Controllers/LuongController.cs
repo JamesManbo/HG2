@@ -913,7 +913,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> NguoiDungPhongBan(string code, string type)
         {
-            var user = _dmDao.DanhSachNguoiDung(code);
+            var user = _dmDao.DanhSachNguoiDung(code,1);
             if (type == "PH")
             {
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/NguoiDungPhongBan.cshtml", user);
