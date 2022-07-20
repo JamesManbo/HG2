@@ -73,8 +73,8 @@
                                             </td>
                                             <td><a href="/Luong/SuaLuongXuLy?code=@item.ma_luong&type=@(StatusAction.View.ToString())">@item.ten_luong</a></td>
 
-                                            <td>@(item.tong_ngay_qt +" ngày " + item.tong_ngay_tt +" ngày")</td>
-                                            <td>@(item.buoc_xl_chinh=true?"Có":"")</td>
+                                            <td>@(item.tong_ngay_qt +" ngày /" + item.tong_ngay_tt +" ngày")</td>
+                                            <td>@(item.buoc_xl_chinh?"Có":"")</td>
                                             <td>
                                                 <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Luong/SuaLuongXuLy?code=@item.ma_luong&type=@(StatusAction.View.ToString())">
                                                     <span class="glyphicon glyphicon-list-alt">Xem</span>
@@ -116,8 +116,8 @@
                             {
                                 if (CurrentPage > CurrentPage + 2)
                                 {
-                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                 };
                                 if (CurrentPage > 3)
                                 {
@@ -125,11 +125,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
                                 }
@@ -139,11 +139,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
 
@@ -151,8 +151,8 @@
 
                                 if (CurrentPage < CurrentPage + 2)
                                 {
-                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                 };
                             }
                             else
@@ -161,11 +161,11 @@
                                 {
                                     if (i == CurrentPage)
                                     {
-                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                     else
                                     {
-                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                 }
                             }
@@ -181,6 +181,7 @@
 </div>
 <script>
     function GetListByCurrentPage(id) {
+        $("#lstCode").val("");
         var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
@@ -194,6 +195,7 @@
         });
     }
     function changePageSize(data) {
+        $("#lstCode").val("");
         $("#lstPageSize").val(data.value);
         $.ajax({
             type: "GET",
@@ -216,6 +218,7 @@
     });
 
     function searchForm() {
+        $("#lstCode").val("");
         var pageSize = $("#lstPageSize").val();
         var tuKhoa = $("#tu_khoa").val();
         $.ajax({
@@ -235,14 +238,12 @@
     }
 
     $(function() {
-        $('#selectAll').click(function() {
+        $('#selectAll').click(function() {          
             var val = [];
             if ($(this).is(':checked')) {
                 $(".ads_Checkbox").prop("checked", true);
-                $(':checkbox:checked').each(function(i) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
                 });
             }
             else {
@@ -255,15 +256,8 @@
 
         $('.ads_Checkbox').click(function() {
             var val = [];
-            $(':checkbox:checked').each(function(i) {
-                if ($('#selectAll').is(':checked')) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
-                } else {
-                    val[i] = $(this).val();
-                }
-
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
             });
             $("#lstCode").val(val);
         });

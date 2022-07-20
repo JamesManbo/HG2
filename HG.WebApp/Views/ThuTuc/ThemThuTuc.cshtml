@@ -48,7 +48,11 @@
         $('#form_pb').submit(function() {
             if ($("#cho_phep_lien_thong").is(':checked')) {
                 if (($("#don_vi_ltxl").val() == '') && ($("#don_vi_ltph").val() == '')) {
-                    alert('Bank phải chọn đơn vị liên thông phối hợp hoặc xử lý.');
+                    alert('Chưa chọn đơn vị liên thông phối hợp hoặc xử lý.');
+                    return false;
+                }
+                  if (($("#cho_phep_gui_lien_thong").val() == 'false') && ($("#cho_phep_nhan_lien_thong").val() == 'false')) {
+                    alert('Chưa chọn cho phép gửi liên thông hoặc Cho phép nhận liên thông.');
                     return false;
                 }
             }

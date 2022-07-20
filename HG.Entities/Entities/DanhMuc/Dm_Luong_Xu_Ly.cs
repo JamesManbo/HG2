@@ -30,7 +30,7 @@ namespace HG.Entities
         public string? lst_thu_tuc { get; set; }
 
         [NotMapped]
-        public string buoc_xl_chinh { get; set; }
+        public bool buoc_xl_chinh { get; set; }
     }
 
     public class Dm_Luong_Xu_Ly_paging

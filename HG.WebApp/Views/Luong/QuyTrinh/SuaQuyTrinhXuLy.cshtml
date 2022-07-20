@@ -20,7 +20,7 @@
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
-            <h5>Danh sách</h5>
+            <h5>Thông tin</h5>
             <h1>Quy trình xử lý</h1>
         </div>
     </div>
@@ -79,9 +79,9 @@
                                                     <td scope="row">
                                                         @stt
                                                     </td>
-                                                    <td><a href="#">@item.ten_buoc</a></td>
+                                                   <td><a href="/Luong/SuaQuyTrinhXuLy?code=@item.ma_luong&step=@item.Id">@item.ten_buoc</a></td>
 
-                                                    <td>@item.nguoi_co_the_xl</td>
+                                                    <td>@item.nguoi_xl</td>
                                                     <td>@item.stt</td>
                                                     <td>@item.so_ngay_xl</td>
                                                     <td>@item.ma_nhanh</td>
@@ -97,70 +97,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
-                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                @{
-                                    var TotalPage = (int)ViewBag.TotalPage;
-                                    var CurrentPage = (int)ViewBag.CurrentPage;
-                                    if (TotalPage > 5)
-                                    {
-                                        if (CurrentPage > CurrentPage + 2)
-                                        {
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
-                                        };
-                                        if (CurrentPage > 3)
-                                        {
-                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (int i = 1; i <= 5; i++)
-                                            {
-                                                if (i == CurrentPage)
-                                                {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                                else
-                                                {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                                }
-                                            }
-
-                                        }
-
-                                        if (CurrentPage < CurrentPage + 2)
-                                        {
-                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                        };
-                                    }
-                                    else
-                                    {
-                                        for (int i = 1; i <= TotalPage; i++)
-                                        {
-                                            if (i == CurrentPage)
-                                            {
-                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                            }
-                                            else
-                                            {
-                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                            }
-                                        }
-                                    }
-                                }
-                            </div>
                         </div>
                     </div>
 
@@ -169,6 +105,7 @@
                         <div class="row" style="padding-bottom: 20px;">
                             <form id="form_nhanh">
                                 <input hidden name="ma_luong" value="@Model.ma_luong" />
+                                <input hidden name="type" value="@StatusAction.Add.ToString()" />
                                 <div class="row">
                                     <label class="col-sm-1 control-label">
                                         Mã nhánh
@@ -383,7 +320,7 @@
 
                                             <label class="col-md-2 control-label">Nhánh</label>
                                             <div class="col-md-3">
-                                                <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm">
+                                                <select name="ma_nhanh" onchange="" id="ddlNhanh" class="form-control input-default-sm" disabled>
                                                     <option selected="selected" value="">------ Gốc ------</option>
                                                     @if (Model.lstNhanhXuLy != null && Model.lstNhanhXuLy.Count > 0)
                                                     {
@@ -450,13 +387,13 @@
                                     <div class="row">
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
-                                            <input id="THUHOIHS" type="checkbox" value="THUHOIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("THUHOIHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"":"disabled")>
+                                            <input id="THUHOIHS" type="checkbox" value="THUHOIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("THUHOIHS") ? "checked" : "")>
                                             <label for="THUHOIHS">Thu hồi hồ sơ đã chuyển</label>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span disabled="disabled">
-                                                <input id="TRALAIHS" type="checkbox" value="TRALAIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRALAIHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"":"disabled")>
+                                                <input id="TRALAIHS" type="checkbox" value="TRALAIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRALAIHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
                                                 <label for="TRALAIHS">Trả lại hồ sơ cho người chuyển</label>
                                             </span>
                                         </div>
@@ -550,10 +487,14 @@
                                     <div class="col-md-4">
                                         <input type="button" name="" value="Thêm mới" id="btnAdd" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.Add.ToString()';">
                                         <input type="submit" name="" value="Lưu" id="btnSave" class="btn btn-primary process">
-                                        <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
+                                        @if (!(Model.quyTrinhXuLy.ma_buoc == null ? "" : Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))
+                                        {
+                                            <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
+                                        }
                                         <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.View.ToString()'">
                                     </div>
                                     <div class="col-md-5">
+                                        <span style="color:red;">@(ViewBag.BuocXuLyChinh?"" :"Quy trình chưa có bước xử lý chính")</span>
                                         <br>
                                         <span id="TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: @Model.tong_ngay_tt Ngày</span>
                                         <br>
@@ -588,7 +529,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -681,7 +622,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="ChonNguoiDung()" data-bs-dismiss="modal">Chọn</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -730,7 +671,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="ChonNguoiDung_XL()" data-bs-dismiss="modal">Chọn</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -816,21 +757,23 @@
     var Arr = [];
     var Arr2 = [];
     $(document).ready(function() {
-        $('#form_pb').validate({
-            rules: {
-                ten_buoc: {
-                    required: true
-                },
-                so_ngay_xl: "required",
-                nguoi_xl_mac_dinh: "required"
-            },
-            messages: {
-                ten_buoc: {
-                    required: "Bạn cần nhập tên bước!",
-                },
-                so_ngay_xl: "Bạn cần nhập số ngày xử lý!",
-                nguoi_xl_mac_dinh: "Bạn cần nhập người xử lý mặc định!"
+        $('#form_pb').submit(function() {
+            if (($("#ten_buoc").val() == '')) {
+                alert('Chưa chọn tên bước.');
+                document.getElementById("ten_buoc").focus();
+                return false;
             }
+            if (($("#so_ngay_xl").val() == '')) {
+                alert('Chưa chọn số ngày xử lý.');
+                document.getElementById("so_ngay_xl").focus();
+                return false;
+            }
+            if (($("#nguoi_xl_mac_dinh").val() == '')) {
+                alert('Chưa chọn người xử lý.');
+                document.getElementById("nguoi_xl_mac_dinh").focus();
+                return false;
+            }
+
         });
 
         $('#so_ngay_xl').keypress(function(event) {
@@ -942,11 +885,14 @@
 
     var ArrUser = [];
     $('#basicModalPH').on('shown.bs.modal', function() {
+        $("#nguoi_phoi_hop_xl2").val("");
         $('#pre-selected-options').multiSelect('deselect_all');
         $('#pre-selected-options').multiSelect('select', $("#nguoi_phoi_hop_xl").val().split(";"));
     })
 
     function ChonNguoiDung() {
+        $("#nguoi_phoi_hop_xl").val("");
+        Arr2 = [];
         var lstGroup = $("#nguoi_phoi_hop_xl2").val();
         lstGroup.split(";").forEach(function(item) {
             Arr2.push(item);
@@ -973,12 +919,15 @@
 
     var ArrUserXL = [];
     $('#basicModalXL').on('shown.bs.modal', function() {
+        $("#nguoi_co_the_xl2").val("");
         $('#Nguoi_XL').multiSelect('deselect_all');
         $('#Nguoi_XL').multiSelect('select', $("#nguoi_co_the_xl").val().split(";"));
     })
 
     function ChonNguoiDung_XL() {
+        $("#nguoi_co_the_xl").val("");
         var lstGroup = $("#nguoi_co_the_xl2").val();
+        Arr = [];
         lstGroup.split(";").forEach(function(item) {
             Arr.push(item);
         });

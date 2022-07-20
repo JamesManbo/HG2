@@ -9,6 +9,18 @@
     var Arr = [];
     var Arr_map = [];
     $(document).ready(function() {
+        $("#files").on('change', function() {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            if (validate_fileupload(files[0].name) == false) {
+                alert("Định dạng tệp tin" + files[0].name + " không hợp lệ!");
+                $("#files").val(null);
+            } else {
+                $("#files_excel").val(files[0].name);
+                $("#btn_file").text("Thay đổi");
+            }
+        })
+
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
         $('#tt_hai_gd').change(function() {
@@ -59,7 +71,13 @@
 
         $('#form_pb').submit(function() {
             if (($("#ma_thu_tuc").val() == '')) {
-                alert('Bank cần nhập mã thủ tục.');
+                alert('Chưa chọn TTHC.');
+                return false;
+            }
+            if (($("#tt_hai_gd").val() == true)) {
+                if ($("#luong_cha").val() == '') {
+                    alert('Chưa chọn luông cha.');
+                }
                 return false;
             }
             $("#form_pb").valid();
@@ -84,7 +102,17 @@
     });
 
 
+    function validate_fileupload(fileName) {
+        var allowed_extensions = new Array("xlsx", "xls", "xlsm");
+        var file_extension = fileName.split('.').pop().toLowerCase(); // split function will split the filename by dot(.), and pop function will pop the last element from the array which will give you the extension as well. If there will be no extension then it will return the filename.
 
+        for (var i = 0; i <= allowed_extensions.length; i++) {
+            if (allowed_extensions[i] == file_extension) {
+                return true; // valid file extension
+            }
+        }
+        return false;
+    }
 
     function CheckMa(data) {
         if (data.value != "") {
@@ -102,7 +130,7 @@
     };
 
     function importExcel() {
-        var myfile = document.getElementById("file");
+        var myfile = document.getElementById("files");
         var formData = new FormData();
 
         if (myfile.files.length > 0) {
@@ -121,6 +149,8 @@
                 if (result == 1) {
                     alert("Cập nhật thành công");
                     window.location.href = "/Luong/ThemLuongXuLy";
+                } else {
+                    alert("Cập nhật thất bại");
                 }
             },
             error: function(err) {
@@ -228,8 +258,10 @@
                         </div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">File excel</label>
-                            <div class="col-sm-8">
-                                <input type="file" class="form-control input-default" placeholder="Chọn file upload" name="file_excel" value="" maxlength="200">
+                            <div class="col-sm-6" style="display:flex">
+                                <input id="files_excel" name="files_excel" class="form-control input-default">
+                                <button type="button" id="btn_file" onclick="$('#files').click();" class="btn btn-secondary"><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
+                                <input type="file" id="files" class="form-control input-default" placeholder="Chọn file upload" name="file_excel" value="" maxlength="200" style="display:none">
                             </div>
                         </div>
 

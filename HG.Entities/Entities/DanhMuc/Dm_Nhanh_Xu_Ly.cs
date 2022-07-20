@@ -15,7 +15,9 @@ namespace HG.Entities
         [Key]
         public string ma_nhanh { get; set; }
         public string ten_nhanh { get; set; }
-        public string? ma_luong { get; set; }      
+        public string? ma_luong { get; set; }
+        [NotMapped]           
+        public string type { get; set; }
     }
 
 }

@@ -35,12 +35,13 @@ namespace HG.Data.Business.DanhMuc
         //    return obj;
         //}
 
-        public List<DanhSachNguoiDung> DanhSachNguoiDung(string ma_phong_ban)
+        public List<DanhSachNguoiDung> DanhSachNguoiDung(string ma_phong_ban, int type = 0)
         {
             try
             {
                 DbProvider.SetCommandText2("user_danh_sach_nguoi_dung", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_phong_ban", ma_phong_ban, SqlDbType.Char);
+                DbProvider.AddParameter("type", type, SqlDbType.Int);
                 // Lấy về danh sách các trường học
                 var obj = DbProvider.ExecuteListObject<DanhSachNguoiDung>();
                 return obj;

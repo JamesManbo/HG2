@@ -33,8 +33,8 @@
                         </td>
                         <td><a href="/Luong/SuaLuongXuLy?code=@item.ma_luong&type=@(StatusAction.View.ToString())">@item.ten_luong</a></td>
 
-                        <td>@(item.tong_ngay_qt +" ngày " + item.tong_ngay_tt +" ngày")</td>
-                        <td>@(item.buoc_xl_chinh=true?"Có":"")</td>
+                        <td>@(item.tong_ngay_qt +" ngày /" + item.tong_ngay_tt +" ngày")</td>
+                        <td>@(item.buoc_xl_chinh?"Có":"")</td>
                         <td>
                             <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/Luong/SuaLuongXuLy?code=@item.ma_luong&type=@(StatusAction.View.ToString())">
                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
@@ -132,3 +132,36 @@
     }
 </div>
 <!-- End Table with stripped rows -->
+<script>
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=' + listData)
+    }
+
+    $(function() {
+        $('#selectAll').click(function() {          
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+</script>
