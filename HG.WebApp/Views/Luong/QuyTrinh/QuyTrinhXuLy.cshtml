@@ -37,7 +37,7 @@
                         <button class="nav-link @(ViewBag.Views.Contains(StatusAction.View.ToString())?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ds-buoc" role="tab" aria-controls="ds-buoc" aria-selected="true">Danh sách bước</button>
                     </li>
                     <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#nhanh" role="tab" aria-controls="nhanh" aria-selected="false">Nhánh</button>
+                        <button class="nav-link @(ViewBag.Views.Contains(StatusAction.Edit.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#nhanh" role="tab" aria-controls="nhanh" aria-selected="false">Nhánh</button>
                     </li>
                     <li class="nav-item ui-state-default ui-corner-top" role="presentation">
                         <button class="nav-link @(ViewBag.Views.Contains(StatusAction.Add.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#tt-buoc" role="tab" aria-controls="tt-buoc" aria-selected="false">Thông tin bước</button>
@@ -102,10 +102,10 @@
                     </div>
 
                     @*Nhánh *@
-                    <div class="tab-pane fade" id="nhanh" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade @(ViewBag.Views.Contains(StatusAction.Edit.ToString())?"show active":"")" id="nhanh" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row" style="padding-bottom: 20px;">
                             <form id="form_nhanh">
-                                <input hidden name="ma_luong" value="@Model.ma_luong" />
+                                <input hidden id="t_ma_luong" name="ma_luong" value="@Model.ma_luong" />
                                 <input hidden name="type" value="@StatusAction.Add.ToString()" />
                                 <div class="row">
                                     <label class="col-sm-1 control-label">
@@ -938,7 +938,8 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             data: dataPost,
             success: function(result) {
-                $("#Tab_Nhanh").html(result);
+                window.location.href = "/Luong/QuyTrinhXuLy?code=" + $("#t_ma_luong").val() + "&views=" + '@StatusAction.Edit.ToString()';
+                // $("#Tab_Nhanh").html(result);
             }
         });
     }
@@ -952,8 +953,9 @@
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: dataPost,
                 success: function(result) {
-                    console.log(result);
-                    $("#Tab_Nhanh").html(result);
+                    window.location.href = "/Luong/QuyTrinhXuLy?code=" + $("#t_ma_luong").val() + "&views=" + '@StatusAction.Edit.ToString()';
+                    //console.log(result);
+                    //$("#Tab_Nhanh").html(result);
                 }
             });
         }
