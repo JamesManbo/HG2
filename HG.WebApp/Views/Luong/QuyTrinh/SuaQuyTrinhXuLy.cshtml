@@ -79,7 +79,7 @@
                                                     <td scope="row">
                                                         @stt
                                                     </td>
-                                                   <td><a href="/Luong/SuaQuyTrinhXuLy?code=@item.ma_luong&step=@item.Id">@item.ten_buoc</a></td>
+                                                    <td><a href="/Luong/SuaQuyTrinhXuLy?code=@item.ma_luong&step=@item.Id">@item.ten_buoc</a></td>
 
                                                     <td>@item.nguoi_xl</td>
                                                     <td>@item.stt</td>
@@ -326,7 +326,15 @@
                                                     {
                                                         foreach (var item in Model.lstNhanhXuLy)
                                                         {
-                                                            <option value="@item.ma_nhanh">@item.ten_nhanh</option>
+                                                            if (item.ma_nhanh == Model.quyTrinhXuLy.ma_nhanh)
+                                                            {
+                                                                <option selected value="@item.ma_nhanh">@item.ten_nhanh</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.ma_nhanh">@item.ten_nhanh</option>
+                                                            }
+
                                                         }
                                                     }
                                                 </select>
@@ -370,14 +378,14 @@
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input type="checkbox" value="YCBSHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("YCBSHS") ? "checked" : " ") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input type="checkbox" value="YCBSHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("YCBSHS") ? "checked" : " ") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="YCBSHS">Yêu cầu bổ sung hồ sơ</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="HSKDK" type="checkbox" value="HSKDK" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("HSKDK") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="HSKDK" type="checkbox" value="HSKDK" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("HSKDK") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="HSKDK">Hồ sơ không đủ điều kiện (Loại hồ sơ và trả cho công dân)</label>
                                             </span>
                                         </div>
@@ -393,7 +401,7 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span disabled="disabled">
-                                                <input id="TRALAIHS" type="checkbox" value="TRALAIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRALAIHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="TRALAIHS" type="checkbox" value="TRALAIHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRALAIHS") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="TRALAIHS">Trả lại hồ sơ cho người chuyển</label>
                                             </span>
                                         </div>
@@ -404,14 +412,14 @@
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input id="KYHS" type="checkbox" value="KYHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KYHS") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="KYHS" type="checkbox" value="KYHS" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KYHS") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="KYHS">Ký duyệt hồ sơ</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="CMC" type="checkbox" value="CMC" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("CMC") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="CMC" type="checkbox" value="CMC" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("CMC") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="CMC">Chuyển hồ sơ ra một cửa để trả KQ xử lý</label>
                                             </span>
                                         </div>
@@ -427,7 +435,7 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="KTXL" type="checkbox" value="KTXL" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KTXL") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="KTXL" type="checkbox" value="KTXL" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("KTXL") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="KTXL">Hồ sơ không phải xử lý (Kết thúc xử lý)</label>
                                             </span>
                                         </div>
@@ -438,14 +446,14 @@
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input id="INPHOIKQ" type="checkbox" value="INPHOIKQ" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("INPHOIKQ") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="INPHOIKQ" type="checkbox" value="INPHOIKQ" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("INPHOIKQ") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="INPHOIKQ">In phôi kết quả xử lý</label>
                                             </span>
                                         </div>
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="GUIKQLT" type="checkbox" value="GUIKQLT" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GUIKQLT") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="GUIKQLT" type="checkbox" value="GUIKQLT" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GUIKQLT") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="GUIKQLT">Gửi hồi đáp kết quả xử lý cho đơn vị gửi liên thông</label>
                                             </span>
                                         </div>
@@ -461,7 +469,7 @@
                                         <div class="col-md-1"></div>
                                         <div class="col-md-5">
                                             <span>
-                                                <input id="TRATB" type="checkbox" value="TRATB" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRATB") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="TRATB" type="checkbox" value="TRATB" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("TRATB") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="TRATB">Trả thông báo</label>
                                             </span>
                                         </div>
@@ -471,7 +479,7 @@
                                         <label class="col-md-2 control-label"></label>
                                         <div class="col-md-3">
                                             <span>
-                                                <input id="GIAHAN" type="checkbox" value="GIAHAN" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GIAHAN") ? "checked" : "") @(((Model.quyTrinhXuLy.ma_buoc==null?"":Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))?"disabled":"")>
+                                                <input id="GIAHAN" type="checkbox" value="GIAHAN" class="ads_Checkbox_cn" @(Model.quyTrinhXuLy.chuc_nang.Contains("GIAHAN") ? "checked" : "") @(Model.quyTrinhXuLy.stt==1?"disabled":"")>
                                                 <label for="GIAHAN">Gia hạn xử lý</label>
                                             </span>
                                         </div>
@@ -487,7 +495,7 @@
                                     <div class="col-md-4">
                                         <input type="button" name="" value="Thêm mới" id="btnAdd" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.Add.ToString()';">
                                         <input type="submit" name="" value="Lưu" id="btnSave" class="btn btn-primary process">
-                                        @if (!(Model.quyTrinhXuLy.ma_buoc == null ? "" : Model.quyTrinhXuLy.ma_buoc).Equals(ViewBag.TNHS))
+                                        @if (Model.quyTrinhXuLy.stt > 1)
                                         {
                                             <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
                                         }
@@ -551,7 +559,7 @@
                     <div class="widgetcontent">
                         <div class="form-group">
                             <select onchange="getUserByPb(this);" name="" id="ddlPhongBan1" class="form-control input-default">
-                                <option value="0">------------ Toàn bộ phòng ban ------------</option>
+                                <option value="">------------ Toàn bộ phòng ban ------------</option>
                                 @if (PhongBan != null)
                                 {
                                     foreach (var item in PhongBan)
@@ -693,6 +701,20 @@
         });
     }
 
+    function ChonPhongBanXL(data) {
+        $.ajax({
+            type: "GET",
+            url: "../Luong/NguoiDungPhongBan?code=" + data.value + "&type=XL",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#Nguoidungtimkiem_XL").html(data);
+                $('#Nguoi_XL').multiSelect('select', $("#nguoi_co_the_xl").val().split(";"));
+            }
+        });
+    }
+
+
     function GetListByCurrentPage(id) {
         var pageSize = $("#lstPageSize").val();
         $.ajax({
@@ -768,7 +790,7 @@
                 document.getElementById("so_ngay_xl").focus();
                 return false;
             }
-            if (($("#nguoi_xl_mac_dinh").val() == '')) {
+            if (($("#nguoi_xl_mac_dinh").val() == '' && '@Model.quyTrinhXuLy.stt' > 1)) {
                 alert('Chưa chọn người xử lý.');
                 document.getElementById("nguoi_xl_mac_dinh").focus();
                 return false;

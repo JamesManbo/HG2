@@ -91,7 +91,7 @@
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
 
-        $('#form_pb').submit(function() {           
+        $('#form_pb').submit(function() {
             if (($("#tt_hai_gd").val() == 'true')) {
                 if ($("#luong_cha").val() == '') {
                     alert('Chưa chọn luông cha.');
@@ -172,10 +172,10 @@
             processData: false, // Not to process data
             data: formData,
             success: function(result) {
-                console.log(result);
-                if (result == 1) {
+                if (result.code == 1) {
                     alert("Cập nhật thành công");
-                    window.location.href = "/Luong/ThemLuongXuLy";
+                    //window.location.href = "/Luong/ThemLuongXuLy";
+                    window.location.href = "/Luong/SuaLuongXuLy?code=" + result.msg + "&type=" + '@StatusAction.View.ToString()';
                 } else {
                     alert("Cập nhật thất bại");
                 }

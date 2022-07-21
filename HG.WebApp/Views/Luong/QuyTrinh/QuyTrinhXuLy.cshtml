@@ -201,7 +201,7 @@
                                     <label class="col-md-2 control-label">
                                         Tên bước thực hiện
                                     </label>
-                                    <input type="hidden" name="ma_buoc" id="ma_buoc" value="TN">
+                                    <input type="hidden" name="ma_buoc" id="ma_buoc" value="">
                                     <div class="col-md-3">
                                         <input name="ten_buoc" id="ten_buoc" type="text" value="" class="form-control input-default-sm" placeholder="Nhập tên bước thực hiện">
                                     </div>
@@ -475,6 +475,7 @@
                                         <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.View.ToString()'">
                                     </div>
                                     <div class="col-md-5">
+                                        <span style="color:red;">@(ViewBag.BuocXuLyChinh?"" :"Quy trình chưa có bước xử lý chính")</span>
                                         <br>
                                         <span id="TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: @Model.tong_ngay_tt Ngày</span>
                                         <br>
@@ -526,7 +527,7 @@
                     <div class="widgetcontent">
                         <div class="form-group">
                             <select onchange="getUserByPb(this);" name="" id="ddlPhongBan1" class="form-control input-default">
-                                <option value="0">------------ Toàn bộ phòng ban ------------</option>
+                                <option value="">------------ Toàn bộ phòng ban ------------</option>
                                 @if (PhongBan != null)
                                 {
                                     foreach (var item in PhongBan)
@@ -739,7 +740,7 @@
 
 
     $(document).ready(function() {
-       $('#form_pb').submit(function() {
+        $('#form_pb').submit(function() {
             if (($("#ten_buoc").val() == '')) {
                 alert('Chưa chọn tên bước.');
                 document.getElementById("ten_buoc").focus();

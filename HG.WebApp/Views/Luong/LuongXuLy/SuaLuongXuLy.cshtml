@@ -190,7 +190,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -249,15 +249,15 @@
         var ngctxl = "@Model.ma_thu_tuc";
         var arrNgctxl = ngctxl.split(";");
         if (arrNgctxl != "") {
-            if ('@Model.tt_hai_gd' == "True") {              
+            if ('@Model.tt_hai_gd' == "True") {
                 arrNgctxl.forEach(function(i) {
-                    Arr2.push(i);                 
+                    Arr2.push(i);
                     $("#ma_thu_tuc2").val(Arr2.join(";"));
                 });
                 $("#multiselect2").val(arrNgctxl).trigger('change');
             } else {
                 arrNgctxl.forEach(function(i) {
-                    Arr.push(i);                  
+                    Arr.push(i);
                     $("#ma_thu_tuc").val(Arr.join(";"));
                 });
                 $("#multiselect").val(arrNgctxl).trigger('change');
@@ -270,7 +270,7 @@
         var ma_tt_map = ma_tt.split(";");
         if (ma_tt_map != "") {
             ma_tt_map.forEach(function(i) {
-               if ('@Model.tt_hai_gd' == "True") {
+                if ('@Model.tt_hai_gd' == "True") {
                     Arr_map2.push(i);
                     $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
                 } else {
@@ -380,10 +380,9 @@
             processData: false, // Not to process data
             data: formData,
             success: function(result) {
-                console.log(result);
-                if (result == 1) {
+                if (result.code == 1) {
                     alert("Cập nhật thành công");
-                    window.location.href = "/Luong/SuaLuongXuLy?code=" + '@Model.ma_luong' + "&type=" + '@ViewBag.type_view';
+                    window.location.href = "/Luong/SuaLuongXuLy?code=" + result.msg + "&type=" + '@StatusAction.View.ToString()';
                 } else {
                     alert("Cập nhật thất bại");
                 }

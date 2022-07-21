@@ -499,14 +499,14 @@ namespace HG.WebApp.Controllers
                 }
             }
             ds.ma_luong = code;
-            var user = _dmDao.DanhSachNguoiDung("", 1);
+            var user = _dmDao.DanhSachNguoiDung("", 0);
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
             using (var db = new EAContext())
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
             }
-            ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
+            //ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
             ViewBag.PhongBan = lstpb;
@@ -533,7 +533,7 @@ namespace HG.WebApp.Controllers
             }
             ds.ma_luong = code;
             ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.FirstOrDefault(n => n.Id == step);
-            var user = _dmDao.DanhSachNguoiDung("", 1);
+            var user = _dmDao.DanhSachNguoiDung("", 0);
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
             using (var db = new EAContext())
@@ -541,7 +541,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
                 nhanhXuLy = db.Dm_Nhanh_Xu_Ly.Where(n => n.Deleted == 0).ToList();
             }
-            ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
+            //ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
             ViewBag.PhongBan = lstpb;
@@ -667,9 +667,10 @@ namespace HG.WebApp.Controllers
         }
         #endregion
         [HttpPost]
-        public async Task<int> ReadFileExcel(IFormFile file)
+        public async Task<IActionResult> ReadFileExcel(IFormFile file)
         {
             var code = 0;
+            var ma_luong = "";
             if (file != null)
             {
                 try
@@ -693,6 +694,7 @@ namespace HG.WebApp.Controllers
                                     if (j == 1)
                                     {
                                         luong.ma_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                        ma_luong = luong.ma_luong;
                                     }
                                     else if (j == 2)
                                     {
@@ -835,8 +837,7 @@ namespace HG.WebApp.Controllers
                     code = 0;
                 }
             }
-
-            return code;
+            return Json(new { code = code, msg = ma_luong });
         }
 
 
@@ -928,7 +929,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> NguoiDungPhongBan(string code, string type)
         {
-            var user = _dmDao.DanhSachNguoiDung(code, 1);
+            var user = _dmDao.DanhSachNguoiDung(code, 0);
             if (type == "PH")
             {
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/NguoiDungPhongBan.cshtml", user);
