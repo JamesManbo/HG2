@@ -378,8 +378,7 @@
     </div>
 </div>
 <script>
-    function saveBieuMau() {
-        debugger
+    function saveBieuMau() {        
         var data = $("#form_pb").serialize();
         var value = CKEDITOR.instances['ckedit1'].getData();
         if ($("#ten_bieu_mau").val() == "" || $("#ten_bieu_mau").val() == undefined || $("#ten_bieu_mau").val() == null) {
@@ -440,6 +439,7 @@
         }
     });
     function searchForm() {
+        $("#lstCode").val("");
         var pageSize = $("#lstPageSize").val();
         var ma_lv = $("#ma_lv").val();
         var ma_pb = $("#ma_pb").val();
@@ -457,6 +457,7 @@
 
 
     function ChangePhongBan(data) {
+        $("#lstCode").val("");
         $("#ma_pb").val(data.value);
         var ma_lv = $("#ma_lv").val();
         var pageSize = $("#lstPageSize").val();
@@ -473,6 +474,7 @@
     }
 
     function ChangeLinhVuc(data) {
+        $("#lstCode").val("");
         $("#ma_lv").val(data.value);
         var ma_pb = $("#ma_pb").val();
         var pageSize = $("#lstPageSize").val();
@@ -488,6 +490,7 @@
         });
     }
     function GetListByCurrentPage(id) {
+        $("#lstCode").val("");
         var pageSize = $("#lstPageSize").val();
         var ma_pb = $("#ma_pb").val();
         var ma_lv = $("#ma_lv").val();
@@ -503,6 +506,7 @@
         });
     }
     function changePageSize(data) {
+        $("#lstCode").val("");
         $("#lstPageSize").val(data.value);
         var ma_pb = $("#ma_pb").val();
         var ma_lv = $("#ma_lv").val();
@@ -527,11 +531,8 @@
             var val = [];
             if ($(this).is(':checked')) {
                 $(".ads_Checkbox").prop("checked", true);
-                $(':checkbox:checked').each(function(i) {
-                    if (i > 0) {
-                        console.log($(this).val() + '|' + $(this).data("id"));
-                        val[i - 1] = $(this).val() + '|' + $(this).data("id");
-                    }
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val() + '|' + $(this).data("id");
                 });
             }
             else {

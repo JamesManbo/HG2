@@ -32,7 +32,7 @@
                     <tr>
                         <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old" /></td>
                         <td scope="row">
-                          @(stt+ViewBag.PageSize)
+                            @(stt+ViewBag.PageSize)
                             <input type="hidden" name="" id="" value="@item.ma_thu_tuc" />
                         </td>
                         <td><a href="/ThuTuc/SuaThuTuc?code_key=@item.ma_thu_tuc_old&code=@item.ma_thu_tuc&type=@(StatusAction.View.ToString())&active=@(ActionThuTuc.ThuTuc.ToString())">@item.ten_thu_tuc</a></td>
@@ -133,3 +133,28 @@
     }
 </div>
 <!-- End Table with stripped rows -->
+<script>
+    $('#selectAll').click(function() {
+        var val = [];
+        if ($(this).is(':checked')) {
+            $(".ads_Checkbox").prop("checked", true);
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val() + '|' + $(this).data("id");
+            });
+        }
+        else {
+            $(".ads_Checkbox").prop("checked", false);
+            val = [];
+        }
+        $("#lstCode").val(val);
+        //console.log(val);
+    });
+
+    $('.ads_Checkbox').click(function() {
+        var val = [];
+        $('.ads_Checkbox:checked').each(function(i) {
+            val[i] = $(this).val() + '|' + $(this).data("id");
+        });
+        $("#lstCode").val(val);       
+    });
+</script>

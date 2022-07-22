@@ -224,8 +224,8 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
                 // Output params
                 DbProvider.AddParameter("ten_luong", DBNull.Value, SqlDbType.NVarChar, 200, ParameterDirection.Output);
-                DbProvider.AddParameter("tong_ngay_tt", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
-                DbProvider.AddParameter("tong_ngay_qt", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("tong_ngay_tt", DBNull.Value, SqlDbType.Float, ParameterDirection.Output);
+                DbProvider.AddParameter("tong_ngay_qt", DBNull.Value, SqlDbType.Float, ParameterDirection.Output);
                 DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 DbProvider.ExecuteReader_ToMyReader();
                 // Lấy về danh sách các người dung
@@ -237,8 +237,8 @@ namespace HG.Data.Business.DanhMuc
 
                 menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
                 menu.ten_luong = DbProvider.Command.Parameters["ten_luong"].Value.ToString() ?? "";
-                menu.tong_ngay_tt = Convert.ToInt32(DbProvider.Command.Parameters["tong_ngay_tt"].Value.ToString());
-                menu.tong_ngay_qt = Convert.ToInt32(DbProvider.Command.Parameters["tong_ngay_qt"].Value.ToString());
+                menu.tong_ngay_tt = float.Parse(DbProvider.Command.Parameters["tong_ngay_tt"].Value.ToString());
+                menu.tong_ngay_qt = float.Parse(DbProvider.Command.Parameters["tong_ngay_qt"].Value.ToString());
                 return menu;
             }
             catch (Exception e)

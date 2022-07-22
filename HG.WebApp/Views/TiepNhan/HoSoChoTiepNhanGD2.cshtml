@@ -1,7 +1,7 @@
 ﻿@using HG.Entities
 @using HG.WebApp
 @{
-    ViewData["Title"] = "Hồ sơ liên thông";
+    ViewData["Title"] = "Hồ sơ chờ tiếp nhận GĐ2";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var LstLinhVuc = ViewBag.LstLinhVuc as List<Dm_Linh_Vuc>;
 }
@@ -16,7 +16,7 @@
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
             <h5>Danh sách</h5>
-            <h1>Hồ sơ liên thông</h1>
+            <h1>Hồ sơ chờ tiếp nhận GĐ2</h1>
         </div>
     </div>
     <div class="maincontent">
@@ -65,7 +65,7 @@
                                     var pageSize = $("#lstPageSize").val();
                                     $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=9",
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=10",
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {
@@ -79,7 +79,7 @@
                                      var pageSize = $("#lstPageSize").val();
                                      $.ajax({
                                         type: "GET",
-                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + tatca + "&dung_han="+ dunghan + "&qua_han=" + quahan + "&pageSize=" + pageSize + "&trang_thai=9",
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + tatca + "&dung_han="+ dunghan + "&qua_han=" + quahan + "&pageSize=" + pageSize + "&trang_thai=10",
                                         data: "",
                                         contentType: 'application/json; charset=utf-8',
                                         success: function(data) {

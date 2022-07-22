@@ -1,5 +1,39 @@
 ﻿@using HG.WebApp
 @model List<HG.Entities.Dm_Nhanh_Xu_Ly>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+
+        });
+    </script>
+}
+else
+{
+    <script>
+        $(document).ready(function() {
+            $("#ma_nhanh").val("");
+            $("#ten_nhanh").val("");
+        });
+    </script>
+}
 
 <div class="dataTable-container">
     <table class="table table-bordered responsive">
@@ -51,9 +85,9 @@
 
                         </td>
                         <td>
-                             <a href="#" onclick="XoaNhanh('@item.ma_luong','@item.ma_nhanh')">
-                                                            <span class="glyphicon glyphicon-edit">Xóa</span>
-                                                        </a>
+                            <a href="#" onclick="XoaNhanh('@item.ma_luong','@item.ma_nhanh')">
+                                <span class="glyphicon glyphicon-edit">Xóa</span>
+                            </a>
                         </td>
                     </tr>
                     stt_nhanh++;

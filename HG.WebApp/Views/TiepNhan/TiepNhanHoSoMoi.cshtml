@@ -197,71 +197,7 @@
                                     }
                                 </script>
                                 <div id="LuongXuLy">
-                                    <div class="form-group row mb-3" hidden>
-                                        <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
-                                        <div class="col-sm-11">
-                                            <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" class="form-control input-default">
-				                                     <option value="">Chọn luồng xử lý</option> 
-                                                    @if(LstLuongXL != null)
-                                                    {
-                                                        foreach (var item in LstLuongXL)
-                                                        {
-                                                            <option value="@item.ma_luong">@item.ten_luong</option> 
-                                                        }
-                                                    }
-			                                </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row mb-3" hidden>
-                                        <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label> 
-                                            <div class="col-sm-11">
-					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
-						                            <tbody>
-                                                        <tr style="background-color:#EEEEEE;">
-							                                <th scope="col">STT</th>
-                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;"> Đã nộp
-                                                                <input type="checkbox" name="" id="selectAll" />
-                                                            </th>
-                                                            <th scope="col">Tên thành phần</th>
-                                                            <th align="center" scope="col" style="white-space: nowrap; text-align: center;">Đính kèm</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản chính</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản sao</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Bản photo</th>
-                                                            <th align="center" scope="col" style="text-align: center;">Ký thành phần</th>
-						                                </tr>
-                                                        @*start body*@
-                                                        <tr>
-							                                <td align="center" style="width:4%;">
-                                                                1
-                                                            </td><td align="center">
-                                                                <div class="checker" id="uniform-cbChon"><span><input id="cbChon" type="checkbox" name="ctl14$gridThanhPhanHoSo$ctl02$cbChon" style="opacity: 0;"></span></div>
-                                                            </td><td>
-                                                                <span id="Label3">Văn bản Thông báo thay đổi phương thức, phạm vi cung cấp dịch vụ trò chơi điện tử G1 trên mạng đã được phê duyệt; Những nội dung thay đổi</span>
-                                                         
-                                                            </td><td align="center" style="width:15%;">
-                                                                <div class="fileupload fileupload-new" data-provides="fileupload">
-                                                                    <div class="input-append">
-                                                                        <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
-                                                                            <span class="fileupload-exists">Thay đổi</span>
-                                                                            <input type="file" name="ctl14$gridThanhPhanHoSo$ctl02$DinhKem" id="DinhKem"></span>
-                                                                        <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>
-                                                                    </div>
-                                                                </div>
-                                                            </td><td align="center" style="width:5%;">
-                                                        
-                                                            </td><td style="width:6%;">
-                                                            <input name="ctl14$gridThanhPhanHoSo$ctl02$BanGoc" type="text" value="1" id="BanGoc" class="form-control">
-                                                            </td><td style="width:6%;">
-                                                                <input name="ctl14$gridThanhPhanHoSo$ctl02$BanSao" type="text" value="0" id="BanSao" class="form-control">
-                                                            </td><td style="width:6%;">
-                                                                <input name="ctl14$gridThanhPhanHoSo$ctl02$BanPhoTo" type="text" value="0" id="BanPhoTo" class="form-control">
-                                                            </td><td align="center" style="width:5%;">
-                                                            </td>
-						                                </tr>
-					                                </tbody></table>
-                                        </div>
-                                    </div>
+                                  
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label class="col-sm-1 control-label"></label>
@@ -290,9 +226,10 @@
                                                 <input name="ThanhPhan_1" type="text" id="ThanhPhan_1" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
-                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="file" id="files1" name="files1" style="display: none">
                                                  <input type="text" id="file_dinh_kem1" name="file_dinh_kem1" style="display: none">
-                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                 <button type="button" onclick="$('#files1').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                  <label type="text" id="namefile1" name="namefile1"></label> <input type="button" id="btnDelete1" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFileDinhKemTP(1)">
                                             </div>
                                             <label class="col-md-1 control-label">Bản chính</label>
                                             <div class="col-md-1">
@@ -314,10 +251,11 @@
                                                 <input name="ThanhPhan_2" type="text" id="ThanhPhan_2" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
-                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="file" id="files2" name="files2" style="display: none">
                                                  <input type="text" id="file_dinh_kem2" name="file_dinh_kem2" style="display: none">
-                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
-                                            </div>
+                                                 <button type="button" onclick="$('#files2').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                  <label type="text" id="namefile2" name="namefile2"></label> <input type="button" id="btnDelete2" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFileDinhKemTP(2)">
+                                             </div>
                                             <label class="col-md-1 control-label">Bản chính</label>
                                             <div class="col-md-1">
                                                 <input name="BanChinh2" type="number" value="0" id="BanChinh2" class="form-control input-default-sm">
@@ -338,10 +276,11 @@
                                                 <input name="" type="text" id="ThanhPhan_3" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
-                                                 <input type="file" id="files" name="files" style="display: none">
-                                                 <input type="text" id="file_dinh_kem3" name="avatar" style="display: none">
-                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
-                                            </div>
+                                                 <input type="file" id="files3" name="files3" style="display: none">
+                                                 <input type="text" id="file_dinh_kem3" name="file_dinh_kem3" style="display: none">
+                                                 <button type="button" onclick="$('#files3').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                  <label type="text" id="namefile3" name="namefile3"></label> <input type="button" id="btnDelete3" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFileDinhKemTP(3)">
+                                             </div>
                                             <label class="col-md-1 control-label">Bản chính</label>
                                             <div class="col-md-1">
                                                 <input name="BanChinh3" type="number" value="0" id="BanChinh3" class="form-control input-default-sm">
@@ -362,9 +301,10 @@
                                                 <input name="" type="text" id="ThanhPhan_4" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
-                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="file" id="files4" name="files4" style="display: none">
                                                  <input type="text" id="file_dinh_kem4" name="file_dinh_kem4" style="display: none">
-                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                 <label type="text" id="namefile4" name="namefile4"></label> <input type="button" id="btnDelete4" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFileDinhKemTP()">
+                                                 <button type="button" onclick="$('#files4').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                             </div>
                                             <label class="col-md-1 control-label">Bản chính</label>
                                             <div class="col-md-1">
@@ -386,9 +326,10 @@
                                                 <input name="ThanhPhan_5" type="text" id="ThanhPhan_5" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
-                                                 <input type="file" id="files" name="files" style="display: none">
+                                                 <input type="file" id="files5" name="files5" style="display: none">
                                                  <input type="text" id="file_dinh_kem5" name="file_dinh_kem5" style="display: none">
-                                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                 <label type="text" id="namefile5" name="namefile5"></label> <input type="button" id="btnDelete5" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFileDinhKemTP()">
+                                                 <button type="button" onclick="$('#files5').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                             </div>
                                             <label class="col-md-1 control-label">Bản chính</label>
                                             <div class="col-md-1">
@@ -509,7 +450,7 @@
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giờ hẹn trả <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@Model.gio_hen_tra" placeholder="Nhập giờ hẹn trả" />
+                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@(HG.WebApp.Common.HelperDateTime.DateTimeToHHmm(ViewBag.NgayTiepNhan))" placeholder="Nhập giờ hẹn trả" />
                                     </div>
                                 </div>
                                  <div class="form-group row mb-3">
@@ -554,8 +495,6 @@
 
 <script>
     $(document).ready(function() {
-      
-
         $('#form_tiepnhan').validate({
             rules: {
                 ho_ten: "required",
@@ -625,7 +564,201 @@
          //         }
          // });           
     }
-     
+    function DeleteFileDinhKemTP(filenumber){
+        if (filenumber == 1) {
+            $('#file_dinh_kem1').attr('value', "");
+            $('btnDelete1').setAttribute('style', 'display:none');
+        } else if (filenumber == 2) {
+            $('#file_dinh_kem2').attr('value', "");
+            $('btnDelete2').setAttribute('style', 'display:none');
+        } else if (filenumber == 3) {
+            $('#file_dinh_kem3').attr('value', "");
+            $('btnDelete3').setAttribute('style', 'display:none');
+        } else if (filenumber == 4) {
+            $('#file_dinh_kem4').attr('value', "");
+            $('btnDelete4').setAttribute('style', 'display:none');
+        } else {
+            $('#file_dinh_kem5').attr('value', "");
+            $('btnDelete5').setAttribute('style', 'display:none');
+        }
+    }
+    $(document).ready(function() {
+        $("#files1").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=ThanhPhanTTHCNew' ,
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                              $('#file_dinh_kem1').attr('value', result.files[i]);
+                              $('#namefile1').html(""+result.names+"");
+                              $("#btnDelete1").show();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+        $("#files2").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=ThanhPhanTTHCNew' ,
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                              $('#file_dinh_kem2').attr('value', result.files[i]);
+                              $('#namefile2').html(""+result.names+"");
+                              $("#btnDelete2").show();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+        $("#files3").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=ThanhPhanTTHCNew' ,
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                              $('#file_dinh_kem3').attr('value', result.files[i]);
+                              $('#namefile3').html(""+result.names+"");
+                              $("#btnDelete3").show();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+        $("#files4").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=ThanhPhanTTHCNew' ,
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                              $('#file_dinh_kem4').attr('value', result.files[i]);
+                              $('#namefile4').html(""+result.names+"");
+                              $("#btnDelete4").show();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+        $("#files5").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=ThanhPhanTTHCNew' ,
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                              $('#file_dinh_kem5').attr('value', result.files[i]);
+                              $('#namefile5').html(""+result.names+"");
+                              $("#btnDelete5").show();
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+     });
 </script>
 
 

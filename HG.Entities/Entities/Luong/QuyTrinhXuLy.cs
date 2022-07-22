@@ -35,8 +35,8 @@ namespace HG.Entities.Entities.Luong
         public string ma_buoc { get; set; }
         public string ma_luong { get; set; }
         public string ten_luong { get; set; }
-        public int tong_ngay_qt { get; set; }
-        public int tong_ngay_tt { get; set; }
+        public float? tong_ngay_qt { get; set; }
+        public float? tong_ngay_tt { get; set; }
         public List<QuyTrinhXuLy> lstQuyTrinhXuLy { get; set; }
         public List<Dm_Nhanh_Xu_Ly>? lstNhanhXuLy { get; set; }
         public QuyTrinhXuLy quyTrinhXuLy { get; set; }

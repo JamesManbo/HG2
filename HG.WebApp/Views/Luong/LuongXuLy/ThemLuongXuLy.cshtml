@@ -8,13 +8,31 @@
 <script>
     var Arr = [];
     var Arr_map = [];
+    var Arr2 = [];
+    var Arr_map2 = [];
     $(document).ready(function() {
+        $("#files").on('change', function() {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            if (validate_fileupload(files[0].name) == false) {
+                alert("Định dạng tệp tin" + files[0].name + " không hợp lệ!");
+                $("#files").val(null);
+            } else {
+                $("#files_excel").val(files[0].name);
+                $("#btn_file").text("Thay đổi");
+            }
+        })
+
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
         $('#tt_hai_gd').change(function() {
             if ($(this).is(':checked')) {
+                $("#tt_gd2").attr("style", "display:flex");
+                $("#tt_gd1").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:flex")
             } else {
+                $("#tt_gd1").attr("style", "display:flex");
+                $("#tt_gd2").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:none")
             }
             $('#tt_hai_gd').val($(this).is(':checked'));
@@ -41,6 +59,22 @@
             $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
 
+        $('#multiselect2').on('select2:select', function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.push(e.params.data.id);
+            Arr_map2.push(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
+
+        $('#multiselect2').on("select2:unselect", function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.pop(e.params.data.id);
+            Arr_map2.pop(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
+
         jQuery.validator.addMethod("tieng_viet_vaild", function(value, element) {
             if ("ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ".includes(value)) {
                 return false;
@@ -58,9 +92,20 @@
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
 
         $('#form_pb').submit(function() {
-            if (($("#ma_thu_tuc").val() == '')) {
-                alert('Bank cần nhập mã thủ tục.');
-                return false;
+            if (($("#tt_hai_gd").val() == 'true')) {
+                if ($("#luong_cha").val() == '') {
+                    alert('Chưa chọn luông cha.');
+                    return false;
+                }
+                if (($("#ma_thu_tuc2").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
+            } else {
+                if (($("#ma_thu_tuc").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
             }
             $("#form_pb").valid();
         });
@@ -84,7 +129,17 @@
     });
 
 
+    function validate_fileupload(fileName) {
+        var allowed_extensions = new Array("xlsx", "xls", "xlsm");
+        var file_extension = fileName.split('.').pop().toLowerCase(); // split function will split the filename by dot(.), and pop function will pop the last element from the array which will give you the extension as well. If there will be no extension then it will return the filename.
 
+        for (var i = 0; i <= allowed_extensions.length; i++) {
+            if (allowed_extensions[i] == file_extension) {
+                return true; // valid file extension
+            }
+        }
+        return false;
+    }
 
     function CheckMa(data) {
         if (data.value != "") {
@@ -102,7 +157,7 @@
     };
 
     function importExcel() {
-        var myfile = document.getElementById("file");
+        var myfile = document.getElementById("files");
         var formData = new FormData();
 
         if (myfile.files.length > 0) {
@@ -117,10 +172,12 @@
             processData: false, // Not to process data
             data: formData,
             success: function(result) {
-                console.log(result);
-                if (result == 1) {
+                if (result.code == 1) {
                     alert("Cập nhật thành công");
-                    window.location.href = "/Luong/ThemLuongXuLy";
+                    //window.location.href = "/Luong/ThemLuongXuLy";
+                    window.location.href = "/Luong/SuaLuongXuLy?code=" + result.msg + "&type=" + '@StatusAction.View.ToString()';
+                } else {
+                    alert("Cập nhật thất bại");
                 }
             },
             error: function(err) {
@@ -192,17 +249,32 @@
                         <div class="row mb-3">
                             <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
-                                    @if (ThuTuc != null)
-                                    {
-                                        foreach (var item in ThuTuc)
+                                <div id="tt_gd1">
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;display:none" tabindex="-1" aria-hidden="true">
+                                        @if (ThuTuc != null)
                                         {
-                                            <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            foreach (var item in ThuTuc)
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
                                         }
-                                    }
-                                </select>
+                                    </select>
+                                </div>
+                                <div id="tt_gd2" style="display:none">
+                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true">
+                                        @if (ThuTuc != null)
+                                        {
+                                            foreach (var item in ThuTuc.Where(n => n.thuc_hien_hai_gd == true))
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
                                 <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc2" type="text" name="ma_thu_tuc2" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc_map2" type="text" name="ma_thu_tuc_map2" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3 tab_luong_cha" style="display:none;">
@@ -228,8 +300,10 @@
                         </div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">File excel</label>
-                            <div class="col-sm-8">
-                                <input type="file" class="form-control input-default" placeholder="Chọn file upload" name="file_excel" value="" maxlength="200">
+                            <div class="col-sm-6" style="display:flex">
+                                <input id="files_excel" name="files_excel" class="form-control input-default">
+                                <button type="button" id="btn_file" onclick="$('#files').click();" class="btn btn-secondary"><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
+                                <input type="file" id="files" class="form-control input-default" placeholder="Chọn file upload" name="file_excel" value="" maxlength="200" style="display:none">
                             </div>
                         </div>
 
@@ -259,7 +333,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

@@ -46,7 +46,7 @@ namespace HG.WebApp.Controllers
             {
                 using (var db = new EAContext())
                 {
-                    var ds = db.dm_don_vi.Where(n => n.Deleted == 0 && (n.ten_don_vi ?? "").Contains(txtSearch)).ToList();
+                    var ds = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                     dsObj = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                     totalRecored = ds.Count();
                 }

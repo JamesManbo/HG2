@@ -13,6 +13,7 @@ using HG.Entities.Entities.ThuTuc;
 using HG.Entities.HoSo;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.DanhMuc;
+using HG.Entities.Entities.HoSo;
 
 namespace HG.WebApp.Data
 {
@@ -64,6 +65,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<dm_nhom_tp> dm_nhom_tp { get; set; }
         public virtual DbSet<Ho_So> Ho_So { get; set; }
         public virtual DbSet<dm_thanh_phan> dm_thanh_phan { get; set; }
+        public virtual DbSet<Ho_So_History> Ho_So_History { get; set; }
         //End TuanTA
 
         // AnTX Gửi hồ sơ 

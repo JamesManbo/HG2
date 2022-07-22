@@ -103,19 +103,66 @@
                                                                     <td align="center" style="width:15%;"  @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
                                                                         <div class="fileupload fileupload-new" data-provides="fileupload">
                                                                             <div class="input-append">
-                                                                                <span class="btn btn-default btn-file" style="border-left: 1px solid rgb(204, 204, 204) !important;"><span class="fileupload-new">Chọn file</span>
-                                                                                <input type="file" name="DinhKem" id="DinhKem"></span>
-                                                                               @* <a href="#" class="btn btn-default fileupload-exists" data-dismiss="fileupload" style="border-left: 1px solid rgb(204, 204, 204) !important;">Xóa</a>*@
-                                                                            </div>
+                                                                               <input type="file" id="files-@(item.Id)" name="files" style="display: none">
+                                                                                <input type="text" id="name-@(item.Id)" name="name-@(item.Id)" style="display: none">
+                                                                                <button type="button" onclick="$('#files-@(item.Id)').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                                                                <label type="text" id="namefile-@(item.Id)" name="namefile-@(item.Id)"  readonly></label> <input type="button" id="btnDelete-@(item.Id)" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFile(@item.Id)">
+                                                                           </div>   
+                                                                        <script>
+                                                                            $("#btnDelete-@(item.Id)").click(function() {
+                                                                                   $('#namefile-@(item.Id)').html("");
+                                                                                   $("#btnDelete-"@(item.Id)).hide();
+                                                                                      //type: "GET",
+                                                                                      //url: "/Upload/DeleteFilesTP?code=@item.Id",
+                                                                                      //data: "",
+                                                                                      //contentType: 'application/json; charset=utf-8',
+                                                                                      //success: function(data) {
+                                                                                      //                //  $('#namefile-@(item.Id)').html(""+result.names+"");
+                                                                                      //                //$("#btnDelete").show();
+                                                                                      //}
+                                                                            });
+                                                                            $(document).ready(function() {
+                                                                                $("#files-@(item.Id)").on('change', function () {
+                                                                                    // Checking whether FormData is available in browser
+                                                                                    if (window.FormData !== undefined) {
+                                                                                        var fileUpload = $(this).get(0);
+                                                                                        var files = fileUpload.files;
+                                                                                        // Create FormData object
+                                                                                        var fileData = new FormData();
+                                                                                        // Looping over all files and add it to FormData object
+                                                                                        for (var i = 0; i < files.length; i++) {
+                                                                                            fileData.append(files[i].name, files[i]);
+                                                                                        }
+                                                                                        // Adding one more key to FormData object
+                                                                                        fileData.append('username', 'Manas');
+                                                                                        $.ajax({
+                                                                                            url: '/Upload/UploadFilesTP?folder=ThanhPhanTTHC&Id=@item.Id' ,
+                                                                                            type: "POST",
+                                                                                            contentType: false, // Not to set any content header
+                                                                                            processData: false, // Not to process data
+                                                                                            data: fileData,
+                                                                                            success: function (result) {
+                                                                                                console.log(result);
+                                                                                                for (var i = 0; i < result.files.length; i++) {
+                                                                                                      //$('#avatar').attr('src', result.files[i]);
+                                                                                                      $('#namefile-@(item.Id)').html(""+result.names+"");
+                                                                                                      $("#btnDelete").show();
+                                                                                                }
+                                                                                            },
+                                                                                            error: function (err) {
+                                                                                                alert(err.statusText);
+                                                                                            }
+                                                                                        });
+                                                                                    } else {
+                                                                                        alert("FormData is not supported.");
+                                                                                    }
+                                                                                });
+                                                                             });
+                                                                        </script>
                                                                         </div>
                                                                     </td>
                                                                     <td align="center" style="width:5%;" >
                                                                         <button type="button" class="btn btn-primary" @((danhsachThanhPhan ?? "").ToString().Contains(item.ma_thanh_phan) ? "" : "disabled" ) data-bs-toggle="modal" id="addData-@(item.ma_thanh_phan)" data-bs-target="#ChonBieuMau" @(ViewBag.view_type == StatusAction.View.ToString()? "" : "hidden") >Chọn</button>
-                                                                        <script>
-                                                                            $('#addData-@(item.ma_thanh_phan)').click(function () {
-                                                                            
-                                                                            });
-                                                                        </script>
                                                                     </td>
                                                                     <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
                                                                     <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>

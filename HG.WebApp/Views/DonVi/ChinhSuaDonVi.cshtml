@@ -51,6 +51,7 @@
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
                     <form id="form_don_vi" action="/DonVi/ChinhSuaDonVi" method="post" enctype="multipart/form-data">
+                        <input hidden name="Id" name="Id" value="@Model.Id" />
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">IP/Domain <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
@@ -89,17 +90,20 @@
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Cấp cơ quan <span style="color:red">(*)</span></label>
                             <div class="col-sm-8"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                @if(ListCapDiaBan != null)
-                                    {
-                                        foreach (var item in ListCapDiaBan)
+                                 <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="GetCoQuanChaTheoID(this)" class="form-control input-default"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @if(ListCapDiaBan != null)
                                         {
-                                            if(item.ma_cap == Model.ma_cap_co_quan)
+                                            foreach (var item in ListCapDiaBan)
                                             {
-                                                <option value="@item.ma_cap" selected>@item.ten_cap</option> 
+                                                if(item.ma_cap == Model.ma_cap_co_quan)
+                                                {
+                                                    <option value="@item.ma_cap" selected>@item.ten_cap</option> 
+                                                }else{
+                                                    <option value="@item.ma_cap">@item.ten_cap</option> 
+                                                }
                                             }
-                                            <option value="@item.ma_cap">@item.ten_cap</option> 
                                         }
-                                    }
+                                 </select>
                             </div>
                         </div>
                          <script>

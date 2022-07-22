@@ -25,6 +25,13 @@ namespace HG.WebApp.Common
             //string s = dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
             string s2 = dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             return s2;
+        } 
+        public static string DateTimeToHHmm(DateTime dt)
+        {
+            //DateTime dt = DateTime.Parse("6/22/2009 07:00:00 AM");
+
+            return dt.ToString("HH:mm"); // 07:00 // 24 hour clock // hour is always 2 digits
+          
         }
         /// <summary>
         /// Đếm số ngày giữa 2 khoảng thời gian

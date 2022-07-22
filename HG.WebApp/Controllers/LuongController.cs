@@ -57,6 +57,7 @@ namespace HG.WebApp.Controllers
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.PageSize = 0;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             return View("~/Views/Luong/LuongXuLy/LuongXuLy.cshtml", ds.lstLuongXuLy);
 
@@ -70,6 +71,7 @@ namespace HG.WebApp.Controllers
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
             ViewBag.PageSize = (currentPage - 1) * pageSize;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
             ViewBag.RecoredFrom = (currentPage - 1) * pageSize + 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/LuongXuLy/LuongXuLyPaging.cshtml", ds.lstLuongXuLy);
@@ -88,6 +90,11 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemLuongXuLy(Dm_Luong_Xu_Ly item)
         {
+            if (item.tt_hai_gd)
+            {
+                item.ma_thu_tuc_map = item.ma_thu_tuc_map2;
+                item.ma_thu_tuc = item.ma_thu_tuc2;
+            }
             item.ma_luong = HelperString.CreateCode(item.ma_luong);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
@@ -131,7 +138,17 @@ namespace HG.WebApp.Controllers
         {
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
+            if (item.tt_hai_gd)
+            {
+                item.ma_thu_tuc_map = item.ma_thu_tuc_map2;
+                item.ma_thu_tuc = item.ma_thu_tuc2;
+            }
+            else
+            {
+                item.luong_cha = "";
+            }
             var response = _danhmucDao.LuuLuongXuLy(item);
+
             if (response > 0)
             {
                 // Xử lý các thông báo lỗi tương ứng
@@ -482,14 +499,14 @@ namespace HG.WebApp.Controllers
                 }
             }
             ds.ma_luong = code;
-            var user = _dmDao.DanhSachNguoiDung("");
+            var user = _dmDao.DanhSachNguoiDung("", 0);
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
             using (var db = new EAContext())
             {
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
             }
-            ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
+            //ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
             ViewBag.PhongBan = lstpb;
@@ -516,7 +533,7 @@ namespace HG.WebApp.Controllers
             }
             ds.ma_luong = code;
             ds.quyTrinhXuLy = ds.lstQuyTrinhXuLy.FirstOrDefault(n => n.Id == step);
-            var user = _dmDao.DanhSachNguoiDung("");
+            var user = _dmDao.DanhSachNguoiDung("", 0);
             var lstpb = new List<Dm_Phong_Ban>();
             var nhanhXuLy = new List<Dm_Nhanh_Xu_Ly>();
             using (var db = new EAContext())
@@ -524,7 +541,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
                 nhanhXuLy = db.Dm_Nhanh_Xu_Ly.Where(n => n.Deleted == 0).ToList();
             }
-            ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
+            //ViewBag.TNHS = _config["AppSetting:KeyTNHS"].ToString();
             ViewBag.NguoiDung = user;
             ViewBag.NhanhXuLy = nhanhXuLy;
             ViewBag.PhongBan = lstpb;
@@ -566,7 +583,18 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LuuNhanh(Dm_Nhanh_Xu_Ly item)
         {
             EAContext db = new EAContext();
-
+            if (item.type == StatusAction.Add.ToString())
+            {
+                var objNhanh = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_nhanh == item.ma_nhanh).Count();
+                if (objNhanh > 0)
+                {
+                    ViewBag.error = 1;
+                    ViewBag.msg = "Mã nhánh đã tồn tại";
+                    var ds = db.Dm_Nhanh_Xu_Ly.Where(n => n.ma_luong == item.ma_luong).ToList();
+                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/Nhanh.cshtml", ds);
+                    return Content(result);
+                }
+            }
             try
             {
                 var objNhanh = db.Dm_Nhanh_Xu_Ly.FirstOrDefault(n => n.ma_nhanh == item.ma_nhanh);
@@ -639,165 +667,177 @@ namespace HG.WebApp.Controllers
         }
         #endregion
         [HttpPost]
-        public async Task<int> ReadFileExcel(IFormFile file)
+        public async Task<IActionResult> ReadFileExcel(IFormFile file)
         {
             var code = 0;
-            var list = new List<string>();
-            var listdata = new List<DataLuong>();
-            using (var stream = new MemoryStream())
+            var ma_luong = "";
+            if (file != null)
             {
-                await file.CopyToAsync(stream);
-                using (var package = new ExcelPackage(stream))
+                try
                 {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
-                    var rowCount = worksheet.Dimension.Rows;
-                    var columnCount = worksheet.Dimension.Columns;
-                    for (int i = 2; i < rowCount + 1; i++)
+                    var list = new List<string>();
+                    var listdata = new List<DataLuong>();
+                    using (var stream = new MemoryStream())
                     {
-                        var luong = new DataLuong();
-                        for (int j = 1; j < columnCount + 1; j++)
+                        await file.CopyToAsync(stream);
+                        using (var package = new ExcelPackage(stream))
                         {
+                            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+                            var rowCount = worksheet.Dimension.Rows;
+                            var columnCount = worksheet.Dimension.Columns;
+                            for (int i = 2; i < rowCount + 1; i++)
+                            {
+                                var luong = new DataLuong();
+                                for (int j = 1; j < columnCount + 1; j++)
+                                {
 
-                            if (j == 1)
-                            {
-                                luong.ma_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 2)
-                            {
-                                luong.ten_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 3)
-                            {
-                                luong.mo_ta = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 4)
-                            {
-                                var matt = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    if (j == 1)
+                                    {
+                                        luong.ma_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                        ma_luong = luong.ma_luong;
+                                    }
+                                    else if (j == 2)
+                                    {
+                                        luong.ten_luong = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 3)
+                                    {
+                                        luong.mo_ta = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 4)
+                                    {
+                                        var matt = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
 
-                                luong.ma_thu_tuc = matt;
+                                        luong.ma_thu_tuc = matt;
+                                    }
+                                    else if (j == 5)
+                                    {
+                                        luong.ten_buoc = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 6)
+                                    {
+                                        luong.nguoi_xl_mac_dinh = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 7)
+                                    {
+                                        luong.nguoi_co_the_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 8)
+                                    {
+                                        luong.nguoi_phoi_hop_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 9)
+                                    {
+                                        luong.so_ngay_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 10)
+                                    {
+                                        luong.stt = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
+                                    }
+                                    else if (j == 11)
+                                    {
+                                        luong.buoc_xl_chinh = worksheet.Cells[i, j].Value == null ? false : worksheet.Cells[i, j].Value.ToString() == "X" ? true : false;
+                                    }
+                                    else
+                                    {
+                                        if (j == 12)
+                                        {
+                                            luong.chuc_nang = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "KYHS," : "") ?? "";
+                                        }
+                                        else if (j == 13)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "YCBSHS," : "") ?? "";
+                                        }
+                                        else if (j == 14)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "HSKDK," : "") ?? "";
+                                        }
+                                        else if (j == 15)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "THUHOIHS," : "") ?? "";
+                                        }
+                                        else if (j == 16)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "TRALAIHS," : "") ?? "";
+                                        }
+                                        else if (j == 17)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "CMC," : "") ?? "";
+                                        }
+                                        else if (j == 18)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "GUIHSLT," : "") ?? "";
+                                        }
+                                        else if (j == 19)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "KTXL," : "") ?? "";
+                                        }
+                                        else if (j == 20)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "INPHOIKQ," : "") ?? "";
+                                        }
+                                        else if (j == 21)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "GUIKQLT," : "") ?? "";
+                                        }
+                                        else if (j == 22)
+                                        {
+                                            luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "THONGBAOCD," : "") ?? "";
+                                        }
+                                    }
+                                }
+                                if (luong.chuc_nang.Length > 0)
+                                {
+                                    luong.chuc_nang = luong.chuc_nang.Remove(luong.chuc_nang.Length - 1, 1);
+                                }
+                                listdata.Add(luong);
                             }
-                            else if (j == 5)
+                            var item = new Dm_Luong_Xu_Ly();
+                            // Insert luồng
+                            if (listdata.FirstOrDefault() != null)
                             {
-                                luong.ten_buoc = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 6)
-                            {
-                                luong.nguoi_xl_mac_dinh = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 7)
-                            {
-                                luong.nguoi_co_the_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 8)
-                            {
-                                luong.nguoi_phoi_hop_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 9)
-                            {
-                                luong.so_ngay_xl = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 10)
-                            {
-                                luong.stt = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString()) ?? "";
-                            }
-                            else if (j == 11)
-                            {
-                                luong.buoc_xl_chinh = worksheet.Cells[i, j].Value == null ? false : worksheet.Cells[i, j].Value.ToString() == "X" ? true : false;
-                            }
-                            else
-                            {
-                                if (j == 12)
+                                item.ma_luong = listdata.FirstOrDefault().ma_luong;
+                                item.ten_luong = listdata.FirstOrDefault().ten_luong;
+                                item.mo_ta = listdata.FirstOrDefault().mo_ta;
+                                item.tt_hai_gd = false;
+                                item.ma_thu_tuc = listdata.FirstOrDefault().ma_thu_tuc;
+                                item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                                item.UidName = User.Identity.Name;
+                                var _pb = _danhmucDao.LuuLuongXuLy(item);
+                                if (_pb == 0)
                                 {
-                                    luong.chuc_nang = (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "KYHS," : "") ?? "";
-                                }
-                                else if (j == 13)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "YCBSHS," : "") ?? "";
-                                }
-                                else if (j == 14)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "HSKDK," : "") ?? "";
-                                }
-                                else if (j == 15)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "THUHOIHS," : "") ?? "";
-                                }
-                                else if (j == 16)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "TRALAIHS," : "") ?? "";
-                                }
-                                else if (j == 17)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "CMC," : "") ?? "";
-                                }
-                                else if (j == 18)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "GUIHSLT," : "") ?? "";
-                                }
-                                else if (j == 19)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "KTXL," : "") ?? "";
-                                }
-                                else if (j == 20)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "INPHOIKQ," : "") ?? "";
-                                }
-                                else if (j == 21)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "GUIKQLT," : "") ?? "";
-                                }
-                                else if (j == 22)
-                                {
-                                    luong.chuc_nang += (worksheet.Cells[i, j].Value == null ? "" : worksheet.Cells[i, j].Value.ToString() == "X" ? "THONGBAOCD," : "") ?? "";
-                                }
-                            }
-                        }
-                        if (luong.chuc_nang.Length > 0)
-                        {
-                            luong.chuc_nang = luong.chuc_nang.Remove(luong.chuc_nang.Length - 1, 1);
-                        }
-                        listdata.Add(luong);
-                    }
-                    var item = new Dm_Luong_Xu_Ly();
-                    // Insert luồng
-                    if (listdata.FirstOrDefault() != null)
-                    {
-                        item.ma_luong = listdata.FirstOrDefault().ma_luong;
-                        item.ten_luong = listdata.FirstOrDefault().ten_luong;
-                        item.mo_ta = listdata.FirstOrDefault().mo_ta;
-                        item.tt_hai_gd = false;
-                        item.ma_thu_tuc = listdata.FirstOrDefault().ma_thu_tuc;
-                        item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
-                        item.UidName = User.Identity.Name;
-                        var _pb = _danhmucDao.LuuLuongXuLy(item);
-                        if (_pb == 0)
-                        {
-                            // Insert quy trình
-                            foreach (var itemlist in listdata)
-                            {
-                                var item2 = new QuyTrinhXuLy();
-                                item2.ma_luong = itemlist.ma_luong;
-                                item2.ten_buoc = itemlist.ten_buoc;
-                                item2.so_ngay_xl = float.Parse(itemlist.so_ngay_xl);
-                                item2.buoc_xl_chinh = itemlist.buoc_xl_chinh;
-                                item2.chuc_nang = itemlist.chuc_nang;
-                                item2.nguoi_xl = itemlist.nguoi_xl_mac_dinh;
-                                item2.nguoi_co_the_xl = itemlist.nguoi_co_the_xl;
-                                item2.nguoi_phoi_hop_xl = itemlist.nguoi_phoi_hop_xl;
-                                item2.Stt = Convert.ToInt32(itemlist.stt);
-                                item2.CreatedUid = Guid.Parse(userManager.GetUserId(User));
-                                item2.UidName = User.Identity.Name;
-                                var _pb2 = _danhmucDao.LuuQuyTrinhXuLyExcel(item2);
-                                if (_pb2.ErrorCode == 0)
-                                {
-                                    code = 1;
+                                    // Insert quy trình
+                                    foreach (var itemlist in listdata)
+                                    {
+                                        var item2 = new QuyTrinhXuLy();
+                                        item2.ma_luong = itemlist.ma_luong;
+                                        item2.ten_buoc = itemlist.ten_buoc;
+                                        item2.so_ngay_xl = float.Parse(itemlist.so_ngay_xl);
+                                        item2.buoc_xl_chinh = itemlist.buoc_xl_chinh;
+                                        item2.chuc_nang = itemlist.chuc_nang;
+                                        item2.nguoi_xl = itemlist.nguoi_xl_mac_dinh;
+                                        item2.nguoi_co_the_xl = itemlist.nguoi_co_the_xl;
+                                        item2.nguoi_phoi_hop_xl = itemlist.nguoi_phoi_hop_xl;
+                                        item2.Stt = Convert.ToInt32(itemlist.stt);
+                                        item2.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+                                        item2.UidName = User.Identity.Name;
+                                        var _pb2 = _danhmucDao.LuuQuyTrinhXuLyExcel(item2);
+                                        if (_pb2.ErrorCode == 0)
+                                        {
+                                            code = 1;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                catch (Exception ex)
+                {
+                    code = 0;
+                }
             }
-            return code;
+            return Json(new { code = code, msg = ma_luong });
         }
 
 
@@ -889,7 +929,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> NguoiDungPhongBan(string code, string type)
         {
-            var user = _dmDao.DanhSachNguoiDung(code);
+            var user = _dmDao.DanhSachNguoiDung(code, 0);
             if (type == "PH")
             {
                 var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/QuyTrinh/NguoiDungPhongBan.cshtml", user);

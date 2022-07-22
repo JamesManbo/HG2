@@ -240,6 +240,7 @@ namespace HG.WebApp.Controllers
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
             ViewBag.txtSearch = tu_khoa;
             ViewBag.MaThuTuc = ma_thu_tuc;
+            ViewBag.trang_thai = trang_thai;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/HoSoPaging.cshtml", hs);
             return Content(result);
         }
@@ -382,9 +383,7 @@ namespace HG.WebApp.Controllers
                 var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
                 //Lấy thủ tục bởi mã lv
                 ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-                ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
-
-
+                ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
                 return View(hoso);
             }
            
@@ -434,6 +433,25 @@ namespace HG.WebApp.Controllers
                 return "Tiếp nhận hồ sơ lỗi !";
             }
         }
+        public string ChuyenCanBoXuLy(int Id)
+        {
+            EAContext db = new EAContext();
+            var obj = db.Ho_So.Where(n => n.Id == Id).FirstOrDefault();
+            if (obj != null)
+            {
+                obj.trang_thai = (int)StatusTiepNhanHoSo.HoSoChoBoSung;
+                obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                obj.UpdatedDateUtc = DateTime.Now;
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+                SaveLogHS(Id, "Chuyển đến người xử lý", (int)StatusTiepNhanHoSo.HoSoTrucTuyen, (int)StatusTiepNhanHoSo.HoSoChoBoSung, Guid.Parse(userManager.GetUserId(User)));
+                return "Chuyển đến người xử lý!";
+            }
+            else
+            {
+                return "Chuyển đến người xử lý lỗi !";
+            }
+        }
         public string LoaiHoSo(int code)
         {
             EAContext db = new EAContext();
@@ -453,6 +471,144 @@ namespace HG.WebApp.Controllers
                 return "Loại hồ sơ lỗi !";
             }
         }
+        public IActionResult HoSoChoBoSung(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.HoSoChoBoSung };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        } 
+        public IActionResult HoSoChoTiepNhanChuaChinhThuc(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.HoSoChoTiepNhanChuaChinhThuc };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
+        public IActionResult HoSoChuyenDaXL(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.HoSoChuyenDaXL };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
 
+        public IActionResult HoSoLienThong(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.HoSoLienThong };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
+        public IActionResult HoSoChoTiepNhanGD2(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.HoSoChoTiepNhanGD2 };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
+        //public IActionResult HoSoTraKQ(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        //{
+        //    var totalRecored = 0;
+        //    var hs = new List<Ho_So>();
+        //    var lv = new List<Dm_Linh_Vuc>();
+        //    HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.Tra };
+        //    hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+        //    using (var db = new EAContext())
+        //    {
+        //        lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+        //    };
+        //    ViewBag.LstLinhVuc = lv;
+        //    ViewBag.CurrentPage = 1;
+        //    ViewBag.TotalRecored = totalRecored;
+        //    ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+        //    ViewBag.CurrentPage = currentPage;
+        //    ViewBag.RecoredFrom = 1;
+        //    ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+        //    ViewBag.txtSearch = txtSearch;
+        //    ViewBag.MaLinhVuc = ma_linh_vuc;
+        //    ViewBag.MaThuTuc = ma_thu_tuc;
+        //    return View(hs);
+        //}
     }
 }

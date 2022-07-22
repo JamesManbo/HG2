@@ -80,17 +80,32 @@
                         <div class="row mb-3">
                             <label for="ma_dvlt_xl" class="col-sm-2 control-label">Thủ tục HC <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @if (ThuTuc != null)
-                                    {
-                                        foreach (var item in ThuTuc)
+                                <div id="tt_gd1">
+                                    <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ThuTuc != null)
                                         {
-                                            <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            foreach (var item in ThuTuc)
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
                                         }
-                                    }
-                                </select>
+                                    </select>
+                                </div>
+                                <div id="tt_gd2">
+                                    <select id="multiselect2" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;" tabindex="-1" aria-hidden="true" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ThuTuc != null)
+                                        {
+                                            foreach (var item in ThuTuc.Where(n => n.thuc_hien_hai_gd == true))
+                                            {
+                                                <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
                                 <input id="ma_thu_tuc" type="text" name="ma_thu_tuc" class="form-control input-default" hidden>
                                 <input id="ma_thu_tuc_map" type="text" name="ma_thu_tuc_map" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc2" type="text" name="ma_thu_tuc2" class="form-control input-default" hidden>
+                                <input id="ma_thu_tuc_map2" type="text" name="ma_thu_tuc_map2" class="form-control input-default" hidden>
                             </div>
                         </div>
                         <div class="row mb-3 tab_luong_cha" style="display:none;">
@@ -113,7 +128,7 @@
 
                                         }
                                     }
-                                </select>                               
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -124,8 +139,11 @@
                         </div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">File excel</label>
-                            <div class="col-sm-8">
-                                <input type="file" id="file" class="form-control input-default" placeholder="Chọn file upload" name="file" value="" maxlength="200">
+                            <div class="col-sm-6" style="display:flex">
+                                <input id="files_excel" name="files_excel" class="form-control input-default">
+                                <button type="button" id="btn_file" onclick="$('#files').click();" class="btn btn-secondary" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>Chọn File</button>
+                                <input type="file" id="files" class="form-control input-default" placeholder="Chọn file upload" name="file" value="" maxlength="200" style="display:none">
+                                @* <input type="file" id="file" class="form-control input-default" placeholder="Chọn file upload" name="file" value="" maxlength="200" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>*@
                             </div>
                         </div>
 
@@ -146,8 +164,10 @@
 
                             <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&type=@ViewBag.type_view';">Quy Trình</button>
                             <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ExportLuong?code=@Model.ma_luong'">Xuất excel</button>
-                            <button type="button" class="btn btn-primary" name="type" onclick="importExcel()">Nhập excel</button>
-
+                            @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                            {
+                                <button type="button" class="btn btn-primary" name="type" onclick="importExcel()">Nhập excel</button>
+                            }
                         </div>
                         <input name="type_view" hidden value="@ViewBag.type_view" />
                     </form><!-- End Horizontal Form -->
@@ -170,7 +190,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -181,44 +201,82 @@
 <script>
     var Arr = [];
     var Arr_map = [];
+    var Arr2 = [];
+    var Arr_map2 = [];
     $(document).ready(function() {
+        $("#files").on('change', function() {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            if (validate_fileupload(files[0].name) == false) {
+                alert("Định dạng tệp tin" + files[0].name + " không hợp lệ!");
+                $("#files").val(null);
+            } else {
+                $("#files_excel").val(files[0].name);
+                $("#btn_file").text("Thay đổi");
+            }
+        })
+
         $("#tt_hai_gd").val($("#tt_hai_gd").is(':checked'));
 
         if ($('#tt_hai_gd').is(':checked')) {
-            $(".tab_luong_cha").attr("style", "display:flex")
+            $("#tt_gd2").attr("style", "display:flex");
+            $("#tt_gd1").attr("style", "display:none");
+            $(".tab_luong_cha").attr("style", "display:flex");
         } else {
-            $(".tab_luong_cha").attr("style", "display:none")
+            $(".tab_luong_cha").attr("style", "display:none");
+            $("#tt_gd1").attr("style", "display:flex");
+            $("#tt_gd2").attr("style", "display:none");
         }
 
         $('#tt_hai_gd').change(function() {
             if ($(this).is(':checked')) {
+                $("#tt_gd2").attr("style", "display:flex");
+                $("#tt_gd1").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:flex")
             } else {
+                $("#tt_gd1").attr("style", "display:flex");
+                $("#tt_gd2").attr("style", "display:none");
                 $(".tab_luong_cha").attr("style", "display:none")
             }
             $('#tt_hai_gd').val($(this).is(':checked'));
         });
 
+
         $('.select2').select2({
             closeOnSelect: false
         });
-
+        console.log('@Model.tt_hai_gd');
         var ngctxl = "@Model.ma_thu_tuc";
         var arrNgctxl = ngctxl.split(";");
         if (arrNgctxl != "") {
-            arrNgctxl.forEach(function(i) {
-                Arr.push(i);
-                $("#ma_thu_tuc").val(Arr.join(";"));
-            });
-            $("#multiselect").val(arrNgctxl).trigger('change');
+            if ('@Model.tt_hai_gd' == "True") {
+                arrNgctxl.forEach(function(i) {
+                    Arr2.push(i);
+                    $("#ma_thu_tuc2").val(Arr2.join(";"));
+                });
+                $("#multiselect2").val(arrNgctxl).trigger('change');
+            } else {
+                arrNgctxl.forEach(function(i) {
+                    Arr.push(i);
+                    $("#ma_thu_tuc").val(Arr.join(";"));
+                });
+                $("#multiselect").val(arrNgctxl).trigger('change');
+            }
         }
+
+
 
         var ma_tt = "@Model.ma_thu_tuc_map";
         var ma_tt_map = ma_tt.split(";");
         if (ma_tt_map != "") {
             ma_tt_map.forEach(function(i) {
-                Arr_map.push(i);
-                $("#ma_thu_tuc_map").val(Arr_map.join(";"));
+                if ('@Model.tt_hai_gd' == "True") {
+                    Arr_map2.push(i);
+                    $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+                } else {
+                    Arr_map.push(i);
+                    $("#ma_thu_tuc_map").val(Arr_map.join(";"));
+                }
             });
         }
 
@@ -237,7 +295,21 @@
             $("#ma_thu_tuc").val(Arr.join(";"));
             $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
+        $('#multiselect2').on('select2:select', function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.push(e.params.data.id);
+            Arr_map2.push(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
 
+        $('#multiselect2').on("select2:unselect", function(e) {
+            var id = $(e.params.data.element).data('id');
+            Arr2.pop(e.params.data.id);
+            Arr_map2.pop(e.params.data.id + "|" + id);
+            $("#ma_thu_tuc2").val(Arr2.join(";"));
+            $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
+        });
 
         jQuery.validator.addMethod("tieng_viet_vaild", function(value, element) {
             if ("ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ".includes(value)) {
@@ -254,10 +326,21 @@
                 return true;
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()+\=\[\]{};':\\|,<>\/?~]");
-          $('#form_pb').submit(function() {
-            if (($("#ma_thu_tuc").val() == '')) {
-                alert('Bank cần nhập mã thủ tục.');
-                return false;
+        $('#form_pb').submit(function() {
+            if (($("#tt_hai_gd").val() == 'true')) {
+                if ($("#luong_cha").val() == '') {
+                    alert('Chưa chọn luông cha.');
+                    return false;
+                }
+                if (($("#ma_thu_tuc2").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
+            } else {
+                if (($("#ma_thu_tuc").val() == '')) {
+                    alert('Chưa chọn TTHC.');
+                    return false;
+                }
             }
             $("#form_pb").valid();
         });
@@ -279,10 +362,10 @@
         });
 
     });
-   
+
 
     function importExcel() {
-        var myfile = document.getElementById("file");
+        var myfile = document.getElementById("files");
         var formData = new FormData();
 
         if (myfile.files.length > 0) {
@@ -297,16 +380,29 @@
             processData: false, // Not to process data
             data: formData,
             success: function(result) {
-                console.log(result);
-                if (result == 1) {
+                if (result.code == 1) {
                     alert("Cập nhật thành công");
-                    window.location.href = "/Luong/SuaLuongXuLy?code=" + '@Model.ma_luong' + "&type=" + '@ViewBag.type_view';
+                    window.location.href = "/Luong/SuaLuongXuLy?code=" + result.msg + "&type=" + '@StatusAction.View.ToString()';
+                } else {
+                    alert("Cập nhật thất bại");
                 }
             },
             error: function(err) {
                 alert(err.statusText);
             }
         });
+    }
+
+    function validate_fileupload(fileName) {
+        var allowed_extensions = new Array("xlsx", "xls", "xlsm");
+        var file_extension = fileName.split('.').pop().toLowerCase(); // split function will split the filename by dot(.), and pop function will pop the last element from the array which will give you the extension as well. If there will be no extension then it will return the filename.
+
+        for (var i = 0; i <= allowed_extensions.length; i++) {
+            if (allowed_extensions[i] == file_extension) {
+                return true; // valid file extension
+            }
+        }
+        return false;
     }
 
     function CheckMa(data) {

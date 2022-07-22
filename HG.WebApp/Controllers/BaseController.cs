@@ -61,7 +61,7 @@ namespace HG.WebApp.Controllers
                 ho_So_History.tra_thai_xu_ly_sau = trangthaisau;
                 ho_So_History.CreatedUid = manguoiupdate;
                 ho_So_History.CreatedDateUtc = DateTime.Now;
-                db.Entry(ho_So_History).State = EntityState.Modified;
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ho_So_History> _role = db.Ho_So_History.Add(ho_So_History);
                 db.SaveChanges();
             }
          }

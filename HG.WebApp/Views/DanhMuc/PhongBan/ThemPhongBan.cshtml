@@ -216,7 +216,7 @@
                     <div class="widgetcontent">
                         <div class="form-group">
                             <select onchange="getUserByPb(this);" name="" id="ddlPhongBan1" class="form-control input-default">
-                                <option value="0">------------ Toàn bộ phòng ban ------------</option>
+                                <option value="">------------ Toàn bộ phòng ban ------------</option>
                                 @foreach (var item in lst_phong_ban)
                                 {
                                     <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>

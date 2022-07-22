@@ -16,6 +16,7 @@ namespace HG.Entities
         public string ma_thu_tuc { get; set; }
         public string ten_thu_tuc { get; set; }
         public int Deleted { get; set; }
+        public bool thuc_hien_hai_gd { get; set; }
 
     }
 

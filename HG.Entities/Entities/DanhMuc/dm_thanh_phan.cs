@@ -12,6 +12,7 @@ namespace HG.Entities.Entities.DanhMuc
     public class dm_thanh_phan : BaseDanhMucModel
     {
         [Key]
+        public int Id { get; set; }
         public string ma_thanh_phan { get; set; }
         public string ma_thu_tuc { get; set; }
      
@@ -26,7 +27,7 @@ namespace HG.Entities.Entities.DanhMuc
         public int? ban_goc { get; set; }
         public int? ban_sao { get; set; }
         public int? ban_pho_to { get; set; }
-        public string? ngay_bat_dau { get; set; }
-        public string? ngay_ket_thuc { get; set; }
+        public DateTime? ngay_bat_dau { get; set; }
+        public DateTime? ngay_ket_thuc { get; set; }
     }
 }

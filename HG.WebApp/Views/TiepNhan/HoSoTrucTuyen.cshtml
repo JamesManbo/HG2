@@ -202,7 +202,7 @@
                                             <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ma_thu_tuc_hc </a></td>
                                             <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.nguoi_xu_ly </a></td>
                                             <td><a href="/TiepNhan/ViewHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra) </a></td>
-                                            <td><a href="#"><span class="glyphicon glyphicon-print">Chuyển CBXL</span> </a></td>
+                                            <td><a href="#"><span class="glyphicon glyphicon-print" onclick="ChuyenCanBoXuLy(@item.Id)">Chuyển CBXL</span> </a></td>
                                             <td><a href="#"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
                                         </tr>
                                         stt++;
@@ -220,8 +220,8 @@
                             {
                                 if (CurrentPage > CurrentPage + 2)
                                 {
-                                      <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                      <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                 };
                                 if (CurrentPage > 3)
                                 {
@@ -229,11 +229,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                   <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
                                 }
@@ -243,11 +243,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                              <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                  <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                              <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
 
@@ -255,8 +255,8 @@
 
                                 if (CurrentPage < CurrentPage + 2)
                                 {
-                                       <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                       <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                           <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                           <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                 };
                             }
                             else
@@ -265,11 +265,11 @@
                                 {
                                     if (i == CurrentPage)
                                     {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                     else
                                     {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                 }
                             }
@@ -282,7 +282,34 @@
         </div>
 
     </div>
+<div class="modal fade" id="NotifyVHS" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body" id="NotifyVHSTitle">
+                Lưu vai trò thành công !!!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    function ChuyenCanBoXuLy(id) {
+        $.ajax({
+            type: "GET",
+            url: "../TiepNhan/ChuyenCanBoXuLy?Id=" + id,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#NotifyVHSTitle").html(data);
+                $("#NotifyVHS").modal("show");
+            }
+        });
+    }
     function GetListByCurrentPage(id) {
         var pageSize = $("#lstPageSize").val();
         $.ajax({

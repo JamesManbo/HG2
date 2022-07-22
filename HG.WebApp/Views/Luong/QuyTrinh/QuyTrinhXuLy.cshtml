@@ -21,7 +21,7 @@
     <div class="pageheader">
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
-            <h5>Danh sách</h5>
+            <h5>Thông tin</h5>
             <h1>Quy trình xử lý</h1>
         </div>
     </div>
@@ -37,7 +37,7 @@
                         <button class="nav-link @(ViewBag.Views.Contains(StatusAction.View.ToString())?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#ds-buoc" role="tab" aria-controls="ds-buoc" aria-selected="true">Danh sách bước</button>
                     </li>
                     <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#nhanh" role="tab" aria-controls="nhanh" aria-selected="false">Nhánh</button>
+                        <button class="nav-link @(ViewBag.Views.Contains(StatusAction.Edit.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#nhanh" role="tab" aria-controls="nhanh" aria-selected="false">Nhánh</button>
                     </li>
                     <li class="nav-item ui-state-default ui-corner-top" role="presentation">
                         <button class="nav-link @(ViewBag.Views.Contains(StatusAction.Add.ToString())?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#tt-buoc" role="tab" aria-controls="tt-buoc" aria-selected="false">Thông tin bước</button>
@@ -98,16 +98,15 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
-
                         </div>
                     </div>
 
                     @*Nhánh *@
-                    <div class="tab-pane fade" id="nhanh" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="tab-pane fade @(ViewBag.Views.Contains(StatusAction.Edit.ToString())?"show active":"")" id="nhanh" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row" style="padding-bottom: 20px;">
                             <form id="form_nhanh">
-                                <input hidden name="ma_luong" value="@Model.ma_luong" />
+                                <input hidden id="t_ma_luong" name="ma_luong" value="@Model.ma_luong" />
+                                <input hidden name="type" value="@StatusAction.Add.ToString()" />
                                 <div class="row">
                                     <label class="col-sm-1 control-label">
                                         Mã nhánh
@@ -202,7 +201,7 @@
                                     <label class="col-md-2 control-label">
                                         Tên bước thực hiện
                                     </label>
-                                    <input type="hidden" name="ma_buoc" id="ma_buoc" value="TN">
+                                    <input type="hidden" name="ma_buoc" id="ma_buoc" value="">
                                     <div class="col-md-3">
                                         <input name="ten_buoc" id="ten_buoc" type="text" value="" class="form-control input-default-sm" placeholder="Nhập tên bước thực hiện">
                                     </div>
@@ -476,6 +475,7 @@
                                         <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.View.ToString()'">
                                     </div>
                                     <div class="col-md-5">
+                                        <span style="color:red;">@(ViewBag.BuocXuLyChinh?"" :"Quy trình chưa có bước xử lý chính")</span>
                                         <br>
                                         <span id="TongSoNgayTT" style="color:Blue;">Tổng số ngày của thủ tục: @Model.tong_ngay_tt Ngày</span>
                                         <br>
@@ -507,7 +507,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -527,7 +527,7 @@
                     <div class="widgetcontent">
                         <div class="form-group">
                             <select onchange="getUserByPb(this);" name="" id="ddlPhongBan1" class="form-control input-default">
-                                <option value="0">------------ Toàn bộ phòng ban ------------</option>
+                                <option value="">------------ Toàn bộ phòng ban ------------</option>
                                 @if (PhongBan != null)
                                 {
                                     foreach (var item in PhongBan)
@@ -547,7 +547,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -598,7 +598,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="ChonNguoiDung()" data-bs-dismiss="modal">Chọn</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -647,7 +647,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="ChonNguoiDung_XL()" data-bs-dismiss="modal">Chọn</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -740,20 +740,21 @@
 
 
     $(document).ready(function() {
-        $('#form_pb').validate({
-            rules: {
-                ten_buoc: {
-                    required: true
-                },
-                so_ngay_xl: "required",
-                nguoi_xl_mac_dinh: "required"
-            },
-            messages: {
-                ten_buoc: {
-                    required: "Bạn cần nhập tên bước!",
-                },
-                so_ngay_xl: "Bạn cần nhập số ngày xử lý!",
-                nguoi_xl_mac_dinh: "Bạn cần nhập người xử lý mặc định!"
+        $('#form_pb').submit(function() {
+            if (($("#ten_buoc").val() == '')) {
+                alert('Chưa chọn tên bước.');
+                document.getElementById("ten_buoc").focus();
+                return false;
+            }
+            if (($("#so_ngay_xl").val() == '')) {
+                alert('Chưa chọn số ngày xử lý.');
+                document.getElementById("so_ngay_xl").focus();
+                return false;
+            }
+            if (($("#nguoi_xl_mac_dinh").val() == '')) {
+                alert('Chưa chọn người xử lý.');
+                document.getElementById("nguoi_xl_mac_dinh").focus();
+                return false;
             }
         });
 
@@ -937,7 +938,8 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             data: dataPost,
             success: function(result) {
-                $("#Tab_Nhanh").html(result);
+                window.location.href = "/Luong/QuyTrinhXuLy?code=" + $("#t_ma_luong").val() + "&views=" + '@StatusAction.Edit.ToString()';
+                // $("#Tab_Nhanh").html(result);
             }
         });
     }
@@ -951,8 +953,9 @@
                 contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: dataPost,
                 success: function(result) {
-                    console.log(result);
-                    $("#Tab_Nhanh").html(result);
+                    window.location.href = "/Luong/QuyTrinhXuLy?code=" + $("#t_ma_luong").val() + "&views=" + '@StatusAction.Edit.ToString()';
+                    //console.log(result);
+                    //$("#Tab_Nhanh").html(result);
                 }
             });
         }
