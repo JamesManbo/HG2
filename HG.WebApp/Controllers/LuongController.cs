@@ -567,10 +567,10 @@ namespace HG.WebApp.Controllers
             return RedirectToAction("QuyTrinhXuLy", "Luong", new { code = item.ma_luong });
         }
 
-        public IActionResult XoaQuyTrinhXuLy(int id, string code)
+        public IActionResult XoaQuyTrinhXuLy(string ma_luong, int id, string code)
         {
             var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _danhmucDao.XoaQuyTrinhXuLy(id, uid);
+            var _pb = _danhmucDao.XoaQuyTrinhXuLy(ma_luong, id, uid);
             if (_pb > 0)
             {
                 // Xử lý các thông báo lỗi tương ứng
@@ -803,7 +803,7 @@ namespace HG.WebApp.Controllers
                                 item.ma_thu_tuc = listdata.FirstOrDefault().ma_thu_tuc;
                                 item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
                                 item.UidName = User.Identity.Name;
-                                var _pb = _danhmucDao.LuuLuongXuLy(item);
+                                var _pb = _danhmucDao.LuuLuongXuLyExcel(item);
                                 if (_pb == 0)
                                 {
                                     // Insert quy trình

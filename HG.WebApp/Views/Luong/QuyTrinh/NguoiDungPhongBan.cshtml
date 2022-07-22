@@ -22,11 +22,17 @@
         },
         afterDeselect: function(values) {
             String(values).split(",").forEach(function(item) {
-                ArrUser.pop(item);
-            });
-            alert(ArrUser);
+                removeElement(ArrUser, item);
+            });            
             $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
         }
     });
     $('#pre-selected-options').multiSelect();
+
+    function removeElement(array, elem) {
+        var index = array.indexOf(elem);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
 </script>

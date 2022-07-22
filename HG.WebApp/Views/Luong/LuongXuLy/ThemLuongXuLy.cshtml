@@ -52,9 +52,9 @@
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
-            var id = $(e.params.data.element).data('id');
-            Arr.pop(e.params.data.id);
-            Arr_map.pop(e.params.data.id + "|" + id);
+            var id = $(e.params.data.element).data('id');           
+            removeElement(Arr, e.params.data.id);
+            removeElement(Arr_map, e.params.data.id + "|" + id);   
             $("#ma_thu_tuc").val(Arr.join(";"));
             $("#ma_thu_tuc_map").val(Arr_map.join(";"));
         });
@@ -68,9 +68,9 @@
         });
 
         $('#multiselect2').on("select2:unselect", function(e) {
-            var id = $(e.params.data.element).data('id');
-            Arr2.pop(e.params.data.id);
-            Arr_map2.pop(e.params.data.id + "|" + id);
+            var id = $(e.params.data.element).data('id');            
+            removeElement(Arr2, e.params.data.id);
+            removeElement(Arr_map2, e.params.data.id + "|" + id);            
             $("#ma_thu_tuc2").val(Arr2.join(";"));
             $("#ma_thu_tuc_map2").val(Arr_map2.join(";"));
         });
@@ -128,6 +128,12 @@
         });
     });
 
+    function removeElement(array, elem) {
+        var index = array.indexOf(elem);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
 
     function validate_fileupload(fileName) {
         var allowed_extensions = new Array("xlsx", "xls", "xlsm");
@@ -253,7 +259,7 @@
                                     <select id="multiselect" class="select2 form-select form-control input-default" multiple="" data-placeholder="Chọn thủ tục" style="width: 100%;display:none" tabindex="-1" aria-hidden="true">
                                         @if (ThuTuc != null)
                                         {
-                                            foreach (var item in ThuTuc)
+                                            foreach (var item in ThuTuc.Where(n => n.thuc_hien_hai_gd == false))
                                             {
                                                 <option value="@item.ma_thu_tuc" data-id="@item.ma_thu_tuc_old">@item.ten_thu_tuc</option>
                                             }

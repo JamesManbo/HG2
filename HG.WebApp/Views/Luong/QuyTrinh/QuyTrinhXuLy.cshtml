@@ -807,7 +807,7 @@
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
-            Arr.pop(e.params.data.id);
+            removeElement(Arr, e.params.data.id);
             $("#nguoi_co_the_xl").val(Arr.join(";"));
         });
 
@@ -817,11 +817,12 @@
         });
 
         $('#multiselect2').on("select2:unselect", function(e) {
-            Arr2.pop(e.params.data.id);
+            removeElement(Arr2, e.params.data.id);
             $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
         });
 
         $('#myModalUser').on('shown.bs.modal', function() {
+            $("#ddlPhongBan1").val("");
             var data = { ma_phong_ban: "" };
             $.ajax({
                 url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
@@ -859,7 +860,7 @@
         },
         afterDeselect: function(values) {
             String(values).split(",").forEach(function(item) {
-                ArrUser.pop(item);
+                removeElement(ArrUser, item);
             });
             $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
         }
@@ -890,12 +891,19 @@
         },
         afterDeselect: function(values) {
             String(values).split(",").forEach(function(item) {
-                ArrUserXL.pop(item);
+                removeElement(ArrUserXL, item);
             });
             $("#nguoi_co_the_xl2").val(ArrUserXL.join(";"));
         }
     });
     $('#Nguoi_XL').multiSelect();
+
+    function removeElement(array, elem) {
+        var index = array.indexOf(elem);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
 
     function SuaNhanh(ma_luong, ma_nhanh) {
         var dataPost = "ma_luong=" + ma_luong + "&ma_nhanh=" + ma_nhanh;
