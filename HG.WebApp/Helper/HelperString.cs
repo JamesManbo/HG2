@@ -229,6 +229,86 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
+        public static List<ListCommonRecords> ListNguyenVongRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Nhóm trẻ 03 - 12 tháng tuổi" },
+               new ListCommonRecords { key=2, noi_dung = "Nhóm trẻ 13 - 24 tháng tuổi" },
+               new ListCommonRecords { key=3, noi_dung = "Nhóm trẻ 25 - 36 tháng tuổi" },
+               new ListCommonRecords { key=4, noi_dung = "Lớp 3 tuổi" },
+               new ListCommonRecords { key=5, noi_dung = "Lớp 4 tuổi" },
+               new ListCommonRecords { key=6, noi_dung = "Lớp 5 tuổi" }
+            };
+            return items;
+        }
+
+        public static List<ListCommonRecords> ListTruongHocRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Nhóm trẻ Hoa Phượng Đỏ, Thành phố Hà Giang" },
+               new ListCommonRecords { key=2, noi_dung = "Nhóm trẻ Mặt Trời Nhỏ, Thành phố Hà Giang" },
+               new ListCommonRecords { key=3, noi_dung = "Nhóm trẻ Ánh Dương, Thành phố Hà Giang" },
+               new ListCommonRecords { key=4, noi_dung = "Trường mầm non Hoa Sen, Thành phố Hà Giang" },
+               new ListCommonRecords { key=5, noi_dung = "Trường mầm non Sao Mai, Thành phố Hà Giang" },
+               new ListCommonRecords { key=6, noi_dung = "Trường mầm non Ngọc Đường, Thành phố Hà Giang" }
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListGioiTinhRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Nam" },
+               new ListCommonRecords { key=2, noi_dung = "Nữ" },
+               new ListCommonRecords { key=3, noi_dung = "Khác" },
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListTinhRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Hà Nội" },
+               new ListCommonRecords { key=2, noi_dung = "Thái Bình" },
+               new ListCommonRecords { key=3, noi_dung = "Nam Định" },
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListHuyenRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Huyện Yên Minh" },
+               new ListCommonRecords { key=2, noi_dung = "Huyện Quảng Bình" },
+               new ListCommonRecords { key=3, noi_dung = "Huyện Đồng văn" },
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListXaRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Xã Yên Thành" },
+               new ListCommonRecords { key=2, noi_dung = "Xã Yên Hà" },
+               new ListCommonRecords { key=3, noi_dung = "Xã Tân Nam" },
+            };
+            return items;
+        }
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Đơn xin nhập học", file_dinh_kem = "" , 
+                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh", file_dinh_kem = "" , 
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+            };
+            return items;
+        }
         public static string GetListSchool()
         {
             return "";
@@ -257,9 +337,25 @@ namespace HG.WebApp.Helper
         public int key { get; set; }
         public int page { get; set; }
     }
+    public class ListCommonRecords
+    {
+        public int key { get; set; }
+        public string noi_dung { get; set; }
+    }
     public class Tempalte
     {
         public string TempFormat { get; set; }
         public string TempElement { get; set; }
+    }
+    public class ThanhPhanHoSoMoDel
+    {
+        public string? ten_thanh_phan { get; set; }
+        public string? file_dinh_kem { get; set; }
+        public string? bieu_mau { get; set; }
+        public int? ban_chinh { get; set; }
+        public int? ban_sao { get; set; }
+        public int? ban_photo { get; set; }
+        public int? id_ghs_tuyen_sinh_cap_mam_non { get; set; }
+        public int? stt { get; set; }
     }
 }

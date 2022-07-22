@@ -3,6 +3,7 @@ using HG.Data.Business.GuiHoSo;
 using HG.Entities;
 using HG.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
 using HG.WebApp.Entities;
@@ -12,10 +13,11 @@ using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static HG.Data.Business.GuiHoSo.TuyenSinhCapMamNonDao;
 
 namespace HG.WebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class GuiHoSoController : BaseController
     {
         private readonly ILogger<UserController> _logger;
@@ -99,10 +101,180 @@ namespace HG.WebApp.Controllers
             }
             return Json(new { error = 1, href = "/GuiHoSo/SuaTuyenSinhCapMamNon?code=" + code.ToUpper() + "&type=" + StatusAction.Edit.ToString() });
         }
+        [HttpPost]
+        public IActionResult UpdateNguoiDung(AspNetUsers obj_user)
+        {
+            var user_id = userManager.GetUserId(User);
 
+
+            var modal = new Ghs_Tuyen_Sinh_Cap_Mam_Non();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstpb = new List<Ghs_Tuyen_Sinh_Cap_Mam_Non>();
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            using (var db = new EAContext())
+            {
+                var userId = Guid.Parse(user_id);
+                lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                nguoi_dung = db.AspNetUsers.Find(userId);
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+            }
+
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+            return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+        }
         public IActionResult ThemTuyenSinhCapMamNon(string code = "")
         {
+            var user_id = userManager.GetUserId(User);
+            
+
             var modal = new Ghs_Tuyen_Sinh_Cap_Mam_Non();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstpb = new List<Ghs_Tuyen_Sinh_Cap_Mam_Non>();
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            using (var db = new EAContext())
+            {
+                var userId = Guid.Parse(user_id);
+                lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                nguoi_dung = db.AspNetUsers.Find(userId);
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+            }
+
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+            ViewBag.code = code;
+            return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+        }
+
+        [HttpPost]
+        public IActionResult ThemTuyenSinhCapMamNon(TuyenSinhCapMamNonModel item)
+        {
+            var ds_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoRecords().OrderBy(x=>x.stt).ToList();
+
+            EAContext eAContext = new EAContext();
+            var data = _tuyensinhcapmamnonDao.mapdata(item);
+            data.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.UidName = User.Identity.Name;
+            data.Deleted = 0;
+            data.CreatedDateUtc = DateTime.Now;
+            //var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == item.ma_don_vi).Count();
+            //if (obj > 0)
+            //{
+            //    ViewBag.ErrorCode = 1;
+            //    ViewBag.ErrorMsg = "Mã đã tồn tại trong hệ thống";
+            //    return View(item);
+            //};
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ghs_Tuyen_Sinh_Cap_Mam_Non> _role = eAContext.Ghs_Tuyen_Sinh_Cap_Mam_Non.Add(data);
+            eAContext.SaveChanges();
+            var roleid = _role.Entity.Id;
+
+            for (int i = 0; i < ds_hs.Count(); i++)
+            {
+                var obj_hs = new Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso();
+                obj_hs.ten_thanh_phan = ds_hs[i].ten_thanh_phan;
+                if (i==0)
+                {
+                    obj_hs.file_dinh_kem = item.filesName_0;
+                }
+                if (i==1)
+                {
+                    obj_hs.file_dinh_kem = item.filesName_1;
+                }
+                var name = "filesName_" + i;
+                obj_hs.bieu_mau = ds_hs[i].bieu_mau;
+                obj_hs.ban_chinh = ds_hs[i].ban_chinh;
+                obj_hs.ban_sao = ds_hs[i].ban_sao;
+                obj_hs.ban_photo = ds_hs[i].ban_photo;
+                obj_hs.id_ghs_tuyen_sinh_cap_mam_non = roleid;
+                obj_hs.Stt = ds_hs[0].stt;
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso> _role_hs = eAContext.Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso.Add(obj_hs);
+            }
+            eAContext.SaveChanges();
+
+            ViewBag.Success = true;
+            ViewBag.Message = "Gửi hồ sơ thành công!";
+            var user_id = userManager.GetUserId(User);
+            var modal = new Ghs_Tuyen_Sinh_Cap_Mam_Non();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            using (var db = new EAContext())
+            {
+                var userId = Guid.Parse(user_id);
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+
+                nguoi_dung = db.AspNetUsers.Find(userId);
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+            }
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+            return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+            //return View(item);
+           
+        }
+        public async Task<IActionResult> LayHuyenTheoTinh(string ma_dia_ban_cha, string noi_dung)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = new List<dm_dia_ban>();
+            LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == ma_dia_ban_cha).ToList();
+            var result = "";
+            if (noi_dung == "huyen_noi_sinh")
+            {
+                 result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/TuyenSinhCapMamNon/DiaBanHuyenNoiSinh.cshtml", LstDiaBan);
+            }
+            if (noi_dung == "huyen_noi_cu_tru")
+            {
+                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/TuyenSinhCapMamNon/DiaBanHuyenNoiCuTru.cshtml", LstDiaBan);
+            }
+            if (noi_dung == "xa_noi_cu_tru")
+            {
+                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/TuyenSinhCapMamNon/DiaBanHuyenNoiCuTru.cshtml", LstDiaBan);
+            }
+            return Content(result);
+            //return LstDiaBan;
+        }
+        public IActionResult SuaTuyenSinhCapMamNon(string code, string type)
+        {
             var user = _danhmucDao.DanhSachNguoiDung("");
             var lstpb = new List<Ghs_Tuyen_Sinh_Cap_Mam_Non>();
             var lstdv = new List<dm_don_vi>();
@@ -114,92 +286,38 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_phong_ban = lstpb;
             ViewBag.lst_don_vi = lstdv;
-            ViewBag.code = code;
-            return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
-        }
-
-        [HttpPost]
-        public IActionResult ThemTuyenSinhCapMamNon(Ghs_Tuyen_Sinh_Cap_Mam_Non pb)
-        {
-
-            //pb.ma_ho_so = HelperString.CreateCode(pb.ma_ho_so);
-            pb.ma_ho_so = "MaHoSo";
-            pb.thong_tin_chi_tiet = "Thông tin chi tiết";
-            pb.CreatedUid = Guid.Parse(userManager.GetUserId(User));
-            pb.UidName = User.Identity.Name;
-            var _pb = _tuyensinhcapmamnonDao.Luu(pb);
-            if (_pb.ErrorCode > 0)
-            {
-                ViewBag.error = 1;
-                ViewBag.msg = _pb.ErrorMsg;
-            }
-            if (pb.type_view == StatusAction.Add.ToString() || _pb.ErrorCode > 0)
-            {
-                var user = _tuyensinhcapmamnonDao.DanhSachNguoiDung("");
-                var lstpb = new List<Ghs_Tuyen_Sinh_Cap_Mam_Non>();
-                using (var db = new EAContext())
-                {
-                    lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
-                }
-                ViewBag.lst_nguoi_dung = user;
-                ViewBag.lst_phong_ban = lstpb;
-                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", pb);
-            }
-            if (pb.type_view == StatusAction.View.ToString())
-            {
-                return RedirectToAction("SuaTuyenSinhCapMamNon", "GuiHoSo", new { code = pb.ma_ho_so, type = StatusAction.View.ToString() });
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-
-        public IActionResult SuaTuyenSinhCapMamNon(string code, string type)
-        {
-            var user = _danhmucDao.DanhSachNguoiDung("");
-            var lstpb = new List<Dm_Phong_Ban>();
-            var lstdv = new List<dm_don_vi>();
-            using (var db = new EAContext())
-            {
-                lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
-                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
-            }
-            ViewBag.lst_nguoi_dung = user;
-            ViewBag.lst_phong_ban = lstpb;
-            ViewBag.lst_don_vi = lstdv;
-            var pb = lstpb.Where(n => n.ma_phong_ban == code).FirstOrDefault();
+            var pb = lstpb.Where(n => n.ma_ho_so == code).FirstOrDefault();
             ViewBag.type_view = type;
-            return View("~/Views/DanhMuc/Phongban/SuaPhongBan.cshtml", pb);
+            return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/SuaTuyenSinhCapMamNon.cshtml", pb);
         }
 
         [HttpPost]
-        public IActionResult SuaTuyenSinhCapMamNon(string code, string type, Dm_Phong_Ban item)
+        public IActionResult SuaTuyenSinhCapMamNon(string code, string type, TuyenSinhCapMamNonModel item)
         {
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
-            var _pb = _danhmucDao.LuuPhongBan(item);
+            var _pb = _tuyensinhcapmamnonDao.Luu(item);
             if (_pb.ErrorCode > 0)
             {
                 ViewBag.error = 1;
                 ViewBag.msg = _pb.ErrorMsg;
                 var user = _danhmucDao.DanhSachNguoiDung("");
-                var lstpb = new List<Dm_Phong_Ban>();
+                var lstpb = new List<Ghs_Tuyen_Sinh_Cap_Mam_Non>();
                 using (var db = new EAContext())
                 {
-                    lstpb = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                    lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 }
                 ViewBag.lst_phong_ban = lstpb;
                 ViewBag.lst_nguoi_dung = user;
-                return PartialView("~/Views/DanhMuc/Phongban/SuaPhongBan.cshtml", item);
+                return PartialView("~/Views/GuiHoSo/TuyenSinhCapMamNon/SuaTuyenSinhCapMamNon.cshtml", item);
             }
             if (item.type_view == StatusAction.Add.ToString())
             {
-                return RedirectToAction("ThemPhongBan", "DanhMuc");
+                return RedirectToAction("ThemTuyenSinhCapMamNon", "DanhMuc");
             }
             else if (item.type_view == StatusAction.View.ToString())
             {
-                return RedirectToAction("SuaPhongBan", "DanhMuc", new { code = item.ma_phong_ban, type = StatusAction.View.ToString() });
+                return RedirectToAction("SuaTuyenSinhCapMamNon", "GuiHoSo", new { code = item.ma_ho_so, type = StatusAction.View.ToString() });
             }
             return BadRequest();
 

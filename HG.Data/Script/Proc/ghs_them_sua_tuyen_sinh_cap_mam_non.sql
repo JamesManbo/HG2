@@ -14,14 +14,16 @@ GO
 -- =============================================
 --declare @ma_loi int exec dm_them_sua_phong_ban 'ttttt','aaaa','','00000000-0000-0000-0000-000000000000','00000000-0000-0000-0000-000000000000','2121',null @ma_loi out select @ma_loi
 alter PROCEDURE [dbo].[ghs_them_sua_tuyen_sinh_cap_mam_non] 
-	@ma_ho_so varchar(25),
+	@Id int,
+	@ma_ho_so varchar(25)='',
+	@nam_hoc nvarchar(50)='',
 	@thong_tin_chi_tiet nvarchar(500),
 	@id_truong int=null,
 	@ho_ten_hoc_sinh varchar(250)='',
 	@so_dinh_danh varchar(250)='',
 	@ngay_sinh datetime=null,
 	@gioi_tinh int=null,
-	@id_dan_toc int=null,
+	@ma_dan_toc varchar(25)='',
 	@id_tinh_noi_sinh int=null,
 	@id_huyen_noi_sinh int=null,
 	@id_tinh_noi_cu_tru int=null,
@@ -47,18 +49,19 @@ BEGIN
 	SET @ma_loi = 99 	
 
 	-- Kiểm tra trạng tồn tại thì cập nhật không thì thêm mới
-	IF EXISTS(SELECT top 1 1 from ghs_tuyen_sinh_cap_mam_non where ma_ho_so=@ma_ho_so)
+	IF EXISTS(SELECT top 1 1 from ghs_tuyen_sinh_cap_mam_non where Id=@Id)
 	BEGIN			
 			Update ghs_tuyen_sinh_cap_mam_non 
 			set 
 			ma_ho_so=@ma_ho_so,
+			nam_hoc=@nam_hoc,
 			thong_tin_chi_tiet=@thong_tin_chi_tiet,
 			id_truong=@id_truong,
 			ho_ten_hoc_sinh=@ho_ten_hoc_sinh,
 			so_dinh_danh=@so_dinh_danh,
 			ngay_sinh=@ngay_sinh,
 			gioi_tinh=@gioi_tinh,
-			id_dan_toc=@id_dan_toc,
+			ma_dan_toc=@ma_dan_toc,
 			id_tinh_noi_sinh=@id_tinh_noi_sinh,
 			id_huyen_noi_sinh=@id_huyen_noi_sinh,
 			id_tinh_noi_cu_tru=@id_tinh_noi_cu_tru,
@@ -86,13 +89,14 @@ BEGIN
 		INSERT INTO ghs_tuyen_sinh_cap_mam_non 
 		(
 		ma_ho_so,
+		nam_hoc,
 		thong_tin_chi_tiet,
 		id_truong,
 		ho_ten_hoc_sinh,
 		so_dinh_danh,
 		ngay_sinh,
 		gioi_tinh,
-		id_dan_toc,
+		ma_dan_toc,
 		id_tinh_noi_sinh,
 		id_huyen_noi_sinh,
 		id_tinh_noi_cu_tru,
@@ -114,9 +118,9 @@ BEGIN
 		UidName
 		)
 		VALUES (
-		@ma_ho_so,
+		@ma_ho_so,@nam_hoc,
 		@thong_tin_chi_tiet,@id_truong,@ho_ten_hoc_sinh,@so_dinh_danh,
-		@ngay_sinh,@gioi_tinh,@id_dan_toc,@id_tinh_noi_sinh,@id_huyen_noi_sinh,
+		@ngay_sinh,@gioi_tinh,@ma_dan_toc,@id_tinh_noi_sinh,@id_huyen_noi_sinh,
 		@id_tinh_noi_cu_tru,@id_huyen_noi_cu_tru,@id_xa_noi_cu_tru, @thon_xom,
 		@ho_ten_lien_he,@so_cccd_lien_he,@dien_thoai_lien_he,@id_nguyen_vong,
 		
