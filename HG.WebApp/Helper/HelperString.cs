@@ -309,6 +309,20 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoCapTieuHocRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Đơn xin tuyển sinh vào lớp 1", file_dinh_kem = "" ,
+                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" ,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+            };
+            return items;
+        }
+
         public static string GetListSchool()
         {
             return "";

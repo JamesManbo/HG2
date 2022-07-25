@@ -71,8 +71,10 @@ namespace HG.WebApp.Data
         // AnTX Gửi hồ sơ 
         public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Mam_Non> Ghs_Tuyen_Sinh_Cap_Mam_Non { get; set; }
         public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso> Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso { get; set; }
-        public virtual DbSet<dm_huyen> dm_huyen { get; set; }
-        public virtual DbSet<dm_xa> dm_xa { get; set; }
+
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Tieu_Hoc> Ghs_Tuyen_Sinh_Cap_Tieu_Hoc { get; set; }
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Tieu_Hoc_Hoso> Ghs_Tuyen_Sinh_Cap_Tieu_Hoc_Hoso { get; set; }
+
         // End Antx -----
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
