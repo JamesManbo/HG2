@@ -1,146 +1,220 @@
 ﻿@model HG.WebApp.Models.DanhMuc.PhanQuyenModel;
-                <script>
-                      $(document).ready(function() {
-                            $('#selectAll').click(function() {
-                                var val = [];
-                                if ($(this).is(':checked')) {
-                                    $(".ads_Checkbox").prop("checked", true);
-                                    $(':checkbox:checked').each(function(i) {
-                                        if (i > 0) {
-                                            val[i - 1] = $(this).val();
-                                        }
-                                    });
-                                }
-                                else {
-                                    $(".ads_Checkbox").prop("checked", false);
-                                    val = [];
-                                }
-                                 $('input[name="lstCode"]').attr('value',val);
-                            });
-
-
-                            $('.ads_Checkbox').click(function() {
-                                var val = [];
-                                $(':checkbox:checked').each(function(i) {
-                                    if ($('#selectAll').is(':checked')) {
-                                        if (i > 0) {
-                                            val[i - 1] = $(this).val();
-                                        }
-                                    } else {
-                                        val[i] = $(this).val();
-                                    }
-
-                                });
-                                $('input[name="lstCode"]').attr('value',val);
-                            });
-    
-                        });
-                </script>
-
-                <input hidden name="lstCode" id="lstCode" value="@(Model.Asp_vaitro_quyen == null? "" : string.Join(",",  Model.Asp_vaitro_quyen.Select(n=>n.ma_chuc_nang).ToArray()))"/>
-                <input hidden name="lstRole" id="lstRole" value=""/>
-                <div class="dataTables_length">
-                    <label>
-                        Hiển thị
-                        <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
-                            <option value="5">5</option>
-                            <option value="10" selected="">10</option>
-                            <option value="15">15</option>
-                            <option value="20">20</option>
-                            <option value="25">25</option>
-                        </select> bản ghi
-                    </label>
-                </div>
+                @{
+                     var lstnotdisplay = ViewBag.lstMenu2Paging as List<HG.Entities.Dm_menu>;
+                }
                 <div id="dataTable">
-                    <div class="dataTable-container">
-                        <table class="table table-bordered responsive">
-                            <thead class="widgettitle">
-                                <tr>
+                    <input hidden name="lstCode" id="lstCode" value="@(Model.Asp_vaitro_quyen == null? "" : string.Join(",",  Model.Asp_vaitro_quyen.Select(n=>n.ma_chuc_nang).ToArray()))"/>
+                    <input hidden name="lstRole" id="lstRole" value=""/>
+                         <div id="paggingTable">
+                        <div class="dataTable-container">
+                            <table class="table table-bordered responsive">
+                                <thead class="widgettitle">
+                                    <tr>
                                     
-                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                            <input type="checkbox" name="" id="selectAll" />
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.dm_Menu_Pagings != null)
-                                {
-                                var stt = 1;
-                                    foreach (var item in Model.dm_Menu_Pagings.lstMenu)
+                                        <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                        <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                        <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                        <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                <input type="checkbox" name="" id="selectAll" />
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.dm_Menu_Pagings != null)
                                     {
-                                        <tr>
-                                            <td scope="row">
-                                                @stt
-                                                <input type="hidden" name="" id="" value="@item.ma_trang" />
-                                            </td>
-                                            <td><p id="addData-@(stt-1)" name = "@(item.ma_trang)" style="cursor:pointer; color:cornflowerblue">@item.ten_trang</p>
-                                                
-                                              <script>
-                                                  
-                                                $('#addData-@(stt-1)').click(function () {
-                                                    var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
-                                                    if (ma_vai_tro == null || ma_vai_tro == undefined || ma_vai_tro == "") { 
-                                                        alert("bạn chưa chọn vai trò");
-                                                        return;
-                                                    }
-                                                    var checkVal = "false";
-                                                    const myArray = $("#lstCode").val().split(",");
-                                                    for (var k = 0; k < myArray.length; k++) {
-                                                        if(myArray[k] == $('#addData-@(stt-1)').attr('name').split(',')[0]){
-                                                             checkVal = "true";
+                                    
+                                        var stt = 1;
+                                        foreach (var item in Model.dm_Menu_Pagings.lstMenu)
+                                        {
+                                             var obj = (Model.Asp_vaitro_quyen ?? new List<HG.Entities.Entities.SuperAdmin.Asp_vaitro_quyen>()).Where(n => n.ma_chuc_nang == @item.ma_trang).FirstOrDefault();
+                                            <tr>
+                                                <td scope="row">
+                                                    @stt
+                                                    <input type="hidden" name="" id="" value="@item.ma_trang" />
+                                                </td>
+                                                <td>
+                                                      @if(obj != null)
+                                                        {
+                                                             <p id="addData-@(stt-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                             <input id="MenuId-@item.ma_trang" name = "@(obj.ds_ma_quyen)" value="@obj.ds_ma_quyen"  hidden/> // dung de add danh sach quyen
                                                         }
-                                                    }
-                                                    if (checkVal == "false") {
-                                                        alert("bạn phải chọn chức năng trước");
-                                                        return;
-                                                    }
-                                                    $.ajax({
-                                                            type: "GET",
-                                                            url: "/SuperAdmin/ChucNangQuyenPartial?ma_trang=" + $('#addData-@(stt-1)').attr('name').split(',')[0] + "&ma_vai_tro="+ma_vai_tro,
-                                                            data: "",
-                                                            contentType: 'application/json; charset=utf-8',
-                                                            success: function(data) {
-                                                                $("#contetModel").html(data);
-                                                                $("#basicModal").modal("show");
-                                                            }
-                                                     });
+                                                        else
+                                                        {
+                                                           <p id="addData-@(stt-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                           <input id="MenuId-@item.ma_trang" name = "" value=""  hidden/>
+                                                        }
+                                                  <script>
+                                                  
+                                                    $('#addData-@(stt-1)').click(function () {
+                                                        var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+                                                        if (ma_vai_tro == null || ma_vai_tro == undefined || ma_vai_tro == "") { 
+                                                            alert("bạn chưa chọn vai trò");
+                                                            return;
+                                                        }
+                                                         var checkVal = "false";
+                                                         var MenuId = "MenuId-";
+                                                                const myArray = $("#lstCode").val().split(",");
+                                                                for (var k = 0; k < myArray.length; k++) {
+                                                                    if(myArray[k] == $('#addData-@(stt-1)').attr('name').split(',')[0]){
+                                                                         checkVal = "true";
+                                                                         MenuId = MenuId + $('#addData-@(stt-1)').attr('name').split(',')[0];
+                                                                    }
+                                                                }
+                                                                var dsquyen = $("#" + MenuId).val();
+                                                                if (dsquyen == null || dsquyen == undefined || dsquyen == 0) {
+                                                                    dsquyen = "NO";
+                                                                }
+                                                                if (checkVal == "false") {
+                                                                    alert("bạn phải chọn chức năng trước");
+                                                                    return;
+                                                                };
+                                                                 $.ajax({
+                                                                        type: "GET",
+                                                                        url: "/SuperAdmin/ChucNangQuyenPartial?ma_trang=" + $('#addData-@(stt-1)').attr('name').split(',')[0] + "&ma_vai_tro=" + ma_vai_tro + "&dsquyen=" + dsquyen ,
+                                                                        data: "",
+                                                                        contentType: 'application/json; charset=utf-8',
+                                                                        success: function(data) {
+                                                                            $("#contetModel").html(data);
+                                                                            $("#basicModal").modal("show");
+                                                                        }
+                                                                 });
                                                       
-                                                });
-                                            </script>
-                                            </td>
-                                            <td><p  id="addData-@(stt-1)" name = "@(item.ma_trang)" style="cursor:pointer; color:cornflowerblue">@item.mo_ta</p> </td>
-                                            <td><input type="checkbox" class="ads_Checkbox" @(Model.Asp_vaitro_quyen == null ? "": Model.Asp_vaitro_quyen.Where(n=>n.ma_chuc_nang == item.ma_trang).Count() > 0 ? "checked": "") value="@item.ma_trang" /></td>
+                                                    });
+                                                </script>
+                                                </td>
+                                                <td><p  id="addData-@(stt-1)" name = "@(item.ma_trang)" style="cursor:pointer; color:cornflowerblue">@item.mo_ta</p> </td>
+                                                <td><input type="checkbox" class="ads_Checkbox" @(Model.Asp_vaitro_quyen == null ? "": Model.Asp_vaitro_quyen.Where(n=>n.ma_chuc_nang == item.ma_trang).Count() > 0 ? "checked": "") value="@item.ma_trang" /></td>
                                            
-                                        </tr>
-                                        stt++;
+                                            </tr>
+                                            stt++;
+                                        }
                                     }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                    @if(lstnotdisplay != null){
+                                       var stt2 = 999;
+                                        foreach (var item in lstnotdisplay)
+                                          {
+                                              var obj = (Model.Asp_vaitro_quyen ?? new List<HG.Entities.Entities.SuperAdmin.Asp_vaitro_quyen>()).Where(n => n.ma_chuc_nang == @item.ma_trang).FirstOrDefault();
+                                              <tr style="display: none">
+                                                  <td scope="row">
+                                                      @stt2
+                                                      <input type="hidden" name="" id="" value="@item.ma_trang" />
+                                                  </td>
+                                                  <td>
+                                                      @if(obj != null)
+                                                      {
+                                                           <p id="addData-@(stt2-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                           <input id="MenuId-@item.ma_trang" name = "@(obj.ds_ma_quyen)" value="@obj.ds_ma_quyen"  hidden/> // dung de add danh sach quyen
+                                                      }
+                                                      else
+                                                      {
+                                                         <p id="addData-@(stt2-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                         <input id="MenuId-@item.ma_trang" name = "" value="@item.ma_trang"  hidden/>
+                                                      }
+                      
+                                                    <script>
+                                                      $('#addData-@(stt2-1)').click(function () {
+                                                          var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+                                                          if (ma_vai_tro == null || ma_vai_tro == undefined || ma_vai_tro == "") { 
+                                                              alert("bạn chưa chọn vai trò");
+                                                              return;
+                                                          }
+                                                          var checkVal = "false";
+                                                          var MenuId = "MenuId-";
+                                                             const myArray = $("#lstCode").val().split(",");
+                                                             for (var k = 0; k < myArray.length; k++) {
+                                                                 if(myArray[k] == $('#addData-@(stt2-1)').attr('name').split(',')[0]){
+                                                                      checkVal = "true";
+                                                                      MenuId = MenuId + $('#addData-@(stt2-1)').attr('name').split(',')[0];
+                                                                 }
+                                                             }
+                                                             var dsquyen = $("#" + MenuId).val();
+                                                             if (dsquyen == null || dsquyen == undefined || dsquyen == 0) {
+                                                                        dsquyen = "NO";
+                                                                }
+                                                             if (checkVal == "false") {
+                                                                 alert("bạn phải chọn chức năng trước");
+                                                                 return;
+                                                             };
+                                                             $.ajax({
+                                                                     type: "GET",
+                                                                     url: "/SuperAdmin/ChucNangQuyenPartial?ma_trang=" + $('#addData-@(stt2-1)').attr('name').split(',')[0] + "&ma_vai_tro=" + ma_vai_tro + "&dsquyen=" + dsquyen ,
+                                                                     data: "",
+                                                                     contentType: 'application/json; charset=utf-8',
+                                                                     success: function(data) {
+                                                                         $("#contetModel").html(data);
+                                                                         $("#basicModal").modal("show");
+                                                                     }
+                                                              });  
+                        
+                                                      });
+                                                  </script>
+                                                  </td>
+                                                  <td><a href=""  id="addData-@(stt2-1)" name = "@(item.ma_trang)" data-toggle="modal" data-target="#basicModal" name = "@(item.ma_trang)" >@item.mo_ta</a> </td>
+                                                  <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_trang" @(Model.Asp_vaitro_quyen == null ? "": Model.Asp_vaitro_quyen.Where(n=>n.ma_chuc_nang == item.ma_trang).Count() > 0 ? "checked": "") /></td>
+                 
+                                              </tr>
+                                              stt2++;
+                                          }
+                                      }
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.RecoredFrom đến  @Model.RecoredTo của @Model.dm_Menu_Pagings.Pagelist.TotalRecords bản ghi</div>
-                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                            @{
-                                var TotalPage = (int)Model.TotalPage;
-                                var CurrentPage = (int)Model.CurrentPage;
-                            if (TotalPage > 5)
-                            {
-                                if (CurrentPage > CurrentPage + 2)
+                        <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.RecoredFrom đến  @Model.RecoredTo của @Model.dm_Menu_Pagings.Pagelist.TotalRecords bản ghi</div>
+                        <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                @{
+                                    var TotalPage = (int)Model.TotalPage;
+                                    var CurrentPage = (int)Model.CurrentPage;
+                                if (TotalPage > 5)
                                 {
-                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>                                                                                                                                             
-                                };
-                                if (CurrentPage > 3)
+                                    if (CurrentPage > CurrentPage + 2)
+                                    {
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>                                                                                                                                             
+                                    };
+                                    if (CurrentPage > 3)
+                                    {
+                                        for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                       <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                       <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                      <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+
+                                    }
+
+                                    if (CurrentPage < CurrentPage + 2)
+                                    {
+                                                      <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                      <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                    };
+                                }
+                                else
                                 {
-                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                    for (int i = 1; i <= TotalPage; i++)
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                     <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
@@ -148,42 +222,43 @@
                                         }
                                     }
                                 }
-                                else
-                                {
-                                    for (int i = 1; i <= 5; i++)
-                                    {
-                                        if (i == CurrentPage)
-                                        {
-                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                        }
-                                        else
-                                        {
-                                                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                        }
-                                    }
-
-                                }
-
-                                if (CurrentPage < CurrentPage + 2)
-                                {
-                                                  <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
-                                };
                             }
-                            else
-                            {
-                                for (int i = 1; i <= TotalPage; i++)
-                                {
-                                    if (i == CurrentPage)
-                                    {
-                                                 <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                    }
-                                    else
-                                    {
-                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
-                                    }
-                                }
-                            }
-                        }
+                        </div>
                     </div>
                 </div>
+                <script>
+                 $(document).ready(function() {
+                     $('#selectAll').click(function() {
+                         var val = [];
+                         if ($(this).is(':checked')) {
+                             $(".ads_Checkbox").prop("checked", true);
+                             $(':checkbox:checked').each(function(i) {
+                                 if (i > 0) {
+                                     val[i - 1] = $(this).val();
+                                 } 
+                             });
+                         }
+                         else {
+                             $(".ads_Checkbox").prop("checked", false);
+                             val = [];
+                         }
+                          $('input[name="lstCode"]').attr('value',val);
+                     });
+                     $('.ads_Checkbox').click(function() {
+                         var val = [];
+                         $(':checkbox:checked').each(function(i) {
+                             if ($('#selectAll').is(':checked')) {
+                                 if (i > 0) {
+                                     val[i - 1] = $(this).val();
+                                 }
+                             } else {
+                                 val[i] = $(this).val();
+                             }
+
+                         });
+                         $('input[name="lstCode"]').attr('value',val);
+                     });
+    
+                 });
+            </script>
+            

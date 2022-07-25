@@ -404,5 +404,13 @@ namespace HG.WebApp.Controllers
             }
             
         }
+        public IActionResult CurrentUser()
+        {
+            if (User.Identity.Name == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return PartialView();
+        }
     }
 }

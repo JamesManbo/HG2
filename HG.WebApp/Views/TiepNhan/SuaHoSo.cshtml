@@ -88,9 +88,13 @@
                                     <div class="col-md-3">
                                          <select class="dataTable-selector form-control" name="gioi_tinh" id="gioi_tinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                                             <option value="0" selected>Chọn giới tính</option>
-                                            <option value="1">Nam</option>
-                                            <option value="2">Nữ</option>
-                                            <option value="3">Khác</option>
+                                            @foreach (var item in HG.WebApp.Helper.HelperString.ListGenders())
+                                            {
+                                                if(item.key == Model.gioi_tinh){
+                                                    <option value="@item.key" selected>@item.name</option>
+                                                }else{<option value="@item.key">@item.name</option>}
+                                                
+                                            }
                                         </select>
                                     </div>
                                 </div>

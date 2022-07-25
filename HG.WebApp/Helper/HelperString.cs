@@ -229,7 +229,17 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
-
+        public static List<Gender> ListGenders()
+        {
+            List<Gender> items = new List<Gender>
+            {
+               new Gender { key=1, name = "Nam" },
+               new Gender { key=2, name = "Nữ" },
+               new Gender { key=3, name = "Khác" },
+              
+            };
+            return items;
+        }
         public static List<Tempalte> ListTemplate()
         {
             List<Tempalte> items = new List<Tempalte>
@@ -253,6 +263,11 @@ namespace HG.WebApp.Helper
     {
         public int key { get; set; }
         public int page { get; set; }
+    }
+    public class Gender
+    {
+        public int key { get; set; }
+        public string name { get; set; }
     }
     public class Tempalte
     {
