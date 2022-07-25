@@ -77,6 +77,9 @@ namespace HG.WebApp.Data
 
         public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THCS> Ghs_Tuyen_Sinh_Cap_THCS { get; set; }
         public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THCS_Hoso> Ghs_Tuyen_Sinh_Cap_THCS_Hoso { get; set; }
+
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THPT> Ghs_Tuyen_Sinh_Cap_THPT { get; set; }
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THPT_Hoso> Ghs_Tuyen_Sinh_Cap_THPT_Hoso { get; set; }
         // End Antx -----
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

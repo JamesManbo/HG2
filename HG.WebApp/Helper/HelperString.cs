@@ -242,7 +242,21 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
+        public static List<ListStrCommonRecords> ListNguyenVong2_THPTRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="01", noi_dung = "PTDT Nội trú THCS&THPT Bắc Mê, Huyện Bắc Mê" },
+               new ListStrCommonRecords { ma="02", noi_dung = "PTDT Nội trú THCS&THPT Hoàng Su Phì, Huyện Hoàng Su Phì" },
+               new ListStrCommonRecords { ma="03", noi_dung = "PTDT Nội trú THCS&THPT Bắc Quang, Huyện Bắc Quang" },
+               new ListStrCommonRecords { ma="04", noi_dung = "PTDT Nội trú  THCS&THPT Yên Minh, Thị trấn Yên Minh, Huyện Yên Minh" },
+               new ListStrCommonRecords { ma="05", noi_dung = "PTDT Nội trú THCS&THPT Xín Mần, Huyện Xín Mần" },
+               new ListStrCommonRecords { ma="06", noi_dung = "PTDT Nội trú THCS&THPT Đồng Văn, Huyện Đồng Văn" },
+               new ListStrCommonRecords { ma="07", noi_dung = "PTDTNT THPT tỉnh Hà Giang, Thành phố Hà Giang" },
 
+            };
+            return items;
+        }
         public static List<ListCommonRecords> ListTruongHocRecords()
         {
             List<ListCommonRecords> items = new List<ListCommonRecords>
@@ -306,6 +320,16 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
+        public static List<ListStrCommonRecords> ListHanhKiemRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="trungbinh", noi_dung = "Trung bình" },
+               new ListStrCommonRecords { ma="kha", noi_dung = "Khá" },
+               new ListStrCommonRecords { ma="tot", noi_dung = "Tốt" },
+            };
+            return items;
+        }
         public static List<ListStrCommonRecords> ListUuTienRecords()
         {
             List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
@@ -349,22 +373,53 @@ namespace HG.WebApp.Helper
             {
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" , is_bat_buoc = true,
-                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                    bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0, stt = 1},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Học bạ cấp tiểu học hoặc các hồ sơ khác có giá trị thay thế học bạ",
                     file_dinh_kem = "" , is_bat_buoc = true,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 2},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Sổ hộ khẩu", file_dinh_kem = "" , is_bat_buoc = false,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 3},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Giấy xác nhận chế độ ưu tiên, do cơ quan có thẩm quyền cấp (nếu có)", 
                    file_dinh_kem = "" , is_bat_buoc = false,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 4},
             };
             return items;
         }
-
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoCapTHPTRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" , is_bat_buoc = true,
+                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="	Sổ hộ khẩu (bản sao hợp lệ) hoặc văn bản xác nhận thông tin " +
+                   "về cư trú của cơ quan có thẩm quyền " +
+                   "(Bắt buộc đối với tuyển sinh vào trường PTDT Nội trú)",
+                    file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Học bạ cấp trung học cơ sở", file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 3},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy xác nhận chế độ ưu tiên, do cơ quan có thẩm quyền cấp",
+                   file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 4}, 
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy xác nhận do Ủy ban nhân dân xã, phường, thị trấn cấp (đối với người học đã tốt nghiệp trung học cơ sở từ những năm học trước) " +
+                   "không trong thời gian thi hành án phạt tù; cải tạo không giam giữ hoặc vi phạm pháp luật	",
+                   file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 5}, 
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Bằng tốt nghiệp trung học cơ sở hoặc giấy chứng nhận tốt nghiệp trung học cơ sở tạm thời",
+                   file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 6},
+            };
+            return items;
+        }
         public static string GetListSchool()
         {
             return "";

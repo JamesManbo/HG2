@@ -283,7 +283,7 @@
                                                             điện thoại<span class="red-text">(*)</span>:
                                                         </span>
                                                         <div class="col-md-5">
-                                                            <input type="text" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
+                                                            <input type="text" id="PhoneNumber" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
                                                         </div>
                                                     </div>
                                                     <!-- 6 -->
@@ -729,7 +729,10 @@
         $("#modalInput").modal("hide");
     }
      function LuuNguoiDung() {
-         var data = $("#modalInput").serialize();
+         var data = {
+             PhoneNumber: $("#PhoneNumber").val(),
+
+         };
         $.ajax({
             type: "Post",
             url: "/GuiHoSo/UpdateNguoiDung",
