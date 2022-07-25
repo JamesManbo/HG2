@@ -546,8 +546,8 @@ namespace HG.WebApp.Controllers
                 obj_hs.ten_thanh_phan = ds_hs[i].ten_thanh_phan;
                 if (i == 0) { obj_hs.file_dinh_kem = item.filesName_0; }
                 if (i == 1) { obj_hs.file_dinh_kem = item.filesName_1; }
-                if (i == 2){ obj_hs.file_dinh_kem = item.filesName_1; }
-                if (i == 3) { obj_hs.file_dinh_kem = item.filesName_1; }
+                if (i == 2){ obj_hs.file_dinh_kem = item.filesName_2; }
+                if (i == 3) { obj_hs.file_dinh_kem = item.filesName_3; }
                 var name = "filesName_" + i;
                 obj_hs.bieu_mau = ds_hs[i].bieu_mau;
                 obj_hs.ban_chinh = ds_hs[i].ban_chinh;
