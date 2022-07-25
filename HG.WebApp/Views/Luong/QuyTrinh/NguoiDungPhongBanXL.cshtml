@@ -22,11 +22,17 @@
         },
         afterDeselect: function(values) {
             String(values).split(",").forEach(function(item) {
-                ArrUser.pop(item);
+                removeElement(ArrUser, item);
             });
-            alert(ArrUser);
             $("#nguoi_co_the_xl2").val(ArrUser.join(";"));
         }
     });
     $('#Nguoi_XL').multiSelect();
+
+    function removeElement(array, elem) {
+        var index = array.indexOf(elem);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
 </script>

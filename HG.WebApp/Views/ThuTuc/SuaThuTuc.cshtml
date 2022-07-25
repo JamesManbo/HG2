@@ -59,7 +59,7 @@
                     alert('Chưa chọn đơn vị liên thông phối hợp hoặc xử lý.');
                     return false;
                 }
-               if (($("#cho_phep_gui_lien_thong").val() == 'false') && ($("#cho_phep_nhan_lien_thong").val() == 'false')) {
+                if (($("#cho_phep_gui_lien_thong").val() == 'false') && ($("#cho_phep_nhan_lien_thong").val() == 'false')) {
                     alert('Chưa chọn cho phép gửi liên thông hoặc Cho phép nhận liên thông.');
                     return false;
                 }
@@ -202,7 +202,7 @@
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
-            Arr.pop(e.params.data.id);
+            removeElement(Arr, e.params.data.id);
             $("#don_vi_ltxl").val(Arr.join(","));
         });
 
@@ -224,13 +224,19 @@
         });
 
         $('#multiselect2').on("select2:unselect", function(e) {
-            Arr2.pop(e.params.data.id);
+            removeElement(Arr2, e.params.data.id);
             $("#don_vi_ltph").val(Arr2.join(","));
         });
 
 
     });
 
+    function removeElement(array, elem) {
+        var index = array.indexOf(elem);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
     // THÀNH PHẦN
     function ThemThanhPhan(ma_thu_tuc_key, ma_thu_tuc, type_view) {
         $.ajax({

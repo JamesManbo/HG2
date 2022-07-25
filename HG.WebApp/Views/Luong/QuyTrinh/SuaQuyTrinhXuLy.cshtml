@@ -497,7 +497,7 @@
                                         <input type="submit" name="" value="Lưu" id="btnSave" class="btn btn-primary process">
                                         @if (Model.quyTrinhXuLy.stt > 1)
                                         {
-                                            <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
+                                            <input type="button" name="" value="Xóa" id="btnClose" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaQuyTrinhXuLy?ma_luong=@Model.ma_luong&id=@Model.quyTrinhXuLy.Id&code=@Model.ma_luong')">
                                         }
                                         <input type="button" name="" value="Đóng" id="btnClose" class="btn btn-primary" onclick="window.location.href='/Luong/QuyTrinhXuLy?code=@Model.ma_luong&views=@StatusAction.View.ToString()'">
                                     </div>
@@ -862,10 +862,16 @@
         });
 
         $('#multiselect').on("select2:unselect", function(e) {
-            Arr.pop(e.params.data.id);
+            removeElement(Arr, e.params.data.id);
             $("#nguoi_co_the_xl").val(Arr.join(";"));
         });
 
+        function removeElement(array, elem) {
+            var index = array.indexOf(elem);
+            if (index > -1) {
+                array.splice(index, 1);
+            }
+        }
 
         var ngphxl = "@Model.quyTrinhXuLy.nguoi_phoi_hop_xl";
         var arrNgphxl = ngphxl.split(";");
@@ -886,12 +892,13 @@
         });
 
         $('#multiselect2').on("select2:unselect", function(e) {
-            Arr2.pop(e.params.data.id);
+            removeElement(Arr2, e.params.data.id);
             $("#nguoi_phoi_hop_xl").val(Arr2.join(";"));
         });
 
 
         $('#myModalUser').on('shown.bs.modal', function() {
+             $("#ddlPhongBan1").val("");
             var data = { ma_phong_ban: "" };
             $.ajax({
                 url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
@@ -932,7 +939,7 @@
         },
         afterDeselect: function(values) {
             String(values).split(",").forEach(function(item) {
-                ArrUser.pop(item);
+                removeElement(ArrUser, item);
             });
             $("#nguoi_phoi_hop_xl2").val(ArrUser.join(";"));
         }
@@ -966,7 +973,7 @@
         },
         afterDeselect: function(values) {
             String(values).split(",").forEach(function(item) {
-                ArrUserXL.pop(item);
+                removeElement(ArrUserXL, item);
             });
             $("#nguoi_co_the_xl2").val(ArrUserXL.join(";"));
         }
