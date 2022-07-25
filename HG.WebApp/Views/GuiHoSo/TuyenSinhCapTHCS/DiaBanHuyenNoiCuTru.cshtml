@@ -1,0 +1,19 @@
+﻿@model List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>
+
+
+ @*<label for="stt" class="col-sm-2 control-label">Huyện</label>   *@                   
+                  
+    <select class="selectpicker w-100 h-100 "
+                name="ma_dia_ban_huyen_noi_cu_tru"
+                data-width=""
+                data-live-search="true" data-hide-disabled="false">
+        @if(Model != null)
+        {
+            <option value="001">Chọn Quân/Huyện</option>
+            foreach (var item in Model)
+            {
+                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+            }
+        }
+	</select>                             
+             

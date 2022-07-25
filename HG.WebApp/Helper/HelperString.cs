@@ -296,6 +296,26 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
+        public static List<ListStrCommonRecords> ListKetQuaHocTapRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="hoanthanh", noi_dung = "Hoàn Thành" },
+               new ListStrCommonRecords { ma="hoanthanhtot", noi_dung = "Hoàn thành tốt" },
+               new ListStrCommonRecords { ma="hoanthanhxuatsac", noi_dung = "Hoàn thành xuất sắc" },
+            };
+            return items;
+        }
+        public static List<ListStrCommonRecords> ListUuTienRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="uutien1", noi_dung = "Ưu tiên 1" },
+               new ListStrCommonRecords { ma="uutien2", noi_dung = "Ưu tiên 2" },
+               new ListStrCommonRecords { ma="uutien3", noi_dung = "Ưu tiên 3" },
+            };
+            return items;
+        }
         public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoRecords()
         {
             List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
@@ -318,6 +338,28 @@ namespace HG.WebApp.Helper
                     bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" ,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+            };
+            return items;
+        }
+
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoCapTHCSRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" , is_bat_buoc = true,
+                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Học bạ cấp tiểu học hoặc các hồ sơ khác có giá trị thay thế học bạ",
+                    file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Sổ hộ khẩu", file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy xác nhận chế độ ưu tiên, do cơ quan có thẩm quyền cấp (nếu có)", 
+                   file_dinh_kem = "" , is_bat_buoc = false,
                    bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
             };
             return items;
@@ -356,6 +398,11 @@ namespace HG.WebApp.Helper
         public int key { get; set; }
         public string noi_dung { get; set; }
     }
+    public class ListStrCommonRecords
+    {
+        public string ma { get; set; }
+        public string noi_dung { get; set; }
+    }
     public class Tempalte
     {
         public string TempFormat { get; set; }
@@ -371,5 +418,6 @@ namespace HG.WebApp.Helper
         public int? ban_photo { get; set; }
         public int? id_ghs_tuyen_sinh_cap_mam_non { get; set; }
         public int? stt { get; set; }
+        public bool? is_bat_buoc { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>;
     var lst_don_vi = ViewBag.lst_don_vi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
     var lst_dan_toc = ViewBag.lst_dan_toc as List<HG.Entities.Dm_Dan_Toc>;
-    var ds_thanh_phan_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTieuHocRecords();
+    var ds_thanh_phan_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTHCSRecords();
 
     var lst_tinh = ViewBag.lst_tinh as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
     var lst_huyen = new List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>();
@@ -156,7 +156,75 @@
             }
         });
 
+        $("#files_2").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
 
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_3").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
 
 
 
@@ -186,8 +254,8 @@
         });
     };
 
-    
-   
+
+
 </script>
 
 
@@ -206,7 +274,7 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_tscmn" action="/GuiHoSo/GuiTuyenSinhCapTieuHoc" method="post" enctype="multipart/form-data">
+                    <form id="form_tscmn" action="/GuiHoSo/GuiTuyenSinhCapTHCS" method="post" enctype="multipart/form-data">
                         <div class="send-document-top top-title-frame">
                             <p>THÔNG TIN HỒ SƠ</p>
                         </div>
@@ -231,7 +299,7 @@
                                 </div>
                                 <!-- Modal -->
                                 <div class="modal fade" id="modalInput" tabindex="-1" role="dialog"
-                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -250,15 +318,15 @@
                                                         </div>
                                                     </div>
                                                     <!-- 2 -->
-                                                  @*  <div class="form-group form-group-new">
-                                                        <span class="col-md-4 control-label" style="font-weight:bold;">
-                                                            Giới
-                                                            tính :
-                                                        </span>
-                                                        <div class="col-md-5">
-                                                            <select style="width:100%;">
-                                                            </select>
-                                                        </div>
+                                                    @*  <div class="form-group form-group-new">
+                                                    <span class="col-md-4 control-label" style="font-weight:bold;">
+                                                    Giới
+                                                    tính :
+                                                    </span>
+                                                    <div class="col-md-5">
+                                                    <select style="width:100%;">
+                                                    </select>
+                                                    </div>
                                                     </div>*@
                                                     <!-- 3 -->
                                                     <div class="form-group form-group-new">
@@ -300,8 +368,8 @@
                                                                     foreach (var item in lst_phong_ban)
                                                                     {
                                                                         <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
-                                                        }
-                                                    }
+                                                                    }
+                                                                }
 
                                                             </select>
                                                         </div>
@@ -487,7 +555,10 @@
                                             </select>
                                         </div>
                                     </div>
-
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">Học sinh trường :</label>
+                                        <div class="col-md-6"><input class="w-100" name="ten_truong" type="text" placeholder=""></div>
+                                    </div>
                                     <!-- 6 -->
                                     <div class="form-group form-group-new ">
                                         <label class="col-md-2 control-label">
@@ -565,8 +636,163 @@
                                         <label class="col-md-2 control-label">Thôn/đội/xóm :</label>
                                         <div class="col-md-6"><input class="w-100" name="thon_xom" type="text" placeholder=""></div>
                                     </div>
+                                     <div class="form-group form-group-new">
+                                         <label class="col-md-2 control-label ">
+                                            Đối tượng ưu tiên:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_uu_tien"
+                                                    id="ma_uu_tien"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListUuTienRecords())
+                                                {
+                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                }
+                                            </select>
+                                        </div>
+                                         <label class="col-md-2 control-label">
+                                            Điểm ưu tiên:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_uu_tien" type="number" placeholder=""  step="0.01">
+                                        </div>
+                                    </div>
+                                      <div class="form-group form-group-new">
+                                         <label class="col-md-2 control-label ">
+                                            Đạt giải:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_uu_tien" type="text" placeholder=""  >
+                                        </div>
+                                         <label class="col-md-2 control-label">
+                                            Điểm khuyến khích:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_khuyen_khich_dat_giai" type="number" placeholder=""  step="0.01">
+                                        </div>
+                                    </div>
+                                     <div class="form-group form-group-new">
+                                         <label class="col-md-2 control-label ">
+                                            Giải thưởng khác:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="giai_khac" type="text" placeholder=""  >
+                                        </div>
+                                         <label class="col-md-2 control-label">
+                                            Điểm khuyến khích:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_khuyen_khich_giai_khac" type="number" placeholder=""  step="0.01">
+                                        </div>
+                                    </div>
+                                     <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label ">
+                                            Kết quả học tập rèn luyện:
+                                         </label>
+                                     </div>
+                                     <div class="form-group form-group-new">
+                                        <div class="col-md-12">
+                                           <table cellspacing="0" cellpadding="4" rules="all"
+                                                   class="table table-bordered table-result">
+                                                <tbody>
+                                                    <tr class="table-headline">
+                                                        <th text-align="center" rowspan="2" scope="col">Lớp</th>
+                                                        <th text-align="center" colspan="5" scope="col" >Kết quả giáo dục cuối năm</th>
+                                                    </tr>
+                                                    <tr class="table-headline">
+                                                        <th text-align="center" scope="col">1</th>
+                                                        <th text-align="center" scope="col">2</th>
+                                                        <th text-align="center" scope="col">3</th>
+                                                        <th text-align="center" scope="col">4</th>
+                                                        <th text-align="center" scope="col">5</th>
+                                                    </tr>
+                                                  
+                                                    <tr>
+                                                        <td text-align="center" >
+                                                            Kết quả học tập
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_1_kq"
+                                                                    id="lop_1_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_2_kq"
+                                                                    id="lop_2_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                                <select class="selectpicker w-100 h-100 "
+                                                                        name="lop_3_kq"
+                                                                        id="lop_3_kq"
+                                                                        data-width=""
+                                                                        data-live-search="true" data-hide-disabled="false">
+                                                                    <option selected="selected" value="">---- Chọn ----</option>
+                                                                    @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                    {
+                                                                        <option value="@item.ma">@item.noi_dung</option>
+                                                                    }
+                                                                </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_4_kq"
+                                                                    id="lop_4_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_5_kq"
+                                                                    id="lop_5_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                    </tr>
 
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                       
+                                    </div>
                                 </div>
+
 
                                 <!-- THIRD SECTION -->
                                 <div class="third-form">
@@ -586,26 +812,7 @@
                                         </label>
                                         <div class="col-md-2"><input class="w-100" name="dien_thoai_lien_he" type="text" placeholder=""></div>
                                     </div>
-                                  @*  <h4>
-                                        <span class="img-infor">Nguyện vọng xét tuyển</span>
-                                    </h4>
-                                    <!-- Nguyện vọng 2 -->
-                                    <div class="form-group form-group-new">
-                                        <label class="col-md-2 control-label">Nguyện vọng :</label>
-                                        <div class="col-md-6 select-nv">
-                                            <select class="selectpicker w-100 h-100 "
-                                                    name="id_nguyen_vong"
-                                                    data-width=""
-                                                    data-live-search="true" data-hide-disabled="false">
-                                                <option selected="selected" value="">---- Chọn nguyện vọng ----</option>
-                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListNguyenVongRecords())
-                                                {
-                                                    <option value="@item.key">@item.noi_dung</option>
-                                                }
-                                            </select>
-                                        </div>
-
-                                    </div>*@
+                                   
                                     <div class="form-group form-group-new">
                                         <label class="col-md-2"></label>
                                         <div class="col-md-8">
@@ -652,10 +859,14 @@
                                                 </td>
                                                 <td text-align="justify">
                                                     <p>@ds_thanh_phan_hs[i].ten_thanh_phan</p>
-                                                    <span class="important-box">
-                                                        Bắt
-                                                        buộc
-                                                    </span>
+                                                    @{
+                                                        if(@ds_thanh_phan_hs[i].is_bat_buoc == true) {
+                                                            <span class="important-box">
+                                                                Bắt
+                                                                buộc
+                                                            </span>
+                                                        }
+                                                    }
                                                 </td>
 
                                                 <td text-align="justify">
@@ -723,8 +934,8 @@
     function CloseModalUser() {
         $("#modalInput").modal("hide");
     }
-     function LuuNguoiDung() {
-         var data = $("#modalInput").serialize();
+    function LuuNguoiDung() {
+        var data = $("#modalInput").serialize();
         $.ajax({
             type: "Post",
             url: "/GuiHoSo/UpdateNguoiDung",
