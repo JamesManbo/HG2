@@ -30,7 +30,7 @@
     </div>
 </div>
 
-@if (ViewBag.error > 0)
+@if (ViewBag.error == true)
 {
     <script>
         $(document).ready(function() {
@@ -60,14 +60,35 @@
                     ma_thu_tuc_vaild: true
                 },
                 thong_tin_chi_tiet: "required",
-                id_truong: "required"
+                id_truong: "required",
+                so_dinh_danh: "required",
+                ngay_sinh: "required",
+                gioi_tinh: "required",
+                ho_ten_lien_he: "required",
+                dien_thoai_lien_he: "required",
+                ma_dan_toc: "required",
+                ma_dia_ban_tinh_noi_sinh: "required",
+                ma_dia_ban_huyen_noi_sinh: "required",
+                ma_dia_ban_tinh_noi_cu_tru: "required",
+                ma_dia_ban_huyen_noi_cu_tru: "required",
             },
             messages: {
                 thong_tin_chi_tiet: {
                     required: "Bạn cần nhập thông tin chi tiết!"
                 },
                 id_truong: "Bạn cần chọn trường!",
-                ho_ten_hoc_sinh: "Bạn cần nhập họ tên!"
+                ho_ten_hoc_sinh: "Bạn cần nhập họ tên!",
+                so_dinh_danh: "Bạn cần nhập Số định danh!",
+                ngay_sinh: "Bạn cần nhập ngày sinh!",
+                gioi_tinh: "Bạn cần chọn giới tính!",
+                ho_ten_lien_he: "Bạn cần nhập người liên hệ!",
+                dien_thoai_lien_he: "Bạn cần nhập điện thoại liên hệ!",
+                ma_dan_toc: "Bạn cần chọn dân tộc!",
+                ma_dia_ban_tinh_noi_sinh: "Bạn cần chọn tỉnh!",
+                ma_dia_ban_huyen_noi_sinh: "Bạn cần chọn huyện!",
+                ma_dia_ban_tinh_noi_cu_tru: "Bạn cần chọn tỉnh!",
+                ma_dia_ban_huyen_noi_cu_tru: "Bạn cần chọn huyện!",
+
             }
         });
 
@@ -85,75 +106,7 @@
             });
         })
 
-        $("#files_0").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-
-        $("#files_1").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
+        
 
         function convetArrayToObj(serialized) {
             var FormHelper = {};
@@ -294,9 +247,17 @@
                                                                 {
                                                                     foreach (var item in lst_phong_ban)
                                                                     {
-                                                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
-                                                        }
-                                                    }
+                                                                         if (nguoi_dung.ma_phong_ban != null && nguoi_dung.ma_phong_ban.Trim() == item.ma_phong_ban.Trim())
+                                                                        {
+                                                                            <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                                        }
+                                                                    }
+                                                                   
+                                                                }
 
                                                             </select>
                                                         </div>
@@ -312,7 +273,14 @@
                                                                 {
                                                                     foreach (var item in lst_chuc_vu)
                                                                     {
-                                                                        <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                                                        if (nguoi_dung.ma_chuc_vu != null && nguoi_dung.ma_chuc_vu.Trim() == item.ma_chuc_vu.Trim())
+                                                                        {
+                                                                            <option value="@item.ma_chuc_vu" selected>@item.ten_chuc_vu</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                                                        }
                                                                     }
                                                                 }
                                                             </select>
@@ -530,7 +498,6 @@
                                         </div>
                                         <script>
                                             function LayXaTheoHuyenCuTru(obj) {
-                                                console.log(111111, obj);
                                                 $.ajax({
                                                     type: "GET",
                                                     url: "/GuiHoSo/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value + "&noi_dung=xa_noi_cu_tru",
@@ -605,7 +572,7 @@
                                         <label class="col-md-2"></label>
                                         <div class="col-md-8">
                                             <p class="red-text commit">
-                                                <input id="chkIsCamKet" type="checkbox">
+                                                <input id="chkIsCamKet" name="chkIsCamKet" type="checkbox">
                                                 <em>
                                                     <strong>
                                                         Tôi đã đọc hướng dẫn tuyển sinh và cam kết những nội dung tự
@@ -740,6 +707,75 @@
             }
         });
     }
+    $("#files_0").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_1").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
 </script>
 
 
