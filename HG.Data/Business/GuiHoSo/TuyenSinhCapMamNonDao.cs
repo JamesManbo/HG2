@@ -191,7 +191,8 @@ namespace HG.Data.Business.GuiHoSo
 
             public string type_view { get; set; }
 
-            public List<ThanhPhanHoSo> ds_thanh_phan { get; set; }
+            public bool? chkIsCamKet { get; set; }
+
         }
         public class ThanhPhanHoSo
         {
