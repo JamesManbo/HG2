@@ -1,0 +1,424 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Entities.CauHinh.CauHinhModel
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background: #fff;
+        border-bottom: 1px solid #fff;
+        color: #333;
+    }
+
+    .nav-pills .nav-link, .nav-pills .show > .nav-link {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 0;
+    }
+
+
+    .nav-pills .nav-link {
+        background: 0 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="pageheader">
+            <div class="pageicon"><span class="iconfa-pencil"></span></div>
+            <div class="pagetitle">
+                <h5>Thông tin</h5>
+                <h1>Cấu hình</h1>
+            </div>
+        </div>
+        <div class="maincontent">
+            <div class="maincontentinner">
+                <!-- Pills Tabs -->
+                <div class="tab-primary" style="border: 2px solid #0866c6;">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Cập nhật phiên làm việc</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Nhập thông tin chuyên viên nhận thông báo online</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab3" role="tab" aria-controls="pills-profile" aria-selected="false">Cập nhật thông tin cấu hình</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab4" role="tab" aria-controls="pills-profile" aria-selected="false">Đồng bộ thông tin Zalo</button>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent" style="padding: 15px;">
+                        @*TAB Cập nhật phiên làm việc*@
+                        <div class="tab-pane fade @(ViewBag.active==1?"show active":"")" id="pills-tab1" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="form-horizontal">
+                                <form id="form_pb" action="/CauHinhHeThong/SavePhien" method="post" enctype="multipart/form-data" id="filterForm">
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 control-label">
+                                            Mã đơn vị
+                                            <span id="ctl08_Label3" style="color:Red;">(*)</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <select name="don_vi" id="don_vi" class="form-control input-default-sm" onchange="ChangePhien(this)">
+                                                @if (Model.lst_don_vi != null)
+                                                    foreach (var item in Model.lst_don_vi)
+                                                    {
+                                                        if (ViewBag.don_vi.Trim() == item.ma_don_vi)
+                                                        {
+                                                            <option selected value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                        }
+                                                    }
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 control-label">
+                                            Số bàn
+                                            <span style="color:Red;">(*)</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input name="so_ban" type="text" id="so_ban" class="form-control input-default" value="@Model.phien_lv.so_ban" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 control-label">
+                                            Số phiên
+                                            <span style="color:Red;">(*)</span>
+                                        </label>
+                                        <div class="col-md-8">
+                                            <input name="so_phien" type="text" id="so_phien" class="form-control input-default" value="@Model.phien_lv.so_phien" placeholder="">
+
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 " style="text-align: right">
+                                            Số phiên hiện tại:
+                                        </label>
+                                        <div class="col-md-8  ">
+                                            <span id="tong_phien" style="color:Red;font-weight:bold;">@Model.phien_lv.phien_hien_tai</span>
+                                            &nbsp; phiên
+                                        </div>
+
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <button type="submit" class="btn btn-primary">Cập nhật số phiên</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        @*TAB thông tin chuyên viên online *@
+                        <div class="tab-pane fade @(ViewBag.active==2?"show active":"")" id="pills-tab2" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="form-horizontal">
+
+                                <form id="form_tab2" action="/CauHinhHeThong/SaveChuyenVien?type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                                    <input type="hidden" name="id" id="id" value="@Model.chuyen_vien.id">
+                                    <div class="row mb-3">
+                                        <label class="col-md-2 control-label">
+                                            Mã đơn vị
+                                            <span id="ctl08_Label7" style="color:Red;">(*)</span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="don_vi" id="don_vi" class="form-control input-default-sm">
+                                                @if (Model.lst_don_vi != null)
+                                                    foreach (var item in Model.lst_don_vi)
+                                                    {
+                                                        if (ViewBag.don_vi.Trim() == item.ma_don_vi)
+                                                        {
+                                                            <option selected value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                        }
+                                                    }
+                                            </select>
+                                        </div>
+
+                                        <label class="col-md-2 control-label">
+                                            Tên chuyên viên
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="ten_chuyen_vien" type="text" id="ten_chuyen_vien" class="form-control input-default" value="@Model.chuyen_vien.ten_chuyen_vien" placeholder="">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3" style="margin-bottom: 0; padding-bottom: 0">
+                                        <label class="col-md-2 control-label">
+                                            Số điện thoại
+                                            <span style="color:Red;">(*)</span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input name="sdt" type="text" id="sdt" class="form-control input-default" placeholder="" value="@Model.chuyen_vien.sdt">
+                                        </div>
+
+                                        <label class="col-md-2 control-label">
+                                            Mã lĩnh vực
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="ma_linh_vuc" id="ma_linh_vuc" class=" form-control input-default-sm">
+                                                <option selected="selected" value="">--- Tất cả lĩnh vực ---</option>
+                                                @if (Model.lst_linh_vuc != null)
+                                                    foreach (var item in Model.lst_linh_vuc)
+                                                    {
+                                                        if (@Model.chuyen_vien.ma_linh_vuc == item.ma_linh_vuc)
+                                                        {
+                                                            <option selected value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                        }
+                                                    }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-offset-2 col-md-10" style="text-align: right">
+                                            <input type="submit" name="" value="Lưu" id="" class="btn btn-primary">
+                                        </div>
+                                    </div>
+                                </form>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
+
+                                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                                <div class="dataTables_length">
+                                                    <label>
+                                                        Hiển thị
+                                                        <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
+                                                            <option value="5">5</option>
+                                                            <option value="10" selected="">10</option>
+                                                            <option value="15">15</option>
+                                                            <option value="20">20</option>
+                                                            <option value="25">25</option>
+                                                        </select> bản ghi
+                                                    </label>
+                                                </div>
+                                                <div id="dataTable">
+                                                    <div class="dataTable-container">
+                                                        <table class="table table-bordered responsive">
+                                                            <thead class="widgettitle">
+                                                                <tr>
+                                                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+
+                                                                    </th>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 25%;">TÊN ĐƠN VỊ</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN CHUYÊN VIÊN</th>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 20%;">SĐT</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">UID_ZALO</th>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.lst_chuyen_vien != null)
+                                                                {
+                                                                    var stt = 1;
+                                                                    foreach (var item in Model.lst_chuyen_vien)
+                                                                    {
+                                                                        <tr>
+                                                                            <td scope="row">@stt</td>
+                                                                            <td>@item.ten_chuyen_vien</td>
+                                                                            <td>@item.ten_don_vi</td>
+                                                                            <td>@item.ten_chuyen_vien</td>
+                                                                            <td>@item.sdt</td>
+                                                                            <td>@item.uid_zalo</td>
+                                                                            <td>
+                                                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/CauHinhHeThong/CauHinh?don_vi=&type=@StatusAction.Edit.ToString()&Oid=@(item.id.ToString()+"-2")">
+                                                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                                </a>
+                                                                            </td>
+                                                                            <td>
+                                                                                <a onclick="confirm.BeforDeletePost('/CauHinhHeThong/XoaChuyenVien?id=@item.id')"
+                                                                           title=""
+                                                                           data-placement="top"
+                                                                           data-toggle="tooltip"
+                                                                           data-original-title="Xóa"
+                                                                           href="#">
+                                                                                    <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        stt++;
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                                        @{
+                                                            var TotalPage = (int)ViewBag.TotalPage;
+                                                            var CurrentPage = (int)ViewBag.CurrentPage;
+                                                            if (TotalPage > 5)
+                                                            {
+                                                                if (CurrentPage > CurrentPage + 2)
+                                                                {
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                                };
+                                                                if (CurrentPage > 3)
+                                                                {
+                                                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                                    {
+                                                                        if (i == CurrentPage)
+                                                                        {
+                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                        if (i == CurrentPage)
+                                                                        {
+                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                                if (CurrentPage < CurrentPage + 2)
+                                                                {
+                                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                                };
+                                                            }
+                                                            else
+                                                            {
+                                                                for (int i = 1; i <= TotalPage; i++)
+                                                                {
+                                                                    if (i == CurrentPage)
+                                                                    {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <!-- End Table with stripped rows -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*TAB cập nhật thông tin cấu hình *@
+                        <div class="tab-pane fade" id="pills-tab3" role="tabpanel" aria-labelledby="profile-tab">
+                            <div>Đang cập nhật 1</div>
+                        </div>
+                        @*TAB Đồng bộ thông tin zalo *@
+                        <div class="tab-pane fade" id="pills-tab4" role="tabpanel" aria-labelledby="profile-tab">
+                            <div>Đang cập nhật 2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#form_pb').validate({
+            rules: {
+                so_ban: {
+                    required: true,
+                    number: true
+                },
+                so_phien: {
+                    required: true,
+                    number: true
+                },
+            },
+            messages: {
+                so_ban: {
+                    required: "Bạn cần nhập số bàn!",
+                    number: "Chỉ được nhập số"
+                },
+                so_phien: {
+                    required: "Bạn cần nhập số phiên!",
+                    number: "Chỉ được nhập số"
+                },
+            }
+        });
+
+        $('#form_tab2').validate({
+            rules: {
+                sdt: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                sdt: {
+                    required: "Bạn cần nhập số điện thoại!",
+                    number: "Chỉ được nhập số"
+                }
+            }
+        });
+    });
+
+    function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
+        $.ajax({
+            type: "GET",
+            url: "../CauHinhHeThong/ChuyenVienPaging?currentPage=" + id + "&pageSize=" + pageSize,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function changePageSize(data) {
+        $("#lstPageSize").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../CauHinhHeThong/ChuyenVienPaging?currentPage=" + 1 + "&pageSize=" + data.value,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
+    function ChangePhien(data) {
+        window.location.href = "/CauHinhHeThong/CauHinh?don_vi=" + data.value;
+    }
+</script>
