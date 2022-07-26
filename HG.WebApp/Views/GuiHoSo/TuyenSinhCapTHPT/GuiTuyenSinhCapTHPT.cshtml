@@ -52,7 +52,9 @@
     $(document).ready(function() {
         var year_now = (new Date()).getFullYear();
         var year_later = year_now - 1;
-        ("#nam_hoc").val(year_now + ' - ' year_later);
+        //("#nam_hoc").val(year_now + ' - ' year_later);
+
+        //$('#idTableMonKHXH_NV1').hide();
 
         $('#form_tscmn').validate({
             rules: {
@@ -86,213 +88,9 @@
             });
         })
 
-        $("#files_0").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
+       
 
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-
-        $("#files_1").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-
-        $("#files_2").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-
-        $("#files_3").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-         $("#files_4").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-         $("#files_5").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
+        
 
 
         function convetArrayToObj(serialized) {
@@ -871,22 +669,7 @@
                                         </div>
                                        
                                     </div>
-                                     <div class="form-group form-group-new">
-                                            <label class="col-md-2 control-label">Nguyện vọng 2:</label>
-                                            <div class="col-md-6 select-nv">
-                                                <select class="selectpicker w-100 h-100 "
-                                                        name="nv2_ma_nguyen_vong"
-                                                        data-width=""
-                                                        data-live-search="true" data-hide-disabled="false">
-                                                    <option selected="selected" value="">---- Chọn nguyện vọng ----</option>
-                                                    @foreach (var item in HG.WebApp.Helper.HelperString.ListNguyenVong2_THPTRecords())
-                                                    {
-                                                        <option value="@item.ma">@item.noi_dung</option>
-                                                    }
-                                                </select>
-                                            </div>
-
-                                        </div>
+                                    
                                 </div>
 
 
@@ -895,6 +678,7 @@
                                     <h4>
                                         <span class="img-infor">Thông tin liên quan</span>
                                     </h4>
+                                    <!-- 2222 -->
                                     <div class="form-group form-group-new">
                                         <label class="col-md-2 control-label">
                                             Họ tên, địa chỉ người liên hệ<span class="red-text">(*)</span>:
@@ -908,7 +692,308 @@
                                         </label>
                                         <div class="col-md-2"><input class="w-100" name="dien_thoai_lien_he" type="text" placeholder=""></div>
                                     </div>
+                                    <!-- 2222 -->
+                                    <h4>
+                                        <span class="img-infor">Nguyện vọng xét tuyển</span>
+                                    </h4>
+                                     <!-- nv1 -->
+                                 @*   <div class="form-group form-group-new">
+	                                    <label class="col-md-2 control-label">Môn học nguyện vọng 1:</label>
+	                                    <div class="col-md-4 select-nv">
+	                                         <div class="send-document-top top-title-frame">
+                                                          <p>Nhóm môn bắt buộc</p>
+                                                  </div>
+   	                                         <div class="send-document-content gray-border">
+                                                        <div class="form-group form-group-new">
+                                                                <label class="col-md-2 control-label">Nguyện vọng 2:</label>
+                                                         <div class="col-md-6 select-nv">
+                                                                <input type="radio" id="css" name="fav_language" value="Nhóm môn KHTN">
+                                                                  <input type="radio" id="css" name="fav_language" value="Nhóm môn KHTN">
+                                                         </div>
+                                                 </div>
+	                                    </div>
+                                         <div class="col-md-6 select-nv">
+	                                         <div class="send-document-top top-title-frame">
+                                                          <p>Nhóm môn bắt buộc</p>
+                                                  </div>
+   	                                         <div class="send-document-content gray-border">
+                                                        <div class="form-group form-group-new">
+                                                                <label class="col-md-2 control-label">Nguyện vọng 2:</label>
+                                                         <div class="col-md-6 select-nv">
+                                                                <input type="radio" id="css" name="fav_language" value="Nhóm môn KHTN">
+                                                                  <input type="radio" id="css" name="fav_language" value="Nhóm môn KHTN">
+                                                         </div>
+                                                 </div>
+	                                    </div>
+                                    </div>*@
+                                    <!-- end nv1 -->
+                                    <!-- NV2 -->
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">Môn học nguyện vọng 1:</label>
+                                        <div class="col-md-4 select-nv">
+                                            <div style="width: 90%">
+                                                <div class="send-document-top top-title-frame">
+                                                    <p>Nhóm môn bắt buộc</p>
+                                                </div>
+   	                                            <div class="send-document-content gray-border">
+                                                    <div class="form-group form-group-new">
+                            	                        <table id="ctl09_ctl00_rblBatBuoc_NV1" border="0">
+					                                        <tbody><tr>
+						                                            <td><input id="nhommombatbuoc1" type="radio" name="nv1_ma_nhom" value="KHTN" onclick="changeNhomMonHoc(1)" checked="checked"><label>Nhóm môn KHTN</label></td>
+                                                                    <td><input id="nhommombatbuoc2" type="radio" name="nv1_ma_nhom" value="KHXH" onclick="changeNhomMonHoc(2)"><label>Nhóm môn KHXH</label></td>
+					                                            </tr>
+				                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         </div>
 
+                                         <div class="col-md-6 select-nv">
+                                             <div>
+                                                <div class="send-document-top top-title-frame">
+                                                    <p>Các môn lựa chọn</p>
+                                                </div>
+   	                                            <div class="send-document-content gray-border">
+                                                   <table id='idTableMonKHTN_NV1'>
+                                                       <tr>
+                                                           <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm muôn KHXH</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="nv1_ma_mon_khtn1" type="radio" name="nv1_ma_mon_khtn" value="LichSu_KHTN">
+                                                                            <label for="nv1_ma_mon_khtn1">Lịch sử</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_khtn2" type="radio" name="nv1_ma_mon_khtn" value="DiaLy_KHTN">
+                                                                            <label for="nv1_ma_mon_khtn2">Địa lý</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_khtn3" type="radio" name="nv1_ma_mon_khtn" value="GD_KHTN">
+                                                                            <label for="nv1_ma_mon_khtn3">GD KT&amp;PL</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                           </td>
+                                                            <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm môn Công nghệ và nghệ thuật</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="nv1_ma_mon_cn1" type="radio" name="nv1_ma_mon_cn" value="TinHoc_KHTN">
+                                                                            <label for="nv1_ma_mon_cn1">Tin học</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_cn2" type="radio" name="nv1_ma_mon_cn" value="CongNghe_KHTN">
+                                                                            <label for="nv1_ma_mon_cn2">Công nghệ</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_cn3" type="radio" name="nv1_ma_mon_cn" value="AmNhac_KHTN">
+                                                                            <label for="nv1_ma_mon_cn3">Âm nhạc</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_cn4" type="radio" name="nv1_ma_mon_cn" value="MyThuat_KHTN">
+                                                                            <label for="nv1_ma_mon_cn4">Mỹ thuật</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                            </td>
+                                                       </tr>
+                                                   </table>
+                                                    <table id='idTableMonKHXH_NV1'  style="display: none">
+                                                       <tr>
+                                                           <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm muôn KHXH</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0" type="radio" name="nv1_ma_mon_khtn" value="VatLy_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0">Vật lý</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1" type="radio" name="nv1_ma_mon_khtn" value="HoaHoc_KHXh">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1">Hóa học</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2" type="radio" name="nv1_ma_mon_khtn" value="SinhHoc_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2">Sinh học</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                           </td>
+                                                            <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm môn Công nghệ và nghệ thuật</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0" type="radio" name="nv1_ma_mon_cn" value="TinHoc_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0">Tin học</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1" type="radio" name="nv1_ma_mon_cn" value="CongNghe_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1">Công nghệ</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2" type="radio" name="nv1_ma_mon_cn" value="AmNhac_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2">Âm nhạc</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2" type="radio" name="nv1_ma_mon_cn" value="MyThuat_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2">Mỹ thuật</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                            </td>
+                                                       </tr>
+                                                   </table>
+                                                </div>
+                                             </div>
+                                         </div>
+                                    </div>
+
+                                       <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">Môn học nguyện vọng 1.2:</label>
+                                        <div class="col-md-4 select-nv">
+                                            <div style="width: 90%">
+                                                <div class="send-document-top top-title-frame">
+                                                    <p>Nhóm môn bắt buộc</p>
+                                                </div>
+   	                                            <div class="send-document-content gray-border">
+                                                    <div class="form-group form-group-new">
+                            	                        <table id="ctl09_ctl00_rblBatBuoc_NV1" border="0">
+					                                        <tbody><tr>
+						                                            <td><input id="nhommombatbuoc1" type="radio" name="nv12_ma_nhom" value="KHTN" onclick="changeNhomMonHoc_NV2(1)" checked="checked"><label>Nhóm môn KHTN</label></td>
+                                                                    <td><input id="nhommombatbuoc2" type="radio" name="nv12_ma_nhom" value="KHXH" onclick="changeNhomMonHoc_NV2(2)"><label>Nhóm môn KHXH</label></td>
+					                                            </tr>
+				                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         </div>
+
+                                         <div class="col-md-6 select-nv">
+                                             <div>
+                                                <div class="send-document-top top-title-frame">
+                                                    <p>Các môn lựa chọn</p>
+                                                </div>
+   	                                            <div class="send-document-content gray-border">
+                                                   <table id='idTableMonKHTN_NV2'>
+                                                       <tr>
+                                                           <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm muôn KHXH</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="nv1_ma_mon_khtn1" type="radio" name="nv12_ma_mon_khtn" value="LichSu_KHTN">
+                                                                            <label for="nv1_ma_mon_khtn1">Lịch sử</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_khtn2" type="radio" name="nv12_ma_mon_khtn" value="DiaLy_KHTN">
+                                                                            <label for="nv1_ma_mon_khtn2">Địa lý</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_khtn3" type="radio" name="nv12_ma_mon_khtn" value="GD_KHTN">
+                                                                            <label for="nv1_ma_mon_khtn3">GD KT&amp;PL</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                           </td>
+                                                            <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm môn Công nghệ và nghệ thuật</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="nv1_ma_mon_cn1" type="radio" name="nv12_ma_mon_cn" value="TinHoc_KHTN">
+                                                                            <label for="nv1_ma_mon_cn1">Tin học</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_cn2" type="radio" name="nv12_ma_mon_cn" value="CongNghe_KHTN">
+                                                                            <label for="nv1_ma_mon_cn2">Công nghệ</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_cn3" type="radio" name="nv12_ma_mon_cn" value="AmNhac_KHTN">
+                                                                            <label for="nv1_ma_mon_cn3">Âm nhạc</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="nv1_ma_mon_cn4" type="radio" name="nv12_ma_mon_cn" value="MyThuat_KHTN">
+                                                                            <label for="nv1_ma_mon_cn4">Mỹ thuật</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                            </td>
+                                                       </tr>
+                                                   </table>
+                                                    <table id='idTableMonKHXH_NV2' style="display: none">
+                                                       <tr>
+                                                           <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm muôn KHXH</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0" type="radio" name="nv12_ma_mon_khtn" value="VatLy_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0">Vật lý</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1" type="radio" name="nv12_ma_mon_khtn" value="HoaHoc_KHXh">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1">Hóa học</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2" type="radio" name="nv12_ma_mon_khtn" value="SinhHoc_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2">Sinh học</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                           </td>
+                                                            <td>
+                                                                <span style="font-style: italic;font-weight: bold; text-decoration: underline;">Nhóm môn Công nghệ và nghệ thuật</span>
+                                                                <table>
+                                                                    <tr>
+								                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0" type="radio" name="nv12_ma_mon_cn" value="TinHoc_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_0">Tin học</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1" type="radio" name="nv12_ma_mon_cn" value="CongNghe_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_1">Công nghệ</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2" type="radio" name="nv12_ma_mon_cn" value="AmNhac_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2">Âm nhạc</label>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input id="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2" type="radio" name="nv12_ma_mon_cn" value="MyThuat_KHXH">
+                                                                            <label for="ctl09_ctl00_dlNguyenVong1_ctl00_chkList_2">Mỹ thuật</label>
+                                                                        </td>
+							                                        </tr>
+                                                                </table>
+                                                            </td>
+                                                       </tr>
+                                                   </table>
+                                                </div>
+                                             </div>
+                                         </div>
+                                    </div>
+
+
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">Nguyện vọng 2:</label>
+                                        <div class="col-md-6 select-nv">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="nv2_ma_nguyen_vong"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">---- Chọn nguyện vọng ----</option>
+                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListNguyenVong2_THPTRecords())
+                                                {
+                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- NV2 -->
+                                    <!-- 3333 -->
                                     <div class="form-group form-group-new">
                                         <label class="col-md-2"></label>
                                         <div class="col-md-8">
@@ -925,7 +1010,9 @@
                                             </p>
                                         </div>
                                     </div>
+                                     <!-- 3333 -->
                                 </div>
+                                <!-- THIRD SECTION -->
                             </div>
                         </div>
 
@@ -1044,6 +1131,236 @@
             }
         });
     }
+    function changeNhomMonHoc(val){
+        if(val == 1) {
+            //$('#nhommombatbuoc').val('KHTN')
+            $('#idTableMonKHTN_NV1').show()
+            $('#idTableMonKHXH_NV1').hide()
+        }
+        if(val == 2) {
+            $('#idTableMonKHTN_NV1').hide()
+            $('#idTableMonKHXH_NV1').show()
+            //$('#nhommombatbuoc').val('KHXH')
+        }
+    }
+    function changeNhomMonHoc_NV2(val){
+        if(val == 1) {
+            //$('#nhommombatbuoc').val('KHTN')
+            $('#idTableMonKHTN_NV2').show()
+            $('#idTableMonKHXH_NV2').hide()
+        }
+        if(val == 2) {
+            $('#idTableMonKHTN_NV2').hide()
+            $('#idTableMonKHXH_NV2').show()
+            //$('#nhommombatbuoc').val('KHXH')
+        }
+    }
+    $("#files_0").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+    });
+    $("#files_1").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_2").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_3").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+         $("#files_4").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+         $("#files_5").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
 </script>
 
 

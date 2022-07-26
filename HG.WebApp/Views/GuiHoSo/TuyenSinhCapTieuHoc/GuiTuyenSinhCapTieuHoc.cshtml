@@ -86,75 +86,7 @@
             });
         })
 
-        $("#files_0").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
-
-        $("#files_1").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
-            }
-        });
+       
 
 
 
@@ -736,6 +668,75 @@
             }
         });
     }
+     $("#files_0").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_1").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
 </script>
 
 

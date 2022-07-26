@@ -406,29 +406,29 @@ namespace HG.WebApp.Helper
             {
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" , is_bat_buoc = true,
-                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                    bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0, stt = 1},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="	Sổ hộ khẩu (bản sao hợp lệ) hoặc văn bản xác nhận thông tin " +
                    "về cư trú của cơ quan có thẩm quyền " +
                    "(Bắt buộc đối với tuyển sinh vào trường PTDT Nội trú)",
                     file_dinh_kem = "" , is_bat_buoc = false,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 1, ban_photo = 0,stt = 2},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Học bạ cấp trung học cơ sở", file_dinh_kem = "" , is_bat_buoc = true,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 3},
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 3},
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Giấy xác nhận chế độ ưu tiên, do cơ quan có thẩm quyền cấp",
                    file_dinh_kem = "" , is_bat_buoc = true,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 4}, 
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 4}, 
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Giấy xác nhận do Ủy ban nhân dân xã, phường, thị trấn cấp (đối với người học đã tốt nghiệp trung học cơ sở từ những năm học trước) " +
                    "không trong thời gian thi hành án phạt tù; cải tạo không giam giữ hoặc vi phạm pháp luật	",
                    file_dinh_kem = "" , is_bat_buoc = false,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 5}, 
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 5}, 
                 new ThanhPhanHoSoMoDel {
                    ten_thanh_phan="Bằng tốt nghiệp trung học cơ sở hoặc giấy chứng nhận tốt nghiệp trung học cơ sở tạm thời",
                    file_dinh_kem = "" , is_bat_buoc = true,
-                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 6},
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 6},
             };
             return items;
         }
