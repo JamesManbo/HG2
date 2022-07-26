@@ -15,7 +15,8 @@ namespace HG.WebApp
         TraKQ,
         InPhieuHen,
         InPhieuChuyen,
-        ChuyenXuLy
+        ChuyenXuLy,
+        Send
     }
 
     public enum ActionSave
