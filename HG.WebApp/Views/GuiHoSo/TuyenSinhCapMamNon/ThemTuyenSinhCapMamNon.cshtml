@@ -319,6 +319,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                @*đặt url file trong form để lấy trong model khi nó submit*@
+                                                 <input type="text" id="filesName_1" name="filesName_1" style="display: none">
+                                                 <input type="text" id="filesName_0" name="filesName_0" style="display: none">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button"
@@ -652,9 +655,8 @@
 
                                                 <td text-align="justify">
                                                     @*@d.file_dinh_kem*@
-                                                    <input type="file"
-                                                       onclick="$('#files_@i').click();" id="files_@i" name="filesName_@i">
-                                                    <input type="text" id="filesName_@i" name="filesName_@i" style="display: none">
+                                                    <input type="file" onclick="$('#files_@i').click();" id="files_@i" name="filesName_@i">
+                                                   
 
 
                                                     @* <span id="filesName_@i"></span>
