@@ -21,9 +21,27 @@ namespace HG.Entities.Entities
         public int? khoa_tai_khoan { get; set; }
 
     }
+    public class ds_nguoi_dung_online
+    {
+        public Guid Id { get; set; }
+        public string? Email { get; set; }
+        public string? ten { get; set; }
+        public string? anh_dai_dien { get; set; }
+        public string? anh_cmt { get; set; }
+        public string? ho_khau_tt { get; set; }
+        public string? PhoneNumber { get; set; }
+        public int? stt { get; set; }
+        public int? khoa_tai_khoan { get; set; }
+
+    }
     public class ds_nguoi_dung_paging : BaseModel
     {
         public List<ds_nguoi_dung>? asp_Nhoms { get; set; }
+        public Pagelist Pagelist { get; set; } = new Pagelist();
+    }
+    public class ds_nguoi_dung_paging_online : BaseModel
+    {
+        public List<ds_nguoi_dung_online>? asp_Nhoms { get; set; }
         public Pagelist Pagelist { get; set; } = new Pagelist();
     }
     public class NguoiDungModels : IdentityUser<Guid>
@@ -56,6 +74,12 @@ namespace HG.Entities.Entities
         public List<Asp_nhom> asp_nhom { get; set; }
         public Response? responseErr { get; set; }
     }
+    public class Asp_NguoiDung_Nhom_Onl
+    {
+        public List<UserOnlineModels> aspNetUsersModel { get; set; }
+      //  public List<Asp_nhom> asp_nhom { get; set; }
+        public Response? responseErr { get; set; }
+    }
     public class AspNetUsersModel2 : IdentityUser<Guid>
     {
 		public string? ho_dem { get; set; }
@@ -71,7 +95,17 @@ namespace HG.Entities.Entities
         public DateTime? ngay_sinh { get; set; }
         public int? Deleted { get; set; }
     }
-
+    public class UserOnlineModels : IdentityUser<Guid>
+    {
+        public string? Email { get; set; }
+        public string? ten { get; set; }
+        public string? mat_khau { get; set; }
+        public string? anh_dai_dien { get; set; }
+        public string? anh_cmt { get; set; }
+        public string? ho_khau_tt { get; set; }
+        public int? khoa_tai_khoan { get; set; }
+        public string? type_view { get; set; }
+    }
     public class Nhom_Vaitro
     {
         public string ma_nhom { get; set; } = "";

@@ -101,6 +101,24 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoiDung/NguoiDungPaging.cshtml", ds);
             return Content(result);
         }
+        public async Task<IActionResult> NguoiDungOnlinePaging(int currentPage = 0, int trang_thai = 0, int da_xoa = 0, int pageSize = 0)
+        {
+            NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { CurrentPage = currentPage,  trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
+            var ds = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
+            ds.Pagelist.CurrentPage = currentPage;
+            var totalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
+            ViewBag.CurrentPage = 1;
+            ViewBag.pageSize = pageSize;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoiDung/NguoiDungPaging.cshtml", ds);
+            return Content(result);
+        }
         public IActionResult KiemTraNguoiDung(string code)
         {
             EAContext db = new EAContext();
@@ -286,7 +304,107 @@ namespace HG.WebApp.Controllers
             return RedirectToAction("ListNguoiDung");
         }
         #endregion
+        #region nguoidungonl
+        public IActionResult ListNguoiDungOnline(string txtSearch = "",  int trang_thai = 1, int da_xoa = 0)
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+           // ViewBag.ma_phong_ban = ma_phong_ban;
+            ViewBag.trang_thai = trang_thai;
+            ViewBag.da_xoa = da_xoa;
+            ViewBag.txtSearch = txtSearch;
+            EAContext eAContext = new EAContext();
+            HelperString stringHelper = new HelperString();
+            NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { tu_khoa = txtSearch, CurrentPage = 1,  trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
+            var ds = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
+            ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
+           // ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
+            ViewBag.CurrentPage = 1;
+            return View(ds.asp_Nhoms);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ThemNguoiDungOnline(UserOnlineModels item)
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            AspNetUsers user = new AspNetUsers();       
+            user.PhoneNumber = item.PhoneNumber;
+            user.Email = item.Email;
+            user.mat_khau = item.mat_khau;
+            user.anh_dai_dien = item.anh_dai_dien;
+            user.anh_cmt = item.anh_cmt;
+            user.ho_khau_tt = item.ho_khau_tt;
+            user.ten = item.ten;
+           // user.ngay_sinh = item.ngay_sinh;
+            user.khoa_tai_khoan = item.khoa_tai_khoan;
+            var result = await userManager.CreateAsync(user, user.mat_khau);
+            var db = new EAContext();
+            //ViewBag.LstNhom = db.Asp_nhom.ToList();
+            //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            //ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            if (result.Succeeded)
+            {
+                //if (item.lstGroup != null)
+                //{
+                //    for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                //    {
+                //        _nguoiDungDao.ThemMoi_NguoiDung_Nhom(user.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
+                //    }
+                //}
+            };
+            if (result.Succeeded)
+            {
+                if (item.type_view == StatusAction.Add.ToString())
+                {
+                    return RedirectToAction("ThemNguoiDungOnline", "QTnguoidung");
+                }
+                else if (item.type_view == StatusAction.View.ToString())
+                {
+                    return RedirectToAction("ViewNguoiDungOnline", "QTnguoidung", new { Id = user.Id, type = StatusAction.View.ToString() });
+                }
+            }
+            else
+            {
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+                return View(item);
+            }
+            ViewBag.ErrorCode = 1;
+            ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+            return View(item);
 
+        }
+        [HttpPost]
+        public IActionResult SuaNguoiDungOnline(Guid Id, string type)
+        {
+            var db = new EAContext();
+            //ViewBag.LstNhom = db.Asp_nhom.ToList();
+            //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            //ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { CurrentPage = 1, trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
+            ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
+   
+            return View(_nguoiDungDao.LayNguoiDungOnlBoiId(Id));
+        }
+        public IActionResult XoaNnguoiDungOnline(string Id, string type)
+        {
+            var _pb = 0;
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            foreach (var item in Id.Split(","))
+            {
+                _pb = _nguoiDungDao.Xoa(Guid.Parse(item), uid);
+            }
+
+            if (_pb > 0)
+            {
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/QTNguoidung/ListNguoiDungOnline" });
+        }
+        #endregion
         #region Nhom vai trò
         public IActionResult QLNhomVaitro(string txtSearch = "")
         {

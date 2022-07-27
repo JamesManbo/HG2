@@ -13,6 +13,9 @@ namespace HG.WebApp
         public string? ten { get; set; }
         public string? mat_khau { get; set; }
         public string? anh_dai_dien { get; set; }
+        public string? anh_cmt { get; set; }
+        public string? ho_khau_tt { get; set; }
+        public string? PhoneNumber { get; set; }
         public string? tinh_trang_hon_nhan { get; set; }
         public Guid? RoleId { get; set; }
         public string? ma_phong_ban { get; set; }
