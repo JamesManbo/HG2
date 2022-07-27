@@ -229,7 +229,213 @@ namespace HG.WebApp.Helper
             };
             return items;
         }
+        public static List<Gender> ListGenders()
+        {
+            List<Gender> items = new List<Gender>
+            {
+               new Gender { key=1, name = "Nam" },
+               new Gender { key=2, name = "Nữ" },
+               new Gender { key=3, name = "Khác" },
+              
+            };
+            return items;
+        }
 
+        public static List<ListCommonRecords> ListNguyenVongRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Nhóm trẻ 03 - 12 tháng tuổi" },
+               new ListCommonRecords { key=2, noi_dung = "Nhóm trẻ 13 - 24 tháng tuổi" },
+               new ListCommonRecords { key=3, noi_dung = "Nhóm trẻ 25 - 36 tháng tuổi" },
+               new ListCommonRecords { key=4, noi_dung = "Lớp 3 tuổi" },
+               new ListCommonRecords { key=5, noi_dung = "Lớp 4 tuổi" },
+               new ListCommonRecords { key=6, noi_dung = "Lớp 5 tuổi" }
+            };
+            return items;
+        }
+        public static List<ListStrCommonRecords> ListNguyenVong2_THPTRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="01", noi_dung = "PTDT Nội trú THCS&THPT Bắc Mê, Huyện Bắc Mê" },
+               new ListStrCommonRecords { ma="02", noi_dung = "PTDT Nội trú THCS&THPT Hoàng Su Phì, Huyện Hoàng Su Phì" },
+               new ListStrCommonRecords { ma="03", noi_dung = "PTDT Nội trú THCS&THPT Bắc Quang, Huyện Bắc Quang" },
+               new ListStrCommonRecords { ma="04", noi_dung = "PTDT Nội trú  THCS&THPT Yên Minh, Thị trấn Yên Minh, Huyện Yên Minh" },
+               new ListStrCommonRecords { ma="05", noi_dung = "PTDT Nội trú THCS&THPT Xín Mần, Huyện Xín Mần" },
+               new ListStrCommonRecords { ma="06", noi_dung = "PTDT Nội trú THCS&THPT Đồng Văn, Huyện Đồng Văn" },
+               new ListStrCommonRecords { ma="07", noi_dung = "PTDTNT THPT tỉnh Hà Giang, Thành phố Hà Giang" },
+
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListTruongHocRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Nhóm trẻ Hoa Phượng Đỏ, Thành phố Hà Giang" },
+               new ListCommonRecords { key=2, noi_dung = "Nhóm trẻ Mặt Trời Nhỏ, Thành phố Hà Giang" },
+               new ListCommonRecords { key=3, noi_dung = "Nhóm trẻ Ánh Dương, Thành phố Hà Giang" },
+               new ListCommonRecords { key=4, noi_dung = "Trường mầm non Hoa Sen, Thành phố Hà Giang" },
+               new ListCommonRecords { key=5, noi_dung = "Trường mầm non Sao Mai, Thành phố Hà Giang" },
+               new ListCommonRecords { key=6, noi_dung = "Trường mầm non Ngọc Đường, Thành phố Hà Giang" }
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListGioiTinhRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Nam" },
+               new ListCommonRecords { key=2, noi_dung = "Nữ" },
+               new ListCommonRecords { key=3, noi_dung = "Khác" },
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListTinhRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Hà Nội" },
+               new ListCommonRecords { key=2, noi_dung = "Thái Bình" },
+               new ListCommonRecords { key=3, noi_dung = "Nam Định" },
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListHuyenRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Huyện Yên Minh" },
+               new ListCommonRecords { key=2, noi_dung = "Huyện Quảng Bình" },
+               new ListCommonRecords { key=3, noi_dung = "Huyện Đồng văn" },
+            };
+            return items;
+        }
+        public static List<ListCommonRecords> ListXaRecords()
+        {
+            List<ListCommonRecords> items = new List<ListCommonRecords>
+            {
+               new ListCommonRecords { key=1, noi_dung = "Xã Yên Thành" },
+               new ListCommonRecords { key=2, noi_dung = "Xã Yên Hà" },
+               new ListCommonRecords { key=3, noi_dung = "Xã Tân Nam" },
+            };
+            return items;
+        }
+        public static List<ListStrCommonRecords> ListKetQuaHocTapRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="hoanthanh", noi_dung = "Hoàn Thành" },
+               new ListStrCommonRecords { ma="hoanthanhtot", noi_dung = "Hoàn thành tốt" },
+               new ListStrCommonRecords { ma="hoanthanhxuatsac", noi_dung = "Hoàn thành xuất sắc" },
+            };
+            return items;
+        }
+        public static List<ListStrCommonRecords> ListHanhKiemRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="trungbinh", noi_dung = "Trung bình" },
+               new ListStrCommonRecords { ma="kha", noi_dung = "Khá" },
+               new ListStrCommonRecords { ma="tot", noi_dung = "Tốt" },
+            };
+            return items;
+        }
+        public static List<ListStrCommonRecords> ListUuTienRecords()
+        {
+            List<ListStrCommonRecords> items = new List<ListStrCommonRecords>
+            {
+               new ListStrCommonRecords { ma="uutien1", noi_dung = "Ưu tiên 1" },
+               new ListStrCommonRecords { ma="uutien2", noi_dung = "Ưu tiên 2" },
+               new ListStrCommonRecords { ma="uutien3", noi_dung = "Ưu tiên 3" },
+            };
+            return items;
+        }
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Đơn xin nhập học", file_dinh_kem = "" , 
+                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh", file_dinh_kem = "" , 
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+            };
+            return items;
+        }
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoCapTieuHocRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Đơn xin tuyển sinh vào lớp 1", file_dinh_kem = "" ,
+                    bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" ,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 2},
+            };
+            return items;
+        }
+
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoCapTHCSRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" , is_bat_buoc = true,
+                    bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Học bạ cấp tiểu học hoặc các hồ sơ khác có giá trị thay thế học bạ",
+                    file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 2},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Sổ hộ khẩu", file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 3},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy xác nhận chế độ ưu tiên, do cơ quan có thẩm quyền cấp (nếu có)", 
+                   file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0,stt = 4},
+            };
+            return items;
+        }
+        public static List<ThanhPhanHoSoMoDel> ListThanhPhanHoSoCapTHPTRecords()
+        {
+            List<ThanhPhanHoSoMoDel> items = new List<ThanhPhanHoSoMoDel>
+            {
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy khai sinh hợp lệ", file_dinh_kem = "" , is_bat_buoc = true,
+                    bieu_mau = "" , ban_chinh = 0, ban_sao = 1, ban_photo = 0, stt = 1},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="	Sổ hộ khẩu (bản sao hợp lệ) hoặc văn bản xác nhận thông tin " +
+                   "về cư trú của cơ quan có thẩm quyền " +
+                   "(Bắt buộc đối với tuyển sinh vào trường PTDT Nội trú)",
+                    file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 1, ban_photo = 0,stt = 2},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Học bạ cấp trung học cơ sở", file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 3},
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy xác nhận chế độ ưu tiên, do cơ quan có thẩm quyền cấp",
+                   file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 4}, 
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Giấy xác nhận do Ủy ban nhân dân xã, phường, thị trấn cấp (đối với người học đã tốt nghiệp trung học cơ sở từ những năm học trước) " +
+                   "không trong thời gian thi hành án phạt tù; cải tạo không giam giữ hoặc vi phạm pháp luật	",
+                   file_dinh_kem = "" , is_bat_buoc = false,
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 5}, 
+                new ThanhPhanHoSoMoDel {
+                   ten_thanh_phan="Bằng tốt nghiệp trung học cơ sở hoặc giấy chứng nhận tốt nghiệp trung học cơ sở tạm thời",
+                   file_dinh_kem = "" , is_bat_buoc = true,
+                   bieu_mau = "" , ban_chinh = 1, ban_sao = 0, ban_photo = 0,stt = 6},
+            };
+            return items;
+        }
+        public static string GetListSchool()
+        {
+            return "";
+        }
         public static List<Tempalte> ListTemplate()
         {
             List<Tempalte> items = new List<Tempalte>
@@ -254,9 +460,37 @@ namespace HG.WebApp.Helper
         public int key { get; set; }
         public int page { get; set; }
     }
+
+    public class Gender
+    {
+        public int key { get; set; }
+        public string name { get; set; }
+    }
+    public class ListCommonRecords
+    {
+        public int key { get; set; }
+        public string noi_dung { get; set; }
+    }
+    public class ListStrCommonRecords
+    {
+        public string ma { get; set; }
+        public string noi_dung { get; set; }
+    }
     public class Tempalte
     {
         public string TempFormat { get; set; }
         public string TempElement { get; set; }
+    }
+    public class ThanhPhanHoSoMoDel
+    {
+        public string? ten_thanh_phan { get; set; }
+        public string? file_dinh_kem { get; set; }
+        public string? bieu_mau { get; set; }
+        public int? ban_chinh { get; set; }
+        public int? ban_sao { get; set; }
+        public int? ban_photo { get; set; }
+        public int? id_ghs_tuyen_sinh_cap_mam_non { get; set; }
+        public int? stt { get; set; }
+        public bool? is_bat_buoc { get; set; }
     }
 }

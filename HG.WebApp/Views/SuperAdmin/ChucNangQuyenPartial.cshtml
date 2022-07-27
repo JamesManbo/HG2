@@ -1,10 +1,99 @@
-﻿@model HG.WebApp.Models.DanhMuc.MenuRoleModel
+﻿                    @model HG.WebApp.Models.DanhMuc.MenuRoleModel
+                    @{
+                        var dsquyen = ViewBag.dsquyen as string;
+                    }
+                    @if(dsquyen != "" && Model.Asp_vaitro_quyen == null)
+                    {
+                        <div class="modal-dialog" id="contetModel">
+                        <div class="modal-content">
+                            <div class="modal-header widgettitle">
+                                <h5 class="modal-title">Danh sách quyền</h5>
+                               @* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
+                            </div>
+                            <input  hidden name="CodeRole" id="CodeRole" value="@Model.ma_vai_tro"/>
+                            <input  hidden name="CodeMenu" id="CodeMenu" value="@Model.ma_chuc_nang"/>
+                            <div class="modal-body">
+                                    <div style="overflow-y: auto;">
+                                        <div id="pnlMain">
+                                            <div>
+                                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                                                    <tbody>
+                                                        <tr class="widgettitle">
+                                                            <th scope="col">Tên quyền</th>
+                                                            <th scope="col">Mô tả</th>
+                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                            <input type="checkbox" name="" id="selectAllRole" />
+                                                            </th>
+                                                        </tr>
+                                                        @if(Model.AspNetRoles != null)
+                                                        {
+                                                             foreach (var item in Model.AspNetRoles)
+                                                            {
+                                                                 <tr>
+                                                                    <td>
+                                                                        @item.Name
+                                                                    </td>
+                                                                    <td style="width: 25%;">@item.Description</td>
+                                                                     <td><input type="checkbox" class="ads_Checkbox2"  @(dsquyen.Contains(item.ma_quyen.ToString()) ? "checked": "")  value="@item.ma_quyen" /></td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="BtnXoaNgXL">Lưu</button>
+                                <button type="button" class="btn btn-secondary" onclick="CloseModelRole()">Đóng</button>
+                            </div>
+                        </div>
+                        <script>$(document).ready(function() {
+                             $('#selectAllRole').click(function() {
+                                var val = [];
+                                if ($(this).is(':checked')) {
+                                    $(".ads_Checkbox2").prop("checked", true);
+                                    $(':checkbox:checked').each(function(i) {
+                                        if (i > 0) {
+                                            val[i - 1] = $(this).val();
+                                        }
+                                    });
+                                }
+                                else {
+                                    $(".ads_Checkbox2").prop("checked", false);
+                                    val = [];
+                                }
+                               $('input[name="lstRole"]').attr('value',val); 
+                               $("#MenuId-"+ $("#CodeMenu").val()).attr("value",$("#lstRole").val())
+                            });
 
+
+                            $('.ads_Checkbox2').click(function() {
+                                var val = [];
+                                $('.ads_Checkbox2:checkbox:checked').each(function(i) {
+                                    if ($('#selectAllRole').is(':checked')) {
+                                        if (i > 0) {
+                                            val[i - 1] = $(this).val();
+                                        }
+                                    } else {
+                                        val[i] = $(this).val();
+                                    }
+
+                                });
+                                 $('input[name="lstRole"]').attr('value',val);
+                                $("#MenuId-" + $("#CodeMenu").val()).attr("value", $("#lstRole").val());
+                            });
+                        });
+                        </script>
+                        
+                    </div>
+                    }else{
                     <div class="modal-dialog" id="contetModel">
                         <div class="modal-content">
                             <div class="modal-header widgettitle">
                                 <h5 class="modal-title">Danh sách quyền</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                               @* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>*@
                             </div>
                             <input  hidden name="CodeRole" id="CodeRole" value="@Model.ma_vai_tro"/>
                             <input  hidden name="CodeMenu" id="CodeMenu" value="@Model.ma_chuc_nang"/>
@@ -45,6 +134,7 @@
                                 <button type="button" class="btn btn-secondary" onclick="CloseModelRole()">Đóng</button>
                             </div>
                         </div>
+                        
                         <script>$(document).ready(function() {
                              $('#selectAllRole').click(function() {
                                 var val = [];
@@ -61,8 +151,7 @@
                                     val = [];
                                 }
                                $('input[name="lstRole"]').attr('value',val); 
-                                 var obj = { ma_vai_tro: $("#CodeRole").val(), ma_chuc_nang: $("#CodeMenu").val(), ds_quyen_da_chon: $("#lstRole").val() };
-                                 localStorage.setItem($("#CodeMenu").val(), JSON.stringify(obj));
+                               $("#MenuId-"+ $("#CodeMenu").val()).attr("value",$("#lstRole").val())
                             });
 
 
@@ -79,10 +168,10 @@
 
                                 });
                                  $('input[name="lstRole"]').attr('value',val);
-                                 var obj = { ma_vai_tro: $("#CodeRole").val(), ma_chuc_nang: $("#CodeMenu").val(), ds_quyen_da_chon: $("#lstRole").val() };
-                                 localStorage.setItem($("#CodeMenu").val(), JSON.stringify(obj));
+                                $("#MenuId-" + $("#CodeMenu").val()).attr("value", $("#lstRole").val());
                             });
                         });
                         </script>
                         
                     </div>
+                    }

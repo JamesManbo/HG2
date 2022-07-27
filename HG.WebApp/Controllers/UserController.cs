@@ -216,7 +216,10 @@ namespace HG.WebApp.Controllers
                 return RedirectToAction("Login", "User");
             }else {
                 //laays menu va tat ca nhom vai tro o day
-                
+                var menu_role = _userDao.GetUnitsMenuRolesOfUser(user.First().Id);
+                //end menu
+
+
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var token = new JwtSecurityToken(_config["Tokens:Issuer"],
@@ -403,6 +406,14 @@ namespace HG.WebApp.Controllers
                 return "false";
             }
             
+        }
+        public IActionResult CurrentUser()
+        {
+            if (User.Identity.Name == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            return PartialView();
         }
     }
 }

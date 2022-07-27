@@ -51,7 +51,7 @@
                     alert('Chưa chọn đơn vị liên thông phối hợp hoặc xử lý.');
                     return false;
                 }
-                  if (($("#cho_phep_gui_lien_thong").val() == 'false') && ($("#cho_phep_nhan_lien_thong").val() == 'false')) {
+                if (($("#cho_phep_gui_lien_thong").val() == 'false') && ($("#cho_phep_nhan_lien_thong").val() == 'false')) {
                     alert('Chưa chọn cho phép gửi liên thông hoặc Cho phép nhận liên thông.');
                     return false;
                 }
@@ -93,7 +93,12 @@
 
         $('.select2').select2({
             allowClear: true,
-            templateResult: hideSelected
+            templateResult: hideSelected,
+            language: {
+                noResults: function() {
+                    return "Không có kết quả nào được tìm thấy.";
+                }
+            }
         });
 
         $("#nop_online").val($("#nop_online").is(':checked'));

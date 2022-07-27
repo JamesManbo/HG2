@@ -792,7 +792,12 @@
         });
 
         $('.select2').select2({
-            closeOnSelect: false
+            closeOnSelect: false,
+            language: {
+                noResults: function() {
+                    return "Không có kết quả nào được tìm thấy.";
+                }
+            }
         });
 
         $("#buoc_xl_chinh").val($("#buoc_xl_chinh").is(':checked'));
