@@ -137,7 +137,18 @@ namespace HG.WebApp.Controllers
 
             return PartialView(new NguoiDungModels() { UserName = UserName});
         }
+        [HttpGet]
+        public IActionResult ThemNguoiDungOnline(string UserName = "")
+        {
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { CurrentPage = 1, trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
+            ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
 
+            return PartialView(new UserOnlineModels { UserName = UserName });
+        }
         [HttpPost]
         public async Task<IActionResult> ThemNguoiDung(NguoiDungModels item)
         {
@@ -326,7 +337,8 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> ThemNguoiDungOnline(UserOnlineModels item)
         {
             var UserId = Guid.Parse(userManager.GetUserId(User));
-            AspNetUsers user = new AspNetUsers();       
+            AspNetUsers user = new AspNetUsers();
+            user.UserName = item.Email;
             user.PhoneNumber = item.PhoneNumber;
             user.Email = item.Email;
             user.mat_khau = item.mat_khau;
@@ -334,7 +346,7 @@ namespace HG.WebApp.Controllers
             user.anh_cmt = item.anh_cmt;
             user.ho_khau_tt = item.ho_khau_tt;
             user.ten = item.ten;
-           // user.ngay_sinh = item.ngay_sinh;
+            user.Type = 1;
             user.khoa_tai_khoan = item.khoa_tai_khoan;
             var result = await userManager.CreateAsync(user, user.mat_khau);
             var db = new EAContext();

@@ -13,6 +13,12 @@ namespace HG.Entities.SearchModels
         public int? trang_thai { get; set; }
         public int? da_xoa { get; set; }
     }
+    public class NguoiDungOnlSearchItem : Pagelist
+    {    
+        public string? tu_khoa { get; set; }
+        public int? trang_thai { get; set; }
+        public int? da_xoa { get; set; }
+    }
     public class HoSoPaging : Pagelist{
         public string? ma_thu_tuc { get; set; }
         public string? tu_khoa { get; set; }
