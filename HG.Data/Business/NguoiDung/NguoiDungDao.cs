@@ -235,6 +235,41 @@ namespace HG.Data.Business.NguoiDung
             }
            
         }
+        public Response SuaNguoiDungOnline(UserOnlineModels item, Guid guid)
+        {
+            try
+            {
+                Response response = new Response();
+                DbProvider.SetCommandText2("nguoidungOnl$chinhsua", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("Ma_nguoi_dung", item.Id, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("UserName", item.Email, SqlDbType.NVarChar);
+                DbProvider.AddParameter("Email", item.Email, SqlDbType.NVarChar);
+                DbProvider.AddParameter("PhoneNumber", item.PhoneNumber, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ten", item.ten, SqlDbType.NVarChar);
+                DbProvider.AddParameter("anh_dai_dien", item.anh_dai_dien, SqlDbType.NVarChar);
+                DbProvider.AddParameter("anh_cmt", item.anh_cmt, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ho_khau_tt", item.ho_khau_tt, SqlDbType.NVarChar);
+               
+              //  DbProvider.AddParameter("stt", item.stt, SqlDbType.Int);
+                
+                DbProvider.AddParameter("UserId", guid, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("khoa_tai_khoan", item.khoa_tai_khoan, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);
+                // Lấy về danh sách các người dung
+                DbProvider.ExecuteNonQuery();
+                response.ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                response.ReturnMsg = DbProvider.Command.Parameters["ReturnMsg"].Value.ToString();
+                return response;
+            }
+            catch (Exception e)
+            {
+                return new Response();
+            }
+
+        }
         public void ThemMoi_NguoiDung_Nhom(Guid ma_nguoi_dung, string asp_nhom_ma, Guid CreatedUid)
         {
             try

@@ -226,6 +226,7 @@ namespace HG.WebApp.Controllers
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             return View(_nguoiDungDao.LayNguoiDungBoiId(Id));
         }
+       
         [HttpPost]
         public IActionResult SuaNguoiDung(NguoiDungModels item, string type)
         {
@@ -385,17 +386,66 @@ namespace HG.WebApp.Controllers
             return View(item);
 
         }
-        [HttpPost]
+        [HttpGet]
         public IActionResult SuaNguoiDungOnline(Guid Id, string type)
         {
             var db = new EAContext();
-            //ViewBag.LstNhom = db.Asp_nhom.ToList();
-            //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
-            //ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { CurrentPage = 1,  trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
+            ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
+            //var abc = _nguoiDungDao.LayNguoiDungOnlBoiId(Id).asp_nhom;
+            //var obj = string.Join(",", _nguoiDungDao.LayNguoiDungOnlBoiId(Id).asp_nhom.Select(n => n.ma_nhom).ToArray());
+            return View(_nguoiDungDao.LayNguoiDungOnlBoiId(Id));
+        }
+        [HttpGet]
+        public IActionResult ViewNguoiDungOnline(Guid Id, string type)
+        {
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { CurrentPage = 1, trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
-   
             return View(_nguoiDungDao.LayNguoiDungOnlBoiId(Id));
+        }
+        [HttpPost]
+        public IActionResult SuaNguoiDungOnline(UserOnlineModels item, string type)
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            var ObjId = _nguoiDungDao.SuaNguoiDungOnline(item, UserId);
+            try
+            {
+                if (ObjId.ErrorCode == 0)
+                {
+
+                    if (item.type_view == StatusAction.Add.ToString())
+                    {
+                        return RedirectToAction("ThemNguoiDungOnline");
+                    }
+                    if (item.type_view == StatusAction.View.ToString())
+                    {
+                        return RedirectToAction("ViewNguoiDungOnline", "QTnguoidung", new { Id = item.Id, type = StatusAction.View.ToString() });
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    ViewBag.ErrorCode = 1;
+                    ViewBag.ErrorMsg = "Lỗi dữ liệu!!!";
+                    return PartialView(item);
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Lỗi dữ liệu!!!";
+                return PartialView(item);
+            }
         }
         public IActionResult XoaNnguoiDungOnline(string Id, string type)
         {
