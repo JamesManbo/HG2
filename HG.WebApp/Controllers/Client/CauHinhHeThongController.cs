@@ -43,15 +43,11 @@ namespace HG.WebApp.Controllers.Client
             }
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var data = new CauHinhModel();
-            var phien_lv = new cd_phien_lam_viec();
-            var lst_don_vi = new List<dm_don_vi>();
-            var lst_linh_vuc = new List<Dm_Linh_Vuc>();
-            var lst_chuyen_vien = new List<cd_tt_chuyen_vien>();
             using (var db = new EAContext())
             {
                 data.lst_don_vi = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 data.lst_linh_vuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
-                data.lst_chuyen_vien = db.cd_tt_chuyen_vien.Where(n => n.Deleted == 0).ToList();
+                data.lst_chuyen_vien = db.cd_tt_chuyen_vien.Where(n => n.Deleted == 0).Skip(0).Take(pageSize).ToList();
 
                 if (String.IsNullOrEmpty(don_vi))
                 {
@@ -120,7 +116,7 @@ namespace HG.WebApp.Controllers.Client
                 EAContext eAContext = new EAContext();
                 var obj = eAContext.cd_tt_chuyen_vien.FirstOrDefault(n => n.id == item.id);
                 var ten_don_vi = (eAContext.dm_don_vi.FirstOrDefault(n => n.Deleted != 1 && n.ma_don_vi == item.don_vi) ?? new dm_don_vi()).ten_don_vi ?? "";
-                if (type == StatusAction.Edit.ToString())
+                if (type == StatusAction.Edit.ToString() && obj != null)
                 {
                     obj.UidName = User.Identity.Name;
                     obj.CreatedDateUtc = DateTime.Now;
@@ -155,23 +151,30 @@ namespace HG.WebApp.Controllers.Client
 
         public IActionResult XoaChuyenVien(int id)
         {
-            if (!User.Identity.IsAuthenticated)
+            try
             {
-                return RedirectToAction("Login", "User");
-            }
-            var uid = Guid.Parse(userManager.GetUserId(User));
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction("Login", "User");
+                }
+                var uid = Guid.Parse(userManager.GetUserId(User));
 
-            EAContext db = new EAContext();
-            var obj = db.cd_tt_chuyen_vien.Where(n => n.id == id).FirstOrDefault();
-            if (obj != null)
-            {
-                obj.Deleted = 1;
-                obj.UpdatedDateUtc = DateTime.Now;
-                obj.UpdatedUid = uid;
-                db.Entry(obj).State = EntityState.Modified;
-                db.SaveChanges();
+                EAContext db = new EAContext();
+                var obj = db.cd_tt_chuyen_vien.Where(n => n.id == id).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.Deleted = 1;
+                    obj.UpdatedDateUtc = DateTime.Now;
+                    obj.UpdatedUid = uid;
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return Json(new { error = 0, msg = "Xóa thành công!", href = "/CauHinhHeThong/CauHinh?Oid=0-2" });
             }
-            return RedirectToAction("CauHinh", "CauHinhHeThong", new { Oid = "0-2" });
+            catch (Exception ex)
+            {
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
         }
 
         public async Task<IActionResult> ChuyenVienPaging(int currentPage = 0, int pageSize = 0)

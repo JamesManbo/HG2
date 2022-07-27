@@ -53,6 +53,8 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Muc_Do_Thuc_Hien> Dm_Muc_Do_Thuc_Hien { get; set; }
         public virtual DbSet<cd_phien_lam_viec> cd_phien_lam_viec { get; set; }
         public virtual DbSet<cd_tt_chuyen_vien> cd_tt_chuyen_vien { get; set; }
+        public virtual DbSet<cd_thong_bao> cd_thong_bao { get; set; }
+        public virtual DbSet<cd_quan_ly_hoat_dong> cd_quan_ly_hoat_dong { get; set; }
 
         // END Danh mục
 

@@ -1,0 +1,687 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Entities.CauHinh.HoatDongModel
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background: #fff;
+        border-bottom: 1px solid #fff;
+        color: #333;
+    }
+
+    .nav-pills .nav-link, .nav-pills .show > .nav-link {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 0;
+    }
+
+
+    .nav-pills .nav-link {
+        background: 0 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="pageheader">
+            <div class="pageicon"><span class="iconfa-pencil"></span></div>
+            <div class="pagetitle">
+                <h5>Hoạt động</h5>
+                <h1>Quản lý hoạt động</h1>
+            </div>
+        </div>
+        <div class="maincontent">
+            <div class="maincontentinner">
+                <!-- Pills Tabs -->
+                <div class="tab-primary" style="border: 2px solid #0866c6;">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Quản lý hoạt động</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Cập nhật nội dung thông báo</button>
+                        </li>
+
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent" style="padding: 15px;">
+                        @*TAB Cập nhật phiên làm việc*@
+                        <div class="tab-pane fade @(ViewBag.active==1?"show active":"")" id="pills-tab1" role="tabpanel" aria-labelledby="home-tab">
+
+                            @if (ViewBag.type_view == StatusAction.Add.ToString() || ViewBag.type_view == StatusAction.Edit.ToString())
+                            {
+                                <div class="widget">
+                                    <h4 class="widgettitle">Thông tin hoạt động</h4>
+                                    <form id="form_hd" action="/QuanLyHoatDong/SaveHoatDong?type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                                        <div class="widgetcontent">
+                                            <div class="form-horizontal">
+                                                <div class="row mb-3">
+                                                    <label for="inputPassword" class="col-md-2 control-label">Chọn ảnh</label>
+                                                    <div class="col-md-8">
+                                                        <div class="input-append" style="display: flex;">
+                                                            <div class="uneditable-input" style="width: 400px !important">
+                                                                <input name="file_name" id="file_name" class="form-control" value="@Model.hoat_dong.file_name">
+                                                                <input name="url_file" id="url_file" hidden value="">
+                                                                <input type="file" id="files" hidden>
+                                                            </div>
+                                                            <span>
+                                                                <button type="button" onclick="$('#files').click();" id="btn_file" class="btn btn-secondary"><i class="glyphicon glyphicon-folder-open"></i>Chọn File</button>
+                                                            </span>
+                                                            <input type="button" name="" value="Xóa tệp" onclick="CleadFile()" id="xoatep" title="Xóa tệp đính kèm" class="btn btn-default btn-Xoa" style="height:32px;display:none">
+                                                            &nbsp;
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label class="col-md-2 control-label">Thứ tự:</label>
+                                                    <div class="col-md-8">
+                                                        <input name="stt" type="number" id="stt" class="form-control input-default" value="@Model.hoat_dong.Stt" placeholder="Thứ tự">
+                                                    </div>
+                                                    <label class="col-md-1 ">
+                                                    </label>
+                                                </div>
+
+                                                <div class="row mb-3">
+                                                    <label class="col-md-2 control-label">Nội dung:</label>
+                                                    <div class="col-md-8">
+                                                        <textarea name="noi_dung" rows="2" cols="20" id="noi_dung" class="form-control input-default" placeholder="Mô tả">@Model.hoat_dong.noi_dung</textarea>
+                                                    </div>
+                                                    <label class="col-md-1 ">
+                                                    </label>
+                                                </div>
+                                                <input name="id" value="@Model.hoat_dong.id" hidden>
+                                                <div class="text-center">
+                                                    <div class="col-md-offset-2 col-md-10">
+                                                        <button type="submit" name="type_add" value="@(StatusAction.Add.ToString())" id="btnThemMoi" class="btn btn-primary">Lưu và Thêm</button>
+                                                        <button type="submit" name="type_add" value="@(StatusAction.Edit.ToString())" class="btn btn-primary">Lưu</button>
+                                                        <button type="button" class="btn btn-primary" value="Xóa" onclick="confirm.BeforDeletePost('/QuanLyHoatDong/XoaHoatDong?code=@Model.hoat_dong.id')">Xóa</button>
+                                                        <button type="button" class="btn btn-primary" value="Đóng" onclick="window.location.href='/QuanLyHoatDong/QuanLy';">Đóng</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="maincontentinner">
+                                    <!-- Table with stripped rows -->
+                                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                                        <input type="button" value="Thêm" onclick="window.location.href = '/QuanLyHoatDong/QuanLy?type=@StatusAction.Add.ToString()';" class="btn btn-primary" style="width:100px;" />
+                                        <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                                        <input hidden id="lstCode" />
+                                    </p>
+
+                                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                        <div class="dataTables_length">
+                                            <label>
+                                                Hiển thị
+                                                <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
+                                                    <option value="5">5</option>
+                                                    <option value="10" selected="">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                </select> bản ghi
+                                            </label>
+                                        </div>
+                                        <div id="dataTable">
+                                            <div class="dataTable-container">
+                                                <table class="table table-bordered responsive">
+                                                    <thead class="widgettitle">
+                                                        <tr>
+                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                                                <input type="checkbox" name="" id="selectAll" />
+                                                            </th>
+                                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                            <th class="head1" scope="col" data-sortable="" style="width: 85%;">NỘI DUNG HOẠT ĐỘNG</th>
+                                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.lst_hoat_dong != null && Model.lst_hoat_dong.Count() > 0)
+                                                        {
+                                                            var stt = 1;
+                                                            foreach (var item in Model.lst_hoat_dong)
+                                                            {
+                                                                <tr>
+                                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.id" /></td>
+                                                                    <td scope="row">
+                                                                        @stt
+                                                                        <input type="hidden" value="@item.id" />
+                                                                    </td>
+                                                                    <td>@item.noi_dung</td>
+                                                                    <td>
+                                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/QuanLyHoatDong/QuanLy?type=@StatusAction.Edit.ToString()&oid=@(item.id+"-1")">
+                                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a onclick="confirm.BeforDeletePost('/QuanLyHoatDong/XoaHoatDong?code=@item.id')"
+                                                               title=""
+                                                               data-placement="top"
+                                                               data-toggle="tooltip"
+                                                               data-original-title="Xóa"
+                                                               href="#">
+                                                                            <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                stt++;
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistHD.RecoredFrom đến  @Model.PagelistHD.RecoredTo của @Model.PagelistHD.TotalRecords bản ghi</div>
+                                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                                @{
+                                                    var TotalPage = (int)Model.PagelistHD.TotalPage;
+                                                    var CurrentPage = (int)Model.PagelistHD.CurrentPage;
+                                                    if (TotalPage > 5)
+                                                    {
+                                                        if (CurrentPage > CurrentPage + 2)
+                                                        {
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                        };
+                                                        if (CurrentPage > 3)
+                                                        {
+                                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                            {
+                                                                if (i == CurrentPage)
+                                                                {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            for (int i = 1; i <= 5; i++)
+                                                            {
+                                                                if (i == CurrentPage)
+                                                                {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                        if (CurrentPage < CurrentPage + 2)
+                                                        {
+                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                        };
+                                                    }
+                                                    else
+                                                    {
+                                                        for (int i = 1; i <= TotalPage; i++)
+                                                        {
+                                                            if (i == CurrentPage)
+                                                            {
+                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        <!-- End Table with stripped rows -->
+                                    </div>
+                                    <!-- Table with stripped rows -->
+                                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                                        <input type="button" value="Thêm" onclick="window.location.href = '/QuanLyHoatDong/QuanLy?type=@StatusAction.Add.ToString()';" class="btn btn-primary" style="width:100px;" />
+
+                                        <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+
+                                    </p>
+                                </div>
+                            }
+
+                        </div>
+                        @*TAB thông tin chuyên viên online *@
+                        <div class="tab-pane fade @(ViewBag.active==2?"show active":"")" id="pills-tab2" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="form-horizontal">
+                                <div class="widget">
+                                    <h4 class="widgettitle">Thông báo </h4>
+                                    <div class="widgetcontent">
+                                        <div class="form-horizontal">
+                                            <form id="form_tb1" action="/QuanLyHoatDong/SaveThongBao?type_add=1" method="post" enctype="multipart/form-data" id="filterForm">
+                                                <div class="row mb-3">
+                                                    <label class="col-md-2 control-label">Tên:</label>
+                                                    <div class="col-md-3">
+                                                        <input name="ten_ma" type="text" id="ten_ma" class="form-control input-default" placeholder="Tên">
+                                                    </div>
+                                                    <label class="col-md-2 control-label">Link liên kết:</label>
+                                                    <div class="col-md-3">
+                                                        <input name="link" type="text" id="link" class="form-control input-default" placeholder="Link liên kết">
+                                                    </div>
+                                                    <label class="col-md-2">
+                                                        <input type="submit" name="ctl08$CreateTTParent" value="Tạo thông báo cha" id="ctl08_CreateTTParent">
+                                                    </label>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label class="col-md-2 control-label">Nội dung:</label>
+                                                    <div class="col-md-8">
+                                                        <textarea name="noi_dung" rows="3" cols="20" id="noi_dung" class="form-control input-default" placeholder="Nội dung TT cha"></textarea>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <hr>
+                                            <form id="form_tb2" action="/QuanLyHoatDong/SaveThongBao?type_add=2" method="post" enctype="multipart/form-data" id="filterForm">
+                                                <div class="row mb-3">
+                                                    <label class="col-md-2 control-label">Tên:</label>
+                                                    <div class="col-md-2">
+                                                        <input name="ten_ma" type="text" id="ten_ma" class="form-control input-default" placeholder="Tên">
+                                                    </div>
+
+                                                    <label class="col-md-2 control-label">Thông báo cha:</label>
+                                                    <div class="col-md-2">
+                                                        <select name="ma_cha" id="ma_cha" class="form-control input-default-sm">
+                                                            <option value="0">Chọn thông báo cha</option>
+                                                            @if (@Model.lst_thong_bao.Where(n => n.ma_cha == 0) != null)
+                                                            {
+                                                                foreach (var item in Model.lst_thong_bao.Where(n => n.ma_cha == 0))
+                                                                {
+                                                                    <option value="@item.id">@item.ten_ma</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <label class="col-md-2 control-label">Link liên kết:</label>
+                                                    <div class="col-md-2">
+                                                        <input name="link" type="text" id="link" class="form-control input-default" placeholder="Link liên kết">
+                                                    </div>
+
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <label class="col-md-2 control-label">Nội dung:</label>
+                                                    <div class="col-md-8">
+                                                        <textarea name="noi_dung" rows="3" cols="20" id="noi_dung" class="form-control input-default" placeholder="Nội dung TB con"></textarea>
+                                                    </div>
+                                                    <label class="col-md-2">
+                                                        <input type="submit" value="Tạo thông báo con" id="ctl08_CreateTTChild">
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
+
+                                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                                <div class="dataTables_length">
+                                                    <label>
+                                                        Hiển thị
+                                                        <select class="dataTable-selector" id="lstPageSize_tb" onchange="changePageSize_tb(this);">
+                                                            <option value="5">5</option>
+                                                            <option value="10" selected="">10</option>
+                                                            <option value="15">15</option>
+                                                            <option value="20">20</option>
+                                                            <option value="25">25</option>
+                                                        </select> bản ghi
+                                                    </label>
+                                                </div>
+                                                <div id="dataTable_tb">
+                                                    <div class="dataTable-container">
+                                                        <table class="table table-bordered responsive">
+                                                            <thead class="widgettitle">
+                                                                <tr>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 15%;">TÊN</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 15%;">THÔNG BÁO CHA</th>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 60%;">NỘI DUNG</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model.lst_thong_bao != null)
+                                                                {
+                                                                    var stt = 1;
+                                                                    foreach (var item in Model.lst_thong_bao)
+                                                                    {
+                                                                        <tr>
+                                                                            <td scope="row">@stt</td>
+                                                                            <td>@item.ten_ma</td>
+                                                                            <td>@(item.ma_cha>0? item.ten_ma : "")</td>
+                                                                            <td>@item.noi_dung</td>
+                                                                            <td>
+                                                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/CauHinhHeThong/CauHinh?don_vi=&type=@StatusAction.Edit.ToString()&Oid=@(item.id.ToString()+"-2")">
+                                                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                                </a>
+                                                                            </td>
+                                                                            <td>
+                                                                                <a onclick="confirm.BeforDeletePost('/CauHinhHeThong/XoaChuyenVien?id=@item.id')"
+                                                                           title=""
+                                                                           data-placement="top"
+                                                                           data-toggle="tooltip"
+                                                                           data-original-title="Xóa"
+                                                                           href="#">
+                                                                                    <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        stt++;
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistTB.RecoredFrom đến  @Model.PagelistTB.RecoredTo của @Model.PagelistTB.TotalRecords bản ghi</div>
+                                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                                        @{
+                                                            var TotalPage_tb = (int)Model.PagelistTB.TotalPage;
+                                                            var CurrentPage_tb = (int)Model.PagelistTB.CurrentPage;
+                                                            if (TotalPage_tb > 5)
+                                                            {
+                                                                if (CurrentPage_tb > CurrentPage_tb + 2)
+                                                                {
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(1)">Đầu</a></span>
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(@CurrentPage_tb - 1)">Trước</a></span>
+                                                                };
+                                                                if (CurrentPage_tb > 3)
+                                                                {
+                                                                    for (int i = CurrentPage_tb - 2; i < CurrentPage_tb + 2; i++)
+                                                                    {
+                                                                        if (i == CurrentPage_tb)
+                                                                        {
+                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                        if (i == CurrentPage_tb)
+                                                                        {
+                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                                if (CurrentPage_tb < CurrentPage_tb + 2)
+                                                                {
+                                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(@CurrentPage_tb + 1)">Trước</a></span>
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(@TotalPage_tb)">Cuối</a></span>
+                                                                };
+                                                            }
+                                                            else
+                                                            {
+                                                                for (int i = 1; i <= TotalPage_tb; i++)
+                                                                {
+                                                                    if (i == CurrentPage_tb)
+                                                                    {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <!-- End Table with stripped rows -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+<script>
+    function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
+        $.ajax({
+            type: "GET",
+            url: "../QuanLyHoatDong/HoatDongPaging?currentPage=" + id + "&pageSize=" + pageSize,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function changePageSize(data) {
+        debugger
+        $("#lstPageSize").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../QuanLyHoatDong/HoatDongPaging?currentPage=" + 1 + "&pageSize=" + data.value,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
+    function GetListByCurrentPage_tb(id) {
+        var pageSize = $("#lstPageSize_tb").val();
+        $.ajax({
+            type: "GET",
+            url: "../QuanLyHoatDong/ThongBaoPaging?currentPage=" + id + "&pageSize=" + pageSize,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable_tb").html(data);
+            }
+        });
+    }
+    function changePageSize_tb(data) {
+        $("#lstPageSize_tb").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../QuanLyHoatDong/ThongBaoPaging?currentPage=" + 1 + "&pageSize=" + data.value,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable_tb").html(data);
+            }
+        });
+    }
+
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/QuanLyHoatDong/XoaHoatDong?code=' + listData)
+    }
+
+    $(function() {
+        $('#selectAll').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+
+    function validate_fileupload(fileName) {
+        var allowed_extensions = new Array("jpg", "png", "JPEG");
+        var file_extension = fileName.split('.').pop().toLowerCase(); // split function will split the filename by dot(.), and pop function will pop the last element from the array which will give you the extension as well. If there will be no extension then it will return the filename.
+
+        for (var i = 0; i <= allowed_extensions.length; i++) {
+            if (allowed_extensions[i] == file_extension) {
+                return true; // valid file extension
+            }
+        }
+        return false;
+    }
+
+
+    $("#files").on('change', function() {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                if (validate_fileupload(files[0].name) == false) {
+                    alert("Định dạng tệp tin" + files[0].name + " không hợp lệ!");
+                    $("#files").val(null);
+                    return;
+                } else {
+                    $("#file_name").val(files[0].name);
+                    $("#btn_file").text("Thay đổi");
+                    fileData.append(files[i].name, files[i]);
+                }
+            }
+            // Adding one more key to FormData object
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=HoatDong',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    console.log(result);
+                    $("#xoatep").attr("style", "display:inline-flex");
+                    for (var i = 0; i < result.files.length; i++) {
+                        $('#url_file').val("" + result.files[i] + "");
+                    }
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+
+    function CleadFile() {
+        $("#files").val(null);
+        $("#url_file").val(null);
+        $("#file_name").val(null);
+    }
+
+    $(document).ready(function() {
+        $('#form_hd').validate({
+            rules: {
+                file_name: {
+                    required: true
+                },
+                stt: {
+                    required: true,
+                    number: true
+                },
+                noi_dung: {
+                    required: true
+                },
+            },
+            messages: {
+                file_name: {
+                    required: "Bạn cần chọn file!"
+                },
+                stt: {
+                    required: "Bạn cần nhập số thứ tự!",
+                    number: "Chỉ được nhập số"
+                },
+                noi_dung: {
+                    required: "Bạn cần nhập nội dung!"
+                }
+            }
+        });
+
+        $('#form_tb1').validate({
+            rules: {
+                ten_ma: {
+                    required: true
+                },
+                noi_dung: {
+                    required: true
+                },
+            },
+            messages: {
+                file_name: {
+                    required: "Bạn cần nhâp tên!"
+                },
+                noi_dung: {
+                    required: "Bạn cần nhập nội dung!"
+                }
+            }
+        });
+
+        $('#form_tb2').validate({
+            rules: {
+                file_name: {
+                    required: true
+                },
+                noi_dung: {
+                    required: true
+                },
+            },
+            messages: {
+                file_name: {
+                    required: "Bạn cần chọn file!"
+                },
+                noi_dung: {
+                    required: "Bạn cần nhập nội dung!"
+                }
+            }
+        });
+    });
+</script>
