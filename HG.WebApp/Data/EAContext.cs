@@ -14,6 +14,7 @@ using HG.Entities.HoSo;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.DanhMuc;
 using HG.Entities.Entities.HoSo;
+using HG.Entities.Entities.CauHinh;
 
 namespace HG.WebApp.Data
 {
@@ -50,6 +51,8 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Buoc_Thuc_Hien> Dm_Buoc_Thuc_Hien { get; set; }
         public virtual DbSet<Dm_Don_Vi_Lien_Thong> Dm_Don_Vi_Lien_Thong { get; set; }
         public virtual DbSet<Dm_Muc_Do_Thuc_Hien> Dm_Muc_Do_Thuc_Hien { get; set; }
+        public virtual DbSet<cd_phien_lam_viec> cd_phien_lam_viec { get; set; }
+        public virtual DbSet<cd_tt_chuyen_vien> cd_tt_chuyen_vien { get; set; }
 
         // END Danh mục
 
