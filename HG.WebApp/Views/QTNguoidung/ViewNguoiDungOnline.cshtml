@@ -1,0 +1,156 @@
+﻿@model HG.Entities.Entities.Asp_NguoiDung_Nhom_Onl
+@{
+    ViewData["Title"] = "Thêm mới";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    //var LstNhom = ViewBag.LstNhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
+    //var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
+    //var lst_chuc_vu = ViewBag.lst_chuc_vu as List<HG.Entities.Dm_Chuc_Vu>;
+    var lst_nguoi_dung = ViewBag.ListNguoiDung as HG.Entities.Entities.ds_nguoi_dung_paging_online;
+}
+@using HG.WebApp
+<script src="/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
+<script src="~/BackEnd/Admin/Js/Validate/NguoiDung.js"></script>
+<script>
+    var Arr = [];
+    $(document).ready(function() {
+
+        NguoiDung.validateForm();
+        $('.select2').select2({
+            closeOnSelect: false
+        });
+        $('#multiselect').on('select2:select', function(e) {
+            Arr.push(e.params.data.id);
+            $("#lstGroup").val(Arr.join(","));
+        });
+        $('#multiselect').on("select2:unselect", function(e) {
+            Arr.pop(e.params.data.id);
+            $("#lstGroup").val(Arr.join(","));
+        });
+    });
+</script>
+
+
+
+<ul class="breadcrumbs">
+    <li><a href="Default.aspx"><i class="iconfa-home"></i></a> <span class="separator"></span></li>
+    <li><span id="breadcrumbsParent">Nhóm Người dùng &amp; Vai trò</span>&nbsp;<span id="spanBr" class="separator"></span></li>
+    <li><span id="breadcrumbsChird">Người dùng</span></li>
+
+
+    <li class="right">
+        <a href="" data-toggle="dropdown" class="dropdown-toggle"><i class="iconsweets-chart4" data-placement="left" data-toggle="tooltip" data-original-title="Màu giao diện"></i>&nbsp;</a>
+        <ul class="dropdown-menu pull-right skin-color">
+            <li><a href="default">Mặc định</a></li>
+            <li><a href="navyblue">Xanh nước biển</a></li>
+            <li><a href="palegreen">Xanh nhạt</a></li>
+            <li><a href="red">Đỏ</a></li>
+            <li><a href="green">Xanh lá</a></li>
+            <li><a href="brown">Nâu</a></li>
+        </ul>
+    </li>
+</ul>
+<div class="card">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-table"></span></div>
+        <div class="pagetitle">
+            <h5>Danh sách</h5>
+            <h1>Người dùng</h1>
+        </div>
+
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <div class="widget">
+                <h4 class="widgettitle">Cập nhật thông tin người dùng</h4>
+                <form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/SuaNguoiDung" method="post" enctype="multipart/form-data">
+                    <div class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">
+                                Tên đăng nhập
+                                <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input name="UserName" disabled value="@Model.aspNetUsersModel.First().UserName" maxlength="50" type="text" id="FCode" class="form-control input-default" onkeyup="xoa_dau(this);" placeholder="Tên đăng nhập">
+                            </div>
+                         
+
+                        </div>
+
+
+                        <div class="form-group" hidden="hidden" id="mkmd">
+                            <label class="col-md-2 control-label">
+                                Mật khẩu mặc định
+                            </label>
+                            <div class="col-md-10">
+                                <input name="ctl08$ctl00$TextBox1" type="text" id="ctl08_ctl00_TextBox1" disabled="disabled" class="form-control input-default" placeholder="1">
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">
+                                Email
+                                <span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span>
+                            </label>
+                            <div class="col-md-10">
+                                <input disabled name="ho_dem" type="text" id="ho_dem" value="@Model.aspNetUsersModel.First().Email" maxlength="50" class="form-control input-default" placeholder="Họ đêm">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">
+                                Tên
+                                <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
+                            </label>
+                            <div class="col-md-10">
+                                <input disabled name="ten" type="text" id="ten" maxlength="50" value="@Model.aspNetUsersModel.First().ten" class="form-control input-default" placeholder="Tên">
+                            </div>
+                        </div>
+                       
+                     
+
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Điện thoại</label>
+                            <div class="col-md-10"> 
+                                <input name="PhoneNumber" disabled type="text" id="PhoneNumber" maxlength="12" value="@Model.aspNetUsersModel.First().PhoneNumber" class="form-control input-default" placeholder="Số điện thoại">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Email</label>
+                            <div class="col-md-10">
+                                <input name="Email" disabled type="text" id="Email" class="form-control input-default" maxlength="50" value="@Model.aspNetUsersModel.First().Email" placeholder="Email">
+                            </div>
+                        </div>
+
+                      
+
+
+                       
+                       
+                        <div class="form-group" hidden="hidden">
+                            <div class="col-md-10">
+                                <input disabled name="Id" type="text" maxlength="50" value="@Model.aspNetUsersModel.First().Id"  class="form-control input-default" placeholder="Mã">
+                            </div>
+                        </div>
+                      <div class="form-group row">
+									<label class="col-md-2 control-label">Khóa tài khoản</label>
+									<div class="col-md-10">
+										<input id="LockoutEnabled" type="checkbox" name="LockoutEnabled" @(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? "checked" : "" )  disabled>
+									</div>
+						</div>
+                         <div class="text-center">
+                           <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/QTNguoiDung/ThemNguoiDung';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/QTNguoiDung/SuaNguoiDung?Id=@Model.aspNetUsersModel.First().Id&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/QTNguoiDung/XoaNnguoiDung2?Id=@Model.aspNetUsersModel.First().Id')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoiDung/ListNguoiDung';">Đóng</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+           
+        </div>
+    </div>
+
+</div>

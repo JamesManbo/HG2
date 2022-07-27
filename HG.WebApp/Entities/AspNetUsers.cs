@@ -24,6 +24,8 @@ namespace HG.WebApp
         public DateTime? ngay_sinh { get; set; }
         public int? Deleted { get; set; }
         public int? khoa_tai_khoan { get; set; }
+        public int? Type { get; set; }
+
 
     }
 }

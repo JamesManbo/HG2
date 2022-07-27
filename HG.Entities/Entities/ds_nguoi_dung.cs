@@ -97,6 +97,7 @@ namespace HG.Entities.Entities
     }
     public class UserOnlineModels : IdentityUser<Guid>
     {
+        public string? ten_dang_nhap { get; set; }
         public string? Email { get; set; }
         public string? ten { get; set; }
         public string? mat_khau { get; set; }
@@ -105,6 +106,7 @@ namespace HG.Entities.Entities
         public string? ho_khau_tt { get; set; }
         public int? khoa_tai_khoan { get; set; }
         public string? type_view { get; set; }
+       
     }
     public class Nhom_Vaitro
     {

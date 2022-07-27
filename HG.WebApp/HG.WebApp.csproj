@@ -48,4 +48,9 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\FrontEnd\Avatar\2022\7\26\" />
+    <Folder Include="wwwroot\FrontEnd\CMT\2022\7\26\" />
+  </ItemGroup>
+
 </Project>
