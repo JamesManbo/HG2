@@ -52,23 +52,43 @@
     $(document).ready(function() {
         var year_now = (new Date()).getFullYear();
         var year_later = year_now - 1;
-        ("#nam_hoc").val(year_now + ' - ' year_later);
 
-        $('#form_tscmn').validate({
+        $('#form_tstieuhoc').validate({
             rules: {
                 ho_ten_hoc_sinh: {
                     required: true,
                     ma_thu_tuc_vaild: true
                 },
                 thong_tin_chi_tiet: "required",
-                id_truong: "required"
+                id_truong: "required",
+                so_dinh_danh: "required",
+                ngay_sinh: "required",
+                gioi_tinh: "required",
+                ho_ten_lien_he: "required",
+                dien_thoai_lien_he: "required",
+                ma_dan_toc: "required",
+                ma_dia_ban_tinh_noi_sinh: "required",
+                ma_dia_ban_huyen_noi_sinh: "required",
+                ma_dia_ban_tinh_noi_cu_tru: "required",
+                ma_dia_ban_huyen_noi_cu_tru: "required",
             },
             messages: {
                 thong_tin_chi_tiet: {
                     required: "Bạn cần nhập thông tin chi tiết!"
                 },
                 id_truong: "Bạn cần chọn trường!",
-                ho_ten_hoc_sinh: "Bạn cần nhập họ tên!"
+                ho_ten_hoc_sinh: "Bạn cần nhập họ tên!",
+                so_dinh_danh: "Bạn cần nhập Số định danh!",
+                ngay_sinh: "Bạn cần nhập ngày sinh!",
+                gioi_tinh: "Bạn cần chọn giới tính!",
+                ho_ten_lien_he: "Bạn cần nhập người liên hệ!",
+                dien_thoai_lien_he: "Bạn cần nhập điện thoại liên hệ!",
+                ma_dan_toc: "Bạn cần chọn dân tộc!",
+                ma_dia_ban_tinh_noi_sinh: "Bạn cần chọn tỉnh!",
+                ma_dia_ban_huyen_noi_sinh: "Bạn cần chọn huyện!",
+                ma_dia_ban_tinh_noi_cu_tru: "Bạn cần chọn tỉnh!",
+                ma_dia_ban_huyen_noi_cu_tru: "Bạn cần chọn huyện!",
+
             }
         });
 
@@ -86,7 +106,7 @@
             });
         })
 
-       
+
 
 
 
@@ -118,8 +138,8 @@
         });
     };
 
-    
-   
+
+
 </script>
 
 
@@ -138,7 +158,7 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_tscmn" action="/GuiHoSo/GuiTuyenSinhCapTieuHoc" method="post" enctype="multipart/form-data">
+                    <form id="form_tstieuhoc" action="/GuiHoSo/GuiTuyenSinhCapTieuHoc" method="post" enctype="multipart/form-data">
                         <div class="send-document-top top-title-frame">
                             <p>THÔNG TIN HỒ SƠ</p>
                         </div>
@@ -178,7 +198,7 @@
                                                             tên <span class="red-text">(*)</span>:
                                                         </span>
                                                         <div class="col-md-5">
-                                                            <input type="text" name="ten" style="width:100%;" value="@nguoi_dung.ten">
+                                                            <input id="User_Ten" type="text" name="ten" style="width:100%;" value="@nguoi_dung.ten">
                                                         </div>
                                                     </div>
                                                     <!-- 2 -->
@@ -195,18 +215,18 @@
                                                     <!-- 3 -->
                                                     <div class="form-group form-group-new">
                                                         <label class="col-md-4 control-label">
-                                                            Ngày sinh<span class="red-text">(*)</span>:
+                                                            Ngày sinh:
                                                         </label>
                                                         <div class="col-md-5">
                                                             @*<input type="text" style="width:100%;" value="@nguoi_dung.ngay_sinh">*@
-                                                            <input type="date" class="w-100" name="ngay_sinh" value="@nguoi_dung.ngay_sinh" placeholder="">
+                                                            <input id="User_NgaySinh" type="date" class="w-100" name="ngay_sinh" value="@nguoi_dung.ngay_sinh" placeholder="">
                                                         </div>
                                                     </div>
                                                     <!-- 4 -->
                                                     <div class="form-group form-group-new">
                                                         <label class="col-md-4 control-label">Email :</label>
                                                         <div class="col-md-5">
-                                                            <input type="text" id="" name="Email" value="@nguoi_dung.Email" style="width:100%;">
+                                                            <input type="text" id="User_Email" name="Email" value="@nguoi_dung.Email" style="width:100%;">
                                                         </div>
                                                     </div>
                                                     <!-- 5 -->
@@ -216,14 +236,14 @@
                                                             điện thoại<span class="red-text">(*)</span>:
                                                         </span>
                                                         <div class="col-md-5">
-                                                            <input type="text" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
+                                                            <input type="text" id="User_PhoneNumber" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
                                                         </div>
                                                     </div>
                                                     <!-- 6 -->
                                                     <div class="form-group form-group-new">
                                                         <label class="col-md-4 control-label">Phòng ban</label>
                                                         <div class="col-md-5">
-                                                            <select name="ma_phong_ban" id="ma_phong_ban"
+                                                            <select name="ma_phong_ban" id="user_ma_phong_ban"
                                                                     value="@nguoi_dung.ma_phong_ban"
                                                                     class="form-control input-default form-select" placeholder="Phòng ban">
                                                                 <option value="0">--- Chọn ---</option>
@@ -231,9 +251,17 @@
                                                                 {
                                                                     foreach (var item in lst_phong_ban)
                                                                     {
-                                                                        <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
-                                                        }
-                                                    }
+                                                                         if (nguoi_dung.ma_phong_ban != null && nguoi_dung.ma_phong_ban.Trim() == item.ma_phong_ban.Trim())
+                                                                        {
+                                                                            <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                                        }
+                                                                    }
+                                                                   
+                                                                }
 
                                                             </select>
                                                         </div>
@@ -243,13 +271,20 @@
                                                         <label class="col-md-4 control-label">Chức vụ</label>
                                                         <div class="col-md-5" style="padding-right: 0px">
 
-                                                            <select name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
+                                                            <select name="ma_chuc_vu" id="user_ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
                                                                 <option value="">---Chọn---</option>
                                                                 @if (lst_chuc_vu != null)
                                                                 {
                                                                     foreach (var item in lst_chuc_vu)
                                                                     {
-                                                                        <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                                                        if (nguoi_dung.ma_chuc_vu != null && nguoi_dung.ma_chuc_vu.Trim() == item.ma_chuc_vu.Trim())
+                                                                        {
+                                                                            <option value="@item.ma_chuc_vu" selected>@item.ten_chuc_vu</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                                                        }
                                                                     }
                                                                 }
                                                             </select>
@@ -265,10 +300,12 @@
                                                     Đóng
                                                 </button>
                                                 <button type="button" onclick="LuuNguoiDung()" class="btn-common btn-login">Lưu</button>
+                                                @*<button type="submit" class="btn-common btn-login">Lưu</button>*@
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -518,31 +555,31 @@
                                         </label>
                                         <div class="col-md-2"><input class="w-100" name="dien_thoai_lien_he" type="text" placeholder=""></div>
                                     </div>
-                                  @*  <h4>
-                                        <span class="img-infor">Nguyện vọng xét tuyển</span>
+                                    @*  <h4>
+                                    <span class="img-infor">Nguyện vọng xét tuyển</span>
                                     </h4>
                                     <!-- Nguyện vọng 2 -->
                                     <div class="form-group form-group-new">
-                                        <label class="col-md-2 control-label">Nguyện vọng :</label>
-                                        <div class="col-md-6 select-nv">
-                                            <select class="selectpicker w-100 h-100 "
-                                                    name="id_nguyen_vong"
-                                                    data-width=""
-                                                    data-live-search="true" data-hide-disabled="false">
-                                                <option selected="selected" value="">---- Chọn nguyện vọng ----</option>
-                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListNguyenVongRecords())
-                                                {
-                                                    <option value="@item.key">@item.noi_dung</option>
-                                                }
-                                            </select>
-                                        </div>
+                                    <label class="col-md-2 control-label">Nguyện vọng :</label>
+                                    <div class="col-md-6 select-nv">
+                                    <select class="selectpicker w-100 h-100 "
+                                    name="id_nguyen_vong"
+                                    data-width=""
+                                    data-live-search="true" data-hide-disabled="false">
+                                    <option selected="selected" value="">---- Chọn nguyện vọng ----</option>
+                                    @foreach (var item in HG.WebApp.Helper.HelperString.ListNguyenVongRecords())
+                                    {
+                                    <option value="@item.key">@item.noi_dung</option>
+                                    }
+                                    </select>
+                                    </div>
 
                                     </div>*@
                                     <div class="form-group form-group-new">
                                         <label class="col-md-2"></label>
                                         <div class="col-md-8">
                                             <p class="red-text commit">
-                                                <input id="chkIsCamKet" type="checkbox">
+                                                <input id="chkIsCamKet" name="chkIsCamKet" type="checkbox">
                                                 <em>
                                                     <strong>
                                                         Tôi đã đọc hướng dẫn tuyển sinh và cam kết những nội dung tự
@@ -655,11 +692,18 @@
     function CloseModalUser() {
         $("#modalInput").modal("hide");
     }
-     function LuuNguoiDung() {
-         var data = $("#modalInput").serialize();
+    function LuuNguoiDung() {
+        var data = {
+            PhoneNumber: $("#User_PhoneNumber").val(),
+            ten: $("#User_Ten").val(),
+            ngay_sinh: $("#User_NgaySinh").val(),
+            Email: $("#User_Email").val(),
+            ma_phong_ban: $("#user_ma_phong_ban").val(),
+            ma_chuc_vu: $("#user_ma_chuc_vu").val(),
+        };
         $.ajax({
             type: "Post",
-            url: "/GuiHoSo/UpdateNguoiDung",
+            url: "/GuiHoSo/UpdateNguoiDungCapTieuHoc",
             data: data,
             //data: data,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -668,75 +712,75 @@
             }
         });
     }
-     $("#files_0").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
+    $("#files_0").on('change', function(i) {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var name = fileUpload?.name;
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
             }
-        });
+            // Adding one more key to FormData object
+            fileData.append('username', 'Manas');
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    for (var i = 0; i < result.files.length; i++) {
 
-        $("#files_1").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
+                        $('#' + name).val("" + result.files[i] + "");
                     }
-                });
-            } else {
-                alert("FormData is not supported.");
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+
+    $("#files_1").on('change', function(i) {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var name = fileUpload?.name;
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
             }
-        });
+            // Adding one more key to FormData object
+            fileData.append('username', 'Manas');
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    for (var i = 0; i < result.files.length; i++) {
+
+                        $('#' + name).val("" + result.files[i] + "");
+                    }
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
 </script>
 
 

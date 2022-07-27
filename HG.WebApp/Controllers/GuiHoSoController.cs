@@ -127,12 +127,24 @@ namespace HG.WebApp.Controllers
             var ds_chucvu = new List<Dm_Chuc_Vu>();
             using (var db = new EAContext())
             {
-                var userId = Guid.Parse(user_id);
+                if(user_id != null)
+                {
+                    var userId = Guid.Parse(user_id);
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                    nguoi_dung.ten = obj_user.ten;
+                    nguoi_dung.PhoneNumber = obj_user.PhoneNumber;
+                    nguoi_dung.ngay_sinh = obj_user.ngay_sinh;
+                    nguoi_dung.Email = obj_user.Email;
+                    nguoi_dung.ma_phong_ban = obj_user.ma_phong_ban;
+                    nguoi_dung.ma_chuc_vu = obj_user.ma_chuc_vu;
+                    db.AspNetUsers.Update(nguoi_dung);
+                    db.SaveChanges();
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                }
                 lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
                 lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
-                nguoi_dung = db.AspNetUsers.Find(userId);
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
             }
@@ -387,6 +399,55 @@ namespace HG.WebApp.Controllers
 
 
         #region ------ Gửi hồ sơ cấp tiểu học ----------
+        [HttpPost]
+        public IActionResult UpdateNguoiDungCapTieuHoc(AspNetUsers obj_user)
+        {
+            var user_id = userManager.GetUserId(User);
+
+            var modal = new Ghs_Tuyen_Sinh_Cap_Tieu_Hoc();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstpb = new List<Ghs_Tuyen_Sinh_Cap_Tieu_Hoc>();
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            var ds_gioitinh = new List<Dm_Gioi_Tinh>();
+            using (var db = new EAContext())
+            {
+                if (user_id != null)
+                {
+                    var userId = Guid.Parse(user_id);
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                    nguoi_dung.ten = obj_user.ten;
+                    nguoi_dung.PhoneNumber = obj_user.PhoneNumber;
+                    nguoi_dung.ngay_sinh = obj_user.ngay_sinh;
+                    nguoi_dung.Email = obj_user.Email;
+                    nguoi_dung.ma_phong_ban = obj_user.ma_phong_ban;
+                    nguoi_dung.ma_chuc_vu = obj_user.ma_chuc_vu;
+                    db.AspNetUsers.Update(nguoi_dung);
+                    db.SaveChanges();
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                }
+                lstpb = db.Ghs_Tuyen_Sinh_Cap_Tieu_Hoc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+                ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
+            }
+            ViewBag.ds_gioi_tinh = ds_gioitinh;
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+            return View("~/Views/GuiHoSo/TuyenSinhCapTieuHoc/GuiTuyenSinhCapTieuHoc.cshtml", modal);
+        }
         public IActionResult GuiTuyenSinhCapTieuHoc(string code = "")
         {
             var user_id = userManager.GetUserId(User);
@@ -433,6 +494,52 @@ namespace HG.WebApp.Controllers
         public IActionResult GuiTuyenSinhCapTieuHoc(TuyenSinhCapTieuHocModel item)
         {
             var user_id = userManager.GetUserId(User);
+
+            var modal = new Ghs_Tuyen_Sinh_Cap_Tieu_Hoc();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            var ds_gioitinh = new List<Dm_Gioi_Tinh>();
+            using (var db = new EAContext())
+            {
+                if (user_id != null)
+                {
+                    var userId = Guid.Parse(user_id);
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                }
+
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+                ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
+            }
+            ViewBag.ds_gioi_tinh = ds_gioitinh;
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+            if (item.chkIsCamKet != true)
+            {
+                ViewBag.error = true;
+                ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
+                return View("~/Views/GuiHoSo/TuyenSinhCapTieuHoc/GuiTuyenSinhCapTieuHoc.cshtml", modal);
+            }
+            if (item.filesName_0 == null || item.filesName_1 == null)
+            {
+                ViewBag.error = true;
+                ViewBag.Message = "Chưa có file đính kèm hoặc file đính kèm bị lỗi!";
+                return View("~/Views/GuiHoSo/TuyenSinhCapTieuHoc/GuiTuyenSinhCapTieuHoc.cshtml", modal);
+            }
+
             var ds_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTieuHocRecords().OrderBy(x => x.stt).ToList();
             EAContext eAContext = new EAContext();
             var data = _tuyensinhcaptieuhocDao.mapdata(item);
@@ -472,7 +579,22 @@ namespace HG.WebApp.Controllers
 
             ViewBag.Success = true;
             ViewBag.Message = "Gửi hồ sơ thành công!";
-            var modal = new Ghs_Tuyen_Sinh_Cap_Tieu_Hoc();
+            
+            return View("~/Views/GuiHoSo/TuyenSinhCapTieuHoc/GuiTuyenSinhCapTieuHoc.cshtml", modal);
+            //return View(item);
+
+        }
+        #endregion -------------------------------------
+
+        #region ------- Gửi hồ sơ cấp THCS -------------
+        [HttpPost]
+        public IActionResult UpdateNguoiDungCapTHCS(AspNetUsers obj_user)
+        {
+
+            var user_id = userManager.GetUserId(User);
+
+
+            var modal = new Ghs_Tuyen_Sinh_Cap_THCS();
             var user = _danhmucDao.DanhSachNguoiDung("");
             var lstdv = new List<dm_don_vi>();
             var lst_dantoc = new List<Dm_Dan_Toc>();
@@ -487,8 +609,16 @@ namespace HG.WebApp.Controllers
                 {
                     var userId = Guid.Parse(user_id);
                     nguoi_dung = db.AspNetUsers.Find(userId);
+                    nguoi_dung.ten = obj_user.ten;
+                    nguoi_dung.PhoneNumber = obj_user.PhoneNumber;
+                    nguoi_dung.ngay_sinh = obj_user.ngay_sinh;
+                    nguoi_dung.Email = obj_user.Email;
+                    nguoi_dung.ma_phong_ban = obj_user.ma_phong_ban;
+                    nguoi_dung.ma_chuc_vu = obj_user.ma_chuc_vu;
+                    db.AspNetUsers.Update(nguoi_dung);
+                    db.SaveChanges();
+                    nguoi_dung = db.AspNetUsers.Find(userId);
                 }
-
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
                 lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
@@ -497,26 +627,21 @@ namespace HG.WebApp.Controllers
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
             }
             ViewBag.ds_gioi_tinh = ds_gioitinh;
+            ViewBag.lst_nguoi_dung = user;
             ViewBag.nguoi_dung = nguoi_dung;
             ViewBag.lst_phong_ban = ds_phongban;
             ViewBag.lst_chuc_vu = ds_chucvu;
-            ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
-            return View("~/Views/GuiHoSo/TuyenSinhCapTieuHoc/GuiTuyenSinhCapTieuHoc.cshtml", modal);
-            //return View(item);
-
+            return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
         }
-        #endregion -------------------------------------
-
-        #region ------- Gửi hồ sơ cấp THCS -------------
         public IActionResult GuiTuyenSinhCapTHCS(string code = "")
         {
             var user_id = userManager.GetUserId(User);
 
 
-            var modal = new Ghs_Tuyen_Sinh_Cap_Tieu_Hoc();
+            var modal = new Ghs_Tuyen_Sinh_Cap_THCS();
             var user = _danhmucDao.DanhSachNguoiDung("");
             var lstdv = new List<dm_don_vi>();
             var lst_dantoc = new List<Dm_Dan_Toc>();
@@ -554,7 +679,54 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult GuiTuyenSinhCapTHCS(TuyenSinhCapTHCSModel item)
         {
+
             var user_id = userManager.GetUserId(User);
+            var modal = new Ghs_Tuyen_Sinh_Cap_THCS();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            var ds_gioitinh = new List<Dm_Gioi_Tinh>();
+            using (var db = new EAContext())
+            {
+                if (user_id != null)
+                {
+                    var userId = Guid.Parse(user_id);
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                }
+
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+                ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
+            }
+            ViewBag.ds_gioi_tinh = ds_gioitinh;
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+
+            if (item.chkIsCamKet != true)
+            {
+                ViewBag.error = true;
+                ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
+                return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
+            }
+            if (item.filesName_0 == null || item.filesName_1 == null)
+            {
+                ViewBag.error = true;
+                ViewBag.Message = "Chưa có file đính kèm hoặc file đính kèm bị lỗi!";
+                return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
+            }
+
             var ds_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTHCSRecords().OrderBy(x => x.stt).ToList();
             EAContext eAContext = new EAContext();
             var data = _tuyensinhcapthcsDao.mapdata(item);
@@ -590,7 +762,22 @@ namespace HG.WebApp.Controllers
 
             ViewBag.Success = true;
             ViewBag.Message = "Gửi hồ sơ thành công!";
-            var modal = new Ghs_Tuyen_Sinh_Cap_THCS();
+            
+            return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
+            //return View(item);
+
+        }
+        #endregion -------------------------------------
+
+        #region ------- Gửi hồ sơ cấp THPT -------------
+        [HttpPost]
+        public IActionResult UpdateNguoiDungCapTHPT(AspNetUsers obj_user)
+        {
+
+            var user_id = userManager.GetUserId(User);
+
+
+            var modal = new Ghs_Tuyen_Sinh_Cap_THPT();
             var user = _danhmucDao.DanhSachNguoiDung("");
             var lstdv = new List<dm_don_vi>();
             var lst_dantoc = new List<Dm_Dan_Toc>();
@@ -605,8 +792,16 @@ namespace HG.WebApp.Controllers
                 {
                     var userId = Guid.Parse(user_id);
                     nguoi_dung = db.AspNetUsers.Find(userId);
+                    nguoi_dung.ten = obj_user.ten;
+                    nguoi_dung.PhoneNumber = obj_user.PhoneNumber;
+                    nguoi_dung.ngay_sinh = obj_user.ngay_sinh;
+                    nguoi_dung.Email = obj_user.Email;
+                    nguoi_dung.ma_phong_ban = obj_user.ma_phong_ban;
+                    nguoi_dung.ma_chuc_vu = obj_user.ma_chuc_vu;
+                    db.AspNetUsers.Update(nguoi_dung);
+                    db.SaveChanges();
+                    nguoi_dung = db.AspNetUsers.Find(userId);
                 }
-
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
                 lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
@@ -615,20 +810,16 @@ namespace HG.WebApp.Controllers
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
             }
             ViewBag.ds_gioi_tinh = ds_gioitinh;
+            ViewBag.lst_nguoi_dung = user;
             ViewBag.nguoi_dung = nguoi_dung;
             ViewBag.lst_phong_ban = ds_phongban;
             ViewBag.lst_chuc_vu = ds_chucvu;
-            ViewBag.lst_nguoi_dung = user;
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
-            return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
-            //return View(item);
-
+            return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
         }
-        #endregion -------------------------------------
 
-        #region ------- Gửi hồ sơ cấp THPT -------------
         public IActionResult GuiTuyenSinhCapTHPT(string code = "")
         {
             var user_id = userManager.GetUserId(User);
@@ -673,6 +864,52 @@ namespace HG.WebApp.Controllers
         public IActionResult GuiTuyenSinhCapTHPT(TuyenSinhCapTHPTModel item)
         {
             var user_id = userManager.GetUserId(User);
+            var modal = new Ghs_Tuyen_Sinh_Cap_THPT();
+            var user = _danhmucDao.DanhSachNguoiDung("");
+            var lstdv = new List<dm_don_vi>();
+            var lst_dantoc = new List<Dm_Dan_Toc>();
+            var lst_tinh = new List<dm_dia_ban>();
+            var nguoi_dung = new AspNetUsers();
+            var ds_phongban = new List<Dm_Phong_Ban>();
+            var ds_chucvu = new List<Dm_Chuc_Vu>();
+            var ds_gioitinh = new List<Dm_Gioi_Tinh>();
+            using (var db = new EAContext())
+            {
+                if (user_id != null)
+                {
+                    var userId = Guid.Parse(user_id);
+                    nguoi_dung = db.AspNetUsers.Find(userId);
+                }
+
+                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                ds_phongban = db.Dm_Phong_Ban.ToList();
+                ds_chucvu = db.Dm_Chuc_Vu.ToList();
+                ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
+            }
+            ViewBag.ds_gioi_tinh = ds_gioitinh;
+            ViewBag.nguoi_dung = nguoi_dung;
+            ViewBag.lst_phong_ban = ds_phongban;
+            ViewBag.lst_chuc_vu = ds_chucvu;
+            ViewBag.lst_nguoi_dung = user;
+            ViewBag.lst_don_vi = lstdv;
+            ViewBag.lst_dan_toc = lst_dantoc;
+            ViewBag.lst_tinh = lst_tinh;
+
+            if (item.chkIsCamKet != true)
+            {
+                ViewBag.error = true;
+                ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
+                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+            }
+            if (item.filesName_0 == null || item.filesName_1 == null)
+            {
+                ViewBag.error = true;
+                ViewBag.Message = "Chưa có file đính kèm hoặc file đính kèm bị lỗi!";
+                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+            }
+
             var ds_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTHPTRecords().OrderBy(x => x.stt).ToList();
             EAContext eAContext = new EAContext();
             var data = _tuyensinhcapthptDao.mapdata(item);
@@ -710,38 +947,7 @@ namespace HG.WebApp.Controllers
 
             ViewBag.Success = true;
             ViewBag.Message = "Gửi hồ sơ thành công!";
-            var modal = new Ghs_Tuyen_Sinh_Cap_THPT();
-            var user = _danhmucDao.DanhSachNguoiDung("");
-            var lstdv = new List<dm_don_vi>();
-            var lst_dantoc = new List<Dm_Dan_Toc>();
-            var lst_tinh = new List<dm_dia_ban>();
-            var nguoi_dung = new AspNetUsers();
-            var ds_phongban = new List<Dm_Phong_Ban>();
-            var ds_chucvu = new List<Dm_Chuc_Vu>();
-            var ds_gioitinh = new List<Dm_Gioi_Tinh>();
-            using (var db = new EAContext())
-            {
-                if (user_id != null)
-                {
-                    var userId = Guid.Parse(user_id);
-                    nguoi_dung = db.AspNetUsers.Find(userId);
-                }
-
-                lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
-                lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
-                ds_phongban = db.Dm_Phong_Ban.ToList();
-                ds_chucvu = db.Dm_Chuc_Vu.ToList();
-                ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
-            }
-            ViewBag.ds_gioi_tinh = ds_gioitinh;
-            ViewBag.nguoi_dung = nguoi_dung;
-            ViewBag.lst_phong_ban = ds_phongban;
-            ViewBag.lst_chuc_vu = ds_chucvu;
-            ViewBag.lst_nguoi_dung = user;
-            ViewBag.lst_don_vi = lstdv;
-            ViewBag.lst_dan_toc = lst_dantoc;
-            ViewBag.lst_tinh = lst_tinh;
+           
             return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
             //return View(item);
 

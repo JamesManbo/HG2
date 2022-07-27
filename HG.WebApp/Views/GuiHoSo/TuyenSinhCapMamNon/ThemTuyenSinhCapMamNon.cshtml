@@ -194,7 +194,7 @@
                                                             tên <span class="red-text">(*)</span>:
                                                         </span>
                                                         <div class="col-md-5">
-                                                            <input type="text" name="ten" style="width:100%;" value="@nguoi_dung.ten">
+                                                            <input id="User_Ten" type="text" name="ten" style="width:100%;" value="@nguoi_dung.ten">
                                                         </div>
                                                     </div>
                                                     <!-- 2 -->
@@ -211,18 +211,18 @@
                                                     <!-- 3 -->
                                                     <div class="form-group form-group-new">
                                                         <label class="col-md-4 control-label">
-                                                            Ngày sinh<span class="red-text">(*)</span>:
+                                                            Ngày sinh:
                                                         </label>
                                                         <div class="col-md-5">
                                                             @*<input type="text" style="width:100%;" value="@nguoi_dung.ngay_sinh">*@
-                                                            <input type="date" class="w-100" name="ngay_sinh" value="@nguoi_dung.ngay_sinh" placeholder="">
+                                                            <input id="User_NgaySinh" type="date" class="w-100" name="ngay_sinh" value="@nguoi_dung.ngay_sinh" placeholder="">
                                                         </div>
                                                     </div>
                                                     <!-- 4 -->
                                                     <div class="form-group form-group-new">
                                                         <label class="col-md-4 control-label">Email :</label>
                                                         <div class="col-md-5">
-                                                            <input type="text" id="" name="Email" value="@nguoi_dung.Email" style="width:100%;">
+                                                            <input type="text" id="User_Email" name="Email" value="@nguoi_dung.Email" style="width:100%;">
                                                         </div>
                                                     </div>
                                                     <!-- 5 -->
@@ -232,14 +232,14 @@
                                                             điện thoại<span class="red-text">(*)</span>:
                                                         </span>
                                                         <div class="col-md-5">
-                                                            <input type="text" id="PhoneNumber" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
+                                                            <input type="text" id="User_PhoneNumber" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
                                                         </div>
                                                     </div>
                                                     <!-- 6 -->
                                                     <div class="form-group form-group-new">
                                                         <label class="col-md-4 control-label">Phòng ban</label>
                                                         <div class="col-md-5">
-                                                            <select name="ma_phong_ban" id="ma_phong_ban"
+                                                            <select name="ma_phong_ban" id="user_ma_phong_ban"
                                                                     value="@nguoi_dung.ma_phong_ban"
                                                                     class="form-control input-default form-select" placeholder="Phòng ban">
                                                                 <option value="0">--- Chọn ---</option>
@@ -267,7 +267,7 @@
                                                         <label class="col-md-4 control-label">Chức vụ</label>
                                                         <div class="col-md-5" style="padding-right: 0px">
 
-                                                            <select name="ma_chuc_vu" id="ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
+                                                            <select name="ma_chuc_vu" id="user_ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
                                                                 <option value="">---Chọn---</option>
                                                                 @if (lst_chuc_vu != null)
                                                                 {
@@ -287,9 +287,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @*đặt url file trong form để lấy trong model khi nó submit*@
-                                                 <input type="text" id="filesName_1" name="filesName_1" style="display: none">
-                                                 <input type="text" id="filesName_0" name="filesName_0" style="display: none">
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button"
@@ -298,12 +295,13 @@
                                                         data-dismiss="modal">
                                                     Đóng
                                                 </button>
-                                                @*<button type="button" onclick="LuuNguoiDung()" class="btn-common btn-login">Lưu</button>*@
-                                                <button type="submit" class="btn-common btn-login">Lưu</button>
+                                                <button type="button" onclick="LuuNguoiDung()" class="btn-common btn-login">Lưu</button>
+                                                @*<button type="submit" class="btn-common btn-login">Lưu</button>*@
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -691,10 +689,14 @@
     function CloseModalUser() {
         $("#modalInput").modal("hide");
     }
-     function LuuNguoiDung() {
+    function LuuNguoiDung() {
          var data = {
-             PhoneNumber: $("#PhoneNumber").val(),
-
+             PhoneNumber: $("#User_PhoneNumber").val(),
+             ten: $("#User_Ten").val(),
+             ngay_sinh: $("#User_NgaySinh").val(),
+             Email: $("#User_Email").val(),
+             ma_phong_ban: $("#user_ma_phong_ban").val(),
+             ma_chuc_vu: $("#user_ma_chuc_vu").val(),
          };
         $.ajax({
             type: "Post",

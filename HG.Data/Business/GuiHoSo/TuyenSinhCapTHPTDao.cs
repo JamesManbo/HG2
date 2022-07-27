@@ -156,6 +156,8 @@ namespace HG.Data.Business.GuiHoSo
             public string? nv12_ma_mon_cn { get; set; }
             public string? nv2_ma_nguyen_vong { get; set; }
 
+            public bool? chkIsCamKet { get; set; }
+
             // Base 
             public int? Status { get; set; }
             public DateTime? CreatedDateUtc { get; set; }
