@@ -40,16 +40,16 @@
                 <div class="tab-primary" style="border: 2px solid #0866c6;">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Cập nhật phiên làm việc</button>
+                            <button class="nav-link @(ViewBag.active==1?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Cập nhật phiên làm việc</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Nhập thông tin chuyên viên nhận thông báo online</button>
+                            <button class="nav-link @(ViewBag.active==2?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Nhập thông tin chuyên viên nhận thông báo online</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab3" role="tab" aria-controls="pills-profile" aria-selected="false">Cập nhật thông tin cấu hình</button>
+                            <button class="nav-link @(ViewBag.active==3?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab3" role="tab" aria-controls="pills-profile" aria-selected="false">Cập nhật thông tin cấu hình</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab4" role="tab" aria-controls="pills-profile" aria-selected="false">Đồng bộ thông tin Zalo</button>
+                            <button class="nav-link @(ViewBag.active==4?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab4" role="tab" aria-controls="pills-profile" aria-selected="false">Đồng bộ thông tin Zalo</button>
                         </li>
 
                     </ul>

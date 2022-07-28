@@ -43,7 +43,23 @@ namespace HG.WebApp.Controllers.Client
             using (var db = new EAContext())
             {
                 data.lst_hoat_dong = db.cd_quan_ly_hoat_dong.Where(n => n.Deleted == 0).OrderBy(n => n.Stt).Skip(0).Take(pageSize).ToList();
-                data.lst_thong_bao = db.cd_thong_bao.Where(n => n.Deleted == 0).Skip(0).Take(pageSize).ToList();
+                var innerJoin = from e in db.cd_thong_bao
+                                join d in db.cd_thong_bao on e.ma_cha equals d.id
+                                into a
+                                from b in a.DefaultIfEmpty()
+                                where e.Deleted == 0
+                                select new cd_thong_bao
+                                {
+                                    id = e.id,
+                                    ma_cha = e.ma_cha,
+                                    ten_ma = e.ten_ma,
+                                    link = e.link,
+                                    noi_dung = e.noi_dung,
+                                    ten_ma_cha = b.ten_ma
+                                };
+
+                data.lst_thong_bao = innerJoin.Skip(0).Take(pageSize).ToList();
+                //db.cd_thong_bao.Where(n => n.Deleted == 0).Skip(0).Take(pageSize).ToList();
                 if (type == StatusAction.Edit.ToString())
                 {
                     data.hoat_dong = data.lst_hoat_dong.FirstOrDefault(n => n.id == id) ?? new cd_quan_ly_hoat_dong();
@@ -228,7 +244,16 @@ namespace HG.WebApp.Controllers.Client
 
                 EAContext db = new EAContext();
 
-                var obj = db.cd_quan_ly_hoat_dong.Where(n => n.id == id).FirstOrDefault();
+                var obj = db.cd_thong_bao.Where(n => n.id == id).FirstOrDefault();
+                if (obj != null && obj.ma_cha == 0)
+                {
+                    // xóa mã cha => check xem có mã con không
+                    var check = db.cd_thong_bao.Where(n => n.ma_cha == id).FirstOrDefault();
+                    if (check != null && check.ma_cha > 0)
+                    {
+                        return Json(new { error = 1, msg = "Thông báo " + check.ten_ma + " đang chứa thông báo con" });
+                    }
+                }
                 if (obj != null)
                 {
                     obj.Deleted = 1;

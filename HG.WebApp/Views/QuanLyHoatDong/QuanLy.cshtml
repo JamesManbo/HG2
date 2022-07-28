@@ -40,10 +40,10 @@
                 <div class="tab-primary" style="border: 2px solid #0866c6;">
                     <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Quản lý hoạt động</button>
+                            <button class="nav-link @(ViewBag.active==1?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Quản lý hoạt động</button>
                         </li>
                         <li class="nav-item ui-state-default ui-corner-top" role="presentation">
-                            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Cập nhật nội dung thông báo</button>
+                            <button class="nav-link @(ViewBag.active==2?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Cập nhật nội dung thông báo</button>
                         </li>
 
                     </ul>
@@ -275,7 +275,7 @@
                                                         <input name="link" type="text" id="link" class="form-control input-default" placeholder="Link liên kết">
                                                     </div>
                                                     <label class="col-md-2">
-                                                        <input type="submit" name="ctl08$CreateTTParent" value="Tạo thông báo cha" id="ctl08_CreateTTParent">
+                                                        <input type="submit" name="" value="Tạo thông báo cha" id="">
                                                     </label>
                                                 </div>
                                                 <div class="row mb-3">
@@ -295,7 +295,7 @@
 
                                                     <label class="col-md-2 control-label">Thông báo cha:</label>
                                                     <div class="col-md-2">
-                                                        <select name="ma_cha" id="ma_cha" class="form-control input-default-sm">
+                                                        <select name="ma_cha" id="ma_cha" class="form-select form-control input-default">
                                                             <option value="0">Chọn thông báo cha</option>
                                                             @if (@Model.lst_thong_bao.Where(n => n.ma_cha == 0) != null)
                                                             {
@@ -329,22 +329,10 @@
                                 <div class="form-group">
                                     <div class="col-md-12">
                                         <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
-
-                                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
-                                                <div class="dataTables_length">
-                                                    <label>
-                                                        Hiển thị
-                                                        <select class="dataTable-selector" id="lstPageSize_tb" onchange="changePageSize_tb(this);">
-                                                            <option value="5">5</option>
-                                                            <option value="10" selected="">10</option>
-                                                            <option value="15">15</option>
-                                                            <option value="20">20</option>
-                                                            <option value="25">25</option>
-                                                        </select> bản ghi
-                                                    </label>
-                                                </div>
+                                            <h4 class="widgettitle">Danh sách thông báo</h4>
+                                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns widgetcontent">
                                                 <div id="dataTable_tb">
-                                                    <div class="dataTable-container">
+                                                    <div class="dataTable-containers">
                                                         <table class="table table-bordered responsive">
                                                             <thead class="widgettitle">
                                                                 <tr>
@@ -365,15 +353,10 @@
                                                                         <tr>
                                                                             <td scope="row">@stt</td>
                                                                             <td>@item.ten_ma</td>
-                                                                            <td>@(item.ma_cha>0? item.ten_ma : "")</td>
+                                                                            <td>@(item.ten_ma_cha)</td>
                                                                             <td>@item.noi_dung</td>
                                                                             <td>
-                                                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/CauHinhHeThong/CauHinh?don_vi=&type=@StatusAction.Edit.ToString()&Oid=@(item.id.ToString()+"-2")">
-                                                                                    <span class="glyphicon glyphicon-edit">Sửa</span>
-                                                                                </a>
-                                                                            </td>
-                                                                            <td>
-                                                                                <a onclick="confirm.BeforDeletePost('/CauHinhHeThong/XoaChuyenVien?id=@item.id')"
+                                                                                <a onclick="confirm.BeforDeletePost('/QuanLyHoatDong/XoaThongBao?id=@item.id')"
                                                                            title=""
                                                                            data-placement="top"
                                                                            data-toggle="tooltip"
@@ -388,70 +371,6 @@
                                                                 }
                                                             </tbody>
                                                         </table>
-                                                    </div>
-                                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @Model.PagelistTB.RecoredFrom đến  @Model.PagelistTB.RecoredTo của @Model.PagelistTB.TotalRecords bản ghi</div>
-                                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                                                        @{
-                                                            var TotalPage_tb = (int)Model.PagelistTB.TotalPage;
-                                                            var CurrentPage_tb = (int)Model.PagelistTB.CurrentPage;
-                                                            if (TotalPage_tb > 5)
-                                                            {
-                                                                if (CurrentPage_tb > CurrentPage_tb + 2)
-                                                                {
-                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(1)">Đầu</a></span>
-                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(@CurrentPage_tb - 1)">Trước</a></span>
-                                                                };
-                                                                if (CurrentPage_tb > 3)
-                                                                {
-                                                                    for (int i = CurrentPage_tb - 2; i < CurrentPage_tb + 2; i++)
-                                                                    {
-                                                                        if (i == CurrentPage_tb)
-                                                                        {
-                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
-                                                                        }
-                                                                    }
-                                                                }
-                                                                else
-                                                                {
-                                                                    for (int i = 1; i <= 5; i++)
-                                                                    {
-                                                                        if (i == CurrentPage_tb)
-                                                                        {
-                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
-                                                                        }
-                                                                    }
-
-                                                                }
-
-                                                                if (CurrentPage_tb < CurrentPage_tb + 2)
-                                                                {
-                                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(@CurrentPage_tb + 1)">Trước</a></span>
-                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage_tb(@TotalPage_tb)">Cuối</a></span>
-                                                                };
-                                                            }
-                                                            else
-                                                            {
-                                                                for (int i = 1; i <= TotalPage_tb; i++)
-                                                                {
-                                                                    if (i == CurrentPage_tb)
-                                                                    {
-                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage_tb(@i)">@i</a></span>
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
                                                     </div>
                                                 </div>
                                                 <!-- End Table with stripped rows -->

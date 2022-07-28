@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace HG.Entities.Entities.CauHinh
 {
-    public class cd_thong_bao : BaseDanhMucModel
+    [Table("cd_danh_sach_can_bo")]
+    public class cd_danh_sach_can_bo : BaseDanhMucModel
     {
         [Key]
         public int id { get; set; }
-        public int? ma_cha { get; set; }
-        public string? ten_ma { get; set; }
-        public string? link { get; set; }
-        public string? noi_dung { get; set; }
+        public Guid? user_id { get; set; }
+        public string? ten_can_bo { get; set; }
+        public string? don_vi { get; set; }
         [NotMapped]
-        public string? ten_ma_cha { get; set; }
+        public string? ten_don_vi { get; set; }
 
     }
 }
