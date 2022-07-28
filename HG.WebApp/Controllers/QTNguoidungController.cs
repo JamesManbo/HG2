@@ -349,7 +349,7 @@ namespace HG.WebApp.Controllers
             user.ten = item.ten;
             user.Type = 1;
             user.khoa_tai_khoan = item.khoa_tai_khoan;
-            var result = await userManager.CreateAsync(user, user.mat_khau);
+            var result = await userManager.CreateAsync(user, item.mat_khau);
             var db = new EAContext();
             //ViewBag.LstNhom = db.Asp_nhom.ToList();
             //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
@@ -368,7 +368,7 @@ namespace HG.WebApp.Controllers
             {
                 if (item.type_view == StatusAction.Add.ToString())
                 {
-                    return RedirectToAction("ThemNguoiDungOnline", "QTnguoidung");
+                    return RedirectToAction("listNguoiDungOnline", "QTnguoidung");
                 }
                 else if (item.type_view == StatusAction.View.ToString())
                 {

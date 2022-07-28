@@ -177,32 +177,29 @@
                     <div class="form-horizontal">
                         <div class="form-group row">
                             <label class="col-md-2 control-label">
-                                Email đăng nhập
-                                <span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
+                                Email đăng nhập<span id="ctl08_ctl00_Label4" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="Email" maxlength="50" type="text" id="Email" class="form-control input-default" value="@Model.Email" onkeyup="xoa_dau(this);" placeholder="Email đăng nhập">
+                                <input name="Email" maxlength="50" type="text" id="Email" class="form-control input-default"  onkeyup="xoa_dau(this);" placeholder="Email đăng nhập">
                             </div>
                            
 
                         </div>
-                        <div class="form-group" hidden="hidden" id="mkmd">
+                        <div class="form-group" id="mat_khau">
                             <label class="col-md-2 control-label">
-                                Mật khẩu
-                                <span id="ctl08_ctl00_Label2" style="color:Red;">(*)</span>
+                                Mật khẩu<span id="ctl08_ctl00_Label2" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="ctl08$ctl00$TextBox1" maxlength="50" type="password" id="mat_khau" class="form-control input-default" placeholder="mật khẩu">
+                                <input name="mat_khau" maxlength="50" type="password" id="mat_khau" class="form-control input-default" placeholder="mật khẩu">
                             </div>
                         </div>
 
-                        <div class="form-group" hidden="hidden" id="mkmd">
+                        <div class="form-group"  id="mkmd">
                             <label class="col-md-2 control-label">
-                                Nhập lại mật khẩu
-                                <span id="ctl08_ctl00_Label3" style="color:Red;">(*)</span>
+                                Nhập lại mật khẩu<span id="ctl08_ctl00_Label3" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="ctl08$ctl00$TextBox1" type="password" id="ctl08_ctl00_TextBox1" disabled="disabled" class="form-control input-default" placeholder="1">
+                                <input name="ctl08$ctl00$TextBox1" type="password" id="ctl08_ctl00_TextBox1" class="form-control input-default" placeholder="">
                             </div>
                         </div>
 
@@ -227,7 +224,7 @@
                             <label class="col-md-2 control-label">Hộ khẩu thường trú</label>
                             <span id="ctl08_ctl00_Label7" style="color:Red;">(*)</span>
                             <div class="col-md-10">
-                                <input name="ho_khau_tt" type="date" id="ho_khau_tt" class="form-control input-default datepicker hasDatepicker" placeholder="Hộ khẩu thường trú" value="@Model.ho_khau_tt">
+                                <input name="ho_khau_tt" type="text" id="ho_khau_tt" class="form-control input-default datepicker hasDatepicker" placeholder="Hộ khẩu thường trú" value="@Model.ho_khau_tt">
                                 @*<span id="ctl08_ctl00_CompareValidator2" style="color:Red;display:none;">Phải nhập dữ liệu kiểu ngày/tháng/năm!</span>*@
                             </div>
                         </div>
