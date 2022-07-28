@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 namespace HG.Entities
 {
     [Table("dm_kenh_tin")]
-    public class Dm_Kenh_Tin : BaseEntities
+    public class Dm_Kenh_Tin : BaseDanhMucModel
     {
+        [Key]
+        public string ma_kenh_tin { get; set; }
         public string? ten_danh_muc { get; set; }
         public bool? is_hien_thi { get; set; }
         public int? Stt { get; set; }      

@@ -151,6 +151,51 @@ namespace HG.Data.Business.DanhMuc
             }
         }
         #endregion
+        #region ---- Kênh tin
+        public int LuuKenhTin(Dm_Kenh_Tin item)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("dm_them_sua_kenh_tin", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_kenh_tin", item.ma_kenh_tin, SqlDbType.VarChar);
+                DbProvider.AddParameter("ten_danh_muc", item.ten_danh_muc, SqlDbType.NVarChar);
+                DbProvider.AddParameter("is_hien_thi", item.is_hien_thi, SqlDbType.NVarChar);
+
+                DbProvider.AddParameter("uid", item.CreatedUid ?? Guid.Empty, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("uid_name", item.UidName ?? "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("stt", item.Stt ?? null, SqlDbType.Int);
+                DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                // Lấy về danh sách các trường học
+                DbProvider.ExecuteNonQuery();
+                var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString() ?? "100");
+                return ma_loi;
+            }
+            catch (Exception ex)
+            {
+                return 101;
+            }
+        }
+
+        public int XoaKenhTin(string ma_kenh_tin, Guid uid)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("dm_xoa_kenh_tin", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_kenh_tin", ma_kenh_tin, SqlDbType.VarChar);
+                DbProvider.AddParameter("uid", uid, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                // Lấy về danh sách các trường học
+                DbProvider.ExecuteNonQuery();
+                //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+                var ma_loi = int.Parse(DbProvider.Command.Parameters["ma_loi"].Value.ToString() ?? "100");
+                return ma_loi;
+            }
+            catch (Exception ex)
+            {
+                return 101;
+            }
+        }
+        #endregion -- end kênh tin ----- 
 
         #region Chức vụ
         public int LuuChucVu(Dm_Chuc_Vu item)

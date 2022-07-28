@@ -395,6 +395,166 @@ namespace HG.WebApp.Controllers
 
         #endregion
 
+
+        #region ------ Danh mục kênh tin
+        public IActionResult KenhTin()
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var currentPage = 1;
+            var totalRecored = 0;
+            var kenhtin = new List<Dm_Kenh_Tin>();
+            using (var db = new EAContext())
+            {
+                var ds = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                kenhtin = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                totalRecored = ds.Count();
+            }
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            return View("~/Views/DanhMuc/KenhTin/KenhTin.cshtml", kenhtin);
+        }
+
+        public async Task<IActionResult> KenhTinPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        {
+            // var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var totalRecored = 0;
+            var result = "";
+            using (var db = new EAContext())
+            {
+                var ds = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ma_kenh_tin.ToUpper().Contains(tu_khoa.ToUpper()) || n.ma_kenh_tin.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                }
+                var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                totalRecored = ds.Count();
+                ViewBag.TotalRecored = totalRecored;
+                ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/KenhTin/KenhTinPaging.cshtml", datapage);
+
+            }
+            return Content(result);
+        }
+        public IActionResult ThemKenhTin(string code = "")
+        {
+            ViewBag.code = code;
+            return View("~/Views/DanhMuc/KenhTin/ThemKenhTin.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemKenhTin(Dm_Kenh_Tin item)
+        {
+            item.ma_kenh_tin = HelperString.CreateCode(item.ma_kenh_tin);
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuKenhTin(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "Tạo kênh tin lỗi";
+            }
+            if (item.type_view == StatusAction.Add.ToString() || response > 0)
+            {
+                return View("~/Views/DanhMuc/KenhTin/ThemKenhTin.cshtml", item);
+            }
+            if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaKenhTin", "DanhMuc", new { code = item.ma_kenh_tin, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+
+        public IActionResult SuaKenhTin(string code, string type)
+        {
+            var kenhtin = new Dm_Kenh_Tin();
+            using (var db = new EAContext())
+            {
+                kenhtin = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0 && n.ma_kenh_tin == code).FirstOrDefault();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
+            ViewBag.type_view = type;
+            return View("~/Views/DanhMuc/KenhTin/SuaKenhTin.cshtml", kenhtin);
+        }
+
+        [HttpPost]
+        public IActionResult SuaKenhTin(string code, string type, Dm_Kenh_Tin item)
+        {
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuKenhTin(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "cập nhật kênh tin lỗi";
+                return PartialView("~/Views/DanhMuc/KenhTin/SuaKenhTin.cshtml", item);
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemKenhTin", "DanhMuc");
+            }
+            else if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaKenhTin", "DanhMuc", new { code = item.ma_kenh_tin, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+        [HttpPost]
+        public IActionResult XoaKenhTin(string code)
+        {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _danhmucDao.XoaKenhTin(code, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/KenhTin" });
+        }
+
+        public async Task<IActionResult> RenderViewKenhTin()
+        {
+            var kenhtin = new List<Dm_Kenh_Tin>();
+            using (var db = new EAContext())
+            {
+                kenhtin = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/KenhTin/ViewKenhTin.cshtml", kenhtin);
+            return Content(result);
+        }
+
+        [HttpPost]
+        public JsonResult CheckMaKT(string code)
+        {
+            var lstpb = new List<Dm_Kenh_Tin>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0 && n.ma_kenh_tin.ToUpper() == code.ToUpper()).ToList();
+            }
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemKenhTin?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
+        }
+
+        #endregion
+
+
         #region Chức vụ
         public IActionResult ChucVu()
         {
