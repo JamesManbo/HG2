@@ -159,7 +159,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.SetCommandText2("dm_them_sua_kenh_tin", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_kenh_tin", item.ma_kenh_tin, SqlDbType.VarChar);
                 DbProvider.AddParameter("ten_danh_muc", item.ten_danh_muc, SqlDbType.NVarChar);
-                DbProvider.AddParameter("is_hien_thi", item.is_hien_thi, SqlDbType.NVarChar);
+                DbProvider.AddParameter("is_hien_thi", item.is_hien_thi ?? null, SqlDbType.Bit);
 
                 DbProvider.AddParameter("uid", item.CreatedUid ?? Guid.Empty, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("uid_name", item.UidName ?? "", SqlDbType.NVarChar);

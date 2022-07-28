@@ -1,5 +1,5 @@
 ﻿
-Create PROCEDURE dm_them_sua_kenh_tin
+alter PROCEDURE dm_them_sua_kenh_tin
 	@ma_kenh_tin varchar(50),
 	@ten_danh_muc varchar(500)='',
 	@is_hien_thi bit = null,
@@ -19,6 +19,7 @@ BEGIN
 	IF EXISTS(SELECT top 1 1 from dm_kenh_tin where ma_kenh_tin=@ma_kenh_tin)
 	BEGIN			
 			Update dm_kenh_tin set ten_danh_muc=@ten_danh_muc,
+				is_hien_thi = @is_hien_thi,
 				UpdatedDateUtc=GETDATE(),
 				UpdatedUid=@uid,
 				Deleted=0,UidName=@uid_name,Stt=@stt
@@ -33,8 +34,9 @@ BEGIN
 		INSERT INTO 
 			dm_kenh_tin(
 				ma_kenh_tin,ten_danh_muc,
+				is_hien_thi,
 				CreatedDateUtc,CreatedUid,UpdatedDateUtc,UpdatedUid,Stt,Status,Deleted,UidName)
-		VALUES (@ma_kenh_tin,@ten_danh_muc,GETDATE(),@uid,GETDATE(),@uid,@stt,1,0,@uid_name)
+		VALUES (@ma_kenh_tin,@ten_danh_muc,@is_hien_thi,GETDATE(),@uid,GETDATE(),@uid,@stt,1,0,@uid_name)
 		IF(@@ROWCOUNT>0)
 		SET @ma_loi=@thanh_cong
 		

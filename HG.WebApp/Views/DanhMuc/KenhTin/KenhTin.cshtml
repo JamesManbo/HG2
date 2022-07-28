@@ -50,9 +50,10 @@
                                     <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
                                     <th class="head1" scope="col" data-sortable="" style="width: 20%;">Mã</th>
                                     <th class="head0" scope="col" data-sortable="" style="width: 30%;">Tên </th>
-                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                    <th class="head1" scope="col" data-sortable="" style="width: 15%;">Hiển thị </th>
                                     <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
                                     <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,6 +71,7 @@
                                             <td>@item.ma_kenh_tin</td>
 
                                             <td>@item.ten_danh_muc</td>
+                                            <td>@(item.is_hien_thi == true ? "Có" : "Không")</td>
                                             <td>
                                                 <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.View.ToString())">
                                                     <span class="glyphicon glyphicon-list-alt">Xem</span>

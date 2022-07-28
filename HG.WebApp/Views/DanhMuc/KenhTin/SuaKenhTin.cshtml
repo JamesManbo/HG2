@@ -34,7 +34,7 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Lĩnh vực</h1>
+            <h1>Kênh tin</h1>
         </div>
     </div>
     <div class="maincontent">
@@ -90,11 +90,24 @@
                                 <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
                             </div>
                         </div>*@
-                        <div class="row mb-3">
-                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="STT" id="stt" maxlength="10" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                            </div>
+                       <div class="row mb-3">
+                            <label class="col-md-2 control-label">Hiển thị</label>
+							<div class="col-md-10">
+								<input onclick="HienThiTin()" id="is_hien_thi" type="checkbox" name="is_hien_thi"  value="" 
+                                    @(@Model.is_hien_thi == true ? "checked" : "" ) 
+                                    value="@(@Model.is_hien_thi == true ? true : 0 )"
+                                    @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")
+                                >
+							</div>
+                            <script>
+                                function HienThiTin() {
+                                    if ($('#is_hien_thi').is(':checked')) {
+                                         $("#is_hien_thi").val(true)
+                                    }else{
+                                        $("#is_hien_thi").val(false)
+                                    }
+                                }
+                            </script>
                         </div>
                         <div class="row mb-3">
                             <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>

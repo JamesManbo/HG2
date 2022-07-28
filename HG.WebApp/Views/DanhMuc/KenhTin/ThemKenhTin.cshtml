@@ -88,10 +88,19 @@
                             </div>
                         </div>*@
                         <div class="row mb-3">
-                            <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="Stt" value="" maxlength="10">
-                            </div>
+                            <label class="col-md-2 control-label">Hiển thị</label>
+							<div class="col-md-10">
+								<input onclick="HienThiTin()" id="is_hien_thi" type="checkbox" name="is_hien_thi"  value="" >
+							</div>
+                            <script>
+                                function HienThiTin() {
+                                    if ($('#is_hien_thi').is(':checked')) {
+                                         $("#is_hien_thi").val(true)
+                                    }else{
+                                        $("#is_hien_thi").val(true)
+                                    }
+                                }
+                            </script>
                         </div>
                         <div class="row mb-3">
                             <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
