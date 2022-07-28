@@ -14,6 +14,7 @@ using HG.Entities.HoSo;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.DanhMuc;
 using HG.Entities.Entities.HoSo;
+using HG.Entities.Entities.CauHinh;
 
 namespace HG.WebApp.Data
 {
@@ -50,6 +51,8 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_Buoc_Thuc_Hien> Dm_Buoc_Thuc_Hien { get; set; }
         public virtual DbSet<Dm_Don_Vi_Lien_Thong> Dm_Don_Vi_Lien_Thong { get; set; }
         public virtual DbSet<Dm_Muc_Do_Thuc_Hien> Dm_Muc_Do_Thuc_Hien { get; set; }
+        public virtual DbSet<cd_phien_lam_viec> cd_phien_lam_viec { get; set; }
+        public virtual DbSet<cd_tt_chuyen_vien> cd_tt_chuyen_vien { get; set; }
 
         // END Danh mục
 
@@ -67,6 +70,20 @@ namespace HG.WebApp.Data
         public virtual DbSet<dm_thanh_phan> dm_thanh_phan { get; set; }
         public virtual DbSet<Ho_So_History> Ho_So_History { get; set; }
         //End TuanTA
+
+        // AnTX Gửi hồ sơ 
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Mam_Non> Ghs_Tuyen_Sinh_Cap_Mam_Non { get; set; }
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso> Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso { get; set; }
+
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Tieu_Hoc> Ghs_Tuyen_Sinh_Cap_Tieu_Hoc { get; set; }
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_Tieu_Hoc_Hoso> Ghs_Tuyen_Sinh_Cap_Tieu_Hoc_Hoso { get; set; }
+
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THCS> Ghs_Tuyen_Sinh_Cap_THCS { get; set; }
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THCS_Hoso> Ghs_Tuyen_Sinh_Cap_THCS_Hoso { get; set; }
+
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THPT> Ghs_Tuyen_Sinh_Cap_THPT { get; set; }
+        public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THPT_Hoso> Ghs_Tuyen_Sinh_Cap_THPT_Hoso { get; set; }
+        // End Antx -----
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

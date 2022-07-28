@@ -6,9 +6,11 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var list_vai_tro = ViewBag.lstVaiTro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro>;
     var list_quyen = ViewBag.lstQuyen as List<HG.WebApp.AspNetRoles>;
-    
+    var Asp_vaitro_quyen = ViewBag.lstVaiTroChucNangQuyen as List<HG.Entities.Entities.SuperAdmin.Asp_vaitro_quyen>;
+    var lstnotdisplay = ViewBag.lstMenu2Paging as List<HG.Entities.Dm_menu>;
 }
 <script>
+
     function CloseModelRole() {
         $("#basicModal").modal("hide");
         localStorage.removeItem($("#CodeMenu").val());
@@ -31,20 +33,22 @@
     }
     
     function LuuPhanQuyen() {
-        if ($("#lstRole").val() == null || $("#lstRole").val() == "" || $("#lstRole").val() == undefined) {
-            alert("Bạn chưa chọn hoặc chưa thay đổi quyền !!!");
+        if ($("#lstCode").val() == null || $("#lstCode").val() == "" || $("#lstCode").val() == undefined ) {
+            alert("Bạn chưa chọn hoặc chưa thay đổi chức năng !!!");
             return;
-        }
+        };
+        var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
         var objVaitroChucNangQuyen = [];
         var lst_chuc_nang_da_chon = $("#lstCode").val().split(",");
             for (var j = 0; j < lst_chuc_nang_da_chon.length; j++) {
-                objVaitroChucNangQuyen.push(JSON.parse(localStorage.getItem(lst_chuc_nang_da_chon[j])));
-                localStorage.removeItem(lst_chuc_nang_da_chon[j]);
+                var MenuId = "MenuId-" + lst_chuc_nang_da_chon[j]; 
+                var chuc_nang = lst_chuc_nang_da_chon[j];
+                var obj = { ma_vai_tro: ma_vai_tro, ma_chuc_nang: chuc_nang, ds_quyen_da_chon: $("#" + MenuId).val() };
+                if (lst_chuc_nang_da_chon[j] != "") { objVaitroChucNangQuyen.push(obj) };
             }
-        var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
         var items = JSON.stringify({ "objVaitroChucNangQuyen":objVaitroChucNangQuyen });
         $.ajax({
-            url: "/SuperAdmin/LuuPhanQuyen?objVaitroChucNangQuyen="+items,
+            url: "/SuperAdmin/LuuPhanQuyen?pageSize="+$("#lstPageSize").val()+"&currentPage=1"+"&objVaitroChucNangQuyen="+items,
             type: "GET",
             //cache: false,
             //data:items,
@@ -60,14 +64,27 @@
 
       function changePageSize(data) {
         $("#lstPageSize").val(data.value);
+         var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
         $.ajax({
             type: "GET",
-            url: "../DanhMenuMuc/ChuyenMucCap2Paging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
+            url: "../SuperAdmin/PhanQuyenPagging?ma_vai_tro=" + ma_vai_tro + "&pageSize=" + data.value + "&currentPage=1",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 //console.log(data);
-                $("#dataTable").Append(data);
+                $("#paggingTable").html(data);
+            }
+        });
+    }
+    function GetListByCurrentPage(id) {
+         var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+        $.ajax({
+            type: "GET",
+            url: "../SuperAdmin/PhanQuyenPagging?ma_vai_tro=" + ma_vai_tro + "&pageSize=" +  $("#lstPageSize").val() + "&currentPage=" + id,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#paggingTable").html(data);
             }
         });
     }
@@ -75,6 +92,39 @@
         var listData = $("#lstCode").val();
         confirm.BeforDeletePost('/SuperAdmin/XoaQuyen?code=' + listData)
     }
+     $(document).ready(function() {
+         $('#selectAll').click(function() {
+             var val = [];
+             if ($(this).is(':checked')) {
+                 $(".ads_Checkbox").prop("checked", true);
+                 $(':checkbox:checked').each(function(i) {
+                     if (i > 0) {
+                         val[i - 1] = $(this).val();
+                     } 
+                 });
+             }
+             else {
+                 $(".ads_Checkbox").prop("checked", false);
+                 val = [];
+             }
+              $('input[name="lstCode"]').attr('value',val);
+         });
+         $('.ads_Checkbox').click(function() {
+             var val = [];
+             $(':checkbox:checked').each(function(i) {
+                 if ($('#selectAll').is(':checked')) {
+                     if (i > 0) {
+                         val[i - 1] = $(this).val();
+                     }
+                 } else {
+                     val[i] = $(this).val();
+                 }
+
+             });
+             $('input[name="lstCode"]').attr('value',val);
+         });
+    
+     });
 </script>
 <style>
     .dataTable-wrapper {
@@ -98,20 +148,19 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Vai trò</label>
                         <div class="col-md-8">
-                                <select name="ma_vai_tro" id="ma_vai_tro" onchange="PhanQuyenChange()" class="form-select form-control input-default">
-			                    <option value="" >----------------Chọn-----------------</option>
+                            <select name="ma_vai_tro" id="ma_vai_tro" onchange="PhanQuyenChange()" class="form-select form-control input-default">  
                                 @if(list_vai_tro != null)
                                 {
-                                    foreach (var item in list_vai_tro)
+                                    for (var item = 0; item <list_vai_tro.Count(); item++)
                                     {
-                                        if(item.ma_vai_tro == ViewBag.ma_vai_tro)
+                                        if(item == 0)
                                         {
-                                            <option value="@item.ma_vai_tro" selected> @item.ten_vai_tro</option>
+                                            <option value="@list_vai_tro[item].ma_vai_tro" selected> @list_vai_tro[item].ten_vai_tro</option>
+                                        }else{
+                                              <option value="@list_vai_tro[item].ma_vai_tro">@list_vai_tro[item].ten_vai_tro</option>
                                         }
-                                        <option value="@item.ma_vai_tro">@item.ten_vai_tro</option>
                                     }
                                 }
-
 		                    </select>
                         </div>
                     </div>
@@ -121,86 +170,189 @@
                 <input type="button" value="Lưu" onclick="LuuPhanQuyen()" class="btn btn-primary" style="width:100px;" />
             </p>
 
-            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns" id="dataTable">
-                <input hidden id="lstCode" />
-                <input hidden id="lstRole" />
+            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+               
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
                         <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
                             <option value="5">5</option>
-                            <option value="10" selected="">10</option>
+                            <option value="10">10</option>
                             <option value="15">15</option>
                             <option value="20">20</option>
-                            <option value="25">25</option>
+                            <option value="25" selected>25</option>
                         </select> bản ghi
                     </label>
                 </div>
+                
                 <div id="dataTable">
-                    <div class="dataTable-container">
-                        <table class="table table-bordered responsive">
-                            <thead class="widgettitle">
-                                <tr>
-                                    
-                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                                    <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
-                                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                            <input type="checkbox" name="" id="selectAll" />
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.lstMenu != null)
-                                {
-                                var stt = 1;
-                                    foreach (var item in Model.lstMenu)
-                                    {
+                    <input hidden name="lstCode" id="lstCode" value="@(Asp_vaitro_quyen == null? "" : string.Join(",",  Asp_vaitro_quyen.Select(n=>n.ma_chuc_nang).ToArray()))"/>
+                    <input hidden id="lstRole" name="lstRole"  />
+                        <div id="paggingTable">
+                            <div class="dataTable-container">
+                                <table class="table table-bordered responsive">
+                                    <thead class="widgettitle">
                                         <tr>
-                                            <td scope="row">
-                                                @stt
-                                                <input type="hidden" name="" id="" value="@item.ma_trang" />
-                                            </td>
-                                            <td><p id="addData-@(stt-1)" name = "@(item.ma_trang)" style="cursor:pointer" >@item.ten_trang</p>
-                                                
-                                              <script>
-                                                $('#addData-@(stt-1)').click(function () {
-                                                    var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
-                                                    $.ajax({
-                                                            type: "GET",
-                                                            url: "/SuperAdmin/ChucNangQuyenPartial?ma_trang=" + $('#addData-@(stt-1)').attr('name').split(',')[0] + "&ma_vai_tro="+ma_vai_tro,
-                                                            data: "",
-                                                            contentType: 'application/json; charset=utf-8',
-                                                            success: function(data) {
-                                                                $("#contetModel").html(data);
-                                                            }
-                                                     });             
-                                                     $("#basicModal").modal("show");
-                                                });
-                                            </script>
-                                            </td>
-                                            <td><a href=""  id="addData-@(stt-1)" name = "@(item.ma_trang)" data-toggle="modal" data-target="#basicModal" name = "@(item.ma_trang)" >@item.mo_ta</a> </td>
-                                            <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_trang" /></td>
-                                           
+                                    
+                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                            <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
+                                            <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                            <input type="checkbox" name="" id="selectAll" />
+                                            </th>
                                         </tr>
-                                        stt++;
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.lstMenu != null)
+                                        {
+                                        var stt = 1;
+                                            foreach (var item in Model.lstMenu)
+                                            {
+                                                var obj = (Asp_vaitro_quyen ?? new List<HG.Entities.Entities.SuperAdmin.Asp_vaitro_quyen>()).Where(n => n.ma_chuc_nang == @item.ma_trang).FirstOrDefault();
+                                                <tr>
+                                                    <td scope="row">
+                                                        @stt
+                                                        <input type="hidden" name="" id="" value="@item.ma_trang" />
+                                                    </td>
+                                                    <td>
+                                                    @if(obj != null)
+                                                    {
+                                                         <p id="addData-@(stt-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                         <input id="MenuId-@item.ma_trang" name = "@(obj.ds_ma_quyen)" value="@obj.ds_ma_quyen"  hidden/> // dung de add danh sach quyen
+                                                    }
+                                                    else
+                                                    {
+                                                       <p id="addData-@(stt-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                       <input id="MenuId-@item.ma_trang" name = "" value=""  hidden/>
+                                                    }
+                                                      <script>
+                                                        $('#addData-@(stt-1)').click(function () {
+                                                            var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+                                                            if (ma_vai_tro == null || ma_vai_tro == undefined || ma_vai_tro == "") { 
+                                                                alert("bạn chưa chọn vai trò");
+                                                                return;
+                                                            }
+                                                            var checkVal = "false";
+                                                            var MenuId = "MenuId-";
+                                                            const myArray = $("#lstCode").val().split(",");
+                                                            for (var k = 0; k < myArray.length; k++) {
+                                                                if(myArray[k] == $('#addData-@(stt-1)').attr('name').split(',')[0]){
+                                                                     checkVal = "true";
+                                                                     MenuId = MenuId + $('#addData-@(stt-1)').attr('name').split(',')[0];
+                                                                }
+                                                            }
+                                                            var dsquyen = $("#" + MenuId).val();
+                                                            if (dsquyen == null || dsquyen == undefined || dsquyen == 0) {
+                                                                dsquyen = "NO";
+                                                            }
+                                                            if (checkVal == "false") {
+                                                                    alert("bạn phải chọn chức năng trước");
+                                                                    return;
+                                                            };
+                                                             $.ajax({
+                                                                    type: "GET",
+                                                                    url: "/SuperAdmin/ChucNangQuyenPartial?ma_trang=" + $('#addData-@(stt-1)').attr('name').split(',')[0] + "&ma_vai_tro=" + ma_vai_tro + "&dsquyen=" + dsquyen ,
+                                                                    data: "",
+                                                                    contentType: 'application/json; charset=utf-8',
+                                                                    success: function(data) {
+                                                                        $("#contetModel").html(data);
+                                                                        $("#basicModal").modal("show");
+                                                                    }
+                                                             });
+                                                              
+                                                  
+                                                        });
+                                                    </script>
+                                                    </td>
+                                                    <td><a href=""  id="addData-@(stt-1)" name = "@(item.ma_trang)" data-toggle="modal" data-target="#basicModal" name = "@(item.ma_trang)" >@item.mo_ta</a> </td>
+                                                    <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_trang" @(Asp_vaitro_quyen == null ? "": Asp_vaitro_quyen.Where(n=>n.ma_chuc_nang == item.ma_trang).Count() > 0 ? "checked": "") /></td>
+                                           
+                                                </tr>
+                                                stt++;
+                                            }
+                                        }
+                                        @if(lstnotdisplay != null){
+                                            var stt2 = 999;
+                                                foreach (var item in lstnotdisplay)
+                                                  {
+                                                      var obj = (Asp_vaitro_quyen ?? new List<HG.Entities.Entities.SuperAdmin.Asp_vaitro_quyen>()).Where(n => n.ma_chuc_nang == @item.ma_trang).FirstOrDefault();
+                                                      <tr style="display: none">
+                                                          <td scope="row">
+                                                              @stt2
+                                                              <input type="hidden" name="" id="" value="@item.ma_trang" />
+                                                          </td>
+                                                          <td>
+                                                              @if(obj != null)
+                                                              {
+                                                                   <p id="addData-@(stt2-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                                   <input id="MenuId-@item.ma_trang" name = "@(obj.ds_ma_quyen)" value="@obj.ds_ma_quyen"  hidden/> // dung de add danh sach quyen
+                                                              }
+                                                              else
+                                                              {
+                                                                 <p id="addData-@(stt2-1)" name = "@(item.ma_trang)"  style="cursor:pointer; color:cornflowerblue" >@item.ten_trang</p>
+                                                                 <input id="MenuId-@item.ma_trang" name = "" value="@item.ma_trang"  hidden/>
+                                                              }
+                      
+                                                            <script>
+                                                              $('#addData-@(stt2-1)').click(function () {
+                                                                  var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+                                                                  if (ma_vai_tro == null || ma_vai_tro == undefined || ma_vai_tro == "") { 
+                                                                      alert("bạn chưa chọn vai trò");
+                                                                      return;
+                                                                  }
+                                                                  var checkVal = "false";
+                                                                  var MenuId = "MenuId-";
+                                                                     const myArray = $("#lstCode").val().split(",");
+                                                                     for (var k = 0; k < myArray.length; k++) {
+                                                                         if(myArray[k] == $('#addData-@(stt2-1)').attr('name').split(',')[0]){
+                                                                              checkVal = "true";
+                                                                              MenuId = MenuId + $('#addData-@(stt2-1)').attr('name').split(',')[0];
+                                                                         }
+                                                                     }
+                                                                     var dsquyen = $("#" + MenuId).val();
+                                                                     if (dsquyen == null || dsquyen == undefined || dsquyen == 0) {
+                                                                                dsquyen = "NO";
+                                                                        }
+                                                                     if (checkVal == "false") {
+                                                                         alert("bạn phải chọn chức năng trước");
+                                                                         return;
+                                                                     };
+                                                                     $.ajax({
+                                                                             type: "GET",
+                                                                             url: "/SuperAdmin/ChucNangQuyenPartial?ma_trang=" + $('#addData-@(stt2-1)').attr('name').split(',')[0] + "&ma_vai_tro=" + ma_vai_tro + "&dsquyen=" + dsquyen ,
+                                                                             data: "",
+                                                                             contentType: 'application/json; charset=utf-8',
+                                                                             success: function(data) {
+                                                                                 $("#contetModel").html(data);
+                                                                                 $("#basicModal").modal("show");
+                                                                             }
+                                                                      });  
+                        
+                                                              });
+                                                          </script>
+                                                          </td>
+                                                          <td><a href=""  id="addData-@(stt2-1)" name = "@(item.ma_trang)" data-toggle="modal" data-target="#basicModal" name = "@(item.ma_trang)" >@item.mo_ta</a> </td>
+                                                          <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_trang" @(Asp_vaitro_quyen == null ? "": Asp_vaitro_quyen.Where(n=>n.ma_chuc_nang == item.ma_trang).Count() > 0 ? "checked": "") /></td>
+                 
+                                                      </tr>
+                                                      stt2++;
+                                                  }
 
-                    <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
-                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
-                        @{
-                            var TotalPage = (int)ViewBag.TotalPage;
-                            var CurrentPage = (int)ViewBag.CurrentPage;
+                                              }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @Model.Pagelist.TotalRecords bản ghi</div>
+                                <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                  @{
+                                var TotalPage = (int) ViewBag.TotalPage;
+                                var CurrentPage = (int)ViewBag.CurrentPage;
                             if (TotalPage > 5)
                             {
                                 if (CurrentPage > CurrentPage + 2)
                                 {
-                                                                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>                                                                                                                                             
                                 };
                                 if (CurrentPage > 3)
                                 {
@@ -208,11 +360,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                                                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
                                 }
@@ -222,11 +374,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                                                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
 
@@ -234,8 +386,8 @@
 
                                 if (CurrentPage < CurrentPage + 2)
                                 {
-                                                                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                  <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                 };
                             }
                             else
@@ -244,16 +396,17 @@
                                 {
                                     if (i == CurrentPage)
                                     {
-                                                                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                 <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                     else
                                     {
-                                                                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                 }
                             }
                         }
-                    </div>
+                            </div>
+                        </div>
                 </div>
                 <!-- End Table with stripped rows -->
                 
@@ -280,84 +433,7 @@
     </div>
 </div>
 <div class="modal fade" id="basicModal" tabindex="-1">
-                    <div class="modal-dialog" id="contetModel">
-                        <div class="modal-content">
-                            <div class="modal-header widgettitle">
-                                <h5 class="modal-title">Danh sách quyền</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                            <input type="hidden" id="matrang_quyen" name="UserID" />
-                                    <div style="overflow-y: auto;">
-                                        <div id="pnlMain">
-                                            <div>
-                                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
-                                                    <tbody>
-                                                        <tr class="widgettitle">
-                                                            <th scope="col">Tên quyền</th>
-                                                            <th scope="col">Mô tả</th>
-                                                            <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
-                                                            <input type="checkbox" name="" id="selectAllRole" />
-                                                            </th>
-                                                        </tr>
-                                                        @if(list_quyen != null)
-                                                        {
-                                                             foreach (var item in list_quyen)
-                                                            {
-                                                            <tr>
-                                                                    <td>
-                                                                        @item.Name
-                                                                    </td>
-                                                                    <td style="width: 25%;">@item.Description</td>
-                                                                     <td><input type="checkbox" class="ads_Checkbox2" value="@item.ma_quyen" /></td>
-                                                            </tr>
-                                                            }
-                                                        }
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                        <script>$(document).ready(function() {
-        
-                             $('#selectAllRole').click(function() {
-                                var val = [];
-                                if ($(this).is(':checked')) {
-                                    $(".ads_Checkbox2").prop("checked", true);
-                                    $(':checkbox:checked').each(function(i) {
-                                        if (i > 0) {
-                                            val[i - 1] = $(this).val();
-                                        }
-                                    });
-                                }
-                                else {
-                                    $(".ads_Checkbox2").prop("checked", false);
-                                    val = [];
-                                }
-                                $("#lstRole").val(val);
-                            });
-
-
-                            $('.ads_Checkbox2').click(function() {
-                                var val = [];
-                                $(':checkbox:checked').each(function(i) {
-                                    if ($('#selectAllRole').is(':checked')) {
-                                        if (i > 0) {
-                                            val[i - 1] = $(this).val();
-                                        }
-                                    } else {
-                                        val[i] = $(this).val();
-                                    }
-
-                                });
-           
-                                $("#lstRole").val(val);
-                            });
-                        });</script>
-                    </div>
-                </div>
+    <div class="modal-dialog" id="contetModel">
+     
+    </div>
+</div>

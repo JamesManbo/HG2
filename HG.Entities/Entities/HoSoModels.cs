@@ -47,7 +47,7 @@ namespace HG.Entities.Entities
         public int? da_thu_phi { get; set; }
         public int? Stt { get; set; }
         public int trang_thai { get; set; }
-        public string lstCode { get; set; } //thành phần đã tồn tại ở tthc
+        public string lstThanhPhan { get; set; } //thành phần đã tồn tại ở tthc
 
 
     }

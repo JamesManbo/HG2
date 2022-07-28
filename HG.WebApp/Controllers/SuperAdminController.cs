@@ -434,42 +434,104 @@ namespace HG.WebApp.Controllers
         {
             EAContext eAContext = new EAContext();
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = 0 };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _menuDao.DanhSanhMenu(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             ViewBag.lstQuyen = eAContext.AspNetRoles.Where(n => n.Deleted == 0).ToList();
-            ViewBag.lstVaiTro = eAContext.Asp_dm_vai_tro.Where(n => n.Deleted == 0).ToList();
-            ViewBag.lstVaiTroChucNangQuyen = eAContext.Asp_vaitro_quyen.Where(n => n.Deleted == 0).ToList();
+            var lstVaiTro = eAContext.Asp_dm_vai_tro.Where(n => n.Deleted == 0).ToList();
+            ViewBag.lstVaiTro = lstVaiTro;
+            ViewBag.CurrentPage = 1;
+            ViewBag.lstVaiTroChucNangQuyen = eAContext.Asp_vaitro_quyen.Where(n => n.Deleted != 1 && n.ma_vai_tro == lstVaiTro[0].ma_vai_tro).ToList();
+            //lay danh sach an
+            MenuModel nhomSearchItem2 = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = 10000 };
+            var ds2 = _menuDao.DanhSanhMenu(nhomSearchItem2).lstMenu;
+            if (ds2 != null)
+            {
+                //tach list
+                var lstobj = ds.lstMenu.Select(n => n.ma_trang).ToArray();
+                ds2 = ds2.Where(n => lstobj.Contains(n.ma_trang) == false).ToList();
+            }
+            ViewBag.lstMenu2Paging = ds2;
             return View(ds);
         }
 
-        public async Task<IActionResult> PhanQuyenChinhSua(string ma_vai_tro)
+        public async Task<IActionResult> PhanQuyenChinhSua(string ma_vai_tro, int pageSize = 25, int currentPage = 1)
         {
             EAContext eAContext = new EAContext();
             PhanQuyenModel phanQuyenModel = new PhanQuyenModel();
-            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _menuDao.DanhSanhMenu(nhomSearchItem);
             phanQuyenModel.dm_Menu_Pagings = ds;
             phanQuyenModel.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
-            phanQuyenModel.CurrentPage = 1;
+            phanQuyenModel.CurrentPage = currentPage;
             phanQuyenModel.RecoredFrom = 1;
             phanQuyenModel.RecoredTo = phanQuyenModel.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
             phanQuyenModel.AspNetRoles = eAContext.AspNetRoles.Where(n => n.Deleted == 0).ToList();
             phanQuyenModel.Asp_dm_vai_tro = eAContext.Asp_dm_vai_tro.Where(n => n.Deleted == 0).ToList();
-            phanQuyenModel.Asp_vaitro_quyen = eAContext.Asp_vaitro_quyen.Where(n => (n.Deleted == 0 || n.Deleted == null) && n.ma_vai_tro == ma_vai_tro).ToList();
+            phanQuyenModel.Asp_vaitro_quyen = eAContext.Asp_vaitro_quyen.Where(n => n.Deleted != 1 && n.ma_vai_tro == ma_vai_tro).ToList();
+            //lay danh sach an
+            MenuModel nhomSearchItem2 = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = 10000 };
+            var ds2 = _menuDao.DanhSanhMenu(nhomSearchItem2).lstMenu;
+            if (ds2 != null)
+            {
+                //tach list
+                var lstobj = ds.lstMenu.Select(n => n.ma_trang).ToArray();
+                ds2 = ds2.Where(n => lstobj.Contains(n.ma_trang) == false).ToList();
+            }
+            ViewBag.lstMenu2Paging = ds2;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/PhanQuyenChinhSua.cshtml", phanQuyenModel);
             return Content(result);
         }
-        public IActionResult LuuPhanQuyen(string objVaitroChucNangQuyen)
+        public async Task<IActionResult> PhanQuyenPagging(int pageSize = 25, string ma_vai_tro = "", int currentPage = 1)
+        {
+            EAContext eAContext = new EAContext();
+            PhanQuyenModel phanQuyenModel = new PhanQuyenModel();
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _menuDao.DanhSanhMenu(nhomSearchItem);
+            phanQuyenModel.dm_Menu_Pagings = ds;
+            phanQuyenModel.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            phanQuyenModel.CurrentPage = currentPage;
+            phanQuyenModel.TotalRecords = ds.Pagelist.TotalRecords;
+            phanQuyenModel.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : ((currentPage - 1) * pageSize) + 1;
+            //phanQuyenModel.RecoredTo = phanQuyenModel.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            phanQuyenModel.RecoredTo = phanQuyenModel.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
+            phanQuyenModel.AspNetRoles = eAContext.AspNetRoles.Where(n => n.Deleted == 0).ToList();
+            phanQuyenModel.Asp_vaitro_quyen = eAContext.Asp_vaitro_quyen.Where(n => n.Deleted != 1 && n.ma_vai_tro == ma_vai_tro).ToList();
+            MenuModel nhomSearchItem2 = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = 10000 };
+           
+            var ds2 = _menuDao.DanhSanhMenu(nhomSearchItem2).lstMenu;
+            if(ds2 != null)
+            {
+                //tach list
+                var lstobj = ds.lstMenu.Select(n => n.ma_trang).ToArray();
+                ds2 = ds2.Where(n => lstobj.Contains(n.ma_trang) == false).ToList();
+            }
+            ViewBag.lstMenu2Paging = ds2;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/PhanQuyenPagging.cshtml", phanQuyenModel);
+            return Content(result);
+        }
+        public IActionResult LuuPhanQuyen(string objVaitroChucNangQuyen, int pageSize)
         {
             var result = JsonConvert.DeserializeObject<Root>(objVaitroChucNangQuyen);
             EAContext db = new EAContext();
             if (result != null)
             {
+                //tìm kiếm chức tất cả quyền có vai trò và xóa sạch sau đó add lại
+                var objCNQ = db.Asp_vaitro_quyen.Where(n => n.ma_vai_tro == result.objVaitroChucNangQuyen.First().ma_vai_tro).ToList();
+                if(objCNQ.Count() > 0)
+                {
+                    foreach(var item in objCNQ)
+                    {
+                        db.Asp_vaitro_quyen.Attach(item);
+                        db.Asp_vaitro_quyen.Remove(item);
+                        db.SaveChanges();
+                    }
+                };
+                //thêm lại quyền mới
                 foreach (var item in result.objVaitroChucNangQuyen)
                 {
                     if (item != null)
@@ -484,7 +546,7 @@ namespace HG.WebApp.Controllers
                         }
                         else
                         {
-                            Asp_vaitro_quyen asp_Vaitro_Quyen = new Asp_vaitro_quyen() { ma_vai_tro = item.ma_vai_tro, ma_chuc_nang = item.ma_chuc_nang, ds_ma_quyen = item.ds_quyen_da_chon, CreatedDateUtc = DateTime.Now, Deleted = 0 };
+                            Asp_vaitro_quyen asp_Vaitro_Quyen = new Asp_vaitro_quyen() { ma_vai_tro = item.ma_vai_tro, ma_chuc_nang = item.ma_chuc_nang, ds_ma_quyen = item.ds_quyen_da_chon == null ? "" : item.ds_quyen_da_chon, CreatedDateUtc = DateTime.Now, Deleted = 0 };
                             Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_vaitro_quyen> _role = db.Asp_vaitro_quyen.Add(asp_Vaitro_Quyen);
                             db.SaveChanges();
                         }
@@ -493,12 +555,25 @@ namespace HG.WebApp.Controllers
 
             };
             var ds_ma_vai_tro = result.objVaitroChucNangQuyen.FirstOrDefault();
-            return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = (ds_ma_vai_tro == null) ? "" : ds_ma_vai_tro.ma_vai_tro });
+            return RedirectToAction("PhanQuyenChinhSua", "SuperAdmin", new { ma_vai_tro = (ds_ma_vai_tro == null) ? "" : ds_ma_vai_tro.ma_vai_tro, pageSize = pageSize });
         }
         [HttpGet]
-        public async Task<IActionResult> ChucNangQuyenPartial(string ma_trang = "", string ma_vai_tro = "")
+        public async Task<IActionResult> ChucNangQuyenPartial(string ma_trang = "", string ma_vai_tro = "", string dsquyen = "")
         {
             EAContext db = new EAContext();
+            var objCount = db.Asp_vaitro_quyen.Where(n => n.Deleted == 0 && n.ma_chuc_nang == ma_trang && n.ma_vai_tro == ma_vai_tro).Count();
+            if (dsquyen != null && !string.IsNullOrEmpty(dsquyen) && objCount == 0)
+            {
+                ViewBag.dsquyen = dsquyen;
+                MenuRoleModel menuRoleModel0 = new MenuRoleModel();
+                menuRoleModel0.AspNetRoles = db.AspNetRoles.Where(n => n.Deleted == 0).ToList();
+                menuRoleModel0.Asp_vaitro_quyen = db.Asp_vaitro_quyen.Where(n => n.Deleted == 0 && n.ma_chuc_nang == ma_trang && n.ma_vai_tro == ma_vai_tro).FirstOrDefault();
+                menuRoleModel0.ma_vai_tro = ma_vai_tro;
+                menuRoleModel0.ma_chuc_nang = ma_trang;
+                var result0 = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/SuperAdmin/ChucNangQuyenPartial.cshtml", menuRoleModel0);
+                return Content(result0);
+            }
+            ViewBag.dsquyen = "";
             MenuRoleModel menuRoleModel = new MenuRoleModel();
             menuRoleModel.AspNetRoles = db.AspNetRoles.Where(n => n.Deleted == 0).ToList();
             menuRoleModel.Asp_vaitro_quyen = db.Asp_vaitro_quyen.Where(n => n.Deleted == 0 && n.ma_chuc_nang == ma_trang && n.ma_vai_tro == ma_vai_tro).FirstOrDefault();

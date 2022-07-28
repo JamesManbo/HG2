@@ -1,0 +1,1000 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục"; Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.Entities.Entities.DanhMuc.DanhSachNguoiDung>;
+    var lst_don_vi = ViewBag.lst_don_vi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+    var lst_dan_toc = ViewBag.lst_dan_toc as List<HG.Entities.Dm_Dan_Toc>;
+    var ds_thanh_phan_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTHCSRecords();
+
+    var lst_tinh = ViewBag.lst_tinh as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
+    var lst_huyen = new List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>();
+
+    var nguoi_dung = ViewBag.nguoi_dung as HG.WebApp.AspNetUsers;
+    var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
+    var lst_chuc_vu = ViewBag.lst_chuc_vu as List<HG.Entities.Dm_Chuc_Vu>;
+    var ds_gioi_tinh = ViewBag.ds_gioi_tinh as List<HG.Entities.Dm_Gioi_Tinh>;
+}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+@if (ViewBag.Success == true)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
+<script>
+    $(document).ready(function() {
+        var year_now = (new Date()).getFullYear();
+        var year_later = year_now - 1;
+        ("#nam_hoc").val(year_now + ' - ' year_later);
+
+        $('#form_tsthcs').validate({
+            rules: {
+                ho_ten_hoc_sinh: {
+                    required: true,
+                    ma_thu_tuc_vaild: true
+                },
+                thong_tin_chi_tiet: "required",
+                id_truong: "required",
+                so_dinh_danh: "required",
+                ngay_sinh: "required",
+                gioi_tinh: "required",
+                ho_ten_lien_he: "required",
+                dien_thoai_lien_he: "required",
+                ma_dan_toc: "required",
+                ma_dia_ban_tinh_noi_sinh: "required",
+                ma_dia_ban_huyen_noi_sinh: "required",
+                ma_dia_ban_tinh_noi_cu_tru: "required",
+                ma_dia_ban_huyen_noi_cu_tru: "required",
+            },
+            messages: {
+                thong_tin_chi_tiet: {
+                    required: "Bạn cần nhập thông tin chi tiết!"
+                },
+                id_truong: "Bạn cần chọn trường!",
+                ho_ten_hoc_sinh: "Bạn cần nhập họ tên!",
+                so_dinh_danh: "Bạn cần nhập Số định danh!",
+                ngay_sinh: "Bạn cần nhập ngày sinh!",
+                gioi_tinh: "Bạn cần chọn giới tính!",
+                ho_ten_lien_he: "Bạn cần nhập người liên hệ!",
+                dien_thoai_lien_he: "Bạn cần nhập điện thoại liên hệ!",
+                ma_dan_toc: "Bạn cần chọn dân tộc!",
+                ma_dia_ban_tinh_noi_sinh: "Bạn cần chọn tỉnh!",
+                ma_dia_ban_huyen_noi_sinh: "Bạn cần chọn huyện!",
+                ma_dia_ban_tinh_noi_cu_tru: "Bạn cần chọn tỉnh!",
+                ma_dia_ban_huyen_noi_cu_tru: "Bạn cần chọn huyện!",
+
+            }
+        });
+
+        $('#myModalUser').on('shown.bs.modal', function() {
+            var data = { ma_phong_ban: "" };
+            $.ajax({
+                url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
+                type: "post",
+                contentType: 'application/x-www-form-urlencoded',
+                data: data,
+                success: function(result) {
+                    $("#singleselect").html("");
+                    $("#singleselect").html(result);
+                }
+            });
+        })
+
+       
+
+
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+    });
+
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaPb",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                window.location.href = result.href;
+            }
+        });
+    };
+
+
+
+</script>
+
+
+<div class="col-lg-12">
+    @*  <div class="pageheader">
+    <div class="pageicon"><span class="iconfa-pencil"></span></div>
+    <div class="pagetitle">
+    <h5>Thông tin</h5>
+    <h1>Phòng ban</h1>
+    </div>
+    </div>*@
+
+    <div class="maincontent">
+        <div class="maincontentinner">
+            @*<h4 class="widgettitle">Cập nhật thông tin phòng ban</h4>*@
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_tsthcs" action="/GuiHoSo/GuiTuyenSinhCapTHCS" method="post" enctype="multipart/form-data">
+                        <div class="send-document-top top-title-frame">
+                            <p>THÔNG TIN HỒ SƠ</p>
+                        </div>
+                        <div class="send-document-content gray-border">
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Thông tin chi tiết
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-7">
+                                    <textarea rows="2" cols="20" id="txtTenDuAn"
+                                              name="thong_tin_chi_tiet"
+                                              class="Css_Mul" autofocus="true"
+                                              placeholder="Thông tin hồ sơ" style="width: 100%; height: 140px;"
+                                              spellcheck="true"></textarea>
+                                </div>
+                                <div class="col-md-3 col-sm-12 sender-infor">
+                                    <a href="javascript: void(0);" data-toggle="modal" data-target="#modalInput"
+                                       data-original-title="Thông tin chi tiết người nộp hồ sơ"
+                                       onclick="ShowModalUser()"
+                                       tooltip="Xem thông tin chi tiết người nộp"><b>Thông tin người nộp</b></a>
+                                </div>
+                               <!-- Modal -->
+                                <div class="modal fade" id="modalInput" tabindex="-1" role="dialog"
+                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">THÔNG TIN NGƯỜI NỘP</h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="sender-detail">
+                                                    <!-- 1 -->
+                                                    <div class="form-group form-group-new">
+                                                        <span class="col-md-4 control-label" style="font-weight:bold;">
+                                                            Họ
+                                                            tên <span class="red-text">(*)</span>:
+                                                        </span>
+                                                        <div class="col-md-5">
+                                                            <input id="User_Ten" type="text" name="ten" style="width:100%;" value="@nguoi_dung.ten">
+                                                        </div>
+                                                    </div>
+                                                    <!-- 2 -->
+                                                  @*  <div class="form-group form-group-new">
+                                                        <span class="col-md-4 control-label" style="font-weight:bold;">
+                                                            Giới
+                                                            tính :
+                                                        </span>
+                                                        <div class="col-md-5">
+                                                            <select style="width:100%;">
+                                                            </select>
+                                                        </div>
+                                                    </div>*@
+                                                    <!-- 3 -->
+                                                    <div class="form-group form-group-new">
+                                                        <label class="col-md-4 control-label">
+                                                            Ngày sinh:
+                                                        </label>
+                                                        <div class="col-md-5">
+                                                            @*<input type="text" style="width:100%;" value="@nguoi_dung.ngay_sinh">*@
+                                                            <input id="User_NgaySinh" type="date" class="w-100" name="ngay_sinh" value="@nguoi_dung.ngay_sinh" placeholder="">
+                                                        </div>
+                                                    </div>
+                                                    <!-- 4 -->
+                                                    <div class="form-group form-group-new">
+                                                        <label class="col-md-4 control-label">Email :</label>
+                                                        <div class="col-md-5">
+                                                            <input type="text" id="User_Email" name="Email" value="@nguoi_dung.Email" style="width:100%;">
+                                                        </div>
+                                                    </div>
+                                                    <!-- 5 -->
+                                                    <div class="form-group form-group-new">
+                                                        <span class="col-md-4 control-label" style="font-weight:bold;">
+                                                            Số
+                                                            điện thoại<span class="red-text">(*)</span>:
+                                                        </span>
+                                                        <div class="col-md-5">
+                                                            <input type="text" id="User_PhoneNumber" name="PhoneNumber" value="@nguoi_dung.PhoneNumber" style="width:100%;">
+                                                        </div>
+                                                    </div>
+                                                    <!-- 6 -->
+                                                    <div class="form-group form-group-new">
+                                                        <label class="col-md-4 control-label">Phòng ban</label>
+                                                        <div class="col-md-5">
+                                                            <select name="ma_phong_ban" id="user_ma_phong_ban"
+                                                                    value="@nguoi_dung.ma_phong_ban"
+                                                                    class="form-control input-default form-select" placeholder="Phòng ban">
+                                                                <option value="0">--- Chọn ---</option>
+                                                                @if (lst_phong_ban != null)
+                                                                {
+                                                                    foreach (var item in lst_phong_ban)
+                                                                    {
+                                                                         if (nguoi_dung.ma_phong_ban != null && nguoi_dung.ma_phong_ban.Trim() == item.ma_phong_ban.Trim())
+                                                                        {
+                                                                            <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                                        }
+                                                                    }
+                                                                   
+                                                                }
+
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- 7 -->
+                                                    <div class="form-group form-group-new">
+                                                        <label class="col-md-4 control-label">Chức vụ</label>
+                                                        <div class="col-md-5" style="padding-right: 0px">
+
+                                                            <select name="ma_chuc_vu" id="user_ma_chuc_vu" class="form-select form-control input-default " placeholder="Chức vụ" style="width:100%;">
+                                                                <option value="">---Chọn---</option>
+                                                                @if (lst_chuc_vu != null)
+                                                                {
+                                                                    foreach (var item in lst_chuc_vu)
+                                                                    {
+                                                                        if (nguoi_dung.ma_chuc_vu != null && nguoi_dung.ma_chuc_vu.Trim() == item.ma_chuc_vu.Trim())
+                                                                        {
+                                                                            <option value="@item.ma_chuc_vu" selected>@item.ten_chuc_vu</option>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <option value="@item.ma_chuc_vu">@item.ten_chuc_vu</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                        onclick="CloseModalUser()"
+                                                        class="btn-common btn-register"
+                                                        data-dismiss="modal">
+                                                    Đóng
+                                                </button>
+                                                <button type="button" onclick="LuuNguoiDung()" class="btn-common btn-login">Lưu</button>
+                                                @*<button type="submit" class="btn-common btn-login">Lưu</button>*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- THONG TIN HO SO -->
+                        <div class="application-infor">
+                            <div class="application-top-title top-title-frame">
+                                <p>THÔNG TIN ĐƠN XIN NHẬP HỌC</p>
+                            </div>
+                            <div class="application-infor-content gray-border">
+                                <div class="first-form">
+                                    <h4>
+                                        <span class="img-infor">Thông tin nhận hồ sơ</span>
+                                    </h4>
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label ">
+                                            Trường<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-6">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="id_truong"
+                                                    id="id_truong"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">---- Chọn trường ----</option>
+                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListTruongHocRecords())
+                                                {
+                                                    <option value="@item.key">@item.noi_dung</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <label class="col-md-2 control-label" style="padding-top: 0px!important">
+                                            Năm học <span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100"
+                                                   type="text"
+                                                   id="nam_hoc"
+                                                   name="nam_hoc"
+                                                   disabled="disabled"
+                                                   placeholder="">
+                                        </div>
+                                    </div>
+                                    <!-- 2 -->
+                                    <h4>
+                                        <span class="img-infor">Thông tin học sinh</span>
+                                    </h4>
+                                    <div class="form-group form-group-new ">
+                                        <label class="col-md-2 control-label">
+                                            Họ tên học sinh
+                                            <span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-6">
+                                            <input class="w-100" id="ho_ten_hoc_sinh" name="ho_ten_hoc_sinh" type="text" placeholder="">
+                                        </div>
+
+                                        <label class="col-md-2 control-label">
+                                            Số CCCD/Mã định danh điện tử <span class="red-text">(*)</span>:
+                                        </label>
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" name="so_dinh_danh" type="text" placeholder="">
+                                        </div>
+                                    </div>
+                                    <!-- 3 -->
+                                    <div class="form-group form-group-new ">
+                                        <label class="col-md-2 control-label">
+                                            Ngày sinh<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input type="date" class="w-100" name="ngay_sinh" placeholder="">
+                                        </div>
+
+                                        <label class="col-md-2 control-label">
+                                            Giới tính<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_gioi_tinh"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                                @*@foreach (var item in HG.WebApp.Helper.HelperString.ListGioiTinhRecords())*@
+                                                @foreach (var item in ds_gioi_tinh)
+                                                {
+                                                    <option value="@item.ma_gioi_tinh">@item.ten_gioi_tinh</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <label class="col-md-2 control-label">
+                                            Dân tộc<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_dan_toc"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                                @foreach (var item in lst_dan_toc)
+                                                {
+                                                    <option value="@item.ma_dan_toc">@item.ten_dan_toc</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- 4 -->
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">
+                                            Nơi sinh<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2">
+
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_dia_ban_tinh_noi_sinh"
+                                                    data-width=""
+                                                    onchange="LayHuyenTheoTinh(this)"
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                                @foreach (var item in lst_tinh)
+                                                {
+                                                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <script>
+                                            function LayHuyenTheoTinh(obj) {
+                                                console.log(111111, obj);
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/GuiHoSo/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value + "&noi_dung=huyen_noi_sinh",
+                                                    data: "",
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    success: function(data) {
+                                                        $("#slHuyen").html(data);
+                                                        //lst_huyen = data;
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                        <label class="col-md-2 control-label">
+                                            Huyện<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2" id="slHuyen">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_dia_ban_huyen_noi_sinh"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">Học sinh trường :</label>
+                                        <div class="col-md-6"><input class="w-100" name="ten_truong" type="text" placeholder=""></div>
+                                    </div>
+                                    <!-- 6 -->
+                                    <div class="form-group form-group-new ">
+                                        <label class="col-md-2 control-label">
+                                            Nơi cư trú<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2">
+
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_dia_ban_tinh_noi_cu_tru"
+                                                    data-width=""
+                                                    onchange="LayHuyenTheoTinhCuTru(this)"
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                                @foreach (var item in lst_tinh)
+                                                {
+                                                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <script>
+                                            function LayHuyenTheoTinhCuTru(obj) {
+                                                console.log(111111, obj);
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/GuiHoSo/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value + "&noi_dung=huyen_noi_cu_tru",
+                                                    data: "",
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    success: function(data) {
+                                                        $("#slHuyenCuTru").html(data);
+                                                        //lst_huyen = data;
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                        <label class="col-md-2 control-label">
+                                            Huyện<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2" id="slHuyenCuTru">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_dia_ban_huyen_noi_cu_tru"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                            </select>
+                                        </div>
+                                        <script>
+                                            function LayXaTheoHuyenCuTru(obj) {
+                                                console.log(111111, obj);
+                                                $.ajax({
+                                                    type: "GET",
+                                                    url: "/GuiHoSo/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value + "&noi_dung=xa_noi_cu_tru",
+                                                    data: "",
+                                                    contentType: 'application/json; charset=utf-8',
+                                                    success: function(data) {
+                                                        $("#slXaCuTru").html(data);
+                                                        //lst_huyen = data;
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                        <label class="col-md-2 control-label">
+                                            Xã:
+                                        </label>
+                                        <div class="col-md-2" id="slXaCuTru">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_dia_ban_xa_noi_cu_tru"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">--- Chọn ---</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- 7 -->
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">Thôn/đội/xóm :</label>
+                                        <div class="col-md-6"><input class="w-100" name="thon_xom" type="text" placeholder=""></div>
+                                    </div>
+                                     <div class="form-group form-group-new">
+                                         <label class="col-md-2 control-label ">
+                                            Đối tượng ưu tiên:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <select class="selectpicker w-100 h-100 "
+                                                    name="ma_uu_tien"
+                                                    id="ma_uu_tien"
+                                                    data-width=""
+                                                    data-live-search="true" data-hide-disabled="false">
+                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListUuTienRecords())
+                                                {
+                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                }
+                                            </select>
+                                        </div>
+                                         <label class="col-md-2 control-label">
+                                            Điểm ưu tiên:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_uu_tien" type="number" placeholder=""  step="0.01">
+                                        </div>
+                                    </div>
+                                      <div class="form-group form-group-new">
+                                         <label class="col-md-2 control-label ">
+                                            Đạt giải:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_uu_tien" type="text" placeholder=""  >
+                                        </div>
+                                         <label class="col-md-2 control-label">
+                                            Điểm khuyến khích:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_khuyen_khich_dat_giai" type="number" placeholder=""  step="0.01">
+                                        </div>
+                                    </div>
+                                     <div class="form-group form-group-new">
+                                         <label class="col-md-2 control-label ">
+                                            Giải thưởng khác:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="giai_khac" type="text" placeholder=""  >
+                                        </div>
+                                         <label class="col-md-2 control-label">
+                                            Điểm khuyến khích:
+                                        </label>
+                                        <div class="col-md-2">
+                                            <input class="w-100" 
+                                            name="diem_khuyen_khich_giai_khac" type="number" placeholder=""  step="0.01">
+                                        </div>
+                                    </div>
+                                     <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label ">
+                                            Kết quả học tập rèn luyện:
+                                         </label>
+                                     </div>
+                                     <div class="form-group form-group-new">
+                                        <div class="col-md-12">
+                                           <table cellspacing="0" cellpadding="4" rules="all"
+                                                   class="table table-bordered table-result">
+                                                <tbody>
+                                                    <tr class="table-headline">
+                                                        <th text-align="center" rowspan="2" scope="col">Lớp</th>
+                                                        <th text-align="center" colspan="5" scope="col" >Kết quả giáo dục cuối năm</th>
+                                                    </tr>
+                                                    <tr class="table-headline">
+                                                        <th text-align="center" scope="col">1</th>
+                                                        <th text-align="center" scope="col">2</th>
+                                                        <th text-align="center" scope="col">3</th>
+                                                        <th text-align="center" scope="col">4</th>
+                                                        <th text-align="center" scope="col">5</th>
+                                                    </tr>
+                                                  
+                                                    <tr>
+                                                        <td text-align="center" >
+                                                            Kết quả học tập
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_1_kq"
+                                                                    id="lop_1_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_2_kq"
+                                                                    id="lop_2_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                                <select class="selectpicker w-100 h-100 "
+                                                                        name="lop_3_kq"
+                                                                        id="lop_3_kq"
+                                                                        data-width=""
+                                                                        data-live-search="true" data-hide-disabled="false">
+                                                                    <option selected="selected" value="">---- Chọn ----</option>
+                                                                    @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                    {
+                                                                        <option value="@item.ma">@item.noi_dung</option>
+                                                                    }
+                                                                </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_4_kq"
+                                                                    id="lop_4_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                        <td text-align="justify">
+                                                            <select class="selectpicker w-100 h-100 "
+                                                                    name="lop_5_kq"
+                                                                    id="lop_5_kq"
+                                                                    data-width=""
+                                                                    data-live-search="true" data-hide-disabled="false">
+                                                                <option selected="selected" value="">---- Chọn ----</option>
+                                                                @foreach (var item in HG.WebApp.Helper.HelperString.ListKetQuaHocTapRecords())
+                                                                {
+                                                                    <option value="@item.ma">@item.noi_dung</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+
+
+                                <!-- THIRD SECTION -->
+                                <div class="third-form">
+                                    <h4>
+                                        <span class="img-infor">Thông tin liên quan</span>
+                                    </h4>
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2 control-label">
+                                            Họ tên, địa chỉ người liên hệ<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2"><input class="w-100" name="ho_ten_lien_he" type="text" placeholder=""></div>
+                                        <label class="col-md-2 control-label">Số CMND/CCCD:</label>
+                                        <div class="col-md-2"><input class="w-100" name="so_cccd_lien_he" type="text" placeholder=""></div>
+
+                                        <label class="col-md-2 control-label">
+                                            Điện thoại<span class="red-text">(*)</span>:
+                                        </label>
+                                        <div class="col-md-2"><input class="w-100" name="dien_thoai_lien_he" type="text" placeholder=""></div>
+                                    </div>
+                                   
+                                    <div class="form-group form-group-new">
+                                        <label class="col-md-2"></label>
+                                        <div class="col-md-8">
+                                            <p class="red-text commit">
+                                                <input id="chkIsCamKet" name="chkIsCamKet" type="checkbox">
+                                                <em>
+                                                    <strong>
+                                                        Tôi đã đọc hướng dẫn tuyển sinh và cam kết những nội dung tự
+                                                        điền trên là đúng sự thật. Nếu sai tôi xin hoàn toàn chịu trách
+                                                        nhiệm
+                                                        theo các quy đinh, quy chế tuyển sinh hiện hành.
+                                                    </strong>
+                                                </em>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DANH SACH CAC THANH PHAN -->
+                        <div class="result-area">
+                            <div class="result-top-title top-title-frame">
+                                <p>DANH SÁCH THÀNH PHẦN HỒ SƠ</p>
+                            </div>
+                            <div class="result-content">
+                                <table cellspacing="0" cellpadding="4" rules="all"
+                                       class="table table-bordered table-result">
+                                    <tbody>
+                                        <tr class="table-headline">
+                                            <th text-align="center" scope="col">STT</th>
+                                            <th scope="col" style="width: 45%;">Tên thành phần</th>
+                                            <th scope="col" style="width: 10%;">Tệp đính kèm</th>
+                                            <th scope="col" style="width: 10%;">B.Chính</th>
+                                            <th scope="col" style="width: 10%;">B.Sao</th>
+                                            <th scope="col" style="width: 10%;">B.Photo</th>
+                                            <th scope="col">Biểu mẫu</th>
+                                        </tr>
+                                        @for (var i = 0; i < ds_thanh_phan_hs.Count(); i++)
+                                        {
+                                            <tr>
+                                                <td text-align="center" style="width:2%;">
+                                                    @(i+1)
+                                                </td>
+                                                <td text-align="justify">
+                                                    <p>@ds_thanh_phan_hs[i].ten_thanh_phan</p>
+                                                    @{
+                                                        if(@ds_thanh_phan_hs[i].is_bat_buoc == true) {
+                                                            <span class="important-box">
+                                                                Bắt
+                                                                buộc
+                                                            </span>
+                                                        }
+                                                    }
+                                                </td>
+
+                                                <td text-align="justify">
+                                                    @*@d.file_dinh_kem*@
+                                                    <input type="file"
+                                                       onclick="$('#files_@i').click();" id="files_@i" name="filesName_@i">
+                                                    <input type="text" id="filesName_@i" name="filesName_@i" style="display: none">
+                                                </td>
+                                                <td text-align="left" style="width:25%;">@ds_thanh_phan_hs[i].ban_chinh</td>
+                                                <td text-align="center" style="width:14%;">@ds_thanh_phan_hs[i].ban_sao</td>
+                                                <td text-align="center" style="width:14%;">@ds_thanh_phan_hs[i].ban_photo</td>
+                                                <td>@ds_thanh_phan_hs[i].bieu_mau</td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+
+                                <div class="form-group">
+                                    <div class="col-md-6 pb-2">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="" style="text-align: left; margin-top: 5px; margin-bottom: 5px">
+                                            <input type="submit" name="type_view"
+                                                   value="Gửi"
+                                                   class="btn-search">
+                                            @*<button type="button" class="btn btn-primary" onclick="GuiHoSoTS()">Gửi</button>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--  -->
+                        </div>
+
+                    </form><!-- End Horizontal Form -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getUserByPb(data) {
+        var data = { ma_phong_ban: data.value };
+        $.ajax({
+            url: '@Url.Action("RenderViewNguoiDung", "DanhMuc")',
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: data,
+            success: function(result) {
+                $("#singleselect").html("");
+                $("#singleselect").html(result);
+            }
+        });
+    }
+    function getUser(data) {
+        $('#nguoi_dai_dien').val(data.value);
+        $('#nguoi_dai_dien').select2().trigger('change');
+        $("#myModalUser").modal("hide");
+    }
+    function ShowModalUser() {
+        $("#modalInput").modal("show");
+    }
+    function CloseModalUser() {
+        $("#modalInput").modal("hide");
+    }
+   function LuuNguoiDung() {
+         var data = {
+             PhoneNumber: $("#User_PhoneNumber").val(),
+             ten: $("#User_Ten").val(),
+             ngay_sinh: $("#User_NgaySinh").val(),
+             Email: $("#User_Email").val(),
+             ma_phong_ban: $("#user_ma_phong_ban").val(),
+             ma_chuc_vu: $("#user_ma_chuc_vu").val(),
+         };
+        $.ajax({
+            type: "Post",
+            url: "/GuiHoSo/UpdateNguoiDungCapTHCS",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#modalInput").modal("hide");
+            }
+        });
+    }
+     $("#files_0").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_1").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_2").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+        $("#files_3").on('change', function(i) {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var name = fileUpload?.name;
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TuyenSinhCapTieuHoc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function(result) {
+                        for (var i = 0; i < result.files.length; i++) {
+
+                            $('#' + name).val("" + result.files[i] + "");
+                        }
+                    },
+                    error: function(err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });
+
+</script>
+
+
+
+

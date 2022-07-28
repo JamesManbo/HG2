@@ -40,7 +40,12 @@
 
 
         $('.select2').select2({
-            closeOnSelect: false
+            closeOnSelect: false,
+             language: {
+                noResults: function() {
+                    return "Không có kết quả nào được tìm thấy.";
+                }
+            }
         });
 
         $('#multiselect').on('select2:select', function(e) {
