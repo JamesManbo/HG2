@@ -141,7 +141,7 @@ namespace HG.Data.Business.GuiHoSo
             public string? lop_4_kq { get; set; }
             public string? lop_5_kq { get; set; }
 
-            public bool? chkIsCamKet { get; set; }
+            public string? chkIsCamKet { get; set; }
 
             // Base 
             public int? Status { get; set; }

@@ -31,7 +31,7 @@
     </div>
 </div>
 
-@if (ViewBag.error > 0)
+@if (ViewBag.error == true)
 {
     <script>
         $(document).ready(function() {
@@ -555,26 +555,7 @@
                                         </label>
                                         <div class="col-md-2"><input class="w-100" name="dien_thoai_lien_he" type="text" placeholder=""></div>
                                     </div>
-                                    @*  <h4>
-                                    <span class="img-infor">Nguyện vọng xét tuyển</span>
-                                    </h4>
-                                    <!-- Nguyện vọng 2 -->
-                                    <div class="form-group form-group-new">
-                                    <label class="col-md-2 control-label">Nguyện vọng :</label>
-                                    <div class="col-md-6 select-nv">
-                                    <select class="selectpicker w-100 h-100 "
-                                    name="id_nguyen_vong"
-                                    data-width=""
-                                    data-live-search="true" data-hide-disabled="false">
-                                    <option selected="selected" value="">---- Chọn nguyện vọng ----</option>
-                                    @foreach (var item in HG.WebApp.Helper.HelperString.ListNguyenVongRecords())
-                                    {
-                                    <option value="@item.key">@item.noi_dung</option>
-                                    }
-                                    </select>
-                                    </div>
-
-                                    </div>*@
+                                   
                                     <div class="form-group form-group-new">
                                         <label class="col-md-2"></label>
                                         <div class="col-md-8">

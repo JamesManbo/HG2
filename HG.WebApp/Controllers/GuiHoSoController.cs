@@ -235,7 +235,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
             #endregion -----------------------
-            if (item.chkIsCamKet != true)
+            if (item.chkIsCamKet != "on")
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
@@ -527,7 +527,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
-            if (item.chkIsCamKet != true)
+            if (item.chkIsCamKet != "on")
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
@@ -714,7 +714,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
 
-            if (item.chkIsCamKet != true)
+            if (item.chkIsCamKet != "on")
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
@@ -897,17 +897,17 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
 
-            if (item.chkIsCamKet != true)
+            if (item.chkIsCamKet != "on")
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
-                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+                return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
             }
-            if (item.filesName_0 == null || item.filesName_1 == null)
+            if (item.filesName_0 == null || item.filesName_2 == null || item.filesName_3 == null || item.filesName_5 == null)
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Chưa có file đính kèm hoặc file đính kèm bị lỗi!";
-                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
+                return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
             }
 
             var ds_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTHPTRecords().OrderBy(x => x.stt).ToList();

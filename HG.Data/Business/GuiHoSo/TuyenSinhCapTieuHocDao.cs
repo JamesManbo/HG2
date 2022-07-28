@@ -131,7 +131,7 @@ namespace HG.Data.Business.GuiHoSo
             public string? filesName_1 { get; set; }
             public int? id_nguyen_vong { get; set; }
             public int? Stt { get; set; }
-            public bool? chkIsCamKet { get; set; }
+            public string? chkIsCamKet { get; set; }
 
             // Base 
             public int? Status { get; set; }
