@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\xuana\\OneDrive\\Documents\\HG2\\HG.Entities\\HG.Entities.csproj": {}
+    "C:\\Users\\Administrator\\Downloads\\QuangTV\\New folder\\HG2\\HG.Entities\\HG.Entities.csproj": {}
   },
   "projects": {
-    "C:\\Users\\xuana\\OneDrive\\Documents\\HG2\\HG.Entities\\HG.Entities.csproj": {
+    "C:\\Users\\Administrator\\Downloads\\QuangTV\\New folder\\HG2\\HG.Entities\\HG.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\xuana\\OneDrive\\Documents\\HG2\\HG.Entities\\HG.Entities.csproj",
+        "projectUniqueName": "C:\\Users\\Administrator\\Downloads\\QuangTV\\New folder\\HG2\\HG.Entities\\HG.Entities.csproj",
         "projectName": "HG.Entities",
-        "projectPath": "C:\\Users\\xuana\\OneDrive\\Documents\\HG2\\HG.Entities\\HG.Entities.csproj",
-        "packagesPath": "C:\\Users\\xuana\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\xuana\\OneDrive\\Documents\\HG2\\HG.Entities\\obj\\",
+        "projectPath": "C:\\Users\\Administrator\\Downloads\\QuangTV\\New folder\\HG2\\HG.Entities\\HG.Entities.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Administrator\\Downloads\\QuangTV\\New folder\\HG2\\HG.Entities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\xuana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

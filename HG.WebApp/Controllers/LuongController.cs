@@ -2,6 +2,7 @@
 using HG.Data.Business.ThuTuc;
 using HG.Entities;
 using HG.Entities.Entities.DanhMuc;
+using HG.Entities.Entities.GanLuongXuLy;
 using HG.Entities.Entities.Luong;
 using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
@@ -202,7 +203,136 @@ namespace HG.WebApp.Controllers
         }
 
         #endregion
+        #region Gán luồng xử lý
+        public IActionResult GanLuongXuLy()
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhGanLuongXuLy(nhomSearchItem);
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.PageSize = 0;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            return View("~/Views/Luong/GanLuongXuLy/GanLuongXuLy.cshtml", ds.lstGanLuongXuLy);
 
+        }
+
+        public async Task<IActionResult> GanLuongXuLyPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        {
+            DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = currentPage, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhGanLuongXuLy(nhomSearchItem);
+            ds.Pagelist.CurrentPage = currentPage;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.PageSize = (currentPage - 1) * pageSize;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize + 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/GanLuongXuLy/GanLuongXuLyPaging.cshtml", ds.lstGanLuongXuLy);
+            return Content(result);
+        }
+
+        public IActionResult ThemGanLuongXuLy(string code = "")
+        {
+            var ds = _danhmucDao.DanhSachLuongKey();
+            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
+            ViewBag.LuongKey = ds;
+            ViewBag.code = code;
+            return View("~/Views/Luong/GanLuongXuLy/ThemGanLuongXuLy.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemGanLuongXuLy(Gan_Luong_Xu_Ly item)
+        {
+
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var _pb = _danhmucDao.LuuGanLuongXuLy(item);
+            if (_pb > 0)
+            {
+                ViewBag.error = 1;
+                ViewBag.msg = "Tạo luồng xử lý lỗi";
+            }
+            if (item.type_view == StatusAction.Add.ToString() || _pb > 0)
+            {
+                return View("~/Views/Luong/GanLuongXuLy/ThemGanLuongXuLy.cshtml", item);
+            }
+            if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("GanLuongXuLy", "Luong");
+                //return RedirectToAction("SuaGanLuongXuLy", "Luong", new { Id = item.Id, type = StatusAction.View.ToString() });
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
+
+        public IActionResult SuaGanLuongXuLy(string Id, string type)
+        {
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            var ds = _danhmucDao.DanhSanhGanLuongXuLy(nhomSearchItem);
+           // ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
+           // return View(_danhmucDao.GanLuongXuLyBoiId(Guid.Parse(Id)));
+            return View("~/Views/Luong/GanLuongXuLy/SuaGanLuongXuLy.cshtml", _danhmucDao.GanLuongXuLyBoiId(Guid.Parse(Id)));
+        }
+
+        [HttpPost]
+        public IActionResult SuaGanLuongXuLy(string code, string type, Gan_Luong_Xu_Ly item)
+        {
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+           
+            var response = _danhmucDao.LuuGanLuongXuLy(item);
+
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "cập nhật lỗi";
+                return PartialView("~/Views/Luong/GanLuongXuLy/SuaGanLuongXuLy.cshtml", item);
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemGanLuongXuLy", "Luong");
+            }
+            else if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaGanLuongXuLy", "Luong", new { code = item.ma_gan_luong, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+        [HttpPost]
+        public JsonResult CheckMaGanLuong(string code)
+        {
+            var ds = _danhmucDao.CheckMaGanLuong(code);
+            if (ds == "")
+            {
+                return Json(new { error = 0, href = "/Luong/ThemGanLuongXuLy?Id=" + ds });
+            }
+            return Json(new { error = 1, href = "/Luong/SuaGanLuongXuLy?Id=" + ds + "&type=" + StatusAction.Edit.ToString() });
+        }
+        [HttpPost]
+        public IActionResult XoaGanLuongXuLy(string Id)
+        {
+           
+            var _pb = _danhmucDao.XoaGanLuongXuLy(Guid.Parse(Id));
+            if (_pb > 0)
+            {
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/Luong/GanLuongXuLy" });
+        }
+        #endregion
         #region Bước xử lý       
         public IActionResult BuocXuLy()
         {
