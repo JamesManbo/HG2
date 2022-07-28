@@ -10,8 +10,8 @@
                     <input type="checkbox" name="" id="selectAll" />
                 </th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
-                <th class="head1" scope="col" data-sortable="" style="width: 20%;">TÊN</th>
-                <th class="head0" scope="col" data-sortable="" style="width: 30%;">MÔ TẢ</th>
+                <th class="head1" scope="col" data-sortable="" style="width: 20%;">Mã</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 30%;">Tên</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
@@ -29,9 +29,9 @@
                             @stt
                             <input type="hidden" name="" id="" value="@item.ma_kenh_tin" />
                         </td>
-                        <td><a href="/DanhMuc/SuaChucVu?code=@item.ma_kenh_tin&type=@(StatusAction.View.ToString())">@item.ten_danh_muc</a></td>
+                        <td>@item.ma_kenh_tin</td>
 
-                        <td></td>
+                        <td>@item.ten_danh_muc</td>
                         <td>
                             <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.View.ToString())">
                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
