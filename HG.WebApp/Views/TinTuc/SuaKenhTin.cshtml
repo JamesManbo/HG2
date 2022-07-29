@@ -1,0 +1,222 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục kênh tin";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Dm_Kenh_Tin
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.msg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Kênh tin</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Cập nhật thông tin kênh tin</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_kenhtin" action="/DanhMuc/SuaKenhTin?code=@Model.ma_kenh_tin&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                        >
+                        <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã kênh tin <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã kênh tin" name="ma_kenh_tin" maxlength="25" value="@Model.ma_kenh_tin" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                    Chọn
+                                </button>
+
+                                <script>
+                                    function myModalPopup() {
+                                        $.ajax({
+                                            type: "GET",
+                                            url: "../DanhMuc/RenderViewKenhTin",
+                                            data: "",
+                                            contentType: 'application/json; charset=utf-8',
+                                            success: function(data) {
+                                                console.log(data);
+                                                $("#basicModal .modal-body").html(data);
+                                            }
+                                        });
+                                    }
+
+                                </script>
+                            </div>
+                        </div>
+                        @*<div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Mã quốc gia" name="ma_quoc_gia" maxlength="50" value="@Model.ma_quoc_gia" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>*@
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Tên" name="ten_danh_muc" maxlength="200" value="@Model.ten_danh_muc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                       @* <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                            <div class="col-sm-8">
+                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
+                            </div>
+                        </div>*@
+                       <div class="row mb-3">
+                            <label class="col-md-2 control-label">Hiển thị</label>
+							<div class="col-md-10">
+								<input onclick="HienThiTin()" id="is_hien_thi" type="checkbox" name="is_hien_thi"  value="" 
+                                    @(@Model.is_hien_thi == true ? "checked" : "" ) 
+                                    value="@(@Model.is_hien_thi == true ? true : 0 )"
+                                    @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")
+                                >
+							</div>
+                            <script>
+                                function HienThiTin() {
+                                    if ($('#is_hien_thi').is(':checked')) {
+                                         $("#is_hien_thi").val(true)
+                                    }else{
+                                        $("#is_hien_thi").val(false)
+                                    }
+                                }
+                            </script>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="nguoi_sua" value="@Model.UidName">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <div class="col-sm-8">
+                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
+                            </div>
+                        </div>
+                        @if (ViewBag.type_view == StatusAction.View.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemKenhTin';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaKenhTin?code=@Model.ma_kenh_tin&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaKenhTin?code=@Model.ma_kenh_tin')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/KenhTin';">Đóng</button>
+                            </div>
+                        }
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMuc/XoaKenhTin?code=@Model.ma_kenh_tin')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/KenhTin';">Đóng</button>
+                            </div>
+                        }
+                        <input name="type_view" hidden value="@ViewBag.type_view" />
+                    </form><!-- End Horizontal Form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+
+<div class="modal fade" id="basicModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div><!-- End Basic Modal-->
+<!-- /.modal -->
+
+
+<script>
+    $(document).ready(function() {
+        jQuery.validator.addMethod("ma_vaild", function(value, element) {
+            if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
+                return false;
+            } else {
+                return true;
+            };
+        }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
+
+       
+        $('#form_kenhtin').validate({
+            rules: {
+                ma_kenh_tin: {
+                    required: true,
+                    ma_vaild: true
+                },              
+                ten_danh_muc: "required"
+            },
+            messages: {
+                ma_kenh_tin: {
+                    required: "Bạn cần nhập mã kênh tin!",
+                },
+                ten_danh_muc: "Bạn cần nhập tên kênh tin!"
+            }
+        });
+    });
+
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaKT",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result.error == 0) {
+                    window.location.href = result.href;
+                }
+            }
+        });
+    };
+</script>
+
+
+
