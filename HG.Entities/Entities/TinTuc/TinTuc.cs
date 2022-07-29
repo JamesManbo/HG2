@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HG.Entities.Entities.TinTuc
+namespace HG.Entities.Entities.Tin_Tuc
 {
-    [Table("tin_tuc")]
-    public class TinTuc : BaseEntities
+    public class Tin_Tuc : BaseEntities
     {
         public string? ma_dm_kenh_tin { get;set;}
         public string? tieu_de { get; set; }
