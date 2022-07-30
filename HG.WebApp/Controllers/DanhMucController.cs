@@ -1075,5 +1075,163 @@ namespace HG.WebApp.Controllers
             // return PartialView("~/Views/DanhMuc/NgayNghi/NgayNghi.cshtml", item);
         }
         #endregion
+
+        #region ------ Đơn vị liên thông
+        public IActionResult DonViLienThong()
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var currentPage = 1;
+            var totalRecored = 0;
+            var kenhtin = new List<Dm_Don_Vi_Lien_Thong>();
+            using (var db = new EAContext())
+            {
+                var ds = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                kenhtin = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                totalRecored = ds.Count();
+            }
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            return View("~/Views/DanhMuc/DonViLienThong/DonViLienThong.cshtml", kenhtin);
+        }
+
+        public async Task<IActionResult> DonViLienThongPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        {
+            // var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var totalRecored = 0;
+            var result = "";
+            using (var db = new EAContext())
+            {
+                var ds = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                if (!String.IsNullOrEmpty(tu_khoa))
+                {
+                    ds = ds.Where(n => n.ma_don_vi.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_don_vi.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                }
+                var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                totalRecored = ds.Count();
+                ViewBag.TotalRecored = totalRecored;
+                ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/DonViLienThong/DonViLienThongPaging.cshtml", datapage);
+
+            }
+            return Content(result);
+        }
+        public IActionResult ThemDonViLienThong(string code = "")
+        {
+            ViewBag.code = code;
+            return View("~/Views/DanhMuc/DonViLienThong/ThemDonViLienThong.cshtml");
+        }
+
+        [HttpPost]
+        public IActionResult ThemDonViLienThong(Dm_Don_Vi_Lien_Thong item)
+        {
+            item.ma_don_vi = HelperString.CreateCode(item.ma_don_vi);
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuDonViLienThong(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "Tạo kênh tin lỗi";
+            }
+            if (item.type_view == StatusAction.Add.ToString() || response > 0)
+            {
+                return View("~/Views/DanhMuc/DonViLienThong/ThemDonViLienThong.cshtml", item);
+            }
+            if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaDonViLienThong", "DanhMuc", new { code = item.ma_don_vi, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+
+        public IActionResult SuaDonViLienThong(string code, string type)
+        {
+            var kenhtin = new Dm_Don_Vi_Lien_Thong();
+            using (var db = new EAContext())
+            {
+                kenhtin = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0 && n.ma_don_vi == code).FirstOrDefault();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
+            ViewBag.type_view = type;
+            return View("~/Views/DanhMuc/DonViLienThong/SuaDonViLienThong.cshtml", kenhtin);
+        }
+
+        [HttpPost]
+        public IActionResult SuaDonViLienThong(string code, string type, Dm_Don_Vi_Lien_Thong item)
+        {
+            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UidName = User.Identity.Name;
+            var response = _danhmucDao.LuuDonViLienThong(item);
+            if (response > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                ViewBag.error = 1;
+                ViewBag.msg = "cập nhật kênh tin lỗi";
+                return PartialView("~/Views/DanhMuc/DonViLienThong/SuaDonViLienThong.cshtml", item);
+            }
+            if (item.type_view == StatusAction.Add.ToString())
+            {
+                return RedirectToAction("ThemKenhTin", "DanhMuc");
+            }
+            else if (item.type_view == StatusAction.View.ToString())
+            {
+                return RedirectToAction("SuaKenhTin", "DanhMuc", new { code = item.ma_don_vi, type = StatusAction.View.ToString() });
+            }
+            return BadRequest();
+
+        }
+        [HttpPost]
+        public IActionResult XoaDonViLienThong(string code)
+        {
+            if (String.IsNullOrEmpty(code))
+            {
+                return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            }
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var _pb = _danhmucDao.XoaDonViLienThong(code, uid);
+            if (_pb > 0)
+            {
+                // Xử lý các thông báo lỗi tương ứng
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/DonViLienThong" });
+        }
+
+        public async Task<IActionResult> RenderViewDonViLienThong()
+        {
+            var kenhtin = new List<Dm_Kenh_Tin>();
+            using (var db = new EAContext())
+            {
+                kenhtin = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+            }
+            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/DonViLienThong/ViewDonViLienThong.cshtml", kenhtin);
+            return Content(result);
+        }
+
+        [HttpPost]
+        public JsonResult CheckMaDVLT(string code)
+        {
+            var lstpb = new List<Dm_Don_Vi_Lien_Thong>();
+            using (var db = new EAContext())
+            {
+                lstpb = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0 && n.ma_don_vi.ToUpper() == code.ToUpper()).ToList();
+            }
+            if (lstpb.Count() == 0)
+            {
+                return Json(new { error = 0, href = "/Danhmuc/ThemDonViLienThong?code=" + code.ToUpper() });
+            }
+            return Json(new { error = 1, href = "" });
+        }
+
+        #endregion
     }
 }
