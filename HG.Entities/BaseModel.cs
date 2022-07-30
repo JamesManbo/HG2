@@ -1,4 +1,6 @@
-﻿namespace HG.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace HG.Entities
 {
 	public class BaseModel
 	{
@@ -20,5 +22,7 @@
 		public Guid? UpdatedUid { get; set; }
 		public int? Deleted { get; set; }
 		public Guid? DeletedBy { get; set; }
+		[NotMapped]
+		public string? type_view { get; set; }
 	}
 }

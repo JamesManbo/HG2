@@ -17,5 +17,6 @@ namespace HG.Entities.Entities.Tin_Tuc
         public bool? is_hien_thi {get;set;}
         public int? status { get; set; }
         public int? stt { get; set; }
+        public string? UidName { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿@using HG.WebApp
-@model List<HG.Entities.Dm_Kenh_Tin>
+@model List<HG.Entities.Entities.Tin_Tuc.Tin_Tuc>
 
 
 <div class="dataTable-container">
@@ -24,26 +24,26 @@
                 foreach (var item in Model)
                 {
                     <tr>
-                        <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_kenh_tin" /></td>
+                        <td><input type="checkbox" class="ads_Checkbox" value="@item.Id" /></td>
                         <td scope="row">
                             @stt
-                            <input type="hidden" name="" id="" value="@item.ma_kenh_tin" />
+                            <input type="hidden" name="" id="" value="@item.Id" />
                         </td>
-                        <td>@item.ma_kenh_tin</td>
+                        <td>@item.tieu_de</td>
 
-                        <td>@item.ten_danh_muc</td>
+                        <td>@item.noi_dung</td>
                         <td>
-                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.View.ToString())">
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaKenhTin?code=@item.Id&type=@(StatusAction.View.ToString())">
                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
                             </a>
                         </td>
                         <td>
-                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.Edit.ToString())">
+                            <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaKenhTin?code=@item.Id&type=@(StatusAction.Edit.ToString())">
                                 <span class="glyphicon glyphicon-edit">Sửa</span>
                             </a>
                         </td>
                         <td>
-                            <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaLinhVuc?code=@item.ma_kenh_tin')"
+                            <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaLinhVuc?code=@item.Id')"
                        title=""
                        data-placement="top"
                        data-toggle="tooltip"

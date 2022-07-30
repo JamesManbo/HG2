@@ -3,7 +3,7 @@
     ViewData["Title"] = "Danh mục kênh tin";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-@model HG.Entities.Dm_Kenh_Tin
+@model HG.Entities.Entities.Tin_Tuc.Tin_Tuc
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -43,12 +43,12 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/DanhMuc/SuaKenhTin?code=@Model.ma_kenh_tin&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                    <form id="form_kenhtin" action="/DanhMuc/SuaKenhTin?code=@Model.Id&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
                         >
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã kênh tin <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã kênh tin" name="ma_kenh_tin" maxlength="25" value="@Model.ma_kenh_tin" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã kênh tin" name="ma_kenh_tin" maxlength="25" value="@Model.Id" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -79,9 +79,9 @@
                             </div>
                         </div>*@
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Tên <span style="color:red">(*)</span></label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Tiêu đề <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tên" name="ten_danh_muc" maxlength="200" value="@Model.ten_danh_muc" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Tiêu đề" name="tieu_de" maxlength="200" value="@Model.tieu_de" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                        @* <div class="row mb-3">
@@ -130,10 +130,10 @@
                         @if (ViewBag.type_view == StatusAction.View.ToString())
                         {
                             <div class="text-center">
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemKenhTin';">Thêm</button>
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaKenhTin?code=@Model.ma_kenh_tin&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaKenhTin?code=@Model.ma_kenh_tin')">Xóa</button>
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/KenhTin';">Đóng</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/TinTuc/ThemTinTuc';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/TinTuc/SuaTinTuc?code=@Model.Id&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/TinTuc/XoaTinTuc?code=@Model.Id')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/TinTuc/TinTuc';">Đóng</button>
                             </div>
                         }
                         @if (ViewBag.type_view == StatusAction.Edit.ToString())
@@ -141,8 +141,8 @@
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMuc/XoaKenhTin?code=@Model.ma_kenh_tin')">Xóa</button>
-                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/KenhTin';">Đóng</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/TinTuc/XoaTinTuc?code=@Model.Id')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/TinTuc/TinTuc';">Đóng</button>
                             </div>
                         }
                         <input name="type_view" hidden value="@ViewBag.type_view" />

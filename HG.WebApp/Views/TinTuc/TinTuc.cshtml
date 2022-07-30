@@ -1,9 +1,9 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Lĩnh vực";
+    ViewData["Title"] = "Tin tức";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-@model List<HG.Entities.Dm_Kenh_Tin>
+@model List<HG.Entities.Entities.Tin_Tuc.Tin_Tuc>
 
 <div class="col-lg-12">
     <div class="pageheader">
@@ -14,14 +14,14 @@
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
             <h5>Danh sách</h5>
-            <h1>Kênh tin</h1>
+            <h1>Tin tức</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
             <!-- Table with stripped rows -->
             <p class="stdformbutton" style="margin-bottom: 10px;">
-                <input type="button" value="Thêm" onclick="window.location.href = '/Danhmuc/ThemKenhTin';" class="btn btn-primary" style="width:100px;" />
+                <input type="button" value="Thêm" onclick="window.location.href = '/TinTuc/ThemTinTuc';" class="btn btn-primary" style="width:100px;" />
                 <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
                 <input hidden id="lstCode" />
             </p>
@@ -63,27 +63,27 @@
                                     foreach (var item in Model)
                                     {
                                         <tr>
-                                            <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_kenh_tin" /></td>
+                                            <td><input type="checkbox" class="ads_Checkbox" value="@item.Id" /></td>
                                             <td scope="row">
                                                 @stt
-                                                <input type="hidden" name="" id="" value="@item.ma_kenh_tin" />
+                                                <input type="hidden" name="" id="" value="@item.Id" />
                                             </td>
-                                            <td>@item.ma_kenh_tin</td>
+                                            <td>@item.tieu_de</td>
 
-                                            <td>@item.ten_danh_muc</td>
+                                            <td>@item.noi_dung</td>
                                             <td>@(item.is_hien_thi == true ? "Có" : "Không")</td>
                                             <td>
-                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.View.ToString())">
+                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/TinTuc/SuaTinTuc?code=@item.Id&type=@(StatusAction.View.ToString())">
                                                     <span class="glyphicon glyphicon-list-alt">Xem</span>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.Edit.ToString())">
+                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaKenhTin?code=@item.Id&type=@(StatusAction.Edit.ToString())">
                                                     <span class="glyphicon glyphicon-edit">Sửa</span>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaKenhTin?code=@item.ma_kenh_tin')"
+                                                <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaKenhTin?code=@item.Id')"
                                            title=""
                                            data-placement="top"
                                            data-toggle="tooltip"
@@ -168,7 +168,7 @@
 
             </div>
             <p class="stdformbutton" style="margin-bottom: 10px;">
-                <input type="button" value="Thêm" onclick="window.location.href = '/Danhmuc/ThemKenhTin';" class="btn btn-primary" style="width:100px;" />
+                <input type="button" value="Thêm" onclick="window.location.href = '/TinTuc/ThemTinTuc';" class="btn btn-primary" style="width:100px;" />
                 <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
             </p>
         </div>
@@ -180,7 +180,7 @@
         var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
-            url: "../DanhMuc/KenhTinPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=" + $("#tu_khoa").val(),
+            url: "../TinTuc/TinTucPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=" + $("#tu_khoa").val(),
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -193,7 +193,7 @@
         $("#lstPageSize").val(data.value);
         $.ajax({
             type: "GET",
-            url: "../DanhMuc/KenhTinPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#tu_khoa").val(),
+            url: "../TinTuc/TinTucPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=" + $("#tu_khoa").val(),
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -205,7 +205,7 @@
 
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
-        confirm.BeforDeletePost('/DanhMuc/XoaKenhTin?code=' + listData)
+        confirm.BeforDeletePost('/TinTuc/XoaTinTuc?code=' + listData)
     }
 
     var input = document.getElementById("tu_khoa");
@@ -220,7 +220,7 @@
         var tuKhoa = $("#tu_khoa").val();
         $.ajax({
             type: "GET",
-            url: "../DanhMuc/KenhTinPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&tu_khoa=" + tuKhoa,
+            url: "../TinTuc/TinTucPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&tu_khoa=" + tuKhoa,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
