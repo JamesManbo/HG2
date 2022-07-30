@@ -15,6 +15,8 @@ using HG.Entities.Entities.DanhMuc;
 using HG.Entities.DanhMuc;
 using HG.Entities.Entities.HoSo;
 using HG.Entities.Entities.CauHinh;
+using HG.Entities.Entities.Tin_Tuc;
+using HG.Entities.Entities.News;
 
 namespace HG.WebApp.Data
 {
@@ -87,6 +89,9 @@ namespace HG.WebApp.Data
 
         public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THPT> Ghs_Tuyen_Sinh_Cap_THPT { get; set; }
         public virtual DbSet<Ghs_Tuyen_Sinh_Cap_THPT_Hoso> Ghs_Tuyen_Sinh_Cap_THPT_Hoso { get; set; }
+
+        public virtual DbSet<Tin_Tuc> Tin_Tuc { get; set; }
+
         // End Antx -----
         public virtual DbSet<AspNetRoleModules> AspNetRoleModules { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

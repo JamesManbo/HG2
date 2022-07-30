@@ -1,8 +1,10 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục kênh tin";
+    ViewData["Title"] = "Danh mục tin tức";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var ds_dmtintuc = ViewBag.lst_kenh_tin as List<HG.Entities.Dm_Kenh_Tin>;
 }
+<script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 2px solid #0866c6;">
@@ -32,61 +34,60 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Kênh tin</h1>
+            <h1>Tin tức</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin kênh tin</h4>
+            <h4 class="widgettitle">Cập nhật thông tin tin tức</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/DanhMuc/ThemKenhTin" method="post" enctype="multipart/form-data">
-                        <div class="row mb-3">
-                            <label for="ma_pb" class="col-sm-2 control-label">Mã lĩnh vực <span style="color:red">(*)</span></label>
+                    <form id="form_kenhtin" action="/TinTuc/ThemTinTuc" method="post" enctype="multipart/form-data">
+                      
+                         <div class="row mb-3 tab_thuc_hien">
+                            <label for="ten_pb" class="col-sm-2 control-label">Danh mục tin tức</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã kênh tin" name="ma_kenh_tin" maxlength="25" value="@ViewBag.code">
-                            </div>
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
-                                    Chọn
-                                </button>
-
-                                <script>
-                                    function myModalPopup() {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: "../DanhMuc/RenderViewKenhTin",
-                                            data: "",
-                                            contentType: 'application/json; charset=utf-8',
-                                            success: function(data) {
-                                                console.log(data);
-                                                $("#basicModal .modal-body").html(data);
-                                            }
-                                        });
+                                <select class="form-select form-control input-default" name="ma_dm_kenh_tin">
+                                    <option selected="selected" value="">---- Chọn danh mục ----</option>
+                                    @if (ds_dmtintuc != null)
+                                    {
+                                        foreach (var item in ds_dmtintuc)
+                                        {
+                                            <option value="@item.ma_kenh_tin">@item.ten_danh_muc</option>
+                                        }
                                     }
-
-                                </script>
+                                </select>
                             </div>
                         </div>
-                       @* <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã quốc gia" name="ma_quoc_gia" maxlength="50" value="">
-                            </div>
-                        </div>*@
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Tên kênh tin <span style="color:red">(*)</span></label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Tiêu đề <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tên kênh tin" name="ten_danh_muc" value="" maxlength="200">
+                                <input type="text" class="form-control input-default" placeholder="Tiêu đề" name="tieu_de" value="" maxlength="200">
                             </div>
                         </div>
-                       @* <div class="row mb-3">
-                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Nội dung</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" maxlength="500"></textarea>
+                                <textarea class="form-control input-default" placeholder="Nội dung" name="noi_dung" maxlength="500"></textarea>
                             </div>
-                        </div>*@
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Nội dung chi tiết</label>
+                            <div class="col-sm-8">
+                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung chi tiết" name="noi_dung_chi_tiet"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Ảnh đại diện</label>
+                            <div class="col-sm-8">
+                                <input type="file" id="files" name="anh_dai_dien" style="display: none">
+                                <input type="text" id="avatar1" name="anh_dai_dien" style="display: none" >
+                                <input type="text" id="avatar_show" name="anh_dai_dien_show" >
+                                <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                @*<img id="avatar" style="margin-top: 10px;" width="100" />*@
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label class="col-md-2 control-label">Hiển thị</label>
 							<div class="col-md-10">
@@ -115,7 +116,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày đăng bài</label>
                             <div class="col-sm-8">
                                 <input disabled type="text" class="form-control input-default" value="">
                             </div>
@@ -124,7 +125,7 @@
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                             <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMuc/KenhTin';">Đóng</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/TinTuc/TinTuc';">Đóng</button>
                         </div>
                     </form><!-- End Horizontal Form -->
                 </div>
@@ -179,8 +180,43 @@
             }
         });
 
+        $("#files").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TinTuc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                                $('#avatar').attr('src', result.files[i]);
+                                $('#avatar1').val(""+result.files[i]+"");
+                                $('#avatar_show').val(""+result.files[i]+"");
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });    
     });
-
+     CKEDITOR.replace('ckedit2');
 </script>
 
 

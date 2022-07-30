@@ -23,7 +23,7 @@ namespace HG.Data.SqlService
         public SqlDbProvider()
         {
             //connectStr = "Server=DESKTOP-C2VM5FN\\SQLEXPRESS; Database=HG; User ID=sa;Password=1234567";
-            connectStr = "Server=DESKTOP-C2VM5FN\\SQLEXPRESS; Database=HG; Trusted_Connection=True;";
+            connectStr = "Data Source=localhost;Initial Catalog=HG; User ID=sa;Password=reallyStrongPwd123;";
             SqlConnection conn = new SqlConnection(connectStr);
             this.dbCommand = conn.CreateCommand();
             this.dataAdapter = new SqlDataAdapter();
