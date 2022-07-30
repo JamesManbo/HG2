@@ -3,6 +3,8 @@
     ViewData["Title"] = "Danh mục kênh tin";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+@model HG.Entities.Dm_Don_Vi_Lien_Thong
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content" style="border: 2px solid #0866c6;">
@@ -41,11 +43,13 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/DanhMuc/ThemKenhTin" method="post" enctype="multipart/form-data">
-                        <div class="row mb-3">
-                            <label for="ma_pb" class="col-sm-2 control-label">Mã lĩnh vực <span style="color:red">(*)</span></label>
+                    <form id="form_kenhtin" action="/DanhMuc/SuaKenhTin?code=@Model.ma_don_vi&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                        
+                        
+                          <div class="row mb-3">
+                            <label for="ma_pb" class="col-sm-2 control-label">Ip/Domain <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã kênh tin" name="ma_kenh_tin" maxlength="25" value="@ViewBag.code">
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã đơn vị" name="Ip" maxlength="25" value="@Model.Ip" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -56,7 +60,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../DanhMuc/RenderViewKenhTin",
+                                            url: "../DanhMuc/RenderViewDonViLienThong",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {
@@ -69,72 +73,73 @@
                                 </script>
                             </div>
                         </div>
-                       @* <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã quốc gia" name="ma_quoc_gia" maxlength="50" value="">
-                            </div>
-                        </div>*@
+                        
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Tên kênh tin <span style="color:red">(*)</span></label>
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã đơn vị <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tên kênh tin" name="ten_danh_muc" value="" maxlength="200">
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã đơn vị" name="ma_don_vi" maxlength="25" value="@Model.ma_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                       @* <div class="row mb-3">
-                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
-                            <div class="col-sm-8">
-                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" maxlength="500"></textarea>
-                            </div>
-                        </div>*@
+                       
                         <div class="row mb-3">
-                            <label class="col-md-2 control-label">Hiển thị</label>
-							<div class="col-md-10">
-								<input onclick="HienThiTin()" id="is_hien_thi" type="checkbox" name="is_hien_thi"  value="" >
-							</div>
-                            <script>
-                                function HienThiTin() {
-                                    if ($('#is_hien_thi').is(':checked')) {
-                                         $("#is_hien_thi").val(true)
-                                    }else{
-                                        $("#is_hien_thi").val(true)
-                                    }
-                                }
-                            </script>
+                            <label for="ten_pb" class="col-sm-2 control-label">Tên đơn vị <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-default" placeholder="Tên đơn vị" name="ten_don_vi" maxlength="200" value="@Model.ten_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
+                        </div>
+                     
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Số thứ tự</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control input-default" placeholder="Số thứ tự" name="Stt" maxlength="50" value="@Model.Stt" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                            </div>
                         </div>
                         <div class="row mb-3">
                             <label for="nguoi_sua" class="col-sm-2 control-label">Người sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="">
+                                <input disabled type="text" class="form-control input-default" id="nguoi_sua" value="@Model.UidName">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="">
+                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" value="">
+                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
                             </div>
                         </div>
-
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMuc/KenhTin';">Đóng</button>
-                        </div>
+                        @if (ViewBag.type_view == StatusAction.View.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemDonViLienThong';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaDonViLienThong?code=@Model.ma_don_vi&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaDonViLienThong?code=@Model.ma_don_vi')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/DonViLienThong';">Đóng</button>
+                            </div>
+                        }
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        {
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
+                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMuc/XoaDonViLienThong?code=@Model.ma_don_vi')">Xóa</button>
+                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/DonViLienThong';">Đóng</button>
+                            </div>
+                        }
+                        <input name="type_view" hidden value="@ViewBag.type_view" />
                     </form><!-- End Horizontal Form -->
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
 <!-- Basic Modal -->
+
 
 <div class="modal fade" id="basicModal" tabindex="-1">
     <div class="modal-dialog">
@@ -151,10 +156,11 @@
         </div>
     </div>
 </div><!-- End Basic Modal-->
+<!-- /.modal -->
+
 
 <script>
     $(document).ready(function() {
-
         jQuery.validator.addMethod("ma_vaild", function(value, element) {
             if (/[ `!#$%^&*()_+\-=\[\]{};':"\\|,<>\/?~]/.test(value)) {
                 return false;
@@ -163,6 +169,7 @@
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
+       
         $('#form_kenhtin').validate({
             rules: {
                 ma_kenh_tin: {
@@ -178,9 +185,22 @@
                 ten_danh_muc: "Bạn cần nhập tên kênh tin!"
             }
         });
-
     });
 
+    function CheckMa(data) {
+        var dataPost = { code: data.value };
+        $.ajax({
+            url: "/DanhMuc/CheckMaKT",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',
+            data: dataPost,
+            success: function(result) {
+                if (result.error == 0) {
+                    window.location.href = result.href;
+                }
+            }
+        });
+    };
 </script>
 
 

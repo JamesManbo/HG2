@@ -14,7 +14,7 @@ namespace HG.Entities
     {
         [Key]
         public string ma_don_vi { get; set; }
-        public string ten_don_vi { get; set; }
-        public string? ip { get; set; }       
+        public string? ten_don_vi { get; set; }
+        public string? Ip { get; set; }       
     }
 }
