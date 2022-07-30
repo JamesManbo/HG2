@@ -2,10 +2,9 @@
 @{
     ViewData["Title"] = "Danh mục quốc tịch";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    var ThuTuc = ViewBag.ThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
+     var LuongXuLy = ViewBag.LuongXuLy as List<HG.Entities.Dm_luong_Key>;
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
     var LinhVuc = ViewBag.LinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
-    var LuongKey = ViewBag.LuongKey as List<HG.Entities.Dm_luong_Key>;
 }
 @model HG.Entities.Entities.GanLuongXuLy.Asp_GanLuong_XuLy
 
@@ -89,7 +88,16 @@
                                     {
                                          foreach (var item in lst_phong_ban)
                                          {
-                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                              if (@Model.ganLuongXuLyModel.ma_phong_ban == item.ma_phong_ban)
+                                                {
+                                                <option selected value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+
+                                                }
+                                                else
+                                                {
+                                                     <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                }
+                                           
                                          }   
                                     }
                                     
@@ -349,7 +357,31 @@
 			                        </select>
                             </div>
                         </div>
-                        
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Luồng xử lý</label>
+                            <div class="col-md-10">
+                                <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" class="form-control input-default form-select" placeholder="Phòng ban">
+                                    <option value="0">------------ Chọn ------------</option>
+                                    @if(LuongXuLy != null)
+                                    {
+                                         foreach (var item in LuongXuLy)
+                                         {
+                                              if (@Model.ganLuongXuLyModel.ma_luong_xu_ly == item.ma_luong)
+                                                {
+                                                <option selected value="@item.ma_luong">@item.ten_luong</option>
+
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ma_luong">@item.ten_luong</option>
+                                                }
+                                            
+                                         }   
+                                    }
+                                    
+                                </select>
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                             <div class="col-sm-8">
