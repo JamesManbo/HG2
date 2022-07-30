@@ -2,9 +2,14 @@
 @{
     ViewData["Title"] = "Tin tức";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var ds_dmtintuc = ViewBag.ds_dmkenhtin as List<HG.Entities.Dm_Kenh_Tin>;
+    var ma_kenh_tin = ViewBag.ma_kenh_tin as string;
 }
 @model List<HG.Entities.Entities.Tin_Tuc.Tin_Tuc>
 
+<script>
+    
+</script>
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="search-form d-flex align-items-center">
@@ -25,6 +30,55 @@
                 <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
                 <input hidden id="lstCode" />
             </p>
+             <div class="widget">
+                <h4 class="widgettitle">Lọc danh sách theo</h4>
+                <div class="widgetcontent">
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban</label>
+                        <div class="col-md-6">
+                                <select name="ma_kenh_tin" id="ma_kenh_tin" onchange="PhongBanSearch()" class="form-select form-control input-default">
+			                    <option value="" >----------------Chọn-----------------</option>
+                                @if(ds_dmtintuc != null)
+                                {
+                                    foreach (var item in ds_dmtintuc)
+                                    {
+                                        if (ma_kenh_tin == item.ma_kenh_tin)
+                                        {
+                                            <option value="@item.ma_kenh_tin" selected> @item.ten_danh_muc</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ma_kenh_tin">@item.ten_danh_muc</option>
+                                        }
+
+                                    }
+                                }
+
+		                    </select>
+                            
+                            <script>
+                                $("select#my-select option")
+                                     .each(function() { this.selected = (this.text == myVal); });
+                             </script>
+                        </div>
+                      @*  <div class="col-md-4">
+                          <div>
+                                  <span class="cssrbCode" style="margin-right :12px;">
+                                      <input id="Status" type="checkbox" name="Status" value="rbDangHoatDong" @(ViewBag.trang_thai == 1 ? "checked" : "") onclick="TrangThaiChecked()">
+                                      <label for="ctl08_rbDangHoatDong">&nbsp;&nbsp;Đang hoạt động</label>
+                                  </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <span class="cssrbCode">
+                                      <input id="Deleted" type="checkbox" name="Deleted" value="rbDaXoa" @(ViewBag.da_xoa == 1 ? "checked" : "") onclick="DaXoaChecked()">
+                                      <label for="ctl08_rbDaXoa">&nbsp;&nbsp;Đã xoá</label>
+                                  </span>                  
+		                    </div>
+
+                        </div>*@
+                    </div>
+
+                </div>
+            </div>
             <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
 
                 <div class="dataTables_length">
@@ -78,12 +132,12 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaKenhTin?code=@item.Id&type=@(StatusAction.Edit.ToString())">
+                                                <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/TinTuc/SuaTinTuc?code=@item.Id&type=@(StatusAction.Edit.ToString())">
                                                     <span class="glyphicon glyphicon-edit">Sửa</span>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaKenhTin?code=@item.Id')"
+                                                <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaTinTuc?code=@item.Id')"
                                            title=""
                                            data-placement="top"
                                            data-toggle="tooltip"
@@ -221,6 +275,20 @@
         $.ajax({
             type: "GET",
             url: "../TinTuc/TinTucPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&tu_khoa=" + tuKhoa,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function PhongBanSearch() {
+         var pageSize = $("#lstPageSize").val();
+        var tuKhoa = $("#tu_khoa").val();
+        var ma_kenh_tin = $("#ma_kenh_tin").val();
+           $.ajax({
+            type: "GET",
+            url: "../TinTuc/TinTucPaging?currentPage=" + 1 + "&pageSize=" + pageSize + "&tu_khoa=" + tuKhoa + "&ma_kenh_tin=" + ma_kenh_tin,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {

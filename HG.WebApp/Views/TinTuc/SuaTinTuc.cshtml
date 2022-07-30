@@ -1,9 +1,11 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục kênh tin";
+    ViewData["Title"] = "Danh mục tin tức";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var ds_dmtintuc = ViewBag.lst_kenh_tin as List<HG.Entities.Dm_Kenh_Tin>;
 }
 @model HG.Entities.Entities.Tin_Tuc.Tin_Tuc
+<script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -34,62 +36,81 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Kênh tin</h1>
+            <h1>Tin tức</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin kênh tin</h4>
+            <h4 class="widgettitle">Cập nhật thông tin tin tức</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/DanhMuc/SuaKenhTin?code=@Model.Id&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
-                        >
-                        <div class="row mb-3">
-                            <label for="ma_pb" class="col-sm-2 control-label">Mã kênh tin <span style="color:red">(*)</span></label>
+                    <form id="form_kenhtin" action="/TinTuc/SuaTinTuc?code=@Model.Id&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                        <div class="row mb-3" style="display: none">
+                            <label for="ma_pb" class="col-sm-2 control-label">Mã kênh tin</label>
                             <div class="col-sm-8">
-                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã kênh tin" name="ma_kenh_tin" maxlength="25" value="@Model.Id" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                            </div>
-                            <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
-                                    Chọn
-                                </button>
-
-                                <script>
-                                    function myModalPopup() {
-                                        $.ajax({
-                                            type: "GET",
-                                            url: "../DanhMuc/RenderViewKenhTin",
-                                            data: "",
-                                            contentType: 'application/json; charset=utf-8',
-                                            success: function(data) {
-                                                console.log(data);
-                                                $("#basicModal .modal-body").html(data);
-                                            }
-                                        });
-                                    }
-
-                                </script>
+                                <input type="number" name="Id" maxlength="25" value="@Model.Id" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                        @*<div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia</label>
+                        <div class="row mb-3 tab_thuc_hien">
+                            <label for="ten_pb" class="col-sm-2 control-label">Danh mục tin tức <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Mã quốc gia" name="ma_quoc_gia" maxlength="50" value="@Model.ma_quoc_gia" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <select class="form-select form-control input-default" name="ma_dm_kenh_tin" 
+                                    @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option selected="selected" value="">---- Chọn danh mục ----</option>
+                                    @if (ds_dmtintuc != null)
+                                    {
+                                        foreach (var item in ds_dmtintuc)
+                                        {
+                                            if (@Model.ma_dm_kenh_tin != null && @Model.ma_dm_kenh_tin.Trim() == item.ma_kenh_tin.Trim())
+                                            {
+                                                 <option value="@item.ma_kenh_tin" selected>@item.ten_danh_muc</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_kenh_tin">@item.ten_danh_muc</option>
+                                            }
+                                        }
+                                    }
+                                </select>
                             </div>
-                        </div>*@
+                        </div>
+                      
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Tiêu đề <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control input-default" placeholder="Tiêu đề" name="tieu_de" maxlength="200" value="@Model.tieu_de" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" class="form-control input-default" placeholder="Tiêu đề" name="tieu_de" 
+                                    maxlength="200" value="@Model.tieu_de" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                       @* <div class="row mb-3">
-                            <label for="mota" class="col-sm-2 control-label">Mô tả</label>
+                        <div class="row mb-3">
+                            <label for="mota" class="col-sm-2 control-label">Nội dung</label>
                             <div class="col-sm-8">
-                                <textarea class="form-control input-default" placeholder="Mô tả" name="mo_ta" id="mota" maxlength="500" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.mo_ta</textarea>
+                                <textarea class="form-control input-default" placeholder="Nội dung" 
+                                    name="noi_dung" id="mota" maxlength="500" 
+                                    @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.noi_dung</textarea>
                             </div>
-                        </div>*@
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Nội dung chi tiết</label>
+                            <div class="col-sm-8">
+                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung chi tiết" 
+                                    name="noi_dung_chi_tiet" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @Html.Raw(Model.noi_dung_chi_tiet)
+                                </textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Ảnh đại diện</label>
+                            <div class="col-sm-8">
+                                <input type="file" id="files" name="files" style="display: none">
+                                <input type="text" id="avatar1" name="anh_dai_dien" style="display: none" value="@Model.anh_dai_dien" >
+                                <input type="text" id="avatar_show" name="anh_dai_dien_show" value="@Model.anh_dai_dien" disabled>
+                                <button type="button" onclick="$('#files').click();" class="btn btn-default"
+                                    @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")
+                                ><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                            </div>
+                        </div>
                        <div class="row mb-3">
                             <label class="col-md-2 control-label">Hiển thị</label>
 							<div class="col-md-10">
@@ -122,9 +143,9 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
+                            <label for="ngay_tao" class="col-sm-2 control-label">Ngày đăng tin</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
+                                <input disabled type="text" class="form-control input-default" id="ngay_tao" name="CreatedDateUtc" value="@Model.CreatedDateUtc">
                             </div>
                         </div>
                         @if (ViewBag.type_view == StatusAction.View.ToString())
@@ -201,7 +222,43 @@
             }
         });
     });
+      $("#files").on('change', function () {
+            // Checking whether FormData is available in browser
+            if (window.FormData !== undefined) {
+                var fileUpload = $(this).get(0);
+                var files = fileUpload.files;
+                // Create FormData object
+                var fileData = new FormData();
+                // Looping over all files and add it to FormData object
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                // Adding one more key to FormData object
+                fileData.append('username', 'Manas');
+                $.ajax({
+                    url: '/Upload/UploadFiles?folder=TinTuc',
+                    type: "POST",
+                    contentType: false, // Not to set any content header
+                    processData: false, // Not to process data
+                    data: fileData,
+                    success: function (result) {
+                        console.log(result);
+                        for (var i = 0; i < result.files.length; i++) {
+                                $('#avatar').attr('src', result.files[i]);
+                                $('#avatar1').val(""+result.files[i]+"");
+                                $('#avatar_show').val(""+result.files[i]+"");
+                        }
+                    },
+                    error: function (err) {
+                        alert(err.statusText);
+                    }
+                });
+            } else {
+                alert("FormData is not supported.");
+            }
+        });    
 
+     CKEDITOR.replace('ckedit2');
     function CheckMa(data) {
         var dataPost = { code: data.value };
         $.ajax({

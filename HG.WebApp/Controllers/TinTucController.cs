@@ -85,12 +85,15 @@ namespace HG.WebApp.Controllers
             var currentPage = 1;
             var totalRecored = 0;
             var tintuc = new List<Tin_Tuc>();
+            var ds_dmkenhtin = new List<Dm_Kenh_Tin>();
             using (var db = new EAContext())
             {
-                var ds = db.Tin_Tuc.Where(n => n.Deleted == 0).OrderBy(n => n.CreatedDateUtc).ToList();
+                ds_dmkenhtin = db.Dm_Kenh_Tin.Where(a => a.Deleted != 1).ToList();
+                var ds = db.Tin_Tuc.Where(n => n.Deleted != 1).OrderBy(n => n.CreatedDateUtc).ToList();
                 tintuc = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
             }
+            ViewBag.ds_dmkenhtin = ds_dmkenhtin;
             ViewBag.TotalRecored = totalRecored;
             ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
@@ -99,20 +102,28 @@ namespace HG.WebApp.Controllers
             return View("~/Views/TinTuc/TinTuc.cshtml", tintuc);
         }
 
-        public async Task<IActionResult> TinTucPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        public async Task<IActionResult> TinTucPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "", string ma_kenh_tin = "")
         {
             // var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var ds_dmkenhtin = new List<Dm_Kenh_Tin>();
             var totalRecored = 0;
             var result = "";
             using (var db = new EAContext())
             {
-                var ds = db.Tin_Tuc.Where(n => n.Deleted == 0).OrderBy(n => n.CreatedDateUtc).ToList();
+                var ds = db.Tin_Tuc.Where(n => n.Deleted != 1).OrderBy(n => n.CreatedDateUtc).ToList();
                 if (!String.IsNullOrEmpty(tu_khoa))
                 {
                     ds = ds.Where(n => n.tieu_de.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
                 }
+                if (!String.IsNullOrEmpty(ma_kenh_tin))
+                {
+                    ds = ds.Where(n => n.ma_dm_kenh_tin == ma_kenh_tin).ToList();
+                }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
+
+                ViewBag.ma_kenh_tin = ma_kenh_tin;
+                ViewBag.ds_dmkenhtin = db.Dm_Kenh_Tin.Where(a => a.Deleted != 1).ToList();
                 ViewBag.TotalRecored = totalRecored;
                 ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
                 ViewBag.CurrentPage = currentPage;
@@ -139,6 +150,7 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult ThemTinTuc(Tin_Tuc item)
         {
+            var ds_dm_kenh_tin = new List<Dm_Kenh_Tin>();
             var user_id = userManager.GetUserId(User);
             if (user_id != null)
             {
@@ -147,9 +159,15 @@ namespace HG.WebApp.Controllers
             }
             item.Deleted = 0;
             item.CreatedDateUtc = DateTime.Now;
+            item.UidName = User.Identity.Name;
+            item.UpdatedDateUtc = DateTime.Now;
+
             EAContext eAContext = new EAContext();
             Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Tin_Tuc> _role = eAContext.Tin_Tuc.Add(item);
-
+            using (var db = new EAContext())
+            {
+                ViewBag.lst_kenh_tin = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).ToList();
+            }
             //eAContext.SaveChanges();
 
 
@@ -188,7 +206,7 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 ViewBag.lst_kenh_tin = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).ToList();
-                tintuc = db.Tin_Tuc.Where(n => n.Deleted == 0 && n.Id == code).FirstOrDefault();
+                tintuc = db.Tin_Tuc.Where(n => n.Deleted != 1 && n.Id == code).FirstOrDefault();
             }
           
             ViewBag.type_view = type;
@@ -196,12 +214,22 @@ namespace HG.WebApp.Controllers
         }
         [HttpPost]
         public IActionResult SuaTinTuc(int code, string type, Tin_Tuc item)
+        //public IActionResult SuaTinTuc(string type, Tin_Tuc item)
         {
+            var ds_dm_kenh_tin = new List<Dm_Kenh_Tin>();
             var user_id = userManager.GetUserId(User);
             if (user_id != null)
             {
-                item.CreatedUid = Guid.Parse(user_id);
+                item.UpdatedUid = Guid.Parse(user_id);
 
+            }
+            item.Deleted = 0;
+            item.UidName = User.Identity.Name;
+            item.UpdatedDateUtc = DateTime.Now;
+
+            using (var db = new EAContext())
+            {
+                ViewBag.lst_kenh_tin = db.Dm_Kenh_Tin.Where(n => n.Deleted != 1).ToList();
             }
             EAContext eAContext = new EAContext();
             Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Tin_Tuc> _role = eAContext.Tin_Tuc.Update(item);
@@ -229,35 +257,50 @@ namespace HG.WebApp.Controllers
 
                 //Xử lý các thông báo lỗi tương ứng
                 ViewBag.error = 1;
-                ViewBag.msg = "cập nhật kênh tin lỗi";
+                ViewBag.msg = "cập nhật tin tức lỗi";
                 return PartialView("~/Views/TinTuc/SuaTinTuc.cshtml", item);
             }
 
             return BadRequest();
 
-            //eAContext.SaveChanges();
-
-            //var roleid = _role.Entity.Id;
-
-            //var response = _tinTucDao.LuuKenhTin(item);
-            //if (response > 0)
-            //{
-            //    // Xử lý các thông báo lỗi tương ứng
-            //    ViewBag.error = 1;
-            //    ViewBag.msg = "cập nhật kênh tin lỗi";
-            //    return PartialView("~/Views/DanhMuc/KenhTin/SuaKenhTin.cshtml", item);
-            //}
-            //if (item.type_view == StatusAction.Add.ToString())
-            //{
-            //    return RedirectToAction("ThemKenhTin", "DanhMuc");
-            //}
-            //else if (item.type_view == StatusAction.View.ToString())
-            //{
-            //    return RedirectToAction("SuaKenhTin", "DanhMuc", new { code = item.ma_kenh_tin, type = StatusAction.View.ToString() });
-            //}
-            //return BadRequest();
-
         }
         #endregion ---- end sửa tin tức -------------
+
+        #region ------ Xóa tin tức -----
+        [HttpPost]
+        public IActionResult XoaTinTuc(int code)
+        {
+            //if (String.IsNullOrEmpty(code))
+            //{
+            //    return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
+            //}
+            var uid = Guid.Parse(userManager.GetUserId(User));
+            var tintuc = new Tin_Tuc();
+            using (var db = new EAContext())
+            {
+                tintuc = db.Tin_Tuc.Where(n => n.Deleted != 1 && n.Id == code).FirstOrDefault();
+            }
+            tintuc.Deleted = 1;
+            tintuc.DeletedBy = uid;
+            EAContext eAContext = new EAContext();
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Tin_Tuc> _role = eAContext.Tin_Tuc.Update(tintuc);
+
+
+
+            if (eAContext.SaveChanges() > 0)
+            {
+                var roleid = _role.Entity.Id;
+
+                //return RedirectToAction("SuaTinTuc", "TinTuc", new { code = item.Id, type = StatusAction.View.ToString() });
+
+                return Json(new { error = 0, msg = "Xóa thành công!", href = "/TinTuc/TinTuc" });
+            }
+            else
+            {
+                return Json(new { error = 1, msg = "Xóa lỗi" });
+            }
+
+        }
+        #endregion ---------------------
     }
 }
