@@ -1,0 +1,57 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Thống kê báo cáo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="card">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h1>Số lượng hồ sơ</h1>
+        </div>
+    </div>
+   
+    <div class="maincontent dat">
+        <div class="maincontentinner">
+            <div class="widget">
+                <h4 class="widgettitle">Lọc danh sách theo</h4>
+                <div class="widgetcontent">
+                    <div class="form-group row">
+                        
+                            <label for="inputPassword" class="col-md-2 control-label">Năm: </label>
+                            <div class="col-md-4">
+                                <select name="nam" id="nam" class="form-select form-control input-default">  
+                                    <option value="1">2019</option>
+                                    <option value="2">2020</option>
+                                    @*@if(list_vai_tro != null)
+                                    {
+                                        for (var item = 0; item <list_vai_tro.Count(); item++)
+                                        {
+                                            if(item == 0)
+                                            {
+                                                <option value="@list_vai_tro[item].ma_vai_tro" selected> @list_vai_tro[item].ten_vai_tro</option>
+                                            }else{
+                                                  <option value="@list_vai_tro[item].ma_vai_tro">@list_vai_tro[item].ten_vai_tro</option>
+                                            }
+                                        }
+                                    }*@
+		                        </select>
+                            </div>
+                            <label class="col-md-1 control-label">
+                                Quý:
+                            </label>
+                            <div class="col-md-4">
+                                <select name="quy" id="quy" class="form-select form-control input-default">
+			                        <option value="1">Quý 1</option>
+			                        <option selected="selected" value="2">Quý 2</option>
+			                        <option value="3">Quý 3</option>
+			                        <option value="4">Quý 4</option>
+		                        </select>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
