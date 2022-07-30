@@ -1,0 +1,275 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var lst_don_vi = ViewBag.lst_don_vi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+}
+@model List<HG.Entities.Entities.CauHinh.cd_danh_sach_can_bo>
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background: #fff;
+        border-bottom: 1px solid #fff;
+        color: #333;
+    }
+
+    .nav-pills .nav-link, .nav-pills .show > .nav-link {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 0;
+    }
+
+
+    .nav-pills .nav-link {
+        background: 0 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="pageheader">
+            <div class="pageicon"><span class="iconfa-pencil"></span></div>
+            <div class="pagetitle">
+                <h5>Hoạt động</h5>
+                <h1>Quản lý hoạt động</h1>
+            </div>
+        </div>
+        <div class="maincontent">
+
+            <!-- Pills Tabs -->
+            <div class="maincontentinners">
+                <div class="form-horizontal">
+                    <div class="row" style="padding: 20px;">
+                        <label class="col-md-2 control-label">Đơn vị:</label>
+                        <div class="col-md-8">
+                            <select onchange="ChangeDanhSachCanBo(this)" id="don_vi" class="form-control input-default-sm">
+                                <option selected="selected" value="">----------------Chọn-----------------</option>
+                                @if (lst_don_vi != null && lst_don_vi.Count() > 0)
+                                {
+                                    foreach (var item in lst_don_vi)
+                                    {
+                                        if (ViewBag.don_vi == item.ma_don_vi)
+                                        {
+                                            <option selected value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                        }
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <p class="stdformbutton" style="margin-bottom: 10px;">
+                    <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                    <input hidden id="lstCode" />
+
+                </p>
+                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                    <div class="dataTables_length">
+                        <label>
+                            Hiển thị
+                            <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
+                                <option value="5">5</option>
+                                <option value="10" selected="">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                            </select> bản ghi
+                        </label>
+                    </div>
+                    <div id="dataTable">
+                        <div class="dataTable-container">
+                            <table class="table table-bordered responsive">
+                                <thead class="widgettitle">
+                                    <tr>
+                                        <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                            <input type="checkbox" name="" id="selectAll" />
+                                        </th>
+                                        <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                        <th class="head1" scope="col" data-sortable="" style="width: 30%;">TÊN ĐẦY ĐỦ</th>
+                                        <th class="head1" scope="col" data-sortable="" style="width: 55%;">TÊN ĐƠN VỊ</th>
+                                        <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        var stt = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td><input type="checkbox" class="ads_Checkbox" value="@item.id" /></td>
+                                                <td scope="row">
+                                                    @stt
+                                                    <input type="hidden" name="" id="" value="@item.id" />
+                                                </td>
+                                                <td>@item.ten_can_bo</td>
+                                                <td>@item.ten_don_vi</td>
+                                                <td>
+                                                    <a onclick="confirm.BeforDeletePost('/TrucBan/XoaCanBoTruc?code=@item.id')"
+                                               title=""
+                                               data-placement="top"
+                                               data-toggle="tooltip"
+                                               data-original-title="Xóa"
+                                               href="#">
+                                                        <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            stt++;
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                        <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                            @{
+                                var TotalPage = (int)ViewBag.TotalPage;
+                                var CurrentPage = (int)ViewBag.CurrentPage;
+                                if (TotalPage > 5)
+                                {
+                                    if (CurrentPage > CurrentPage + 2)
+                                    {
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                    };
+                                    if (CurrentPage > 3)
+                                    {
+                                        for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i == CurrentPage)
+                                            {
+                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                            else
+                                            {
+                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                            }
+                                        }
+
+                                    }
+
+                                    if (CurrentPage < CurrentPage + 2)
+                                    {
+                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                    };
+                                }
+                                else
+                                {
+                                    for (int i = 1; i <= TotalPage; i++)
+                                    {
+                                        if (i == CurrentPage)
+                                        {
+                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                        else
+                                        {
+                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    <!-- End Table with stripped rows -->
+
+                </div>
+                <!-- Table with stripped rows -->
+                <p class="stdformbutton" style="margin-bottom: 10px;">
+                    <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                </p>
+            </div>
+
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+
+<script>
+    function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
+        var don_vi = $("#don_vi").val();
+        $.ajax({
+            type: "GET",
+            url: "../TrucBan/DanhSachCanBoPaging?don_vi=" + don_vi + "&currentPage=" + id + "&pageSize=" + pageSize,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function changePageSize(data) {
+        var don_vi = $("#don_vi").val();
+        $("#lstPageSize").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../TrucBan/DanhSachCanBoPaging?don_vi=" + don_vi + "&currentPage=" + 1 + "&pageSize=" + data.value,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
+    function ChangeDanhSachCanBo(data) {
+        window.location.href = "/TrucBan/DanhSachCanBo?don_vi=" + data.value;
+    }
+
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/TrucBan/XoaCanBoTruc?code=' + listData)
+    }
+
+    $(function() {
+        $('#selectAll').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+</script>

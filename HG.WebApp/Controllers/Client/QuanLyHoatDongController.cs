@@ -135,7 +135,7 @@ namespace HG.WebApp.Controllers.Client
             {
                 if (!User.Identity.IsAuthenticated)
                 {
-                    return RedirectToAction("Login", "User1");
+                    return RedirectToAction("Login", "User");
                 }
                 var uid = Guid.Parse(userManager.GetUserId(User));
 
