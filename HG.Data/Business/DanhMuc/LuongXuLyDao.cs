@@ -270,7 +270,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("ma_gan_luong", item.ma_gan_luong, SqlDbType.VarChar);
                 DbProvider.AddParameter("ten_gan_luong", item.ten_gan_luong, SqlDbType.NVarChar);
                 DbProvider.AddParameter("mo_ta", item.mo_ta ?? "", SqlDbType.NVarChar);
-                DbProvider.AddParameter("mac_dinh", item.mac_dinh, SqlDbType.Int);
+                DbProvider.AddParameter("mac_dinh", item.mac_dinh, SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_dich_vu", item.ma_dich_vu ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_linh_vuc", item.ma_linh_vuc ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_luong_xu_ly", item.ma_luong_xu_ly ?? "", SqlDbType.NVarChar);

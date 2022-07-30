@@ -33,4 +33,19 @@ namespace HG.WebApp
         HoSoNhanKQQuaBC = 16,
         HoSoChuyenPhatTC = 17,
     }
+
+    public enum StatusXuLyHoSo
+    {
+        HoSoChoXuLy = 18,
+        HoSoDangXuLy = 19,
+        HoSoPhoiHop = 20,
+        HoSoChuaBoSung = 21,
+        HoSoDaChuyenXuLy = 22,
+        HoSoChoKy = 23,
+        HoSoDaKy = 24,
+        HoSoChuyenMotCua = 25,
+        HoSoDaPhoiHop = 26,
+        HoSoGanQuaHan = 27,
+        HoSoTheoDoiDonDoc = 28
+    }
 }

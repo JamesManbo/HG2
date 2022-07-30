@@ -14,7 +14,7 @@ namespace HG.Entities.Entities.GanLuongXuLy
         public string? ma_gan_luong { get; set; }
         public string? ten_gan_luong { get; set; }
         public string? mo_ta { get; set; }
-        public int mac_dinh { get; set; }
+        public string mac_dinh { get; set; }
         public string? ma_phong_ban { get; set; }
         public string? ma_linh_vuc { get; set; }
         public string? ma_dich_vu { get; set; }

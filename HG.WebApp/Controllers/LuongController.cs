@@ -236,9 +236,11 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemGanLuongXuLy(string code = "")
         {
-            var ds = _danhmucDao.DanhSachLuongKey();
-            ViewBag.ThuTuc = _danhmucDao.DanhSachThuTuc();
-            ViewBag.LuongKey = ds;
+            var db = new EAContext();
+            
+            ViewBag.LuongXuLy = _danhmucDao.DanhSachLuongKey();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.LinhVuc = db.Dm_Linh_Vuc.ToList();
             ViewBag.code = code;
             return View("~/Views/Luong/GanLuongXuLy/ThemGanLuongXuLy.cshtml");
         }
@@ -274,9 +276,9 @@ namespace HG.WebApp.Controllers
         public IActionResult SuaGanLuongXuLy(string Id, string type)
         {
             var db = new EAContext();
-            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.LuongXuLy = _danhmucDao.DanhSachLuongKey();
             ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
-            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            ViewBag.LinhVuc = db.Dm_Linh_Vuc.ToList();
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhGanLuongXuLy(nhomSearchItem);

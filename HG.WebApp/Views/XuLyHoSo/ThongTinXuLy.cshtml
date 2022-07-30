@@ -1,0 +1,90 @@
+﻿                                    @model HG.Entities.QuaTrinhXuLyModels
+                                    @using HG.WebApp;
+                                    <script>
+                                        $(document).ready(function() {
+                                         $('#selectAll').click(function() {
+                                            var val = [];
+                                            if ($(this).is(':checked')) {
+                                                $(".ads_Checkbox").prop("checked", true);
+                                                $(':checkbox:checked').each(function(i) {
+                                                    if (i > 0) {
+                                                        val[i - 1] = $(this).val();
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                $(".ads_Checkbox").prop("checked", false);
+                                                val = [];
+                                            }
+                                            // $('input[name="lstThanhPhan"]').attr('value',val);
+                                            //$("#lstCode").val(val);
+                                        });
+
+
+                                        $('.ads_Checkbox').click(function() {
+                                            var val = [];
+                                            $(':checkbox:checked').each(function(i) {
+                                                if ($('#selectAll').is(':checked')) {
+                                                    if (i > 0) {
+                                                        val[i - 1] = $(this).val();
+                                                    }
+                                                } else {
+                                                    val[i] = $(this).val();
+                                                }
+
+                                            });
+                                           // $('input[name="lstThanhPhan"]').attr('value',val);
+                                        });
+                                    });
+                                    </script>
+                                    @{
+                                        //var danhsachThanhPhan = ViewBag.Qua_trinh_xu_ly as string;
+                                        //var maluongdachon = ViewBag.ma_luong as string;
+                                    }
+                                    
+                                    <div class="form-group row mb-3">                                       
+                                            <div class="col-sm-11">
+					                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
+						                            <tbody @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
+                                                        <tr style="background-color:#EEEEEE;">
+							                                <th scope="col">STT</th>
+                                                            <th align="center" > Hạn xử lý= </th>
+                                                            <th align="center">Ngày xử lý</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Tên người thực hiện</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Trình tự công việc</th>
+                                                            <th align="center" scope="col" style="text-align: center;">Người nhận</th>
+						                                </tr>
+                                                        @*start body*@
+                                                        
+                                                            @if(@Model.Qua_trinh_xu_ly != null){
+                                                                var stt = 1;
+                                                                foreach (var item in Model.Qua_trinh_xu_ly)
+                                                                {
+                                                                    <tr>
+                                                                    <td align="center" style="width:4%;">
+                                                                        @stt
+                                                                         <span id="Label1">@item.trang_thai</span>
+                                                                    </td>
+                                                                                                                                          
+                                                                    <td>
+                                                                        <span id="Label3">@item.han_xu_ly</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span id="Label4">@item.ngay_thuc_hien</span>
+                                                                    </td>
+                                                                     <td>
+                                                                        <span id="Label5">@item.nguoi_xu_ly</span>
+                                                                    </td>
+                                                                     <td>
+                                                                        <span id="Label6">@item.trinh_tu_cong_viec</span>
+                                                                    </td>
+                                                                     <td>
+                                                                        <span id="Label7">@item.nguoi_nhan</span>
+                                                                    </td>
+                                                                    </tr>
+                                                                }
+                                                            }   
+					                                </tbody></table>
+                                        </div>
+                                    </div>
+                                    
