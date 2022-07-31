@@ -289,6 +289,20 @@ namespace HG.Data.Business.DanhMuc
                 return 101;
             }
         }
+        public List<Dm_thu_tuc_hc> DanhSachThuTucHC()
+        {
+            try
+            {
+                DbProvider.SetCommandText2("Get_thu_tuc_hc", CommandType.StoredProcedure);
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteListObject<Dm_thu_tuc_hc>();
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new List<Dm_thu_tuc_hc>();
+            }
+        }
         public string CheckMaGanLuong(string ma_gan_luong)
         {
             DbProvider.SetCommandText2("check_ma_gan_luong", CommandType.StoredProcedure);

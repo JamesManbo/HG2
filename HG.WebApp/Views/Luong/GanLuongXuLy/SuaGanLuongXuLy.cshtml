@@ -5,6 +5,7 @@
      var LuongXuLy = ViewBag.LuongXuLy as List<HG.Entities.Dm_luong_Key>;
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
     var LinhVuc = ViewBag.LinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
+    var thutuchc = ViewBag.DichVu as List<HG.Entities.Dm_thu_tuc_hc>;
 }
 @model HG.Entities.Entities.GanLuongXuLy.Asp_GanLuong_XuLy
 
@@ -126,237 +127,27 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-md-2 control-label">
-                                Dịch vụ
-                            </label>
-                            <div class="col-md-8">
-                                        <select name="ctl08$ctl00$MaDichVu" id="ctl08_ctl00_MaDichVu" class="form-control input-default" placeholder="Chọn một dịch vụ">
-				                        <option value="">----------------Chọn-----------------</option>
-				                        <option value="LT-01">(LT-01) Đăng k&#253; khai tử</option>
-				                        <option value="LT-02b">(LT-02) X&#243;a đăng k&#253; thường tr&#250; (C&#244;ng an Huyện)</option>
-				                        <option value="LT-03">(LT-03) Giải quyết hưởng chế độ tử tuất (trợ cấp tuất v&#224; trợ cấp mai t&#225;ng)</option>
-				                        <option value="LT-04">(LT-04) Hưởng mai t&#225;ng ph&#237; đối với đối tượng người c&#243; c&#244;ng với c&#225;ch mạng từ trần</option>
-				                        <option value="LT-05">(LT-05) Hỗ trợ chi ph&#237; mai t&#225;ng cho đối tượng bảo trợ x&#227; hội (được trợ gi&#250;p x&#227; hội thường xuy&#234;n tại cộng đồng)</option>
-				                        <option value="LT-07">(LT-07) Hưởng mai t&#225;ng ph&#237; đối với người trực tiếp tham gia kh&#225;ng chiến chống Mỹ cứu nước nhưng chưa được hưởng ch&#237;nh s&#225;ch của Đảng, nh&#224; nước theo Quyết định số 290/2005/QĐ-TTg ng&#224;y 08 th&#225;ng 11 năm 2005, Quyết định số 188/2007/QĐ-TTg ng&#224;y 06 th&#225;ng 12 năm 2007</option>
-				                        <option value="LT-08">(LT-08) Hưởng mai t&#225;ng ph&#237; đối với đối tượng thực hiện theo quyết định số 150/2006/QĐ-TTg ng&#224;y 12 th&#225;ng 12 năm 2006 hướng dẫn thi h&#224;nh một số điều của Ph&#225;p lệnh cựu chiến binh</option>
-				                        <option value="LT-11">(LT-10) Hưởng mai t&#225;ng ph&#237; đối với đối tượng hưởng trợ cấp theo Quyết định số 49/2015/QĐ-TTg ng&#224;y 14 th&#225;ng 10 năm 2015 của Thủ tướng Ch&#237;nh phủ về một số chế độ, ch&#237;nh s&#225;ch đối với d&#226;n c&#244;ng hỏa tuyến tham gia kh&#225;ng chiến chống Ph&#225;p, chống Mỹ, chiến tranh bảo vệ Tổ quốc v&#224; l&#224;m nghĩa vụ quốc tế</option>
-				                        <option value="tbs01">A</option>
-				                        <option value="Antest2">An test 1 li&#234;n th&#244;ng</option>
-				                        <option value="an">An test 2 GĐ</option>
-				                        <option value="DD10">B&#225;n hoặc g&#243;p vốn bằng t&#224;i sản gắn liền với đất thu&#234; của Nh&#224; nước theo h&#236;nh thức thu&#234; đất trả tiền h&#224;ng năm</option>
-				                        <option value="TP06">Bổ sung hộ tịch, điều chỉnh hộ tịch cho mọi trường hợp (Trong trường hợp sổ hộ tịch kh&#244;ng c&#242;n lưu tại UBND cấp x&#227;, m&#224; chỉ lưu được tại UBND cấp huyện)</option>
-				                        <option value="CC01">Cấp  giấy  giới  thiệu  đi thăm viếng  mộ  liệt  sĩ</option>
-				                        <option value="CT07">Cấp bản sao c&#243; chứng thực từ bản ch&#237;nh hợp đồng, giao dịch đ&#227; được chứng thực</option>
-				                        <option value="TP07">Cấp bản sao giấy tờ hộ tịch từ sổ hộ tịch gốc</option>
-				                        <option value="CT01">Cấp bản sao từ sổ gốc</option>
-				                        <option value="KT05">Cấp đổi giấy chứng nhận đăng k&#253; kinh doanh Hợp t&#225;c x&#227; (thay đổi)</option>
-				                        <option value="DD19">Cấp đổi Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nh&#224; ở v&#224; t&#224;i sản kh&#225;c gắn liền với đất.</option>
-				                        <option value="CC09">Cấp giấy chứng nhận con đối tượng ch&#237;nh s&#225;ch</option>
-				                        <option value="VH05">Cấp giấy chứng nhận Đăng k&#253; hoạt động của đại l&#253; kinh doanh dịch vụ karaoke</option>
-				                        <option value="VH03">Cấp giấy chứng nhận Đăng k&#253; hoạt động của đại l&#253; kinh doanh internet</option>
-				                        <option value="HH03">Cấp giấy chứng nhận đăng k&#253; kinh doanh hộ kinh doanh c&#225; thể (cấp đổi)</option>
-				                        <option value="HH01">Cấp giấy chứng nhận đăng k&#253; kinh doanh hộ kinh doanh c&#225; thể (cấp mới)</option>
-				                        <option value="DK01">Cấp giấy chứng nhận đăng k&#253; kinh doanh hộ kinh doanh
-                        </option>
-				                        <option value="HTX1">Cấp giấy chứng nhận đăng k&#253; kinh doanh Hợp t&#225;c x&#227; (cấp mới)</option>
-				                        <option value="DD03">Cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nh&#224; ở v&#224; t&#224;i sản kh&#225;c gắn liền với đất cho người đ&#227; đăng k&#253; quyền sử dụng đất lần đầu</option>
-				                        <option value="tt1">cấp giấy chứng nhận..</option>
-				                        <option value="CC10">Cấp giấy giới thiệu di chuyển chế độ cho đối tượng ch&#237;nh s&#225;ch Người c&#243; c&#244;ng</option>
-				                        <option value="CC17">Cấp giấy giới thiệu đi thăm viếng mộ liệt sĩ v&#224; hỗ trợ thăm viếng mộ liệt sĩ</option>
-				                        <option value="BT23">Cấp giấy ph&#233;p hoạt động đối với cơ sở chăm s&#243;c người khuyết tật; cơ sở chăm s&#243;c người cao tuổi thuộc tr&#225;ch nhiệm quản l&#253; của cấp huyện</option>
-				                        <option value="XD12">Cấp giấy ph&#233;p sản xuất kinh doanh rượu</option>
-				                        <option value="XD01">Cấp giấy ph&#233;p x&#226;y dựng </option>
-				                        <option value="XD02">Cấp giấy ph&#233;p x&#226;y dựng tạm</option>
-				                        <option value="TP02">Cấp lại bản ch&#237;nh Giấy khai sinh</option>
-				                        <option value="TP05">Cấp lại bản ch&#237;nh giấy khai sinh sau khi thay đổi, cải ch&#237;nh hộ tịch, x&#225;c định lại d&#226;n tộc, x&#225;c định lại giới t&#237;nh</option>
-				                        <option value="DD21">Cấp lại Giấy chứng nhận do bị mất. </option>
-				                        <option value="BT24">Cấp lại; điều chỉnh giấy ph&#233;p hoạt động cơ sở chăm s&#243;c người khuyết tật, cơ sở chăm s&#243;c người cao tuổi thuộc tr&#225;ch nhiệm quản l&#253; của cấp huyện</option>
-				                        <option value="XD05">Cấp ph&#233;p Kinh doanh b&#225;n lẻ (hoặc đại l&#253; b&#225;n lẻ) Rượu</option>
-				                        <option value="XD06">Cấp ph&#233;p Kinh doanh b&#225;n lẻ (hoặc đại l&#253; b&#225;n lẻ) Thuốc l&#225;</option>
-				                        <option value="XD10">Cấp ph&#233;p kinh doanh b&#225;n lẻ sản phẩm thuốc l&#225; </option>
-				                        <option value="CC05">Cấp sổ ưu đ&#227;i Gi&#225;o dục – Đ&#224;o tạo cho con đẻ của người c&#243; c&#244;ng với c&#225;ch mạng</option>
-				                        <option value="CQ01">Chia t&#225;ch th&#244;n, tổ d&#226;n phố</option>
-				                        <option value="TP12">Chứng thực bản sao bản sao từ bản ch&#237;nh giấy tờ, văn bản bằng tiếng nước ngo&#224;i hoặc chủ yếu bằng tiếng nước ngo&#224;i c&#243; xen một số từ bằng tiếng Việt</option>
-				                        <option value="TP03">Chứng thực bản sao từ bản ch&#237;nh c&#225;c giấy tờ, văn bản bằng tiếng nước ngo&#224;i</option>
-				                        <option value="CT02">Chứng thực bản sao từ bản ch&#237;nh giấy tờ, văn bản do cơ quan tổ chức c&#243; thẩm quyền của Việt Nam cấp hoặc chứng nhận</option>
-				                        <option value="CT03">Chứng thực bản sao từ bản ch&#237;nh giấy tờ, văn bản do cơ quan, tổ chức c&#243; thẩm quyền của nước ngo&#224;i; cơ quan, tổ chức c&#243; thẩm quyền của Việt Nam li&#234;n kết với cơ quan, tổ chức c&#243; thẩm quyền của nước ngo&#224;i  cấp hoặc chứng nhận</option>
-				                        <option value="TP13">Chứng thực c&#225;c giấy tờ, văn bản c&#243; t&#237;nh chất song ngữ</option>
-				                        <option value="TP04">Chứng thực chữ k&#253; của người dịch trong c&#225;c giấy tờ, văn bản từ tiếng nước ngo&#224;i sang tiếng Việt hoặc từ tiếng Việt sang tiếng nước ngo&#224;i</option>
-				                        <option value="CT09">Chứng thực chữ k&#253; người dịch m&#224; người dịch kh&#244;ng phải l&#224; cộng t&#225;c vi&#234;n dịch thuật</option>
-				                        <option value="CT08">Chứng thực chữ k&#253; người dịch m&#224; người dịch l&#224; cộng t&#225;c vi&#234;n dịch thuật của Ph&#242;ng Tư ph&#225;p</option>
-				                        <option value="CT04">Chứng thực chữ k&#253; trong c&#225;c giấy tờ, văn bản (&#225;p dụng cho cả trường hợp chứng thực điểm chỉ v&#224; trường hợp người y&#234;u cầu chứng thực kh&#244;ng thể k&#253;, kh&#244;ng thể điểm chỉ được) </option>
-				                        <option value="TP14">Chứng thực điểm chỉ trong văn bản tiếng nước ngo&#224;i</option>
-				                        <option value="TP10">Chứng thực Hợp đ&#244;̀ng  uỷ quyền</option>
-				                        <option value="CT10">Chứng thực hợp đồng, giao dịch li&#234;n quan đến t&#224;i sản l&#224; động sản</option>
-				                        <option value="TP08">Chứng thực một tập hồ sơ, t&#224;i liệu trong đ&#243; vừa c&#243; giấy tờ, văn bản bằng tiếng Việt vừa c&#243; giấy tờ, văn bản bằng tiếng nước ngo&#224;i</option>
-				                        <option value="CT12">Chứng thực văn bản khai nhận di sản m&#224; di sản l&#224; động sản</option>
-				                        <option value="TP09">Chứng thực Văn bản ph&#226;n chia di sản, văn bản khai nhận di sản</option>
-				                        <option value="CT11">Chứng thực văn bản thỏa thuận ph&#226;n chia di sản m&#224; di sản l&#224; động sản</option>
-				                        <option value="CT05">Chứng thực việc sửa đổi, bổ sung, hủy bỏ hợp đồng, giao dịch</option>
-				                        <option value="DD20">Chuyển đổi quyền sử dụng đất n&#244;ng nghiệp của hộ gia đ&#236;nh, c&#225; nh&#226;n.</option>
-				                        <option value="DD27">Chuyển mục đ&#237;ch sử dụng đất phải được ph&#233;p của cơ quan nh&#224; nước c&#243; thẩm quyền đối với hộ gia đ&#236;nh, c&#225; nh&#226;n</option>
-				                        <option value="TN08">Chuyển mục đ&#237;ch sử dụng đất phải được ph&#233;p của cơ quan nh&#224; nước c&#243; thẩm quyền đối với hộ gia đ&#236;nh, c&#225; nh&#226;n</option>
-				                        <option value="TEST3C">C&#244;ng nhận Trường Mầm non đạt chuẩn Quốc gia
-                        </option>
-				                        <option value="VH01">C&#244;ng nhận v&#224; c&#244;ng nhận lại Danh hiệu “Tổ d&#226;n phố văn ho&#225;”
-                        </option>
-				                        <option value="TG06">Đăng k&#237; tổ chức lễ hội t&#237;n ngưỡng</option>
-				                        <option value="DD14">Đăng k&#253; biến động đối với trường hợp chuyển từ h&#236;nh thức thu&#234; đất trả tiền h&#224;ng năm sang thu&#234; đất trả tiền một lần cho cả thời gian thu&#234; hoặc từ giao đất kh&#244;ng thu tiền sử dụng đất sang h&#236;nh thức thu&#234; đất hoặc từ thu&#234; đất sang giao đất c&#243; thu tiền sử dụng đất</option>
-				                        <option value="DD09">Đăng k&#253; biến động quyền sử dụng đất, quyền sở hữu t&#224;i sản gắn liền với đất trong c&#225;c trường hợp chuyển nhượng, cho thu&#234;, cho thu&#234; lại,  thừa kế, tặng cho, g&#243;p vốn bằng quyền sử dụng đất, quyền sở hữu t&#224;i sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu t&#224;i sản gắn liền với đất của vợ hoặc chồng th&#224;nh của chung vợ v&#224; chồng </option>
-				                        <option value="DD12">Đăng k&#253; biến động quyền sử dụng đất, quyền sở hữu t&#224;i sản gắn liền với đất trong c&#225;c trường hợp giải quyết tranh chấp, khiếu nại, tố c&#225;o về đất đai; xử l&#253; nợ hợp đồng thế chấp, g&#243;p vốn; k&#234; bi&#234;n, đấu gi&#225; quyền sử dụng đất, t&#224;i sản gắn liền với đất để thi h&#224;nh &#225;n; chia, t&#225;ch, hợp nhất, s&#225;p nhập tổ chức (trừ doanh nghiệp); thỏa thuận hợp nhất hoặc ph&#226;n chia quyền sử dụng đất, t&#224;i sản gắn liền với đất của hộ gia đ&#236;nh, của vợ v&#224; chồng, của nh&#243;m người sử dụng đất</option>
-				                        <option value="DD13">Đăng k&#253; biến động về sử dụng đất, t&#224;i sản gắn liền với đất do thay đổi th&#244;ng tin về người được cấp Giấy chứng nhận (đổi t&#234;n hoặc giấy tờ ph&#225;p nh&#226;n, giấy tờ nh&#226;n th&#226;n, địa chỉ); giảm diện t&#237;ch thửa đất do sạt lở tự nhi&#234;n; thay đổi về hạn chế quyền sử dụng đất; thay đổi về nghĩa vụ t&#224;i ch&#237;nh; thay đổi về t&#224;i sản gắn liền với đất so với nội dung đ&#227; đăng k&#253;, cấp Giấy chứng nhận
-                        </option>
-				                        <option value="DD05">Đăng k&#253; bổ sung đối với t&#224;i sản gắn liền với đất của người sử dụng đất đ&#227; được cấp Giấy chứng nhận.</option>
-				                        <option value="HT11">Đăng k&#253; bổ sung hộ tịch c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT08">Đăng k&#253; chấm dứt, thay đổi gi&#225;m hộ c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="TG09">Đăng k&#253; chương tr&#236;nh hoạt động t&#244;n gi&#225;o h&#224;ng năm</option>
-				                        <option value="DD06">Đăng k&#253; đất đai lần đầu đối với trường hợp được Nh&#224; nước giao đất để quản l&#253;</option>
-				                        <option value="KT02">Đăng k&#253; Điều lệ hợp t&#225;c x&#227; sửa đổi</option>
-				                        <option value="HT06">Đăng k&#253; Gi&#225;m hộ cử c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT07">Đăng k&#253; Gi&#225;m hộ đương nhi&#234;n c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="TG02">Đăng k&#253; hoạt động d&#242;ng tu, tu viện</option>
-				                        <option value="TG01">Đăng k&#253; hội đo&#224;n t&#244;n gi&#225;o.</option>
-				                        <option value="HT03">Đăng k&#253; kết h&#244;n c&#243; yếu tố nước ngo&#224;i  </option>
-				                        <option value="HT02">Đăng k&#253; khai sinh cho trẻ em sinh ra ở nước ngo&#224;i về cư tr&#250; tại Việt Nam</option>
-				                        <option value="HT01">Đăng k&#253; khai sinh c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT18">Đăng k&#253; khai sinh kết hợp đăng k&#253; nhận cha, mẹ, con c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT14">Đăng k&#253; khai tử c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="KT10">Đăng k&#253; kinh doanh khi chia, t&#225;ch, hợp nhất v&#224; s&#225;t nhập HTX</option>
-				                        <option value="HT17">Đăng k&#253; lại kết h&#244;n c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT15">Đăng k&#253; lại khai sinh c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT16">Đăng k&#253; lại khai tử c&#243; yếu tố nước ngo&#224;i</option>
-				                        <option value="HT09">Đăng k&#253; nhận cha, mẹ, con c&#243; yếu tố nước ngo&#224;i </option>
-				                        <option value="DD01">Đăng k&#253; quyền sử dụng đất lần đầu.</option>
-				                        <option value="KT03">Đăng k&#253; th&#224;nh lập chi nh&#225;nh, văn ph&#242;ng đại diện trực thuộc hợp t&#225;c x&#227;</option>
-				                        <option value="KT06">Đăng k&#253; thay đổi nơi đăng k&#253; kinh doanh của Hợp t&#225;c x&#227;</option>
-				                        <option value="KT01">Đăng k&#253; thay đổi số lượng x&#227; vi&#234;n, người đại diện theo ph&#225;p luật, danh s&#225;ch Ban quản trị, Ban kiểm so&#225;t hợp t&#225;c x&#227;</option>
-				                        <option value="KT08">Đăng k&#253; thay đổi t&#234;n Hợp t&#225;c x&#227;</option>
-				                        <option value="KT04">Đăng k&#253; thay đổi vốn điều lệ Hợp t&#225;c x&#227;</option>
-				                        <option value="KT09">Đăng k&#253; thay đổi, bổ sung ng&#224;nh nghề kinh doanh của hợp t&#225;c x&#227;</option>
-				                        <option value="VH04">Đăng k&#253; tổ chức lễ hội do cấp x&#227;, thị trấn tổ chức</option>
-				                        <option value="DD02">Đăng k&#253; v&#224; cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nh&#224; ở v&#224; t&#224;i sản kh&#225;c gắn liền với đất lần đầu.</option>
-				                        <option value="HT10">Đăng k&#253; việc thay đổi, cải ch&#237;nh hộ tịch cho người đủ 14 tuổi trở l&#234;n</option>
-				                        <option value="DD15">Đăng k&#253; x&#225;c lập quyền sử dụng hạn chế thửa đất liền kề sau khi được cấp Giấy chứng nhận lần đầu v&#224; đăng k&#253; thay đổi, chấm dứt quyền sử dụng hạn chế thửa đất liền kề</option>
-				                        <option value="DD07">Đăng k&#253;, cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nh&#224; ở v&#224; t&#224;i sản kh&#225;c gắn liền với đất cho người nhận chuyển nhượng quyền sử dụng đất, mua nh&#224; ở, c&#244;ng tr&#236;nh x&#226;y dựng trong c&#225;c dự &#225;n ph&#225;t triển nh&#224; ở</option>
-				                        <option value="DD08">Đăng k&#253;, cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nh&#224; ở v&#224; t&#224;i sản kh&#225;c gắn liền với đất đối với trường hợp đ&#227; chuyển quyền sử dụng đất trước ng&#224;y 01 th&#225;ng 7 năm 2014 m&#224; b&#234;n chuyển quyền đ&#227; được cấp Giấy chứng nhận nhưng chưa thực hiện thủ tục chuyển quyền theo quy định</option>
-				                        <option value="DD04">Đăng k&#253;, cấp Giấy chứng nhận quyền sử dụng đất, quyền sở hữu nh&#224; ở v&#224; t&#224;i sản kh&#225;c gắn liền với đất lần đầu đối với t&#224;i sản gắn liền với đất m&#224; chủ sở hữu kh&#244;ng đồng thời l&#224; người sử dụng đất</option>
-				                        <option value="dddd">dddđ</option>
-				                        <option value="TG03">Đề nghị giảng đạo, truyền đạo ngo&#224;i cơ sở t&#244;n gi&#225;o</option>
-				                        <option value="TG07">Đề nghị hoạt động t&#244;n gi&#225;o ngo&#224;i chương tr&#236;nh đ&#227; đăng k&#253;</option>
-				                        <option value="TG04">Đề nghị tổ chức c&#225;c cuộc lễ diễn ra ngo&#224;i cơ sở t&#244;n gi&#225;o</option>
-				                        <option value="TG05">Đề nghị tổ chức hội nghị, đại hội của tổ chức t&#244;n gi&#225;o cơ sở</option>
-				                        <option value="XD03">Điều chỉnh giấy ph&#233;p x&#226;y dựng</option>
-				                        <option value="DD22">Đ&#237;nh ch&#237;nh Giấy chứng nhận đ&#227; cấp.</option>
-				                        <option value="HT04">Ghi v&#224;o Sổ hộ tịch việc kết h&#244;n của c&#244;ng d&#226;n Việt Nam đ&#227; được giải quyết tại cơ quan c&#243; thẩm quyền của nước ngo&#224;i ở nước ngo&#224;i</option>
-				                        <option value="HT13">Ghi v&#224;o Sổ hộ tịch việc khai sinh; gi&#225;m hộ; nhận cha, mẹ, con; x&#225;c định cha, mẹ, con; nu&#244;i con nu&#244;i; thay đổi hộ tịch; khai tử đ&#227; được giải quyết tại cơ quan c&#243; thẩm quyền của nước ngo&#224;i</option>
-				                        <option value="HT05">Ghi v&#224;o Sổ hộ tịch việc ly h&#244;n, hủy việc kết h&#244;n đ&#227; được giải quyết ở nước ngo&#224;i</option>
-				                        <option value="DD16">Gia hạn sử dụng đất.</option>
-				                        <option value="XD08">Gia hạn v&#224; cấp lại giấy ph&#233;p x&#226;y dựng</option>
-				                        <option value="BT11">Giải quyết c&#225;c chế độ ch&#237;nh s&#225;ch an sinh x&#227; hội</option>
-				                        <option value="BC01">Giải quyết c&#225;n bộ thuy&#234;n chuyển c&#244;ng t&#225;c</option>
-				                        <option value="CC06">Giải quyết chế độ cho vợ liệt sĩ t&#225;i gi&#225;</option>
-				                        <option value="CC08">Giải quyết chế độ mai t&#225;ng ph&#237;  đối với người c&#243; c&#244;ng từ trần</option>
-				                        <option value="CC07">Giải quyết chế độ thương, bệnh binh</option>
-				                        <option value="CC02">Giải quyết chế độ trợ cấp đối với người hoạt động kh&#225;ng chiến bị nhiễm chất độc ho&#225; học</option>
-				                        <option value="CC03">Giải quyết chế độ trợ cấp tuất liệt sĩ</option>
-				                        <option value="CC04">Giải quyết chế độ với người hoạt động c&#225;ch mạng, hoạt động kh&#225;ng chiến bị địch bắt t&#249; đ&#224;y v&#224; hoạt động kh&#225;ng chiến giải ph&#243;ng d&#226;n tộc</option>
-				                        <option value="BT01">Giải quyết đơn đề nghị được trợ gi&#250;p đột xuất (một lần) của đối tượng x&#227; hội</option>
-				                        <option value="BT03">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối tượng Người cao tuổi (Từ 80 tuổi trở l&#234;n)</option>
-				                        <option value="BT02">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối tượng Người gi&#224; c&#244; đơn (thuộc hộ ngh&#232;o)</option>
-				                        <option value="BT04">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối tượng Người khuyết tật</option>
-				                        <option value="BT06">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối tượng Người nhiễm HIV/AIDS</option>
-				                        <option value="BT05">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối tượng Trẻ mồ c&#244;i (thuộc hộ ngh&#232;o)</option>
-				                        <option value="BT07">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối với Gia đ&#236;nh, c&#225; nh&#226;n nhận nu&#244;i dưỡng trẻ em mồ c&#244;i, trẻ em bị bỏ rơi</option>
-				                        <option value="BT08">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối với Hộ gia đ&#236;nh c&#243; từ 01 người t&#224;n tật nặng trở l&#234;n, kh&#244;ng c&#243; khả năng tự phục vụ</option>
-				                        <option value="BT09">Giải quyết hồ sơ đề nghị hưởng trợ cấp thường xuy&#234;n h&#224;ng th&#225;ng đối với Người đơn th&#226;n nu&#244;i con nhỏ (thuộc hộ ngh&#232;o)</option>
-				                        <option value="BT10">Giải quyết hỗ trợ mai t&#225;ng ph&#237; cho đối tượng Bảo trợ x&#227; hội</option>
-				                        <option value="DD24">Giải quyết tranh chấp đất đai thuộc thẩm quyền của Chủ tịch Ủy ban nh&#226;n cấp huyện</option>
-				                        <option value="TL02">Giải quyết tranh chấp lao động tập thể về quyền</option>
-				                        <option value="1.001257.000.00.00.H22">giải quyết trợ cấp một lần đối với người c&#243; th&#224;nh t&#237;ch tham gia kh&#225;ng chiến đ&#227; được tặng Bằng khen của Thủ tướng Ch&#237;nh phủ, Bằng khen của Chủ tịch Hội đồng Bộ trưởng hoặc Bằng khen của Bộ trưởng, Thủ trưởng cơ quan ngang bộ, Thủ trưởng cơ quan thuộc Ch&#237;nh phủ, Bằng khen của Chủ tịch Ủy ban nh&#226;n d&#226;n tỉnh, th&#224;nh phố trực thuộc Trung ương </option>
-				                        <option value="DD26">Giao đất, cho thu&#234; đất cho hộ gia đ&#236;nh, c&#225; nh&#226;n; giao đất cho cộng đồng d&#226;n cư đối với trường hợp giao đất, cho thu&#234; đất kh&#244;ng th&#244;ng qua h&#236;nh thức đấu gi&#225; quyền sử dụng đất</option>
-				                        <option value="DD30">Giao đất, cho thu&#234; đất th&#244;ng qua h&#236;nh thức đấu gi&#225; quyền sử dụng đất đối với hộ gia đ&#236;nh, c&#225; nh&#226;n, cộng đồng d&#226;n cư, người Việt Nam định cư ở nước ngo&#224;i được sở hữu nh&#224; ở tại Việt Nam.</option>
-				                        <option value="XD07">Giấy ph&#233;p x&#226;y dựng c&#244;ng tr&#236;nh v&#224; nh&#224; ở đ&#244; thị,nh&#224; ở ri&#234;ng lẻ, c&#244;ng tr&#236;nh x&#226;y dựng tạm</option>
-				                        <option value="TL01">Gửi thang lương, bảng lương, định mức lao động của doanh nghiệp</option>
-				                        <option value="BT26">Hỗ trợ chi ph&#237; mai t&#225;ng cho đối tượng bảo trợ x&#227; hội được trợ gi&#250;p x&#227; hội thường xuy&#234;n tại cộng đồng</option>
-				                        <option value="TN01">Hỗ trợ học văn h&#243;a, học nghề, trợ cấp kh&#243; khăn ban đầu cho nạn nh&#226;n</option>
-				                        <option value="BT20">Hỗ trợ kinh ph&#237; chăm s&#243;c, nu&#244;i dưỡng đối tượng bảo trợ x&#227; hội (bao gồm cả người khuyết tật đặc biệt nặng)</option>
-				                        <option value="BT19">Hỗ trợ kinh ph&#237; nhận nu&#244;i dưỡng, chăm s&#243;c đối tượng cần bảo vệ khẩn cấp</option>
-				                        <option value="CC18">Hỗ trợ người c&#243; c&#244;ng đi l&#224;m phương tiện, dụng cụ trợ gi&#250;p chỉnh h&#236;nh; đi điều trị phục hồi chức năng</option>
-				                        <option value="TN02">Ho&#227;n chấp h&#224;nh quyết định &#225;p dụng biện ph&#225;p quản l&#253; sau cai tại trung t&#226;m quản l&#253; sau cai nghiện  </option>
-				                        <option value="LT-06">Hưởng mai t&#225;ng ph&#237;, trợ cấp một lần khi người c&#243; c&#244;ng với c&#225;ch mạng từ trần</option>
-				                        <option value="2.001932.000.00.00.H22">Lập, thẩm định, quyết định đầu tư chương tr&#236;nh, dự &#225;n đầu tư thuộc thẩm quyền của người đứng đầu cơ quan chủ quản</option>
-				                        <option value="LT-09">LT-09) Hưởng mai t&#225;ng ph&#237; đối với đối tượng hưởng trợ cấp theo Quyết định số 62/2011/QĐ-TTg ng&#224;y 09 th&#225;ng 11 năm 2011 về chế độ, ch&#237;nh s&#225;ch đối với đối tượng tham gia chiến tranh bảo vệ tổ quốc, l&#224;m nhiệm vụ quốc tế ở Căm-pu-chi-a, gi&#250;p bạn L&#224;o sau ng&#224;y 30 th&#225;ng 4 năm 1975 đ&#227; phục vi&#234;n, xuất ngũ, th&#244;i việc</option>
-				                        <option value="TN03">Miễn chấp h&#224;nh quyết định &#225;p dụng biện ph&#225;p quản l&#253; sau cai nghiện tại trung t&#226;m quản l&#253; sau cai nghiện</option>
-				                        <option value="VH02">Ph&#234; duyệt Quy ước tổ d&#226;n phố</option>
-				                        <option value="q">sdcd</option>
-				                        <option value="CT06">Sửa lỗi sai s&#243;t trong hợp đồng, giao dịch</option>
-				                        <option value="DD18">T&#225;ch thửa hoặc hợp thửa đất.</option>
-				                        <option value="tbs">tbs 1</option>
-				                        <option value="tbs2">tbs 2 </option>
-				                        <option value="T2GD1">Test hồ sơ 2 giai đoạn</option>
-				                        <option value="TEST_LT01">test lien thong</option>
-				                        <option value="TLV">Test lĩnh vực</option>
-				                        <option value="TEST11">Test phối hợp xl</option>
-				                        <option value="TTHCSSSS">Test_VPUBND</option>
-				                        <option value="Test_VPUBND">Test_VPUBND</option>
-				                        <option value="test124">test124</option>
-				                        <option value="TH2">TH</option>
-				                        <option value="XD04">Thẩm định bản vẽ hiện trạng nh&#224; ở</option>
-				                        <option value="TG11">Thẩm định Cấp giấy chứng nhận sinh hoạt đạo theo điểm nh&#243;m</option>
-				                        <option value="XD09">Thẩm định c&#244;ng tr&#236;nh x&#226;y dựng</option>
-				                        <option value="DD25">Thẩm định nhu cầu sử dụng đất để xem x&#233;t giao đất, cho thu&#234; đất kh&#244;ng th&#244;ng qua h&#236;nh thức đấu gi&#225; quyền sử dụng đất đối với hộ gia đ&#236;nh, c&#225; nh&#226;n, cộng đồng d&#226;n cư </option>
-				                        <option value="XD11">Thẩm định quy hoạch x&#226;y dựng</option>
-				                        <option value="HO01">Th&#224;nh lập Hội</option>
-				                        <option value="HH02">Thay đổi nội dung đăng k&#253; kinh doanh : Hộ kinh doanh c&#225; thể</option>
-				                        <option value="TP01">Thay đổi, cải ch&#237;nh hộ tịch cho người từ đủ 14 tuổi trở l&#234;n; x&#225;c định lại d&#226;n tộc, x&#225;c định lại giới t&#237;nh cho mọi trường hợp kh&#244;ng ph&#226;n biệt độ tuổi</option>
-				                        <option value="BC04">Thi tuyển c&#225;n bộ c&#244;ng chức x&#227;, phường, thị trấn</option>
-				                        <option value="KT07">Th&#244;ng b&#225;o tạm ngừng hoạt động hợp t&#225;c x&#227;</option>
-				                        <option value="HH04">Th&#244;ng b&#225;o tạm ngừng kinh doanh của hộ kinh doanh</option>
-				                        <option value="TG10">Th&#244;ng b&#225;o thuy&#234;n chuyển nơi hoạt động t&#244;n gi&#225;o của chức sắc, nh&#224; tu h&#224;nh</option>
-				                        <option value="TG08">Th&#244;ng b&#225;o tổ chức quy&#234;n g&#243;p của cơ sở t&#237;n ngưỡng, tổ chức t&#244;n gi&#225;o</option>
-				                        <option value="DD28">Thu hồi đất do chấm dứt việc sử dụng đất theo ph&#225;p luật, tự nguyện trả lại đất đối với trường hợp thu hồi đất của hộ gia đ&#236;nh, c&#225; nh&#226;n, cộng đồng d&#226;n cư, thu hồi đất ở của người Việt Nam định cư ở nước ngo&#224;i được sở hữu nh&#224; ở tại Việt Nam</option>
-				                        <option value="DD29">Thu hồi đất ở trong khu vực bị &#244; nhiễm m&#244;i trường c&#243; nguy cơ đe dọa t&#237;nh mạng con người; đất ở c&#243; nguy cơ sạt lở, sụt l&#250;n, bị ảnh hưởng bởi hiện tượng thi&#234;n tai kh&#225;c đe dọa t&#237;nh mạng con người đối với trường hợp thu hồi đất ở của hộ gia đ&#236;nh, c&#225; nh&#226;n, người Việt Nam định cư ở nước ngo&#224;i được sở hữu nh&#224; ở tại Việt Nam </option>
-				                        <option value="DD23">Thu hồi Giấy chứng nhận đ&#227; cấp kh&#244;ng đ&#250;ng quy định của ph&#225;p luật đất đai do người sử dụng đất, chủ sở hữu t&#224;i sản gắn liền với đất ph&#225;t hiện</option>
-				                        <option value="TTTEST">THỦ THỤC TEST</option>
-				                        <option value="T2GD">Thủ tục 2 giai đoạn test</option>
-				                        <option value="TTHC2GD">Thủ tục 2 giai đoạn test</option>
-				                        <option value="an1">Thủ tục An 1 kh&#244;ng li&#234;n th&#244;ng</option>
-				                        <option value="TD02">Thủ tục đề nghị x&#233;t tặng kỷ niệm chương v&#236; sự nghiệp x&#226;y dựng v&#224; ph&#225;t triển H&#224; Giang</option>
-				                        <option value="1.003423.000.00.00.H22">Thủ tục giải quyết chế độ người c&#243; c&#244;ng gi&#250;p đỡ c&#225;ch mạng </option>
-				                        <option value="TEST_QT">Thủ tục h&#224;nh ch&#237;nh cấp huyện</option>
-				                        <option value="TEST-QTLT">Thủ tục h&#224;nh ch&#237;nh li&#234;n th&#244;ng test</option>
-				                        <option value="TD01">Thủ tục khen thưởng đột xuất cho c&#225; nh&#226;n, tập thể</option>
-				                        <option value="h.lt3c">Thủ tục li&#234;n th&#244;ng 3 cấp</option>
-				                        <option value="LT02">Thủ tục li&#234;n th&#244;ng giải quyết chế độ trợ cấp h&#224;ng th&#225;ng đối với người khuyết tật.</option>
-				                        <option value="LT01">Thủ tục li&#234;n th&#244;ng giải quyết thủ tục h&#224;nh ch&#237;nh cấp x&#227;</option>
-				                        <option value="LT_01">Thủ tục li&#234;n th&#244;ng giữa c&#225;c Sở, ban ng&#224;nh v&#224; UBND Tỉnh</option>
-				                        <option value="test">Thủ tục test</option>
-				                        <option value="TTT">Thủ tục test</option>
-				                        <option value="BT22">Thực hiện hỗ trợ kinh ph&#237; chăm s&#243;c đối với hộ gia đ&#236;nh c&#243; người khuyết tật đặc biệt nặng</option>
-				                        <option value="BT18">Thực hiện trợ cấp x&#227; hội h&#224;ng th&#225;ng khi đối tượng thay đổi nơi cư tr&#250; giữa c&#225;c quận, huyện, thị x&#227;, th&#224;nh phố thuộc tỉnh</option>
-				                        <option value="BT17">Thực hiện trợ cấp x&#227; hội h&#224;ng th&#225;ng khi đối tượng thay đổi nơi cư tr&#250; trong c&#249;ng địa b&#224;n quận, huyện, thị x&#227;, th&#224;nh phố thuộc tỉnh</option>
-				                        <option value="BT25">Thực hiện, điều chỉnh, th&#244;i hưởng trợ cấp x&#227; hội h&#224;ng th&#225;ng cho đối tượng bảo trợ x&#227; hội (bao gồm cả người khuyết tật; người khuyết tật mang thai, nu&#244;i con dưới 36 th&#225;ng tuổi)</option>
-				                        <option value="thuongtest">Thương test</option>
-				                        <option value="BC02">Tiếp nhận c&#225;n bộ chuyển đến</option>
-				                        <option value="CC15">Tiếp nhận hồ sơ đề nghị cấp bằng tổ quốc ghi c&#244;ng</option>
-				                        <option value="CC11">Tiếp nhận hồ sơ đề nghị cấp phương tiện trợ gi&#250;p dụng cụ chỉnh h&#236;nh v&#224; phục hồi chức năng</option>
-				                        <option value="CC13">Tiếp nhận hồ sơ đề nghị giải quyết chế độ quy tập mộ liệt sỹ quản l&#253; tại gia đ&#236;nh</option>
-				                        <option value="CC14">Tiếp nhận Hồ sơ đề nghị giải quyết chế độ thờ c&#250;ng liệt sỹ</option>
-				                        <option value="CC12">Tiếp nhận hồ sơ đề nghị giải quyết trợ cấp cho th&#226;n nh&#226;n gia đ&#236;nh liệt sỹ</option>
-				                        <option value="CC16">Tiếp nhận hồ sơ Người c&#243; c&#244;ng chuyển nơi kh&#225;c đến</option>
-				                        <option value="BT21">Trợ gi&#250;p x&#227; hội đột xuất đối với người bị thương nặng ngo&#224;i nơi cư tr&#250; m&#224; kh&#244;ng c&#243; người th&#226;n th&#237;ch chăm s&#243;c</option>
-				                        <option value="TP15">Tư vấn ph&#225;p luật</option>
-				                        <option value="HT12">X&#225;c định lại d&#226;n tộc</option>
-				                        <option value="MT01">X&#225;c nhận đăng k&#253; kế hoạch bảo vệ m&#244;i trường</option>
-				                        <option value="TP11">X&#225;c nhận lại việc sinh, tử, kết h&#244;n, nhận nu&#244;i con nu&#244;i</option>
-				                        <option value="DD17">X&#225;c nhận tiếp tục sử dụng đất n&#244;ng nghiệp của hộ gia đ&#236;nh, c&#225; nh&#226;n khi hết hạn sử dụng đất đối với trường hợp c&#243; nhu cầu.</option>
-				                        <option value="BC03">X&#233;t tuyển vi&#234;n chức nh&#224; nước</option>
-				                        <option value="TG12">Xin cấp gi&#226;y ph&#233;p cải tạo, n&#226;ng cấp, x&#226;y dựng mới c&#244;ng tr&#236;nh kiến tr&#250;c t&#244;n gi&#225;o</option>
-				                        <option value="DD11">X&#243;a đăng k&#253; cho thu&#234;, cho thu&#234; lại, g&#243;p vốn bằng quyền sử dụng đất, quyền sở hữu t&#224;i sản gắn liền với đất</option>
+                            <label for="ten_pb" class="col-sm-2 control-label">Dịch vụ <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <select class="form-select form-control input-default" name="ma_dich_vu" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option selected="selected" value="">---- Chọn dịch vụ ----</option>
+                                    @if (thutuchc != null)
+                                        foreach (var item in thutuchc)
+                                        {
+                                            if (@Model.ganLuongXuLyModel.ma_dich_vu == item.ma_thu_tuc)
+                                                {
+                                                <option selected value="@item.ma_thu_tuc">@item.ten_thu_tuc</option>
 
-			                        </select>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option>
+                                                }
+                                            
+                                        }
+                                </select>
                             </div>
-                        </div>
+                        </div>                        
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Luồng xử lý</label>
                             <div class="col-md-10">

@@ -1,6 +1,6 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Tiếp nhận hồ sơ"; 
+    ViewData["Title"] = "Xử lý hồ sơ"; 
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
@@ -8,45 +8,47 @@
    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
    var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
    var lst_phong_ban = ViewBag.LstBieuMau as List<HG.Entities.Dm_Phong_Ban>;
+   var lst_quy_trinh = ViewBag.LstQuyTrinhXuLy as List<HG.Entities.Entities.Luong.QuyTrinhXuLy>;
 }
 @model HG.Entities.HoSo.Ho_So
 <script>
 $(document).ready(function() {
-     $("#files").on('change', function () {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=xuLyHoSo',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function (result) {
-                        console.log(result);
-                        for (var i = 0; i < result.files.length; i++) {
-                            $('#attach').attr('src', result.files[i]);
-                            $('#attach1').val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function (err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
+    $("#files").on('change', function() {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
             }
-        });
-}
+            // Adding one more key to FormData object
+            fileData.append('username', 'Manas');
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=XuLyHoSo',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    console.log(result);
+                    for (var i = 0; i < result.files.length; i++) {
+                        $('#attach').attr('src', result.files[i]);
+                        $('#attach1').val("" + result.files[i] + "");
+                    }
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+    
+});
 </script>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">-
@@ -99,7 +101,7 @@ $(document).ready(function() {
             <h4 class="widgettitle">Thông tin người nộp/ tổ chức</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
-                    <a href="/Luong/SuaLuongXuLy?code=@Model.ma_luong_xu_ly&type=View" style="text-decoration:none"> Luồng xử lý hồ sơ</a>
+                    <a href="/XuLyHoSo/ViewHoSo?code=@Model.Id&type=View" style="text-decoration:none"> Luồng xử lý hồ sơ</a>
                     <div id="form_tiepnhan" class="row">
                           
                                 <div class="form-group row mb-3">
@@ -299,15 +301,15 @@ $(document).ready(function() {
                         <div class="form-group row mb-3">
                                     
                                     <div class="form-group row">
-                                    <label class="col-md-2 control-label">Phòng ban</label>
+                                    <label class="col-md-2 control-label">Quy trình</label>
                                     <div class="col-md-10">
-                                        <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
-                                            <option value="0">------------ Toàn bộ phòng ban ------------</option>
-                                            @if(lst_phong_ban != null)
+                                        <select name="ma_buoc" id="ma_buoc" class="form-control input-default form-select" placeholder="Quy trình">
+                                            <option value="0">------------ Chọn quy trình ------------</option>
+                                            @if(lst_quy_trinh != null)
                                             {
-                                                 foreach (var item in lst_phong_ban)
+                                                 foreach (var item in lst_quy_trinh)
                                                  {
-                                                    <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+                                                    <option value="@item.ma_buoc">@item.ten_buoc</option>
                                                  }   
                                             }
                                     
@@ -372,8 +374,8 @@ $(document).ready(function() {
                          </div>      
                     </div>
                      <div class="text-center">
-                               <button type="button" class="btn btn-primary"  onclick="TiepNhanHoSo(@Model.Id)"  style="width: 150px" >Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LoaiHoSo(@Model.Id)" style="width: 150px">Lưu và chuyển</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,19)"  style="width: 150px" >Lưu</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,19)" style="width: 150px">Lưu và chuyển</button>
                                <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Yêu cầu bổ sung</button>
                                <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Trả KQ giai đoạn 1</button>
                                <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Hồ sơ không đủ đk</button>
@@ -424,6 +426,17 @@ $(document).ready(function() {
                   }
           });           
     }
+    function LuuThongTinHoSo(id,trangthai) {
+        debugger;
+        $.ajax({
+            url: "/XuLyHoSo/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',          
+            success: function(result) {
+                window.location.href = window.location.origin + "/XuLyHoSo/HoSoChoXuLy"
+            }
+        });
+    };
     function ThongBaoChoCongDan(abc){
         var msg = $("#gui_tin_nhan").val();
         if (msg = "") {
