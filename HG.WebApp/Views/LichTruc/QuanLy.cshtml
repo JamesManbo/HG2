@@ -1,0 +1,440 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Danh mục";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model HG.Entities.Entities.CauHinh.lich_truc_model
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background: #fff;
+        border-bottom: 1px solid #fff;
+        color: #333;
+    }
+
+    .nav-pills .nav-link, .nav-pills .show > .nav-link {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 0;
+    }
+
+
+    .nav-pills .nav-link {
+        background: 0 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="pageheader">
+            <div class="pageicon"><span class="iconfa-pencil"></span></div>
+            <div class="pagetitle">
+                <h5>Lịch</h5>
+                <h1>Quản lý lịch</h1>
+            </div>
+        </div>
+        <div class="maincontent">
+            <div class="maincontentinner">
+                <!-- Pills Tabs -->
+                <div class="tab-primary" style="border: 2px solid #0866c6;">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(ViewBag.active==1?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Quản lý ngày nghỉ</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link @(ViewBag.active==2?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Quản lý lịch trực</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent" style="padding: 15px;">
+                        @*TAB Cập nhật phiên làm việc*@
+                        <div class="tab-pane fade @(ViewBag.active==1?"show active":"")" id="pills-tab1" role="tabpanel" aria-labelledby="home-tab">
+                            @if (ViewBag.type_view == StatusAction.Add.ToString() || ViewBag.type_view == StatusAction.Edit.ToString())
+                            {
+                                <form id="form_pb" action="/TrucBan/SaveNgayNghi?type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                                    <div class="maincontentinner">
+                                        <div class="form-horizontal">
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">
+                                                    Năm
+                                                    <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <input name="nam" type="text" id="nam" class="form-control input-default" placeholder="Năm">
+                                                    <span id="ctl08_ctl00_RangeValidator1" style="color:Red;visibility:hidden;">Năm không phù hợp</span>
+                                                    <span id="ctl08_ctl00_reqFirstName" style="color:Red;visibility:hidden;">Nhập năm</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">
+                                                    Tên ngày nghỉ
+                                                    <span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span>
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$FName" type="text" value="Ngày nghỉ năm 2019" id="ctl08_ctl00_FName" class="form-control input-default" placeholder="Tên ngày nghỉ">
+                                                    <span id="ctl08_ctl00_RequiredFieldValidator2" class="error" style="color:Red;display:none;">Bạn cần nhập tên ngày nghỉ!</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Mô tả</label>
+                                                <div class="col-md-8">
+                                                    <textarea name="ctl08$ctl00$FDescription" rows="2" cols="20" id="ctl08_ctl00_FDescription" class="form-control input-default" placeholder="Mô tả">Ngày nghỉ năm 2019</textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Ngày nghỉ trong tuần</label>
+                                                <div class="col-md-8">
+                                                    <input name="ngay_nghi_trong_tuan" type="text" value="" id="ngay_nghi_trong_tuan" class="form-control input-default" placeholder="Ngày nghỉ trong tuần">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator13" style="color:Red;display:none;">Ngày nghỉ phải là 2 ký tự liền nhau, các ngày phân biệt nhau bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator38" style="color:Red;display:none;">Không nhập trùng nhau.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator39" style="color:Red;display:none;">Bạn phải nhập T2, T3...CN, không phân biệt chữ hoa/chữ thường</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 1</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_1" type="text" value="01 02" id="ctl08_ctl00_THANG_1" class="form-control input-default" placeholder="Ngày nghỉ của tháng 1">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator2" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator14" style="color:Red;display:none;">Ngày nghỉ trong tháng 1 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator26" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 1.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 2</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_2" type="text" id="ctl08_ctl00_THANG_2" class="form-control input-default" placeholder="Ngày nghỉ của tháng 2">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator3" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator15" style="color:Red;display:none;">Ngày nghỉ trong tháng 2 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator27" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 2.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 3</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_3" type="text" id="ctl08_ctl00_THANG_3" class="form-control input-default" placeholder="Ngày nghỉ của tháng 3">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator4" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator16" style="color:Red;display:none;">Ngày nghỉ trong tháng 3 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator28" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 3.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 4</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_4" type="text" id="ctl08_ctl00_THANG_4" class="form-control input-default" placeholder="Ngày nghỉ của tháng 4">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator5" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator17" style="color:Red;display:none;">Ngày nghỉ trong tháng 4 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator29" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 4.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 5</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_5" type="text" id="ctl08_ctl00_THANG_5" class="form-control input-default" placeholder="Ngày nghỉ của tháng 5">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator6" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator18" style="color:Red;display:none;">Ngày nghỉ trong tháng 5 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator30" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 5.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 6</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_6" type="text" id="ctl08_ctl00_THANG_6" class="form-control input-default" placeholder="Ngày nghỉ của tháng 6">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator7" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator19" style="color:Red;display:none;">Ngày nghỉ trong tháng 6 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator31" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 6.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 7</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_7" type="text" id="ctl08_ctl00_THANG_7" class="form-control input-default" placeholder="Ngày nghỉ của tháng 7">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator8" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator20" style="color:Red;display:none;">Ngày nghỉ trong tháng 7 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator32" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 7.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 8</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_8" type="text" id="ctl08_ctl00_THANG_8" class="form-control input-default" placeholder="Ngày nghỉ của tháng 8">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator9" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator21" style="color:Red;display:none;">Ngày nghỉ trong tháng 8 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator33" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 8.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 9</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_9" type="text" id="ctl08_ctl00_THANG_9" class="form-control input-default" placeholder="Ngày nghỉ của tháng 9">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator10" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator22" style="color:Red;display:none;">Ngày nghỉ trong tháng 9 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator34" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 9.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 10</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_10" type="text" id="ctl08_ctl00_THANG_10" class="form-control input-default" placeholder="Ngày nghỉ của tháng 10">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator14" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator23" style="color:Red;display:none;">Ngày nghỉ trong tháng 10 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator35" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 10.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 11</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_11" type="text" id="ctl08_ctl00_THANG_11" class="form-control input-default" placeholder="Ngày nghỉ của tháng 11">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator11" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator24" style="color:Red;display:none;">Ngày nghỉ trong tháng 11 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator36" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 11.</span>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Tháng 12</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$THANG_12" type="text" id="ctl08_ctl00_THANG_12" class="form-control input-default" placeholder="Ngày nghỉ của tháng 12">
+                                                    <span id="ctl08_ctl00_RegularExpressionValidator12" style="color:Red;display:none;">Ngày trong tháng phải là 2 số liền nhau, các ngày phân biệt bởi dấu cách.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator25" style="color:Red;display:none;">Ngày nghỉ trong tháng 12 trùng với ngày nghỉ trong tuần hoặc ngày không hợp lệ.</span>
+                                                    <span id="ctl08_ctl00_CustomValidator37" style="color:Red;display:none;">Không nhập trùng ngày nghỉ trong cùng tháng 12.</span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Người sửa</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$FUserEdit" type="text" value="nguyenvsd" id="ctl08_ctl00_FUserEdit" disabled="disabled" class="form-control input-default" placeholder="Người sửa">
+                                                    <span id="ctl08_ctl00_FUserEditValid" class="labError" style="color:Red;display:none;"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Ngày sửa</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$FEditTime" type="text" value="23/04/19 02:26:39 PM" id="ctl08_ctl00_FEditTime" disabled="disabled" class="form-control input-default" placeholder="Ngày sửa">
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <label class="col-md-2 control-label">Ngày tạo</label>
+                                                <div class="col-md-8">
+                                                    <input name="ctl08$ctl00$FCreateTime" type="text" value="23/04/19 02:23:21 PM" id="ctl08_ctl00_FCreateTime" disabled="disabled" class="form-control input-default" placeholder="Ngày tạo">
+                                                </div>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <div class="col-md-offset-2 col-md-10">
+                                                    <input type="submit" name="ctl08$ctl00$btnluu" value="Lưu" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$ctl00$btnluu&quot;, &quot;&quot;, true, &quot;&quot;, &quot;&quot;, false, false))" id="btnluu" class="btn btn-primary">
+
+                                                    <input type="submit" name="ctl08$ctl00$btndong" value="Đóng" id="btndong" class="btn btn-primary">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <div class="maincontentinner">
+                                    <!-- Table with stripped rows -->
+                                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                                        <input type="button" value="Thêm" onclick="window.location.href = '/Danhmuc/ThemPhongBan';" class="btn btn-primary" style="width:100px;" />
+
+                                    </p>
+
+                                    <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                        <div class="dataTables_length">
+                                            <label>
+                                                Hiển thị
+                                                <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
+                                                    <option value="5">5</option>
+                                                    <option value="10" selected="">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                </select> bản ghi
+                                            </label>
+                                        </div>
+                                        <div id="dataTable">
+                                            <div class="dataTable-container">
+                                                <table class="table table-bordered responsive">
+                                                    <thead class="widgettitle">
+                                                        <tr>
+                                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                            <th class="head1" scope="col" data-sortable="" style="width: 30%;">TÊN</th>
+                                                            <th class="head0" scope="col" data-sortable="" style="width: 50%;">MÔ TẢ</th>
+                                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                            <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                            <th class="head1" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model.lst_ngay_nghi != null)
+                                                        {
+                                                            var stt = 1;
+                                                            foreach (var item in Model.lst_ngay_nghi)
+                                                            {
+                                                                <tr>
+                                                                    <td scope="row">@stt</td>
+                                                                    <td><a href="#">@item.ten_ngay_nghi</a></td>
+                                                                    <td>@item.mo_ta</td>
+                                                                    <td>
+                                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DanhMuc/SuaPhongBan?code=@item.nam&type=@(StatusAction.View.ToString())">
+                                                                            <span class="glyphicon glyphicon-list-alt">Xem</span>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Sửa" href="/DanhMuc/SuaPhongBan?code=@item.nam&type=@(StatusAction.Edit.ToString())">
+                                                                            <span class="glyphicon glyphicon-edit">Sửa</span>
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a onclick="confirm.BeforDeletePost('/DanhMuc/XoaPhongBan?code=@item.nam')"
+                                                               title=""
+                                                               data-placement="top"
+                                                               data-toggle="tooltip"
+                                                               data-original-title="Xóa"
+                                                               href="#">
+                                                                            <span class="glyphicon glyphicon-trash">Xóa</span>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                stt++;
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                                            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                                @{
+                                                    var TotalPage = (int)ViewBag.TotalPage;
+                                                    var CurrentPage = (int)ViewBag.CurrentPage;
+                                                    if (TotalPage > 5)
+                                                    {
+                                                        if (CurrentPage > CurrentPage + 2)
+                                                        {
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                        };
+                                                        if (CurrentPage > 3)
+                                                        {
+                                                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                            {
+                                                                if (i == CurrentPage)
+                                                                {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            for (int i = 1; i <= 5; i++)
+                                                            {
+                                                                if (i == CurrentPage)
+                                                                {
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                        if (CurrentPage < CurrentPage + 2)
+                                                        {
+                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                        };
+                                                    }
+                                                    else
+                                                    {
+                                                        for (int i = 1; i <= TotalPage; i++)
+                                                        {
+                                                            if (i == CurrentPage)
+                                                            {
+                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+
+                                        <!-- End Table with stripped rows -->
+
+                                    </div>
+                                    <!-- Table with stripped rows -->
+                                    <p class="stdformbutton" style="margin-bottom: 10px;">
+                                        <input type="button" value="Thêm" onclick="window.location.href = '/LichTruc/QuanLy?type=@StatusAction.Add.ToString()';" class="btn btn-primary" style="width:100px;" />
+
+                                        <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+
+                                    </p>
+
+                                </div>
+                            }
+
+                        </div>
+                        @*TAB thông tin chuyên viên online *@
+                        <div class="tab-pane fade @(ViewBag.active==2?"show active":"")" id="pills-tab2" role="tabpanel" aria-labelledby="profile-tab">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        jQuery.validator.addMethod("dinh_dang", function(value, element) {
+            var check = true;
+            value.split(" ").forEach(function(i) {
+                console.log("iii" + i);
+                if (i.length != 2) {
+                    console.log("i" + i.length);
+                    check = false;
+                }
+            });
+            if (check == true) {
+                return true;
+            } else {
+                return false;
+            }
+        }, "Phải là 2 ký tự liền nhau, các ngày phân biệt nhau bởi dấu cách.");
+
+        $('#form_pb').validate({
+            rules: {
+                nam: {
+                    required: true,
+                    minlength: 4,
+                    maxlength: 4
+                },
+                ngay_nghi_trong_tuan: {
+                    dinh_dang: true
+                },
+            },
+            messages: {
+                nam: {
+                    required: "Nhập năm",
+                    minlength: "Năm không phù hợp",
+                    maxlength: "Năm không phù hợp"
+                },
+            }
+        });
+    });
+</script>

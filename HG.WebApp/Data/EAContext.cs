@@ -59,6 +59,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<cd_thong_bao> cd_thong_bao { get; set; }
         public virtual DbSet<cd_quan_ly_hoat_dong> cd_quan_ly_hoat_dong { get; set; }
         public virtual DbSet<cd_danh_sach_can_bo> cd_danh_sach_can_bo { get; set; }
+        public virtual DbSet<cd_lich_truc> cd_lich_truc { get; set; }
 
         // END Danh mục
 
