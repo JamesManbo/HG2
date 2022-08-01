@@ -102,6 +102,7 @@ namespace HG.WebApp.Controllers
             EAContext db = new EAContext();
             var hoso = db.Ho_So.Where(n => n.Id == Int32.Parse(Id)).FirstOrDefault();
             hoso.trang_thai = trangthai;
+           
             db.Update(hoso);
             db.SaveChangesAsync();
             ViewBag.view_type = type;
