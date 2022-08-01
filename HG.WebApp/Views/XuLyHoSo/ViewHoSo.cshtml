@@ -293,7 +293,7 @@ $(document).ready(function() {
                 <div class="form-horizontal">
                     <div id="tt_chitiet" class="row">
                         <div class="form-group row mb-3">
-                                    <span for="mota" class="col-sm-1 control-label">Hạn xử lý"</span>
+                                    <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
                                     <div class="col-md-3">
                                        <label  type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="" ></label>
                                     </div>
@@ -375,17 +375,17 @@ $(document).ready(function() {
                     </div>
                      <div class="text-center">
                                <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,19)"  style="width: 150px" >Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,25)" style="width: 150px">Lưu và chuyển</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,14)">Yêu cầu bổ sung</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Trả KQ giai đoạn 1</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Hồ sơ không đủ đk</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Ký hồ sơ</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Chuyển một cửa</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Trả lại</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Kết thúc XL</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">In kết quả</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,22)" style="width: 150px">Lưu và chuyển</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,6)">Yêu cầu bổ sung</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,15)">Trả KQ giai đoạn 1</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,14)">Hồ sơ không đủ đk</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,24)">Ký hồ sơ</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,25)">Chuyển một cửa</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,12)">Trả lại</button>
+                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,12)">Kết thúc XL</button>
+                               <button type="button" class="btn btn-primary">In kết quả</button>
                                <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Thông báo cho công dân</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Gia hạn xử lý</button>
+                               <button type="button" class="btn btn-primary" onclick="LyDoGiaHan(@Model.Id)">Gia hạn xử lý</button>
                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/XuLyHoSo/HoSoChoXuLy';" style="width: 150px">Đóng</button>
                     </div>
                 </div>
@@ -445,7 +445,16 @@ $(document).ready(function() {
             return;
         }
         $("#NotifyVHSTitle").html("Thông báo tin nhắn cho công dân thành công!");
+        this.LuuThongTinHoSo(abc,99)
         $("#NotifyVHS").modal("show");
+    }
+     function LyDoGiaHan(abc){
+       // var msg = $("#gui_tin_nhan").val();
+       
+       // $("#NotifyVHSTitle").html("Thông báo tin nhắn cho công dân thành công!");
+       /// this.LuuThongTinHoSo(abc,99)
+        $("#Giahanxl").modal("show");
+
     }
 </script>
 
@@ -460,6 +469,48 @@ $(document).ready(function() {
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Giahanxl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Gia hạn xử lý</h5>
+            </div>
+            <div class="form-horizontal">
+                 <div id="tt_chitiet" class="row">
+                    <div class="form-group row mb-3">
+                          <span for="mota" class="col-sm-3 control-label">Lý do gia hạn</span>
+                                    <div class="col-sm-8">
+                                        <input maxlength="200" type="text" class="form-control input-default" id="ly_do_gia_han" name="ly_do_gia_han" value="" placeholder="Nhập nội dung"/>
+                                    </div>
+                     </div>
+                      <div class="form-group row mb-3">
+                          <span for="mota" class="col-sm-3 control-label">Số ngày gia hạn</span>
+                                    <div class="col-sm-8">
+                                        <input maxlength="200" type="number" class="form-control input-default" id="so_ngay" name="so_ngay" value="" placeholder="Số ngày gia hạn"/>
+                                    </div>
+                     </div>
+                      <div class="form-group row mb-3">
+                               <span  class="col-sm-3 control-label">File đính kèm</span>
+                                    <div class="col-md-8">
+                                        <input type="file" id="files" name="files" style="display: none">
+                                        <input type="text" id="attach2" name="attach1" style="display: none">
+                                        <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <img id="attach1" style="margin-top: 10px;" width="100" />
+                                    </div>
+                     </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                 <div class="form-horizontal">
+                    <div class="row">
+                          <button type="button" class="btn btn-secondary modal-footer-btnclose"  onclick="LuuThongTinHoSo(@Model.Id,98)">Lưu</button>
+                           <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+                     </div>
+                      </div>
             </div>
         </div>
     </div>
