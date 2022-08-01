@@ -101,12 +101,47 @@ namespace HG.WebApp.Controllers
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
             EAContext db = new EAContext();
             var hoso = db.Ho_So.Where(n => n.Id == Int32.Parse(Id)).FirstOrDefault();
+            
             hoso.trang_thai = trangthai;
+            switch (trangthai)
+            {
+                case 19:
+                    hoso.id_trang_thai_xl = 1;
+                    break;
+                case 22:
+                    hoso.id_trang_thai_xl = 2;
+                    break;
+                case 6:
+                    hoso.id_trang_thai_xl = 4;
+                    break;
+                case 15:
+                    hoso.id_trang_thai_xl = 6;
+                    break;
+                case 14:
+                    hoso.id_trang_thai_xl = 3;
+                    break;
+                case 25:
+                    hoso.id_trang_thai_xl = 10;
+                    break;
+                case 24:
+                    hoso.id_trang_thai_xl = 1;
+                    break;
+                case 12:
+                    hoso.id_trang_thai_xl = 5;
+                    break;               
+                case 99:
+                    hoso.id_trang_thai_xl = 9;
+                    break;
+                case 98:
+                    hoso.id_trang_thai_xl = 11;
+                    break;
+            }
             db.Update(hoso);
             db.SaveChangesAsync();
             ViewBag.view_type = type;
             //ViewBag.lstThanhPhan = lstThanhPhan;
             //ViewBag.ma_luong = ma_luong;
+           
             return RedirectToAction("XuLyHoSo", "HoSoChoXuLy", new {  currentPage = 1,  txtSearch = "",  ma_linh_vuc = "",  ma_thu_tuc = "",  pageSize = 25 });
            // var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/HoSoChoXuLy.cshtml",hs);
            // return Content(result);
