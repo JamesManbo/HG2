@@ -58,10 +58,8 @@ namespace HG.WebApp.Controllers.Client
 
                 data.lich_truc = db.cd_lich_truc.FirstOrDefault(n => n.thang == month && n.tuan == week) ?? new cd_lich_truc();
             }
-            if (id > 0 && type == StatusAction.Edit.ToString() && tab == 1)
-            {
-                data.ngay_nghi = data.lst_ngay_nghi.FirstOrDefault(n => n.nam == nam) ?? new Dm_Ngay_Nghi();
-            }
+
+            data.ngay_nghi = data.lst_ngay_nghi.FirstOrDefault(n => n.nam == nam) ?? new Dm_Ngay_Nghi();
             ViewBag.type_view = type;
             ViewBag.TotalPage = (data.lst_ngay_nghi.Count() / pageSize) + ((data.lst_ngay_nghi.Count() % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
@@ -71,6 +69,28 @@ namespace HG.WebApp.Controllers.Client
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? data.lst_ngay_nghi.Count() : pageSize;
             ViewBag.active = tab;
             return View(data);
+        }
+
+        public async Task<IActionResult> QuanLyPaging(int nam , int currentPage = 0, int pageSize = 0)
+        {
+            var totalRecored = 0;
+            var result = "";
+
+            using (var db = new EAContext())
+            {
+                var ds = db.Dm_Ngay_Nghi.Where(n => n.Deleted == 0).ToList();
+                var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                totalRecored = ds.Count();
+                ViewBag.TotalRecored = totalRecored;
+                ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                ViewBag.CurrentPage = currentPage;
+                ViewBag.RecoredFrom = (currentPage - 1) * pageSize + 1;
+                ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/LichTruc/QuanLyPaging.cshtml", datapage);
+
+            }
+
+            return Content(result);
         }
 
         public IActionResult SaveNgayNghi(Dm_Ngay_Nghi item, string type = "")
@@ -83,7 +103,7 @@ namespace HG.WebApp.Controllers.Client
                 if (type == StatusAction.Edit.ToString() && obj != null)
                 {
                     obj.UidName = User.Identity.Name;
-                    obj.CreatedDateUtc = DateTime.Now;
+                    obj.UpdatedDateUtc = DateTime.Now;
                     obj.ten_ngay_nghi = item.ten_ngay_nghi;
                     obj.mo_ta = item.mo_ta;
                     obj.ngay_nghi_trong_tuan = item.ngay_nghi_trong_tuan;
@@ -106,7 +126,10 @@ namespace HG.WebApp.Controllers.Client
                 {
                     item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
                     item.CreatedDateUtc = DateTime.Now;
-                    item.Deleted = 0;            
+                    item.Deleted = 0;
+                    item.Status = 1;
+                    item.UidName = User.Identity.Name;
+                    item.UpdatedDateUtc = DateTime.Now;
                     Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Dm_Ngay_Nghi> _role = eAContext.Dm_Ngay_Nghi.Add(item);
                     eAContext.SaveChanges();
                 }
@@ -117,6 +140,37 @@ namespace HG.WebApp.Controllers.Client
                 ViewBag.ErrorCode = 1;
                 ViewBag.ErrorMsg = "Lỗi dữ liệu";
                 return RedirectToAction("QuanLy", "LichTruc");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult XoaNgayNghi(int nam)
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction("Login", "User");
+                }
+                var uid = Guid.Parse(userManager.GetUserId(User));
+
+                EAContext db = new EAContext();
+
+                var obj = db.Dm_Ngay_Nghi.Where(n => n.nam == Convert.ToInt64(nam)).FirstOrDefault();
+                if (obj != null)
+                {
+                    obj.Deleted = 1;
+                    obj.UpdatedDateUtc = DateTime.Now;
+                    obj.UpdatedUid = uid;
+                    db.Entry(obj).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                return Json(new { error = 0, msg = "Xóa thành công!", href = "/LichTruc/QuanLy" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = 1, msg = "Xóa lỗi" });
             }
         }
 

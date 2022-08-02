@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using HG.Data.Business.DanhMuc;
+using HG.Data.Business.HoSo;
 using HG.Data.Business.ThuTuc;
 using HG.Entities;
 using HG.Entities.Entities;
@@ -24,6 +25,7 @@ namespace HG.WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly LuongXuLyDao _danhmucDao;
         private readonly ThuTucDao _thuTucDao;
+        private readonly XuLyHoSoDao _xulyhsDao;
         private readonly HG.Data.Business.HoSo.HoSoDao _hoso;
         public XuLyHoSoController(IWebHostEnvironment _environment, ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -34,6 +36,7 @@ namespace HG.WebApp.Controllers
             this._httpContextAccessor = httpContextAccessor;
             _danhmucDao = new LuongXuLyDao(DbProvider);
             _thuTucDao = new ThuTucDao(DbProvider);
+            _xulyhsDao = new XuLyHoSoDao(DbProvider);
             _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
 
         }
@@ -47,7 +50,7 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 2 };
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 18 };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
             using (var db = new EAContext())
             {
@@ -67,10 +70,12 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSo(int code, string type)
         {
+            
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
             ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
             ViewBag.type_view = StatusAction.View.ToString();
+            ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
@@ -89,6 +94,57 @@ namespace HG.WebApp.Controllers
             //ViewBag.ma_luong = ma_luong;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinXuLy.cshtml", quaTrinhXuLyModels);
             return Content(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai)
+        {
+            //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
+            EAContext db = new EAContext();
+            var hoso = db.Ho_So.Where(n => n.Id == Int32.Parse(Id)).FirstOrDefault();
+            
+            hoso.trang_thai = trangthai;
+            switch (trangthai)
+            {
+                case 19:
+                    hoso.id_trang_thai_xl = 1;
+                    break;
+                case 22:
+                    hoso.id_trang_thai_xl = 2;
+                    break;
+                case 6:
+                    hoso.id_trang_thai_xl = 4;
+                    break;
+                case 15:
+                    hoso.id_trang_thai_xl = 6;
+                    break;
+                case 14:
+                    hoso.id_trang_thai_xl = 3;
+                    break;
+                case 25:
+                    hoso.id_trang_thai_xl = 10;
+                    break;
+                case 24:
+                    hoso.id_trang_thai_xl = 1;
+                    break;
+                case 12:
+                    hoso.id_trang_thai_xl = 5;
+                    break;               
+                case 99:
+                    hoso.id_trang_thai_xl = 9;
+                    break;
+                case 98:
+                    hoso.id_trang_thai_xl = 11;
+                    break;
+            }
+            db.Update(hoso);
+            db.SaveChangesAsync();
+            ViewBag.view_type = type;
+            //ViewBag.lstThanhPhan = lstThanhPhan;
+            //ViewBag.ma_luong = ma_luong;
+           
+            return RedirectToAction("XuLyHoSo", "HoSoChoXuLy", new {  currentPage = 1,  txtSearch = "",  ma_linh_vuc = "",  ma_thu_tuc = "",  pageSize = 25 });
+           // var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/HoSoChoXuLy.cshtml",hs);
+           // return Content(result);
         }
     }
 }

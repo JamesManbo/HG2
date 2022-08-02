@@ -241,6 +241,7 @@ namespace HG.WebApp.Controllers
             ViewBag.LuongXuLy = _danhmucDao.DanhSachLuongKey();
             ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
             ViewBag.LinhVuc = db.Dm_Linh_Vuc.ToList();
+            ViewBag.DichVu = _danhmucDao.DanhSachThuTucHC();
             ViewBag.code = code;
             return View("~/Views/Luong/GanLuongXuLy/ThemGanLuongXuLy.cshtml");
         }
@@ -279,6 +280,7 @@ namespace HG.WebApp.Controllers
             ViewBag.LuongXuLy = _danhmucDao.DanhSachLuongKey();
             ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
             ViewBag.LinhVuc = db.Dm_Linh_Vuc.ToList();
+            ViewBag.DichVu = _danhmucDao.DanhSachThuTucHC();
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhGanLuongXuLy(nhomSearchItem);
@@ -308,7 +310,7 @@ namespace HG.WebApp.Controllers
             }
             else if (item.type_view == StatusAction.View.ToString())
             {
-                return RedirectToAction("SuaGanLuongXuLy", "Luong", new { code = item.ma_gan_luong, type = StatusAction.View.ToString() });
+                return RedirectToAction("SuaGanLuongXuLy", "Luong", new { code = item.ma_gan_luong, type = StatusAction.Edit.ToString() });
             }
             return BadRequest();
 
