@@ -10,20 +10,20 @@
             <h1>Số lượng hồ sơ</h1>
         </div>
     </div>
-   
+
     <div class="maincontent dat">
         <div class="maincontentinner">
             <div class="widget">
                 <h4 class="widgettitle">Lọc danh sách theo</h4>
                 <div class="widgetcontent">
                     <div class="form-group row">
-                        
+
                             <label for="inputPassword" class="col-md-2 control-label">Năm: </label>
                             <div class="col-md-4">
                                 <select name="nam" id="nam" class="form-select form-control input-default">  
                                     <option value="1">2019</option>
                                     <option value="2">2020</option>
-                                    @*@if(list_vai_tro != null)
+                                @*@if(list_vai_tro != null)
                                     {
                                         for (var item = 0; item <list_vai_tro.Count(); item++)
                                         {
@@ -35,18 +35,21 @@
                                             }
                                         }
                                     }*@
-		                        </select>
+                                </select>
                             </div>
                             <label class="col-md-1 control-label">
                                 Quý:
                             </label>
                             <div class="col-md-4">
                                 <select name="quy" id="quy" class="form-select form-control input-default">
-			                        <option value="1">Quý 1</option>
-			                        <option selected="selected" value="2">Quý 2</option>
-			                        <option value="3">Quý 3</option>
-			                        <option value="4">Quý 4</option>
-		                        </select>
+                                    <option value="1">Quý 1</option>
+                                    <option selected="selected" value="2">Quý 2</option>
+                                    <option value="3">Quý 3</option>
+                                    <option value="4">Quý 4</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" name="ctl08$Button2" value="Xem" onclick="window.location.href='/ThongKeBaoCao/Print';" id="Button2" class="btn btn-primary" role="button" style="height:34px;width:100px;">
                             </div>
                     </div>
                 </div>

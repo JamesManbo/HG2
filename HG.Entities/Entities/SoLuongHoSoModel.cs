@@ -8,15 +8,10 @@ namespace HG.Entities
 {
     public class SoLuongHoSoModel
     {
-        public int tong_hs_nhan_giai_quyet { get; set; }
-        public int so_ky_truoc_chuyen_qua { get; set; }
-        public int so_moi_tiep_nhan { get; set; }
-        public int tong_hs_da_giai_quyet { get; set; }
-        public int tra_dung_han { get; set; }
-        public int tra_som_han { get; set; }
-        public int tra_qua_han { get; set; }
-        public int tong_hs_dang_giai_quyet { get; set; }
-        public int chua_den_han { get; set; }
-        public int qua_han { get; set; }
+        public int Id { get; set; }
+        public string ma_khach_hang { get; set; }
+        public int gioi_tinh { get; set; }
+        public string ho_ten { get; set; }
+        public string email { get; set; }
     }
 }

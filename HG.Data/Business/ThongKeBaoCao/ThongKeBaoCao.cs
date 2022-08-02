@@ -20,20 +20,20 @@ namespace HG.Data.Business.ThongKeBaoCao
             try
             {
                 List<SoLuongHoSoModel> soLuongHS = new List<SoLuongHoSoModel>();
-                DbProvider.SetCommandText2("bao_cao_so_luong_ho_so", CommandType.StoredProcedure);
+                DbProvider.SetCommandText2("[dbo].[bao_cao_so_luong_ho_so]", CommandType.StoredProcedure);
 
                 // Input params
                 DbProvider.AddParameter("@nam", nam, SqlDbType.NVarChar);
                 DbProvider.AddParameter("@quy", quy, SqlDbType.NVarChar);
 
                 // Output params
-                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                //DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
                 soLuongHS = DbProvider.ExecuteListObject<SoLuongHoSoModel>();
-                var maloi = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
-                if (maloi == 1)
-                {
-                    return new List<SoLuongHoSoModel>();
-                }
+                //var maloi = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+                //if (maloi == 1)
+                //{
+                //    return new List<SoLuongHoSoModel>();
+                //}
                 return soLuongHS;
             }
             catch (Exception e)
