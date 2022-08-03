@@ -34,6 +34,36 @@ namespace HG.Data.Business.HoSo
                 return new List<QuyTrinhXuLy>();
             }
         }
+        public PhanCongThucHienModels GetPhanCongXuLy(int id)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("Get_phancong_xuly", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_ho_so", id, SqlDbType.Int);
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteObject<PhanCongThucHienModels>();
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new PhanCongThucHienModels();
+            }
+        }
+        public List<QuaTrinhXuLyModels> GetQuaTrinhXuLy(int id)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("Get_quatrinh_xuly_hoso", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_ho_so", id, SqlDbType.Int);
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteListObject<QuaTrinhXuLyModels>();
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new List<QuaTrinhXuLyModels>();
+            }
+        }
         public int ThemSuaPhanCongThucHien(PhanCongThucHienModels item,string userid)
         {
             try
@@ -45,6 +75,8 @@ namespace HG.Data.Business.HoSo
                 DbProvider.AddParameter("ma_quy_trinh", item.ma_quy_trinh, SqlDbType.NVarChar);
                 DbProvider.AddParameter("Id_nguoi_nhan", item.Id_nguoi_nhan, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("Id_nguoi_phoi_hop", item.Id_nguoi_phoi_hop, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("file_dinh_kem", item.file_dinh_kem, SqlDbType.NVarChar);
+                DbProvider.AddParameter("y_kien", item.y_kien, SqlDbType.NVarChar);
                 DbProvider.AddParameter("CreatedUid", Guid.Parse(userid), SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("UpdatedUid", Guid.Parse(userid), SqlDbType.UniqueIdentifier);
               
