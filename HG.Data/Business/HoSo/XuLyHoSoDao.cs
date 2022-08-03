@@ -34,12 +34,13 @@ namespace HG.Data.Business.HoSo
                 return new List<QuyTrinhXuLy>();
             }
         }
-        public PhanCongThucHienModels GetPhanCongXuLy(int id)
+        public PhanCongThucHienModels GetPhanCongXuLy(int id,int trang_thai)
         {
             try
             {
                 DbProvider.SetCommandText2("Get_phancong_xuly", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_ho_so", id, SqlDbType.Int);
+                DbProvider.AddParameter("trang_thai", trang_thai, SqlDbType.Int);
                 // Lấy về danh sách các người dung
                 var menu = DbProvider.ExecuteObject<PhanCongThucHienModels>();
                 return menu;
@@ -49,21 +50,22 @@ namespace HG.Data.Business.HoSo
                 return new PhanCongThucHienModels();
             }
         }
-        public List<QuaTrinhXuLyModels> GetQuaTrinhXuLy(int id)
+        public List<QuaTrinhXuLy> GetQuaTrinhXuLy(int id)
         {
             try
             {
                 DbProvider.SetCommandText2("Get_quatrinh_xuly_hoso", CommandType.StoredProcedure);
-                DbProvider.AddParameter("ma_ho_so", id, SqlDbType.Int);
+                DbProvider.AddParameter("Id_ho_so", id, SqlDbType.Int);
                 // Lấy về danh sách các người dung
-                var menu = DbProvider.ExecuteListObject<QuaTrinhXuLyModels>();
+                var menu = DbProvider.ExecuteListObject<QuaTrinhXuLy>();
                 return menu;
             }
             catch (Exception e)
             {
-                return new List<QuaTrinhXuLyModels>();
+                return new List<QuaTrinhXuLy>();
             }
         }
+        
         public int ThemSuaPhanCongThucHien(PhanCongThucHienModels item,string userid)
         {
             try
@@ -71,8 +73,9 @@ namespace HG.Data.Business.HoSo
                 DbProvider.SetCommandText2("them_sua_phan_luong_xu_ly", CommandType.StoredProcedure);
                 DbProvider.AddParameter("Id", item.Id == null? Guid.Empty : item.Id, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("Id_ho_so", item.Id_ho_so, SqlDbType.Int);
+                DbProvider.AddParameter("trang_thai_xl", item.trang_thai, SqlDbType.Int);
                 DbProvider.AddParameter("han_xu_ly", item.han_xu_ly == null? "" : item.han_xu_ly, SqlDbType.NVarChar);
-                DbProvider.AddParameter("ma_quy_trinh", item.ma_quy_trinh, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_quy_trinh", item.ma_quy_trinh == null ? "" : item.ma_quy_trinh, SqlDbType.NVarChar);
                 DbProvider.AddParameter("Id_nguoi_nhan", item.Id_nguoi_nhan, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("Id_nguoi_phoi_hop", item.Id_nguoi_phoi_hop, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("file_dinh_kem", item.file_dinh_kem, SqlDbType.NVarChar);

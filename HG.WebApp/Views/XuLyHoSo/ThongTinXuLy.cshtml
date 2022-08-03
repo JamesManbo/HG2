@@ -1,4 +1,4 @@
-﻿                                    @model HG.Entities.QuaTrinhXuLyModels
+﻿                                    @model List<HG.Entities.QuaTrinhXuLy>
                                     @using HG.WebApp;
                                     <script>
                                         $(document).ready(function() {
@@ -50,22 +50,20 @@
 							                                <th scope="col">STT</th>
                                                             <th align="center" > Hạn xử lý </th>
                                                             <th align="center">Ngày xử lý</th>
-                                                            <th align="center">Người xử lý</th>
-                                                            <th align="center">Trình tự công việc</th>
-                                                             <th align="center">Người nhận</th>
+                                                       
                                                             <th align="center" scope="col" style="text-align: center;">Tên người thực hiện</th>
                                                             <th align="center" scope="col" style="text-align: center;">Trình tự công việc</th>
                                                             <th align="center" scope="col" style="text-align: center;">Người nhận</th>
 						                                </tr>
                                                         @*start body*@
                                                        
-                                                            @if(@Model.Qua_trinh_xu_ly != null){
+                                                            @if(@Model != null){
                                                                 var stt = 1;
-                                                                foreach (var item in @Model.Qua_trinh_xu_ly)
+                                                                foreach (var item in @Model)
                                                                 {
                                                                     <tr>
                                                                     <td align="center" style="width:4%;">
-                                                                        stt
+                                                                        @stt
                                                                          
                                                                     </td>
                                                                                                                                           
@@ -85,6 +83,7 @@
                                                                         <span id="Label7">@item.nguoi_nhan</span>
                                                                     </td>
                                                                     </tr>
+                                                                    
                                                                 }
                                                             }   
 					                                </tbody></table>

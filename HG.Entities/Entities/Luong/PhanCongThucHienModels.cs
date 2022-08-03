@@ -16,5 +16,6 @@ namespace HG.Entities.Entities.Luong
         public Guid? Id_nguoi_phoi_hop { get; set; }
         public string file_dinh_kem { get; set; }
         public string y_kien { get; set; }
+        public int trang_thai { get; set; }
     }
 }

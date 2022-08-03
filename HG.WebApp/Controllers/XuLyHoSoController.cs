@@ -69,6 +69,30 @@ namespace HG.WebApp.Controllers
             ViewBag.MaThuTuc = ma_thu_tuc;
             return View(hs);
         }
+        public IActionResult HoSoDangXuLy(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            //hs mới tiếp nhận status = 1
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 19 };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
         public IActionResult ViewHoSo(int code, string type)
         {
             
@@ -77,7 +101,25 @@ namespace HG.WebApp.Controllers
             ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code);
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code,18);
+            var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+            //Lấy thủ tục bởi mã lv
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
+            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            //Lấy biểu mẫu
+            ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
+
+            return View(hoso);
+        }
+        public IActionResult ViewHoSoDangXuLy(int code, string type)
+        {
+
+            EAContext db = new EAContext();
+            ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.type_view = StatusAction.View.ToString();
+            ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 19);
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
@@ -90,11 +132,11 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayThongTinXuLyHoSo(string ma_ho_so, string type)
         {
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
-            //QuaTrinhXuLyModels quaTrinhXuLyModels = new QuaTrinhXuLyModels();
+            List<QuaTrinhXuLy> quaTrinhXuLyModels = new List<QuaTrinhXuLy>();
             ViewBag.view_type = type;
-            var lstQuaTrinhXuLy = _xulyhsDao.GetQuaTrinhXuLy(Int32.Parse(ma_ho_so));
+            quaTrinhXuLyModels = _xulyhsDao.GetQuaTrinhXuLy(Int32.Parse(ma_ho_so));
             //ViewBag.ma_luong = ma_luong;
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinXuLy.cshtml", lstQuaTrinhXuLy);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinXuLy.cshtml", quaTrinhXuLyModels);
             return Content(result);
         }
         [HttpPost]
