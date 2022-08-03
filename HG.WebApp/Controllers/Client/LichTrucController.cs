@@ -38,7 +38,7 @@ namespace HG.WebApp.Controllers.Client
 
             return myCal.GetWeekOfYear(time, myCWR, myFirstDOW);
         }
-        public IActionResult QuanLy(int nam, string type = "", string oid = "")
+        public IActionResult QuanLy(int nam, string type = "", string oid = "", string don_vi = "")
         {
             var id = 0;
             var tab = 1;
@@ -49,16 +49,28 @@ namespace HG.WebApp.Controllers.Client
             }
             var day = DateTime.Now;
             var month = day.Month;
+            var year = day.Year;
             var week = GetWeekOrderInYear(day);
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var data = new lich_truc_model();
+
             using (var db = new EAContext())
             {
                 data.lst_ngay_nghi = db.Dm_Ngay_Nghi.Where(n => n.Deleted == 0).OrderByDescending(n => n.nam).Skip(0).Take(pageSize).ToList();
+                data.lst_don_vi = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                if (String.IsNullOrEmpty(don_vi))
+                {
+                    don_vi = data.lst_don_vi.FirstOrDefault().ma_don_vi ?? "";
+                }
+                data.lich_truc = db.cd_lich_truc.FirstOrDefault(n => n.thang == month && n.tuan == week && n.nam == year && n.don_vi == don_vi) ?? new cd_lich_truc();
 
-                data.lich_truc = db.cd_lich_truc.FirstOrDefault(n => n.thang == month && n.tuan == week) ?? new cd_lich_truc();
+                data.lst_can_bo = db.cd_danh_sach_can_bo.Where(n => n.Deleted == 0).ToList();
             }
-
+            if (data.lich_truc != null)
+            {
+                don_vi = data.lich_truc.don_vi ?? "";
+            }
+            ViewBag.don_vi = don_vi;
             data.ngay_nghi = data.lst_ngay_nghi.FirstOrDefault(n => n.nam == nam) ?? new Dm_Ngay_Nghi();
             ViewBag.type_view = type;
             ViewBag.TotalPage = (data.lst_ngay_nghi.Count() / pageSize) + ((data.lst_ngay_nghi.Count() % pageSize) > 0 ? 1 : 0);
@@ -71,7 +83,7 @@ namespace HG.WebApp.Controllers.Client
             return View(data);
         }
 
-        public async Task<IActionResult> QuanLyPaging(int nam , int currentPage = 0, int pageSize = 0)
+        public async Task<IActionResult> QuanLyPaging(int nam, int currentPage = 0, int pageSize = 0)
         {
             var totalRecored = 0;
             var result = "";
@@ -174,7 +186,47 @@ namespace HG.WebApp.Controllers.Client
             }
         }
 
+        public IActionResult SaveLichTruc(cd_lich_truc item)
+        {
+            try
+            {
+                EAContext eAContext = new EAContext();
+                var day = DateTime.Now;
+                var month = day.Month;
+                var year = day.Year;
+                var week = GetWeekOrderInYear(day);
+                var obj = eAContext.cd_lich_truc.FirstOrDefault(n => n.nam == year && n.thang == month && n.tuan == week && n.don_vi == item.don_vi);
 
+                if (obj != null)
+                {
+                    obj.thu2 = item.thu2;
+                    obj.thu3 = item.thu3;
+                    obj.thu4 = item.thu4;
+                    obj.thu5 = item.thu5;
+                    obj.thu6 = item.thu6;
+                    obj.thu7 = item.thu7;
+                    obj.thu8 = item.thu8;
+                    obj.don_vi = item.don_vi;
+                    eAContext.Entry(obj).State = EntityState.Modified;
+                    eAContext.SaveChanges();
+                }
+                else
+                {
+                    item.nam = year;
+                    item.thang = month;
+                    item.tuan = week;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<cd_lich_truc> _role = eAContext.cd_lich_truc.Add(item);
+                    eAContext.SaveChanges();
+                }
+                return RedirectToAction("QuanLy", "LichTruc");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Lỗi dữ liệu";
+                return RedirectToAction("QuanLy", "LichTruc");
+            }
+        }
 
     }
 }

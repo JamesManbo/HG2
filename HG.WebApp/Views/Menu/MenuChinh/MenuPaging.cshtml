@@ -126,4 +126,38 @@
 </div>
 
 <!-- End Table with stripped rows -->
+<script>
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/Menu/XoaChuyenMuc?code=' + listData)
+    }
+
+
+    $(function() {
+        $('#selectAll').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+</script>
 

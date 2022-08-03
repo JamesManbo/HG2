@@ -179,23 +179,24 @@
 </div>
 <script>
     function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
         $.ajax({
             type: "GET",
-            url: "../Menu/ChuyenMucCap2Paging?currentPage=" + id + "&pageSize=" + pageSize +  "&tu_khoa=",
+            url: "../Menu/ChuyenMucCap2Paging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-               // console.log(data);
+                // console.log(data);
                 $("#dataTable").html(data);
             }
         });
     }
 
-      function changePageSize(data) {
+    function changePageSize(data) {
         $("#lstPageSize").val(data.value);
         $.ajax({
             type: "GET",
-            url: "../DanhMenuMuc/ChuyenMucCap2Paging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
+            url: "../Menu/ChuyenMucCap2Paging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -214,10 +215,8 @@
             var val = [];
             if ($(this).is(':checked')) {
                 $(".ads_Checkbox").prop("checked", true);
-                $(':checkbox:checked').each(function(i) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
                 });
             }
             else {
@@ -230,18 +229,13 @@
 
         $('.ads_Checkbox').click(function() {
             var val = [];
-            $(':checkbox:checked').each(function(i) {
-                if ($('#selectAll').is(':checked')) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
-                } else {
-                    val[i] = $(this).val();
-                }
-
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
             });
             $("#lstCode").val(val);
         });
 
     });
+
+
 </script>

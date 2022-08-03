@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HG.Entities.DanhMuc.DonVi;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -31,5 +32,7 @@ namespace HG.Entities.Entities.CauHinh
         public cd_lich_truc lich_truc { get; set; }
         public Dm_Ngay_Nghi ngay_nghi { get; set; }
         public List<Dm_Ngay_Nghi> lst_ngay_nghi { get; set; }
+        public List<dm_don_vi> lst_don_vi { get; set; }
+        public List<cd_danh_sach_can_bo> lst_can_bo { get; set; }
     }
 }
