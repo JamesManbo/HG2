@@ -4,18 +4,6 @@
 
 
 
-<div class="dataTables_length">
-    <label>
-        Hiển thị
-        <select class="dataTable-selector">
-            <option value="5">5</option>
-            <option value="10" selected="">10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-            <option value="25">25</option>
-        </select> bản ghi
-    </label>
-</div>
 <div class="dataTable-container">
     <table class="table table-bordered responsive">
         <thead class="widgettitle">
@@ -140,3 +128,36 @@
 </div>
 
 <!-- End Table with stripped rows -->
+<script>
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/Menu/XoaChuyenMucCap2?code=' + listData)
+    }
+
+    $(function() {
+        $('#selectAll').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+</script>

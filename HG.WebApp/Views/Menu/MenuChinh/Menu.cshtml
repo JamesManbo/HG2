@@ -6,7 +6,7 @@
 }
 @model Dm_menu_paging
 <style>
-        .dataTable-wrapper {
+    .dataTable-wrapper {
         position: relative;
     }
 </style>
@@ -215,10 +215,8 @@
             var val = [];
             if ($(this).is(':checked')) {
                 $(".ads_Checkbox").prop("checked", true);
-                $(':checkbox:checked').each(function(i) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
+                $('.ads_Checkbox:checked').each(function(i) {
+                    val[i] = $(this).val();
                 });
             }
             else {
@@ -231,15 +229,8 @@
 
         $('.ads_Checkbox').click(function() {
             var val = [];
-            $(':checkbox:checked').each(function(i) {
-                if ($('#selectAll').is(':checked')) {
-                    if (i > 0) {
-                        val[i - 1] = $(this).val();
-                    }
-                } else {
-                    val[i] = $(this).val();
-                }
-
+            $('.ads_Checkbox:checked').each(function(i) {
+                val[i] = $(this).val();
             });
             $("#lstCode").val(val);
         });
