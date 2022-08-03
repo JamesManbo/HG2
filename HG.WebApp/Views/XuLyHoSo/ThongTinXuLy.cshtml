@@ -48,22 +48,25 @@
 						                            <tbody @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
                                                         <tr style="background-color:#EEEEEE;">
 							                                <th scope="col">STT</th>
-                                                            <th align="center" > Hạn xử lý= </th>
+                                                            <th align="center" > Hạn xử lý </th>
                                                             <th align="center">Ngày xử lý</th>
+                                                            <th align="center">Người xử lý</th>
+                                                            <th align="center">Trình tự công việc</th>
+                                                             <th align="center">Người nhận</th>
                                                             <th align="center" scope="col" style="text-align: center;">Tên người thực hiện</th>
                                                             <th align="center" scope="col" style="text-align: center;">Trình tự công việc</th>
                                                             <th align="center" scope="col" style="text-align: center;">Người nhận</th>
 						                                </tr>
                                                         @*start body*@
-                                                        
+                                                       
                                                             @if(@Model.Qua_trinh_xu_ly != null){
                                                                 var stt = 1;
-                                                                foreach (var item in Model.Qua_trinh_xu_ly)
+                                                                foreach (var item in @Model.Qua_trinh_xu_ly)
                                                                 {
                                                                     <tr>
                                                                     <td align="center" style="width:4%;">
-                                                                        @stt
-                                                                         <span id="Label1">@item.trang_thai</span>
+                                                                        stt
+                                                                         
                                                                     </td>
                                                                                                                                           
                                                                     <td>

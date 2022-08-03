@@ -77,6 +77,7 @@ namespace HG.WebApp.Controllers
             ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code);
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
@@ -89,11 +90,11 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayThongTinXuLyHoSo(string ma_ho_so, string type)
         {
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
-            QuaTrinhXuLyModels quaTrinhXuLyModels = new QuaTrinhXuLyModels();
+            //QuaTrinhXuLyModels quaTrinhXuLyModels = new QuaTrinhXuLyModels();
             ViewBag.view_type = type;
-            //ViewBag.lstThanhPhan = lstThanhPhan;
+            var lstQuaTrinhXuLy = _xulyhsDao.GetQuaTrinhXuLy(Int32.Parse(ma_ho_so));
             //ViewBag.ma_luong = ma_luong;
-            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinXuLy.cshtml", quaTrinhXuLyModels);
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinXuLy.cshtml", lstQuaTrinhXuLy);
             return Content(result);
         }
         [HttpPost]
@@ -102,7 +103,7 @@ namespace HG.WebApp.Controllers
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
             EAContext db = new EAContext();
             var hoso = db.Ho_So.Where(n => n.Id == Int32.Parse(Id)).FirstOrDefault();
-            
+            var trangthaitruoc = 0;
             hoso.trang_thai = trangthai;
             switch (trangthai)
             {
@@ -139,6 +140,7 @@ namespace HG.WebApp.Controllers
             }
             db.Update(hoso);
             db.SaveChangesAsync();
+            SaveLogHS(int.Parse( Id), "Hồ sơ chờ xử lý", (int)StatusXuLyHoSo.HoSoChoXuLy, trangthai, Guid.Parse(userManager.GetUserId(User)));
             ViewBag.view_type = type;
             //ViewBag.lstThanhPhan = lstThanhPhan;
             //ViewBag.ma_luong = ma_luong;
@@ -151,7 +153,7 @@ namespace HG.WebApp.Controllers
         public async Task<int> LuuPhanCongXuLy(PhanCongThucHienModels model)
         {
             var user = userManager.GetUserId(User);
-          var result =   _xulyhsDao.ThemSuaPhanCongThucHien(model,user.FirstOrDefault().ToString());
+          var result =   _xulyhsDao.ThemSuaPhanCongThucHien(model,user);
             if (result == 0)
             {
                 return 0;

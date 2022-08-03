@@ -14,8 +14,8 @@ namespace HG.Entities
     }
     public class QuaTrinhXuLy
     {
-        public DateTime han_xu_ly { get; set; }
-        public DateTime? ngay_thuc_hien { get; set; }
+        public string han_xu_ly { get; set; }
+        public string? ngay_thuc_hien { get; set; }
         public string? nguoi_xu_ly { get; set; }
         public string? trinh_tu_cong_viec { get; set; }
         public string? nguoi_nhan { get; set; }
