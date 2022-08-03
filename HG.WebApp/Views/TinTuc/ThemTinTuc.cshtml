@@ -43,10 +43,10 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/TinTuc/ThemTinTuc" method="post" enctype="multipart/form-data">
+                    <form id="form_tintuc" action="/TinTuc/ThemTinTuc" method="post" enctype="multipart/form-data">
                       
                          <div class="row mb-3 tab_thuc_hien">
-                            <label for="ten_pb" class="col-sm-2 control-label">Danh mục tin tức</label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Danh mục tin tức <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <select class="form-select form-control input-default" name="ma_dm_kenh_tin">
                                     <option selected="selected" value="">---- Chọn danh mục ----</option>
@@ -164,19 +164,19 @@
             };
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
-        $('#form_kenhtin').validate({
+        $('#form_tintuc').validate({
             rules: {
-                ma_kenh_tin: {
+                ma_dm_kenh_tin: {
                     required: true,
                     ma_vaild: true
                 },              
-                ten_danh_muc: "required"
+                tieu_de: "required"
             },
             messages: {
-                ma_kenh_tin: {
-                    required: "Bạn cần nhập mã kênh tin!",
+                ma_dm_kenh_tin: {
+                    required: "Bạn cần chọn danh mục!",
                 },
-                ten_danh_muc: "Bạn cần nhập tên kênh tin!"
+                tieu_de: "Bạn cần nhập tiêu đề tin!"
             }
         });
 

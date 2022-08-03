@@ -45,7 +45,7 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/TinTuc/SuaTinTuc?code=@Model.Id&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                    <form id="form_tintuc" action="/TinTuc/SuaTinTuc?code=@Model.Id&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
                         <div class="row mb-3" style="display: none">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã kênh tin</label>
                             <div class="col-sm-8">
@@ -206,19 +206,19 @@
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
        
-        $('#form_kenhtin').validate({
+          $('#form_tintuc').validate({
             rules: {
-                ma_kenh_tin: {
+                ma_dm_kenh_tin: {
                     required: true,
                     ma_vaild: true
                 },              
-                ten_danh_muc: "required"
+                tieu_de: "required"
             },
             messages: {
-                ma_kenh_tin: {
-                    required: "Bạn cần nhập mã kênh tin!",
+                ma_dm_kenh_tin: {
+                    required: "Bạn cần chọn danh mục!",
                 },
-                ten_danh_muc: "Bạn cần nhập tên kênh tin!"
+                tieu_de: "Bạn cần nhập tiêu đề tin!"
             }
         });
     });
