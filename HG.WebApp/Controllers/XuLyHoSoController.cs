@@ -7,6 +7,7 @@ using HG.Entities.Entities;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.Model;
 using HG.Entities.HoSo;
+using HG.Entities.Entities.Luong;
 using HG.Entities.SearchModels;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
@@ -145,6 +146,20 @@ namespace HG.WebApp.Controllers
             return RedirectToAction("XuLyHoSo", "HoSoChoXuLy", new {  currentPage = 1,  txtSearch = "",  ma_linh_vuc = "",  ma_thu_tuc = "",  pageSize = 25 });
            // var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/HoSoChoXuLy.cshtml",hs);
            // return Content(result);
+        }
+        [HttpPost]
+        public async Task<int> LuuPhanCongXuLy(PhanCongThucHienModels model)
+        {
+            var user = userManager.GetUserId(User);
+          var result =   _xulyhsDao.ThemSuaPhanCongThucHien(model,user.FirstOrDefault().ToString());
+            if (result == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }    
         }
     }
 }

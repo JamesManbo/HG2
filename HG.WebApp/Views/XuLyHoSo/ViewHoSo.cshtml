@@ -36,7 +36,7 @@ $(document).ready(function() {
                     console.log(result);
                     for (var i = 0; i < result.files.length; i++) {
                         $('#attach').attr('src', result.files[i]);
-                        $('#attach1').val("" + result.files[i] + "");
+                        $('#file_dinh_kem').val("" + result.files[i] + "");
                     }
                 },
                 error: function(err) {
@@ -303,7 +303,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                     <label class="col-md-2 control-label">Quy trình</label>
                                     <div class="col-md-10">
-                                        <select name="ma_buoc" id="ma_buoc" class="form-control input-default form-select" placeholder="Quy trình">
+                                        <select name="ma_quy_trinh" id="ma_quy_trinh" class="form-control input-default form-select" placeholder="Quy trình">
                                             <option value="0">------------ Chọn quy trình ------------</option>
                                             @if(lst_quy_trinh != null)
                                             {
@@ -322,7 +322,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                     <label class="col-md-2 control-label">Người nhận</label>
                                     <div class="col-md-10">
-                                        <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
+                                        <select name="Id_nguoi_nhan" id="Id_nguoi_nhan" class="form-control input-default form-select" placeholder="Phòng ban">
                                             <option value="0">------------ Chọn người nhận ------------</option>
                                             @if(LstNguoiDung != null)
                                             {
@@ -341,7 +341,7 @@ $(document).ready(function() {
                                     <div class="form-group row">
                                     <label class="col-md-2 control-label">Người phối hợp</label>
                                     <div class="col-md-10">
-                                        <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
+                                        <select name="Id_nguoi_phoi_hop" id="Id_nguoi_phoi_hop" class="form-control input-default form-select" placeholder="Phòng ban">
                                             <option value="0">------------ Chọn người phối hợp ------------</option>
                                             @if(LstNguoiDung != null)
                                             {
@@ -359,7 +359,7 @@ $(document).ready(function() {
                                     <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
                                     <div class="col-md-3">
                                         <input type="file" id="files" name="files" style="display: none">
-                                        <input type="text" id="attach1" name="attach" style="display: none">
+                                        <input type="text" id="file_dinh_kem" name="attach" style="display: none">
                                         <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                         <img id="attach" style="margin-top: 10px;" width="100" />
                                     </div>
@@ -369,7 +369,7 @@ $(document).ready(function() {
                             
                                     <span for="ten_to_chuc" class="col-sm-1 control-label">Ý kiến</span>
                                     <div class="col-sm-11">
-                                        <input maxlength="50" type="text" class="form-control input-default" id="gui_tin_nhan" name="gui_tin_nhan" value="" placeholder="Nhập nội dung"/>
+                                        <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="" placeholder="Nhập nội dung"/>
                                     </div>
                          </div>      
                     </div>
@@ -428,7 +428,26 @@ $(document).ready(function() {
     }
     function LuuThongTinHoSo(id,trangthai) {
         debugger;
-        $.ajax({
+        var data = {};
+        data.Id_ho_so = id;
+        data.han_xu_ly =  $("#han_xu_ly").val();
+        data.ma_quy_trinh =  $("#ma_quy_trinh").val();
+        data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
+        data.Id_nguoi_phoi_hop = $("#Id_nguoi_phoi_hop").val();
+        data.file_dinh_kem = $("#file_dinh_kem").val();
+        data.y_kien = $("#y_kien").val();
+       // data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
+        var promise = $.ajax({
+            url: "/XuLyHoSo/LuuPhanCongXuLy",
+            type: "post",
+            data: data,
+            contentType: 'application/x-www-form-urlencoded',          
+            success: function(result) {
+               
+            }
+        });
+
+       var promise1 = $.ajax({
             url: "/XuLyHoSo/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"",
             type: "post",
             contentType: 'application/x-www-form-urlencoded',          
@@ -436,6 +455,15 @@ $(document).ready(function() {
                 window.location.href = window.location.origin + "/XuLyHoSo/HoSoChoXuLy"
             }
         });
+        $.when(promise1, promise2).then(
+            function(result1, result2) {
+                
+
+            },
+            function(error) {
+               
+            }
+        );
     };
     function ThongBaoChoCongDan(abc){
         var msg = $("#gui_tin_nhan").val();
