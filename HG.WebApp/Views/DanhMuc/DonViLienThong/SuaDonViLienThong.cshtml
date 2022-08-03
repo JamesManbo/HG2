@@ -1,6 +1,6 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục kênh tin";
+    ViewData["Title"] = "Danh mục đơn vị liên thông";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 @model HG.Entities.Dm_Don_Vi_Lien_Thong
@@ -34,22 +34,22 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Kênh tin</h1>
+            <h1>Đơn vị liên thông</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin kênh tin</h4>
+            <h4 class="widgettitle">Cập nhật thông tin đơn vị liên thông</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_kenhtin" action="/DanhMuc/SuaKenhTin?code=@Model.ma_don_vi&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                    <form id="form_dvlt" action="/DanhMuc/SuaDonViLienThong?code=@Model.ma_don_vi&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
                         
                         
                           <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Ip/Domain <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã đơn vị" name="Ip" maxlength="25" value="@Model.Ip" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text"  class="form-control input-default" placeholder="Mã đơn vị" name="Ip" maxlength="25" value="@Model.Ip" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
@@ -77,7 +77,8 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã đơn vị <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã đơn vị" name="ma_don_vi" maxlength="25" value="@Model.ma_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" onfocusout="CheckMa(this)" 
+                                    class="form-control input-default" placeholder="Mã đơn vị" name="ma_don_vi" maxlength="25" value="@Model.ma_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
                        
@@ -170,19 +171,21 @@
         }, "Mã không nhập các kí tự đặc biệt [ `!#$%^&*()_+\-=\[\]{};':\\|,<>\/?~]");
 
        
-        $('#form_kenhtin').validate({
+        $('#form_dvlt').validate({
             rules: {
-                ma_kenh_tin: {
+                ma_don_vi: {
                     required: true,
                     ma_vaild: true
                 },              
-                ten_danh_muc: "required"
+                ten_don_vi: "required",
+                Ip: "required",
             },
             messages: {
-                ma_kenh_tin: {
-                    required: "Bạn cần nhập mã kênh tin!",
+                ma_don_vi: {
+                    required: "Bạn cần nhập mã đơn vị!",
                 },
-                ten_danh_muc: "Bạn cần nhập tên kênh tin!"
+                ten_don_vi: "Bạn cần nhập tên đơn vị!",
+                Ip: "Bạn cần nhập Ip/Domain!"
             }
         });
     });
@@ -190,7 +193,7 @@
     function CheckMa(data) {
         var dataPost = { code: data.value };
         $.ajax({
-            url: "/DanhMuc/CheckMaKT",
+            url: "/DanhMuc/CheckMaDVLT",
             type: "post",
             contentType: 'application/x-www-form-urlencoded',
             data: dataPost,

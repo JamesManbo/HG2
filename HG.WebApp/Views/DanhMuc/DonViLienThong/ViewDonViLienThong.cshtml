@@ -1,5 +1,5 @@
 ﻿@using HG.WebApp
-@model List<HG.Entities.Dm_Kenh_Tin>
+@model List<HG.Entities.Dm_Don_Vi_Lien_Thong>
 
 <div style="overflow-y: auto;">
     <div id="pnlMain">
@@ -8,16 +8,25 @@
                 <tbody>
                     <tr class="widgettitle">
                         <th align="center" scope="col">CHỌN</th>
-                        <th scope="col">TÊN</th>
+                        <th scope="col">IP</th>
+                        <th scope="col">ĐƠN VỊ</th>
+                        <th scope="col">TÊN ĐƠN VỊ</th>
                     </tr>
                     @foreach (var item in Model)
                     {
                         <tr>
                             <td align="center">
-                                <a href="/DanhMuc/SuaKenhTin?code=@item.ma_kenh_tin&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                <a href="/DanhMuc/SuaDonViLienThong?code=@item.ma_don_vi&type=@(StatusAction.Edit.ToString())">Chọn</a>
                             </td>
                             <td>
-                                @item.ten_danh_muc
+                                @item.Ip
+                            </td>
+
+                             <td>
+                                @item.ma_don_vi
+                            </td>
+                             <td>
+                                @item.ten_don_vi
                             </td>
                         </tr>
                     }

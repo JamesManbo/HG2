@@ -385,7 +385,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.SetCommandText2("dm_them_sua_don_vi_lien_thong", CommandType.StoredProcedure);
                 DbProvider.AddParameter("ma_don_vi", item.ma_don_vi, SqlDbType.VarChar);
                 DbProvider.AddParameter("ten_don_vi", item.ten_don_vi ?? "", SqlDbType.NVarChar);
-                DbProvider.AddParameter("Ip", item.Ip ?? "", SqlDbType.Bit);
+                DbProvider.AddParameter("Ip", item.Ip ?? "", SqlDbType.VarChar);
 
                 DbProvider.AddParameter("uid", item.CreatedUid ?? Guid.Empty, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("uid_name", item.UidName ?? "", SqlDbType.NVarChar);

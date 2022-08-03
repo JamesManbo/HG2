@@ -1133,14 +1133,27 @@ namespace HG.WebApp.Controllers
             item.ma_don_vi = HelperString.CreateCode(item.ma_don_vi);
             item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
-            var response = _danhmucDao.LuuDonViLienThong(item);
-            if (response > 0)
-            {
-                // Xử lý các thông báo lỗi tương ứng
-                ViewBag.error = 1;
-                ViewBag.msg = "Tạo kênh tin lỗi";
-            }
-            if (item.type_view == StatusAction.Add.ToString() || response > 0)
+            item.Deleted = 0;
+            item.CreatedDateUtc = DateTime.Now;
+            item.UpdatedDateUtc = DateTime.Now;
+
+            EAContext eAContext = new EAContext();
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Dm_Don_Vi_Lien_Thong> _role = eAContext.Dm_Don_Vi_Lien_Thong.Add(item);
+            eAContext.SaveChanges();
+            //;
+            //if ()
+            //{
+
+            //}
+
+            //var response = _danhmucDao.LuuDonViLienThong(item);
+            //if (response > 0)
+            //{
+            //    // Xử lý các thông báo lỗi tương ứng
+            //    ViewBag.error = 1;
+            //    ViewBag.msg = "Tạo đơn vị liên thông lỗi";
+            //}
+            if (item.type_view == StatusAction.Add.ToString() )
             {
                 return View("~/Views/DanhMuc/DonViLienThong/ThemDonViLienThong.cshtml", item);
             }
@@ -1167,23 +1180,22 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult SuaDonViLienThong(string code, string type, Dm_Don_Vi_Lien_Thong item)
         {
-            item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
+            //item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
             item.UidName = User.Identity.Name;
-            var response = _danhmucDao.LuuDonViLienThong(item);
-            if (response > 0)
-            {
-                // Xử lý các thông báo lỗi tương ứng
-                ViewBag.error = 1;
-                ViewBag.msg = "cập nhật kênh tin lỗi";
-                return PartialView("~/Views/DanhMuc/DonViLienThong/SuaDonViLienThong.cshtml", item);
-            }
+            item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+            item.UpdatedDateUtc = DateTime.Now;
+            item.Deleted = 0;
+
+            EAContext eAContext = new EAContext();
+            Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Dm_Don_Vi_Lien_Thong> _role = eAContext.Dm_Don_Vi_Lien_Thong.Update(item);
+            eAContext.SaveChanges();
             if (item.type_view == StatusAction.Add.ToString())
             {
-                return RedirectToAction("ThemKenhTin", "DanhMuc");
+                return RedirectToAction("ThemDonViLienThong", "DanhMuc");
             }
             else if (item.type_view == StatusAction.View.ToString())
             {
-                return RedirectToAction("SuaKenhTin", "DanhMuc", new { code = item.ma_don_vi, type = StatusAction.View.ToString() });
+                return RedirectToAction("SuaDonViLienThong", "DanhMuc", new { code = item.ma_don_vi, type = StatusAction.View.ToString() });
             }
             return BadRequest();
 
@@ -1195,22 +1207,38 @@ namespace HG.WebApp.Controllers
             {
                 return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
             }
-            var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _danhmucDao.XoaDonViLienThong(code, uid);
-            if (_pb > 0)
+            var arr_ma = code.Split(",");
+            var obj = new Dm_Don_Vi_Lien_Thong();
+            EAContext eAContext = new EAContext();
+            using (var db = new EAContext())
             {
-                // Xử lý các thông báo lỗi tương ứng
+                foreach (var item in arr_ma)
+                {
+                    var data = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0 && n.ma_don_vi == item).FirstOrDefault();
+                    if (data != null)
+                    {
+                        data.Deleted = 1;
+                        data.DeletedBy = Guid.Parse(userManager.GetUserId(User));
+                        data.UpdatedDateUtc = DateTime.Now;
+                        Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Dm_Don_Vi_Lien_Thong> _role = eAContext.Dm_Don_Vi_Lien_Thong.Update(data);
+                    }
+                }
+            }
+            if (eAContext.SaveChanges() > 0)
+            {
+                return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/DonViLienThong" });
+            } else
+            {
                 return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/DonViLienThong" });
         }
 
         public async Task<IActionResult> RenderViewDonViLienThong()
         {
-            var kenhtin = new List<Dm_Kenh_Tin>();
+            var kenhtin = new List<Dm_Don_Vi_Lien_Thong>();
             using (var db = new EAContext())
             {
-                kenhtin = db.Dm_Kenh_Tin.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
+                kenhtin = db.Dm_Don_Vi_Lien_Thong.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
             }
             //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMuc/DonViLienThong/ViewDonViLienThong.cshtml", kenhtin);
@@ -1229,7 +1257,7 @@ namespace HG.WebApp.Controllers
             {
                 return Json(new { error = 0, href = "/Danhmuc/ThemDonViLienThong?code=" + code.ToUpper() });
             }
-            return Json(new { error = 1, href = "" });
+            return Json(new { error = 1, href = "/Danhmuc/SuaDonViLienThong?code=" + code.ToUpper() + "&type=" + StatusAction.Edit.ToString() });
         }
 
         #endregion
