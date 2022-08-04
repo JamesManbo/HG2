@@ -76,10 +76,10 @@ namespace HG.Data.Business.HoSo
                 DbProvider.AddParameter("trang_thai_xl", item.trang_thai, SqlDbType.Int);
                 DbProvider.AddParameter("han_xu_ly", item.han_xu_ly == null? "" : item.han_xu_ly, SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_quy_trinh", item.ma_quy_trinh == null ? "" : item.ma_quy_trinh, SqlDbType.NVarChar);
-                DbProvider.AddParameter("Id_nguoi_nhan", item.Id_nguoi_nhan, SqlDbType.UniqueIdentifier);
-                DbProvider.AddParameter("Id_nguoi_phoi_hop", item.Id_nguoi_phoi_hop, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("Id_nguoi_nhan", item.Id_nguoi_nhan == null ? Guid.Empty : item.Id_nguoi_nhan, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("Id_nguoi_phoi_hop", item.Id_nguoi_phoi_hop == null ? Guid.Empty : item.Id_nguoi_phoi_hop, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("file_dinh_kem", item.file_dinh_kem, SqlDbType.NVarChar);
-                DbProvider.AddParameter("y_kien", item.y_kien, SqlDbType.NVarChar);
+                DbProvider.AddParameter("y_kien", item.y_kien == null? "" : item.y_kien, SqlDbType.NVarChar);
                 DbProvider.AddParameter("CreatedUid", Guid.Parse(userid), SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("UpdatedUid", Guid.Parse(userid), SqlDbType.UniqueIdentifier);
               

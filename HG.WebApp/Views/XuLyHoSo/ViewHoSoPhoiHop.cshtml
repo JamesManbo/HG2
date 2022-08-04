@@ -293,67 +293,7 @@ $(document).ready(function() {
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <div id="tt_chitiet" class="row">
-                        <div class="form-group row mb-3">
-                                    <span for="mota" class="col-sm-1 control-label">Ngày hẹn trả KQ</span>
-                                    <div class="col-md-3">
-                                       <label  type="text" id="ngay_hen_tra" name="ngay_hen_tra" maxlength="50" value="@Model.ngay_hen_tra.ToString("dd/MM/yyyyy")" ></label>
-                                    </div>
-                          </div>
-                        
-                          <div class="form-group row mb-3">
-                                    
-                                    <div class="form-group row">
-                                    <label class="col-md-2 control-label">Người nhận</label>
-                                    <div class="col-md-10">
-                                        <select name="Id_nguoi_nhan" id="Id_nguoi_nhan" class="form-control input-default form-select" placeholder="Phòng ban">
-                                            <option value="0">------------ Chọn người nhận ------------</option>
-                                            @if(LstNguoiDung != null)
-                                            {
-                                                 foreach (var item in LstNguoiDung)
-                                                 {
-                                                     if(phancongthuchien != null && phancongthuchien.Id_nguoi_nhan == @item.Id)
-                                                        {
-                                                            <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
-                                                        }
-                                                        else
-                                                        {
-                                                             <option value="@item.Id">@item.ho_dem @item.ten</option>
-                                                        }
-                                                   
-                                                 }   
-                                            }
-                                    
-                                        </select>
-                                    </div>
-                                </div>
-                          </div>
-                           <div class="form-group row mb-3">
-                                    
-                                    <div class="form-group row">
-                                    <label class="col-md-2 control-label">Người phối hợp</label>
-                                    <div class="col-md-10">
-                                        <select name="Id_nguoi_phoi_hop" id="Id_nguoi_phoi_hop" class="form-control input-default form-select" placeholder="Phòng ban">
-                                            <option value="0">------------ Chọn người phối hợp ------------</option>
-                                            @if(LstNguoiDung != null)
-                                            {
-                                                 foreach (var item in LstNguoiDung)
-                                                 {
-                                                       if(phancongthuchien != null && phancongthuchien.Id_nguoi_phoi_hop == @item.Id)
-                                                        {
-                                                            <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
-                                                        }
-                                                        else
-                                                        {
-                                                             <option value="@item.Id">@item.ho_dem @item.ten</option>
-                                                        }
-                                                   
-                                                 }   
-                                            }
-                                    
-                                        </select>
-                                    </div>
-                                </div>
-                          </div>
+                   
                           <div class="form-group row mb-3">
                                     <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
                                     <div class="col-md-3">
@@ -373,19 +313,9 @@ $(document).ready(function() {
                          </div>      
                     </div>
                      <div class="text-center">
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,19)"  style="width: 150px" >Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,22)" style="width: 150px">Lưu và chuyển</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,6)">Yêu cầu bổ sung</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,15)">Trả KQ giai đoạn 1</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,14)">Hồ sơ không đủ đk</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,24)">Ký hồ sơ</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,25)">Chuyển một cửa</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,12)">Trả lại</button>
-                               <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,12)">Kết thúc XL</button>
-                               <button type="button" class="btn btn-primary">In kết quả</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Thông báo cho công dân</button>
-                               <button type="button" class="btn btn-primary" onclick="LyDoGiaHan(@Model.Id)">Gia hạn xử lý</button>
-                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/XuLyHoSo/HoSoDangXuLy';" style="width: 150px">Đóng</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,20)"  style="width: 150px" >Lưu</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,26)" style="width: 150px">Kết thúc</button>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/XuLyHoSo/HoSoPhoiHop';" style="width: 150px">Đóng</button>
                     </div>
                 </div>
 
@@ -429,13 +359,13 @@ $(document).ready(function() {
         debugger;
         var data = {};
         data.Id_ho_so = id;
-        data.han_xu_ly =  $("#han_xu_ly").val();
-        data.ma_quy_trinh =  $("#ma_quy_trinh").val();
-        data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
-        data.Id_nguoi_phoi_hop = $("#Id_nguoi_phoi_hop").val();
+        //data.han_xu_ly =  $("#han_xu_ly").val();
+        //data.ma_quy_trinh =  $("#ma_quy_trinh").val();
+        //data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
+        //data.Id_nguoi_phoi_hop = $("#Id_nguoi_phoi_hop").val();
         data.file_dinh_kem = $("#file_dinh_kem").val();
         data.y_kien = $("#y_kien").val();
-        data.trang_thai = 19;
+        data.trang_thai = 20;
        // data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
         var promise = $.ajax({
             url: "/XuLyHoSo/LuuPhanCongXuLy",
@@ -448,12 +378,12 @@ $(document).ready(function() {
         });
 
        var promise1 = $.ajax({
-            url: "/XuLyHoSo/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"&trangthaitruoc=19",
+            url: "/XuLyHoSo/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"&trangthaitruoc=20",
             type: "post",
             contentType: 'application/x-www-form-urlencoded',          
             success: function(result) {
                 $("#NotifyVHS").modal("show");
-                window.location.href = window.location.origin + "/XuLyHoSo/HoSoDangXuLy"
+                window.location.href = window.location.origin + "/XuLyHoSo/HoSoPhoiHop"
             }
         });
         $.when(promise1, promise2).then(
@@ -494,7 +424,7 @@ $(document).ready(function() {
                 <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
             </div>
             <div class="modal-body" id="NotifyVHSTitle">
-                Lưu vai trò thành công !!!
+                Lưu thành công !!!
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
