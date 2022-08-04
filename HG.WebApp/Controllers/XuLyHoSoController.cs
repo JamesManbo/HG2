@@ -93,6 +93,31 @@ namespace HG.WebApp.Controllers
             ViewBag.MaThuTuc = ma_thu_tuc;
             return View(hs);
         }
+        public IActionResult HoSoPhoiHop(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            //hs mới tiếp nhận status = 1
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 20 };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            hs = hs.Where(e => e.nguoi_phoi_hop == userManager.GetUserId(User).ToUpper()).ToList();
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
         public IActionResult ViewHoSo(int code, string type)
         {
             
@@ -129,6 +154,24 @@ namespace HG.WebApp.Controllers
 
             return View(hoso);
         }
+        public IActionResult ViewHoSoPhoiHop(int code, string type)
+        {
+
+            EAContext db = new EAContext();
+            ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.type_view = StatusAction.View.ToString();
+            ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+            //Lấy thủ tục bởi mã lv
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
+            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            //Lấy biểu mẫu
+            ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
+
+            return View(hoso);
+        }
         public async Task<IActionResult> LayThongTinXuLyHoSo(string ma_ho_so, string type)
         {
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
@@ -140,20 +183,31 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
         [HttpPost]
-        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai)
+        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc)
         {
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
             EAContext db = new EAContext();
             var hoso = db.Ho_So.Where(n => n.Id == Int32.Parse(Id)).FirstOrDefault();
-            var trangthaitruoc = 0;
+            
+            var title = "";
             hoso.trang_thai = trangthai;
             switch (trangthai)
             {
+                case 18:
+                    hoso.id_trang_thai_xl = 1;
+                    title = "Hồ sơ chờ xử lý";
+                    break;
                 case 19:
                     hoso.id_trang_thai_xl = 1;
+                    title = "Hồ sơ đang xử lý";
+                    break;
+                case 20:
+                    hoso.id_trang_thai_xl = 1;
+                    title = "Hồ sơ phối hợp";
                     break;
                 case 22:
                     hoso.id_trang_thai_xl = 2;
+                   
                     break;
                 case 6:
                     hoso.id_trang_thai_xl = 4;
@@ -182,7 +236,7 @@ namespace HG.WebApp.Controllers
             }
             db.Update(hoso);
             db.SaveChangesAsync();
-            SaveLogHS(int.Parse( Id), "Hồ sơ chờ xử lý", (int)StatusXuLyHoSo.HoSoChoXuLy, trangthai, Guid.Parse(userManager.GetUserId(User)));
+            SaveLogHS(int.Parse( Id), title, trangthaitruoc, trangthai, Guid.Parse(userManager.GetUserId(User)));
             ViewBag.view_type = type;
             //ViewBag.lstThanhPhan = lstThanhPhan;
             //ViewBag.ma_luong = ma_luong;
