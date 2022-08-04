@@ -1,0 +1,116 @@
+﻿@using HG.WebApp
+@model List<HG.Entities.Entities.CauHinh.cd_theo_doi_hs>
+
+<div class="form-group">
+    <div class="col-md-12">
+        <div>
+            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl08_gridHS_GanDenHan" style="width:100%;border-collapse:collapse;">
+                <tbody>
+                    <tr class="widgettitle">
+                        <th align="center" scope="col" style="font-size:12px;">STT</th>
+                        <th align="left" scope="col" style="font-size:12px;">MÃ HỒ SƠ</th>
+                        <th align="left" scope="col" style="font-size:12px;">THỦ TỤC</th>
+                        <th align="left" scope="col" style="font-size:12px;">NGÀY TIẾP NHẬN</th>
+                        <th align="left" scope="col" style="font-size:12px;">NGÀY DỰ KIẾN TRẢ KQ</th>
+                        <th align="left" scope="col" style="font-size:12px;">TRẠNG THÁI</th>
+                        <th align="left" scope="col" style="font-size:12px;">ĐƠN VỊ</th>
+                    </tr>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td align="center" style="width:1%;">
+
+                                    20
+                                </td>
+                                <td align="left" style="width:12%;">
+                                    @item.ten_ho_so
+                                </td>
+                                <td align="left" style="width:12%;">
+                                    @item.ten_thu_tuc
+                                </td>
+                                <td align="left" style="width:12%;">
+                                    @item.ngay_tiep_nhan
+                                </td>
+                                <td align="left" style="width:12%;">
+                                    @item.ngay_hen_tra
+                                </td>
+                                <td align="left" style="width:12%;">
+                                    <span id="ctl08_gridHS_GanDenHan_ctl21_lblTT" class="text-success">@item.ten_trang_thai (còn <b> @item.so_ngay_con</b> ngày)</span>
+                                </td>
+                                <td align="left" style="width:12%;">
+                                    @item.ten_don_vi
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </tbody>
+            </table>
+            <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                @{
+                    var TotalPage = (int)ViewBag.TotalPage;
+                    var CurrentPage = (int)ViewBag.CurrentPage;
+                    if (TotalPage > 5)
+                    {
+                        if (CurrentPage > CurrentPage + 2)
+                        {
+                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                        };
+                        if (CurrentPage > 3)
+                        {
+                            for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                            {
+                                if (i == CurrentPage)
+                                {
+                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                }
+                                else
+                                {
+                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 1; i <= 5; i++)
+                            {
+                                if (i == CurrentPage)
+                                {
+                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                }
+                                else
+                                {
+                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                }
+                            }
+
+                        }
+
+                        if (CurrentPage < CurrentPage + 2)
+                        {
+                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                        };
+                    }
+                    else
+                    {
+                        for (int i = 1; i <= TotalPage; i++)
+                        {
+                            if (i == CurrentPage)
+                            {
+                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                            else
+                            {
+                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
