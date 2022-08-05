@@ -1,20 +1,32 @@
-﻿
-@model List<HG.WebApp.Entities.AspModule>
+﻿@{
+    var MenuParrent = ViewBag.MenuParrent as List<HG.Entities.Dm_menu>;
+    var MenuChill = ViewBag.MenuChill as HG.Entities.UnitsMenuRolesOfUser;
+}
 
-            @{
-                if(Model != null)
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+        @if(MenuParrent != null)
+        {
+                foreach (var item in MenuParrent)
                 {
-                    foreach(var item in Model)
-                    {
-                         <li class="nav-item">
-                            <a href="@item.link" class="nav-link active">
-                              <i class="far fa-circle nav-icon"></i>
-                              <p>@item.Name</p>
-                            </a>
-                          </li>
-                    }
+                    <li class="nav-item">
+                    <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>@item.ten_trang</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                        @if (MenuChill != null && MenuChill.Vai_Tro_Menu_Quyen != null)
+                        {
+                           foreach (var item2 in MenuChill.Vai_Tro_Menu_Quyen.Where(n=>n.ma_chuc_nang.Contains(item.ma_trang)).ToList())
+                           {
+                               <li>
+                                    <a href="@item2.url">
+                                        <i class="bi bi-circle"></i><span>@item2.ma_chuc_nang</span>
+                                    </a>
+                               </li>
+                           }
+                        }
+                    </ul>
+                </li>
                 }
-            }
-
-             
-          
+        }
+    </ul>

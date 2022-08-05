@@ -76,6 +76,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<Ho_So> Ho_So { get; set; }
         public virtual DbSet<dm_thanh_phan> dm_thanh_phan { get; set; }
         public virtual DbSet<Ho_So_History> Ho_So_History { get; set; }
+        public virtual DbSet<Dm_menu> Dm_menus { get; set; }
         //End TuanTA
 
         // AnTX Gửi hồ sơ 

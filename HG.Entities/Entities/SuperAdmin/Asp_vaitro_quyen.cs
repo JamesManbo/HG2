@@ -20,6 +20,9 @@ namespace HG.Entities.Entities.SuperAdmin
 		public Guid? UpdatedUid { get; set; }
 		public int? Deleted { get; set; }
 		public Guid? DeletedBy { get; set; }
+        [NotMapped]		
+		public string? url { get; set; }
 
 	}
+
 }

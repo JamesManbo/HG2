@@ -38,31 +38,6 @@ namespace HG.WebApp.Controllers
             this._httpContextAccessor = httpContextAccessor;
             _userDao = new UserDao(DbProvider);
         }
-
-//        public async Task<IActionResult> Index(int page = 1, int status = 0)
-//        {
-//            //call stored
-//            var calldatasp = _userDao.GetAspNetUsers();
-
-
-//            AspNetUsers applicationUser = await userManager.GetUserAsync(User);
-//            if (applicationUser == null) { return RedirectToAction("Login", "User"); }
-//            if (_httpContextAccessor != null) { if (!sercutiry.IsAthentication(applicationUser, _httpContextAccessor.HttpContext.Request.Path.ToString())) { return RedirectToAction("NotFound", "Admin"); } };            //
-//#pragma warning disable CS8602 // Dereference of a possibly null reference.
-//            var Username = User.Identity.Name;
-//#pragma warning restore CS8602 // Dereference of a possibly null reference.
-//            var q = await userManager.Users.CountAsync();
-//            var query = await userManager.Users.Select(x => new UserDTO()
-//            {
-//                Email = x.Email,
-//                PhoneNumber = x.PhoneNumber,
-//                UserName = x.UserName,
-//                RoleId = x.RoleId,
-//                Id = x.Id.ToString(),
-//            }).ToListAsync();
-//            ViewBag.ListRole = eAContext.AspNetRoles.ToList();
-//            return View(query.ToPagedList(page, 10));
-//        }
         public async Task<IActionResult> AddUser(string UserName, string PhoneNumber, string Email, string Password, Guid RoleId)
         {
             try
@@ -216,10 +191,8 @@ namespace HG.WebApp.Controllers
                 return RedirectToAction("Login", "User");
             }else {
                 //laays menu va tat ca nhom vai tro o day
-                var menu_role = _userDao.GetUnitsMenuRolesOfUser(user.First().Id);
+                var menu_role = _userDao.GetUnitsMenuRolesOfUser(checkUser.Id);
                 //end menu
-
-
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var token = new JwtSecurityToken(_config["Tokens:Issuer"],
@@ -292,15 +265,13 @@ namespace HG.WebApp.Controllers
             if (_httpContextAccessor != null) { if (!sercutiry.IsAthentication(applicationUser, _httpContextAccessor.HttpContext.Request.Path.ToString())) { return RedirectToAction("NotFound", "Admin"); } };
             return View(eAContext.AspNetRoles.ToPagedList(page,10));
         }
-        public async Task<IActionResult> Nav()
+        public IActionResult Nav()
         {
-            AspNetUsers applicationUser = await userManager.GetUserAsync(User);
-            var lstIdModuleByRole = eAContext.AspNetRoleModules.Where(n => n.RoleId == applicationUser.RoleId).Select(n=>n.ModuleId).ToArray();
-            //if(lstIdModuleByRole != null)
-            //{
-            //    return PartialView(eAContext.AspModules.Where(n => lstIdModuleByRole.Contains(n.Id)).ToList());
-            //}
-            return PartialView(new AspModule());
+            EAContext db = new EAContext();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.MenuParrent = db.Dm_menus.Where(n => (n.ma_trang_cha == "" || n.ma_trang_cha == null) && n.Deleted != 1).ToList();
+            ViewBag.MenuChill = _userDao.GetUnitsMenuRolesOfUser(UserId);
+            return PartialView();
         }
         public IActionResult ListFunction(int page = 1)
         {
@@ -308,35 +279,7 @@ namespace HG.WebApp.Controllers
             //return PartialView(query.ToPagedList(page, 10));
             return View();
         }
-        //public async Task<IActionResult> AddRoleAsync(RoleDTO item)
-        //{
-        //    AspNetUsers applicationUser = await userManager.GetUserAsync(User);
-        //    AspNetRoles _user = new AspNetRoles();
-        //    if (eAContext.AspNetRoles.Where(n => n.Name == item.Name).FirstOrDefault() == null)
-        //    {
-        //        _user.Name = item.Name;
-        //        _user.Description = item.Description;
-        //        Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AspNetRoles> _role = eAContext.AspNetRoles.Add(_user);
-        //        eAContext.SaveChanges();
-        //        var roleid = _role.Entity.Id;
-        //        if(!string.IsNullOrEmpty(item.ListModule))
-        //        {
-        //            var lstModule = item.ListModule.Split(","); 
-        //            for (var j = 0; j < lstModule.Length; j++)
-        //            {
-        //                AspNetRoleModules k = new AspNetRoleModules();
-        //                k.ModuleId = Convert.ToInt32(lstModule[j]) ;
-        //                k.RoleId = roleid;
-        //                k.IsFull = true;
-        //                eAContext.AspNetRoleModules.Add(k);
-        //                eAContext.SaveChanges();
-        //            }
-        //        }
-        //    }
-        //    //add taikhoan voi role =>>xong quyen
-        //    return RedirectToAction("ListRole","User");
-        //}
-
+      
 
         public async Task<string> RegisterClient(string UserName, string Password, string Gmail)
         {
