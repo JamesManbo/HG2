@@ -31,7 +31,7 @@ namespace HG.Data.Business.CauHinh
 
                 // Input params
                 DbProvider.AddParameter("@from", from, SqlDbType.DateTime);
-                DbProvider.AddParameter("@to", from, SqlDbType.DateTime);
+                DbProvider.AddParameter("@to", to, SqlDbType.DateTime);
                 DbProvider.AddParameter("@page", page, SqlDbType.Int);
                 DbProvider.AddParameter("@page_size", page_size, SqlDbType.Int);
 
@@ -59,9 +59,59 @@ namespace HG.Data.Business.CauHinh
 
                 // Input params
                 DbProvider.AddParameter("@from", from, SqlDbType.DateTime);
-                DbProvider.AddParameter("@to", from, SqlDbType.DateTime);
+                DbProvider.AddParameter("@to", to, SqlDbType.DateTime);
      
                 nguoi_PHXLModel = DbProvider.ExecuteListObject<cd_theo_doi_hs>();  
+                return nguoi_PHXLModel;
+            }
+            catch (Exception e)
+            {
+                return new List<cd_theo_doi_hs>();
+            }
+        }
+
+        public List<cd_theo_doi_hs> HoSoSapChamTiepNhan(string from, string to, int page, int page_size, out int total)
+        {
+            total = 0;
+            try
+            {
+
+                List<cd_theo_doi_hs> nguoi_PHXLModel = new List<cd_theo_doi_hs>();
+                DbProvider.SetCommandText2("Proc_DanhSachHoSoChamTiepNhan", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("@from", from, SqlDbType.DateTime);
+                DbProvider.AddParameter("@to", to, SqlDbType.DateTime);
+                DbProvider.AddParameter("@page", page, SqlDbType.Int);
+                DbProvider.AddParameter("@page_size", page_size, SqlDbType.Int);
+
+                // Output params
+                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                nguoi_PHXLModel = DbProvider.ExecuteListObject<cd_theo_doi_hs>();
+                total = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
+
+                return nguoi_PHXLModel;
+            }
+            catch (Exception e)
+            {
+                return new List<cd_theo_doi_hs>();
+            }
+        }
+
+        public List<cd_theo_doi_hs> HoSoSapChamTiepNhannExcel(string from, string to)
+        {
+
+            try
+            {
+
+                List<cd_theo_doi_hs> nguoi_PHXLModel = new List<cd_theo_doi_hs>();
+                DbProvider.SetCommandText2("Proc_DanhSachHoSoChamTiepNhan_excel", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("@from", from, SqlDbType.DateTime);
+                DbProvider.AddParameter("@to", to, SqlDbType.DateTime);
+
+                nguoi_PHXLModel = DbProvider.ExecuteListObject<cd_theo_doi_hs>();
                 return nguoi_PHXLModel;
             }
             catch (Exception e)

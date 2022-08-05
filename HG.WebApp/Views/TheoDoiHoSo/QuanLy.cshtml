@@ -52,23 +52,7 @@
                         @*TAB Cập nhật phiên làm việc*@
                         <div class="tab-pane fade @(ViewBag.active==1?"show active":"")" id="pills-tab1" role="tabpanel" aria-labelledby="home-tab">
 
-                            <div id="ctl08_UpdatePanel1">
-                                <div class="row mb-3" style="display: none">
-                                    <label class="col-md-2 control-label">
-                                        Mã đơn vị
-                                        <span id="ctl08_Label3" style="color:Red;">(*)</span>
-                                    </label>
-                                    <div class="col-md-8">
-                                        <select name="ctl08$dropMaDV" id="ctl08_dropMaDV" class="chzn-select form-control input-default-sm">
-                                            <option selected="selected" value="BQL">BAN QUẢN LÝ KHU KINH TẾ</option>
-                                            <option value="STC">SỞ TÀI CHÍNH</option>
-                                            <option value="SXD">SỞ XÂY DỰNG</option>
-                                            <option value="SGT">SỞ GIAO THÔNG VẬN TẢI</option>
-
-                                        </select>
-
-                                    </div>
-                                </div>
+                            <div id="ctl08_UpdatePanel1">                             
                                 <div class="row mb-3">
                                     <label class="col-md-3 control-label" style="text-align: right">Hẹn trả từ ngày :</label>
                                     <div class="col-md-3">
@@ -77,11 +61,11 @@
                                     </div>
                                     <label class="col-md-2 control-label" style="text-align: right">đến ngày:</label>
                                     <div class="col-md-3">
-                                        <input name="ctl08$txtDenNgay" type="date" id="tohsshh" class="form-control input-default-sm datepicker hasDatepicker" autocomplete="off">
+                                        <input type="date" id="tohsshh" class="form-control input-default-sm datepicker hasDatepicker" autocomplete="off">
                                         <span id="ctl08_ctl02" style="color:Red;font-size:11px;display:none;">sai định dạng dd/mm/yyyy</span>
                                     </div>
                                 </div>
-                                <div class="text-center">
+                                <div class="text-center mb-3">
                                     <div class="col-md-offset-2 col-md-10">
                                         <input type="button" value="Hiển thị" onclick="FindHsSapHetHan()" class="btn btn-primary">
                                         <input type="button" value="Xuất Excel" onclick="HsSapHetHanExcel()" id="ctl08_btn_tab1_XuatExcel" class="btn btn-primary">
@@ -97,696 +81,25 @@
                         <div class="tab-pane fade @(ViewBag.active==2?"show active":"")" id="pills-tab2" role="tabpanel" aria-labelledby="profile-tab">
                             <div id="ctl08_tab2">
                                 <div class="form-horizontal">
-                                    <div class="form-group" style="display: none">
-                                        <label class="col-md-2 control-label">
-                                            Mã đơn vị
-                                            <span id="ctl08_Label1" style="color:Red;">(*)</span>
-
-                                        </label>
-                                        <div class="col-md-8">
-                                            <select name="ctl08$dropDonVi" id="ctl08_dropDonVi" class="chzn-select form-control input-default-sm">
-                                                <option selected="selected" value="BQL">BAN QUẢN LÝ KHU KINH TẾ</option>
-                                                <option value="STC">SỞ TÀI CHÍNH</option>
-                                                <option value="SXD">SỞ XÂY DỰNG</option>
-                                                <option value="SGT">SỞ GIAO THÔNG VẬN TẢI</option>
-                                                <option value="SCT">SỞ CÔNG THƯƠNG</option>
-                                                <option value="SLD">SỞ LAO ĐỘNG THƯƠNG BINH VÀ XÃ HỘI</option>
-                                                <option value="SKH">SỞ KẾ HOẠCH VÀ ĐẦU TƯ</option>
-                                                <option value="STN">SỞ TÀI NGUYÊN VÀ MÔI TRƯỜNG</option>
-
-
-                                            </select>
-
-                                        </div>
-
-
-                                    </div>
-                                    <div class="form-group">
+                                    <div class="row mb-3">
                                         <label class="col-md-3 control-label" style="text-align: right">Tiếp nhận từ ngày :</label>
                                         <div class="col-md-3">
-                                            <input name="ctl08$txtTiepNhanTuNgay" type="text" id="txtTiepNhanTuNgay" class="form-control input-default-sm datepicker hasDatepicker" autocomplete="off">
-                                            <span id="ctl08_ctl04" style="color:Red;font-size:11px;display:none;">sai định dạng dd/mm/yyyy</span>
+                                            <input type="date" id="fromhsctn" class="form-control input-default-sm datepicker hasDatepicker" autocomplete="off">
+
                                         </div>
                                         <label class="col-md-2 control-label" style="text-align: right">đến ngày:</label>
                                         <div class="col-md-3">
-                                            <input name="ctl08$txtTiepNhanDenNgay" type="text" id="txtTiepNhanDenNgay" class="form-control input-default-sm datepicker hasDatepicker" autocomplete="off">
-                                            <span id="ctl08_ctl05" style="color:Red;font-size:11px;display:none;">sai định dạng dd/mm/yyyy</span>
+                                            <input type="date" id="tohsctn" class="form-control input-default-sm datepicker hasDatepicker" autocomplete="off">
+
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="text-center mb-3">
                                         <div class="col-md-offset-2 col-md-10">
-                                            <input type="submit" name="ctl08$btn_tab2_HienThi" value="Hiển thị" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$btn_tab2_HienThi&quot;, &quot;&quot;, true, &quot;Btntk_tab2_Group&quot;, &quot;&quot;, false, false))" id="ctl08_btn_tab2_HienThi" class="btn btn-primary">
-                                            <input type="submit" name="ctl08$btn_tab2_XuatExcel" value="Xuất Excel" onclick="javascript:WebForm_DoPostBackWithOptions(new WebForm_PostBackOptions(&quot;ctl08$btn_tab2_XuatExcel&quot;, &quot;&quot;, true, &quot;Btntk_tab2_Group&quot;, &quot;&quot;, false, false))" id="ctl08_btn_tab2_XuatExcel" class="btn btn-primary">
+                                            <input type="button" value="Hiển thị" onclick="FindHsChamTiepNhan()" class="btn btn-primary">
+                                            <input type="button" value="Xuất Excel" onclick="HsChamTiepNhanExcel()" class="btn btn-primary">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div>
-                                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl08_gridHS_MoiTiepNhan" style="width:100%;border-collapse:collapse;">
-                                                    <tbody>
-
-                                                        <tr class="widgettitle">
-                                                            <th align="center" scope="col" style="font-size:12px;">STT</th>
-
-                                                            <th align="left" scope="col" style="font-size:12px;">MÃ HỒ SƠ</th>
-
-                                                            <th align="left" scope="col" style="font-size:12px;">THỦ TỤC</th>
-
-                                                            <th align="left" scope="col" style="font-size:12px;">NGÀY TIẾP NHẬN</th>
-
-                                                            <th align="left" scope="col" style="font-size:12px;">NGÀY DỰ KIẾN TRẢ KQ</th>
-
-                                                            <th align="left" scope="col" style="font-size:12px;">TRẠNG THÁI</th>
-
-                                                            <th align="left" scope="col" style="font-size:12px;">ĐƠN VỊ</th>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                1
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.56.21.H22-210330-0004
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục cấp bản sao từ sổ gốc
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                30/03/21 03:45:15 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                31/03/21 03:45:15 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl02_lblTT" class="text-danger">Chậm tiếp nhận <b>11791</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                            </td> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                2
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.56.21.H22-210330-0003
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục cấp bản sao từ sổ gốc
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                30/03/21 03:41:29 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                31/03/21 03:41:29 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl03_lblTT" class="text-danger">Chậm tiếp nhận <b>11791</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                            </td>  </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                3
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.03.H22-220609-0001
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Điều chỉnh Giấy chứng nhận đăng ký đầu tư đối với dự án đầu tư thuộc diện điều chỉnh quyết định chủ trương đầu tư của Ủy ban nhân dân cấp tỉnh
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                09/06/22 09:04:00 AM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                15/07/22 09:04:00 AM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl04_lblTT" class="text-danger">Chậm tiếp nhận <b>1333</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                SỞ KẾ HOẠCH VÀ ĐẦU TƯ
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                4
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.18.H22-220720-0006
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục chuyển mục đích sử dụng đất phải được phép của cơ quan nhà nước có thẩm quyền đối với hộ gia đình, cá nhân
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                20/07/22 02:54:48 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                31/08/22 02:54:48 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl05_lblTT" class="text-danger">Chậm tiếp nhận <b>344</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN BẮC QUANG
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                5
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.18.H22-220720-0004
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục chuyển mục đích sử dụng đất phải được phép của cơ quan nhà nước có thẩm quyền đối với hộ gia đình, cá nhân
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                20/07/22 02:38:16 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                31/08/22 02:38:16 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl06_lblTT" class="text-danger">Chậm tiếp nhận <b>344</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN BẮC QUANG
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                6
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.20.H22-220610-0007
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thực hiện chế độ trợ cấp một lần đối với quân nhân, công nhân viên chức quốc phòng trực tiếp tham gia chiến tranh chống Mỹ cứu nước nhưng chưa được hưởng chế độ, chính sách của Đảng và Nhà nước (đối tượng cư trú ở địa phương khác không còn lưu giữ được giấy tờ)
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                10/06/22 02:31:17 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                12/08/22 02:31:18 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl07_lblTT" class="text-danger">Chậm tiếp nhận <b>1304</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN HOÀNG SU PHÌ
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                7
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.28.H22-220615-0038
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký thành lập hộ kinh doanh
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                21/06/22 02:28:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                24/06/22 10:17:00 AM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl08_lblTT" class="text-danger">Chậm tiếp nhận <b>1040</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN MÈO VẠC
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                8
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0016
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký biến động quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trong các trường hợp chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, góp vốn bằng quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất của vợ hoặc chồng thành của chung vợ và chồng
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 05:13:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 05:10:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl09_lblTT" class="text-danger">Chậm tiếp nhận <b>5</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                9
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0015
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký thế chấp quyền sử dụng đất, tài sản gắn liền với đất
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 05:09:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                08/08/22 05:05:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl10_lblTT" class="text-danger">Chậm tiếp nhận <b>5</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                10
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0014
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký thế chấp quyền sử dụng đất, tài sản gắn liền với đất
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 04:37:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                08/08/22 04:33:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl11_lblTT" class="text-danger">Chậm tiếp nhận <b>6</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                11
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0013
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký thế chấp quyền sử dụng đất, tài sản gắn liền với đất
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 04:11:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                08/08/22 04:07:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl12_lblTT" class="text-danger">Chậm tiếp nhận <b>6</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                12
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0012
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký biến động quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trong các trường hợp chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, góp vốn bằng quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất của vợ hoặc chồng thành của chung vợ và chồng
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 03:49:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 03:47:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl13_lblTT" class="text-danger">Chậm tiếp nhận <b>7</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                13
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0011
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký biến động quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trong các trường hợp chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, góp vốn bằng quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất của vợ hoặc chồng thành của chung vợ và chồng
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 03:44:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 03:40:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl14_lblTT" class="text-danger">Chậm tiếp nhận <b>7</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                14
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0010
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục xác nhận tiếp tục sử dụng đất nông nghiệp của hộ gia đình, cá nhân khi hết hạn sử dụng đất đối với trường hợp có nhu cầu
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 03:23:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                10/08/22 03:19:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl15_lblTT" class="text-danger">Chậm tiếp nhận <b>7</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                15
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0009
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký biến động quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trong các trường hợp chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, góp vốn bằng quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất của vợ hoặc chồng thành của chung vợ và chồng
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 03:15:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 03:11:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl16_lblTT" class="text-danger">Chậm tiếp nhận <b>7</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                16
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0008
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục đăng ký biến động về sử dụng đất, tài sản gắn liền với đất do thay đổi thông tin về người được cấp Giấy chứng nhận (đổi tên hoặc giấy tờ pháp nhân, giấy tờ nhân thân, địa chỉ); giảm diện tích thửa đất do sạt lở tự nhiên; thay đổi về hạn chế quyền sử dụng đất; thay đổi về nghĩa vụ tài chính; thay đổi về tài sản gắn liền với đất so với nội dung đã đăng ký, cấp Giấy chứng nhận
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 02:14:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 02:04:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl17_lblTT" class="text-danger">Chậm tiếp nhận <b>8</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                17
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0007
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục đăng ký biến động về sử dụng đất, tài sản gắn liền với đất do thay đổi thông tin về người được cấp Giấy chứng nhận (đổi tên hoặc giấy tờ pháp nhân, giấy tờ nhân thân, địa chỉ); giảm diện tích thửa đất do sạt lở tự nhiên; thay đổi về hạn chế quyền sử dụng đất; thay đổi về nghĩa vụ tài chính; thay đổi về tài sản gắn liền với đất so với nội dung đã đăng ký, cấp Giấy chứng nhận
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 02:01:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 01:57:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl18_lblTT" class="text-danger">Chậm tiếp nhận <b>8</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                18
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0006
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký biến động quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trong các trường hợp chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, góp vốn bằng quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất của vợ hoặc chồng thành của chung vợ và chồng
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 01:55:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                17/08/22 01:50:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl19_lblTT" class="text-danger">Chậm tiếp nhận <b>9</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                19
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220803-0002
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Thủ tục tách thửa hoặc hợp thửa đất
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                03/08/22 09:34:00 AM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                23/08/22 09:31:00 AM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl20_lblTT" class="text-danger">Chậm tiếp nhận <b>13</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td align="center" style="width:1%;">
-                                                                20
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                000.00.22.H22-220802-0030
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                Đăng ký biến động quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất trong các trường hợp chuyển nhượng, cho thuê, cho thuê lại, thừa kế, tặng cho, góp vốn bằng quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất; chuyển quyền sử dụng đất, quyền sở hữu tài sản gắn liền với đất của vợ hoặc chồng thành của chung vợ và chồng
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                02/08/22 05:03:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                16/08/22 05:01:00 PM
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                <span id="ctl08_gridHS_MoiTiepNhan_ctl21_lblTT" class="text-danger">Chậm tiếp nhận <b>29</b> giờ</span>
-                                                            </td>
-
-                                                            <td align="left" style="width:12%;">
-                                                                UBND HUYỆN VỊ XUYÊN
-                                                            </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td colspan="7">
-
-                                                                <table border="0">
-                                                                    <tbody>
-
-                                                                        <tr>
-                                                                            <td><span>1</span></td>
-
-                                                                            <td><a href="javascript:__doPostBack('ctl08$gridHS_MoiTiepNhan','Page$2')">2</a></td>
-
-                                                                            <td><a href="javascript:__doPostBack('ctl08$gridHS_MoiTiepNhan','Page$3')">3</a></td>
-
-                                                                            <td><a href="javascript:__doPostBack('ctl08$gridHS_MoiTiepNhan','Page$4')">4</a></td>
-
-                                                                            <td><a href="javascript:__doPostBack('ctl08$gridHS_MoiTiepNhan','Page$5')">...</a></td>
-
-                                                                            <td><a href="javascript:__doPostBack('ctl08$gridHS_MoiTiepNhan','Page$Last')">Cuối</a></td>
-                                                                        </tr>
-                                                                    </tbody>
-
-                                                                </table>
-
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-
-                                                </table>
-                                            </div>
-                                        </div>
+                                    <div id="hs_cham_tiep_nhan">
                                     </div>
                                 </div>
                             </div>
@@ -800,18 +113,21 @@
 </div>
 <script>
     function GetListByCurrentPage(id) {
-        var pageSize = $("#lstPageSize").val();
+        var from = $("#fromhsshh").val();
+        var to = $("#tohsshh").val();
         $.ajax({
             type: "GET",
-            url: "../Menu/ChuyenMucCap2Paging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
+            url: "../TheoDoiHoSo/HSSapHetHanPaging?from=" + from + "&to=" + to + "&page=" + id,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
                 // console.log(data);
-                $("#dataTable").html(data);
+                $("#hs_sap_het_han").html(data);
             }
         });
     }
+
+
 
     function FindHsSapHetHan() {
         var from = $("#fromhsshh").val();
@@ -835,5 +151,42 @@
         window.location.href = url;
     }
 
+    function FindHsChamTiepNhan() {
+        var from = $("#fromhsctn").val();
+        var to = $("#tohsctn").val();
+        $.ajax({
+            type: "GET",
+            url: "../TheoDoiHoSo/HSChamTiepNhanPaging?from=" + from + "&to=" + to + "&page=1",
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                //console.log(data);
+                $("#hs_cham_tiep_nhan").html(data);
+            }
+        });
+    }
+
+    function HsChamTiepNhanExcel() {
+        var from = $("#fromhsctn").val();
+        var to = $("#tohsctn").val();
+        var url = "/TheoDoiHoSo/ExportHSSapChamTiepNhan?from=" + from + "&to=" + to
+        window.location.href = url;
+    }
+
+    function GetListByCurrentPage2(id) {
+        var from = $("#fromhsctn").val();
+        var to = $("#tohsctn").val();
+
+        $.ajax({
+            type: "GET",
+            url: "../TheoDoiHoSo/HSChamTiepNhanPaging?from=" + from + "&to=" + to + "&page=" + id,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function(data) {
+                // console.log(data);
+                $("#hs_cham_tiep_nhan").html(data);
+            }
+        });
+    }
 
 </script>
