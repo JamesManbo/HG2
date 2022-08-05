@@ -54,7 +54,6 @@
             <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false"></a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
                 <a class="dropdown-item" href="/GuiHoSo/ThemTuyenSinhCapMamNon">Gửi hồ sơ tuyển sinh cấp mầm non</a>
                 <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTieuHoc">Gửi hồ sơ tuyển sinh cấp tiểu học </a>
                 <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHCS">Gửi hồ sơ tuyển sinh cấp THCS </a>
@@ -129,46 +128,7 @@
           </div>
           <div class="news-list">
             <ul class="list_news_ul">
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
+                @Html.RenderAction("GetListNews","News")
             </ul>
             <a class="view-more-news" href="#" title="Xem danh sách tin đầy đủ">
               <img src="~/BackEnd/assets/img/viewmore-hover.png" /></a>

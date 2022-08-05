@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HG.WebApp.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HG.WebApp.Controllers.Client
 {
@@ -9,9 +10,10 @@ namespace HG.WebApp.Controllers.Client
             return View();
         }
 
-        public IActionResult AddNews()
+        public IActionResult GetListNews()
         {
-            return View();
+            var db = new EAContext();
+            return PartialView(db.Tin_Tuc.Take(20).ToList());
         }
     }
 }
