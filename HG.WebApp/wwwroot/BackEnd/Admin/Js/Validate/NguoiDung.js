@@ -22,6 +22,10 @@
                     ten:
                     {
                          required: true
+                    },
+                    ma_phong_ban:
+                    {
+                        required: true
                     }
             },
                 messages:
@@ -37,7 +41,10 @@
                     ten:
                     {
                         required: "Tên không được trống!"
-                    }
+                    },
+                    ma_phong_ban : {
+                        required: "Bạn phải chọn phòng ban!"
+                    },
 
                 }
             });
