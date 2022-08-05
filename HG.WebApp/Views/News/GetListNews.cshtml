@@ -1,0 +1,13 @@
+﻿    @model List<HG.Entities.Entities.Tin_Tuc.Tin_Tuc> 
+    @if(Model != null)
+    {
+        foreach (var item in Model)
+        {
+           <li class="list_news_li">
+                <a class="list_news_a" href="#">@item.tieu_de</a>
+           </li>
+        }
+    }
+
+              
+        
