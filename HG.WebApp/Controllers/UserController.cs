@@ -269,6 +269,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext db = new EAContext();
             var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.UserId = UserId.ToString();
             ViewBag.MenuParrent = db.Dm_menus.Where(n => (n.ma_trang_cha == "" || n.ma_trang_cha == null) && n.Deleted != 1).ToList();
             ViewBag.MenuChill = _userDao.GetUnitsMenuRolesOfUser(UserId);
             return PartialView();
