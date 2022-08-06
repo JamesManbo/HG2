@@ -296,7 +296,7 @@ $(document).ready(function() {
                         <div class="form-group row mb-3">
                                     <span for="mota" class="col-sm-1 control-label">Ngày hẹn trả KQ</span>
                                     <div class="col-md-3">
-                                       <label  type="text" id="ngay_hen_tra" name="ngay_hen_tra" maxlength="50" value="@Model.ngay_hen_tra.ToString("dd/MM/yyyyy")" ></label>
+                                       <label  type="text" id="ngay_hen_tra" name="ngay_hen_tra" maxlength="50" value="@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.ngay_hen_tra)" ></label>
                                     </div>
                           </div>
                         
