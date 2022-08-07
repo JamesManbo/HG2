@@ -22,6 +22,8 @@ namespace HG.Entities.Entities.SuperAdmin
 		public Guid? DeletedBy { get; set; }
         [NotMapped]		
 		public string? url { get; set; }
+		[NotMapped]
+		public string? ten_chuc_nang { get; set; }
 
 	}
 
