@@ -43,6 +43,7 @@ namespace HG.Data.Business.HoSo
                 DbProvider.AddParameter("trang_thai", trang_thai, SqlDbType.Int);
                 // Lấy về danh sách các người dung
                 var menu = DbProvider.ExecuteObject<PhanCongThucHienModels>();
+                
                 return menu;
             }
             catch (Exception e)
