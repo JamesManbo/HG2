@@ -43,7 +43,7 @@ namespace HG.WebApp.Controllers
         {
 
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", userId = Guid.Parse(userManager.GetUserId(User)), RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
@@ -62,7 +62,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> QuanLyPaging(int currentPage = 0, int pageSize = 0, string ma_pb = "", string ma_lv = "", string tu_khoa = "")
         {
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = currentPage, ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = currentPage, userId = Guid.Parse(userManager.GetUserId(User)), ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
