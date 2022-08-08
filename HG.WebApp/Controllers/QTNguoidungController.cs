@@ -32,6 +32,7 @@ namespace HG.WebApp.Controllers
         #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
         {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.ma_phong_ban = ma_phong_ban;
             ViewBag.trang_thai = trang_thai;
@@ -39,7 +40,7 @@ namespace HG.WebApp.Controllers
             ViewBag.txtSearch = txtSearch;
             EAContext eAContext = new EAContext();
             HelperString stringHelper = new HelperString();
-            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() {tu_khoa = txtSearch, CurrentPage = 1, ma_phong_ban = ma_phong_ban, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() {tu_khoa = txtSearch, CurrentPage = 1, ma_phong_ban = ma_phong_ban,userId = UserId, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();

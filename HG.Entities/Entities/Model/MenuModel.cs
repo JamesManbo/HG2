@@ -28,5 +28,6 @@ namespace HG.Entities.Entities.Model
         public string? ma_pb { get; set; }
         public string? ma_lv { get; set; }
         public string? tu_khoa { get; set; }
+        public Guid? userId { get; set; }
     }
 }

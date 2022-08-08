@@ -66,6 +66,7 @@ namespace HG.Data.Business.NguoiDung
                 DbProvider.AddParameter("tu_khoa", item.tu_khoa, SqlDbType.NVarChar);
                 DbProvider.AddParameter("trang_thai", item.trang_thai, SqlDbType.Int);
                 DbProvider.AddParameter("da_xoa", item.da_xoa, SqlDbType.Int);
+                DbProvider.AddParameter("user", item.userId, SqlDbType.UniqueIdentifier);
                 // Output params
                 DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
 
@@ -98,6 +99,7 @@ namespace HG.Data.Business.NguoiDung
                 DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
                 DbProvider.AddParameter("tu_khoa", item.tu_khoa, SqlDbType.NVarChar);
                 DbProvider.AddParameter("trang_thai", item.trang_thai, SqlDbType.Int);
+                DbProvider.AddParameter("user", item.userId, SqlDbType.UniqueIdentifier);
                 //DbProvider.AddParameter("da_xoa", item.da_xoa, SqlDbType.Int);
                 // Output params
                 DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
