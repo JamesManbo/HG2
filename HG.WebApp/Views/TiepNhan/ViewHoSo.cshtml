@@ -242,7 +242,7 @@
     function TiepNhanHoSo(abc){
          $.ajax({
                   type: "GET",
-                  url: "/TiepNhan/TiepNhanHoSoOnline?code=" + abc.value,
+                  url: "/TiepNhan/TiepNhanHoSoOnline?code=" + abc,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
@@ -254,7 +254,7 @@
      function LoaiHoSo(abc){
          $.ajax({
            type: "GET",
-                  url: "/TiepNhan/LoaiHoSo?code=" + abc.value,
+                  url: "/TiepNhan/LoaiHoSo?code=" + abc,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
@@ -265,7 +265,7 @@
     }
     function ThongBaoChoCongDan(abc){
         var msg = $("#gui_tin_nhan").val();
-        if (msg = "") {
+        if (msg == "" || msg == undefined || msg == null) {
              $("#NotifyVHSTitle").html("Bạn chưa nhập nội dung thông báo!");
              $("#NotifyVHS").modal("show");
             return;
