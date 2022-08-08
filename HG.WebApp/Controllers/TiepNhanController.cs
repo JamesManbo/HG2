@@ -103,7 +103,7 @@ namespace HG.WebApp.Controllers
             }
             else if (type_view == StatusAction.TraKQ.ToString())
             {
-                des.trang_thai = 3; //hs đã trả kết quả
+                des.trang_thai = 12; //hs đã trả kết quả
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ho_So> _hoso = db.Ho_So.Add(des);
                 db.SaveChanges();
                 hosoId = _hoso.Entity.Id;
@@ -219,7 +219,8 @@ namespace HG.WebApp.Controllers
             }
             else if (type_view == StatusAction.TraKQ.ToString())
             {
-              //chuyển hồ sơ về danh sách hồ sơ đã trã kết quả
+                //chuyển hồ sơ về danh sách hồ sơ đã trã kết quả
+                return RedirectToAction("Index","XuLyHoSo");
             }
             return RedirectToAction("DanhSachHoSo");
         }

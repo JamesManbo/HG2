@@ -26,7 +26,10 @@ namespace HG.WebApp.Controllers
             _thuTucDao = new ThuTucDao(DbProvider);
             _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
         }
-
+        public string TraKetQua()
+        {
+            return "";
+        }
 
 
     }

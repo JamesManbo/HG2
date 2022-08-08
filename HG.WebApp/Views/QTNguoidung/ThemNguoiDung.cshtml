@@ -183,7 +183,7 @@
                         </div>
 
                         <div class="form-group row">
-                            <label class="col-md-2 control-label">Phòng ban<span id="ctl08_ctl00_Label5" style="color:Red;">(*)</span></label>
+                            <label class="col-md-2 control-label">Phòng ban</label>
                             <div class="col-md-10">
                                 <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Toàn bộ phòng ban ------------</option>
@@ -439,7 +439,21 @@
                                 <input name="stt" type="text" id="stt" maxlength="10" class="form-control input-default" placeholder="Số thứ tự">
                             </div>
                         </div>
-
+                         <div class="form-group row">
+                            <label class="col-md-2 control-label">Là Administrator</label>
+                            <div class="col-md-10">
+                                <input name="IsAdministrator" onclick="IsAdministrator()"  type="checkbox" value="0" id="IsAdministrator" >
+                            </div>
+                            <script>
+                                        function IsAdministrator() {
+                                            if ($('#IsAdministrator').is(':checked')) {
+                                                $("#IsAdministrator").val(1)
+                                            }else{
+                                                $("#IsAdministrator").val(0)
+                                            }
+                                        }
+                                    </script>
+                        </div>
                         <div class="form-group row">
                         <label class="col-md-2 control-label">Khóa tài khoản</label>
 									<div class="col-md-10">

@@ -164,6 +164,7 @@ namespace HG.WebApp.Controllers
                 user.ten = item.ten;
                 user.ngay_sinh = item.ngay_sinh;
                 user.khoa_tai_khoan = item.khoa_tai_khoan;
+                user.IsAdministrator = item.IsAdministrator;
                 var result = await userManager.CreateAsync(user, user.mat_khau);
                 var db = new EAContext();
                 ViewBag.LstNhom = db.Asp_nhom.ToList();
