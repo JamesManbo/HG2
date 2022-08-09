@@ -1,5 +1,8 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Data.Business.ThuTuc;
+using HG.Entities;
+using HG.Entities.HoSo;
+using HG.Entities.SearchModels;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +30,26 @@ namespace HG.WebApp.Controllers
             _danhmucDao = new LuongXuLyDao(DbProvider);
             _thuTucDao = new ThuTucDao(DbProvider);
             _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
+        }
+        public async Task<IActionResult> HoSoBoSungPaging(int currentPage = 1, string tu_khoa = "", string ma_thu_tuc = "", int tat_ca = 1, int dung_han = 0, int qua_han = 0, int trang_thai = 1, int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = currentPage, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = dung_han, qua_han = qua_han, RecordsPerPage = pageSize, trang_thai_hs = trang_thai };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = tu_khoa;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            ViewBag.trang_thai = trang_thai;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/HoSoBoSungPaging.cshtml", hs);
+            return Content(result);
         }
         public string ChuyenXuLy(int ho_so_id)
         {

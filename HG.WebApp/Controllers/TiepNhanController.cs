@@ -611,5 +611,20 @@ namespace HG.WebApp.Controllers
         //    ViewBag.MaThuTuc = ma_thu_tuc;
         //    return View(hs);
         //}
+        public IActionResult ViewBoSungHoSo(int code, string type)
+        {
+            EAContext db = new EAContext();
+            ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.type_view = StatusAction.View.ToString();
+            var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+            //Lấy thủ tục bởi mã lv
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
+            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            //Lấy biểu mẫu
+            ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
+
+            return View(hoso);
+        }
     }
 }
