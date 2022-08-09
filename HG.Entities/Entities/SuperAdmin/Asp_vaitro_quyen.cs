@@ -24,6 +24,8 @@ namespace HG.Entities.Entities.SuperAdmin
 		public string? url { get; set; }
 		[NotMapped]
 		public string? ten_chuc_nang { get; set; }
+		[NotMapped]
+		public string? ma_trang_cha { get; set; }
 
 	}
 

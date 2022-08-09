@@ -9,6 +9,18 @@ namespace HG.WebApp.Helper
     {
       
         readonly static EAContext db = new EAContext();
+        public static string GetTenTrang(string ma_trang)
+        {
+            try
+            {
+                var countrecord = db.Dm_menu.Where(n => n.ma_trang == ma_trang).FirstOrDefault();
+                return countrecord == null ? "" : countrecord.ten_trang;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
         public static string GetFullName(Guid? id)
         {
             try

@@ -1,35 +1,35 @@
 ﻿@{
-    var MenuParrent = ViewBag.MenuParrent as List<HG.Entities.Dm_menu>;
     var MenuChill = ViewBag.MenuChill as HG.Entities.UnitsMenuRolesOfUser;
 }
 
 @if(ViewBag.UserId != "893f8f02-6fd1-4118-05ab-08da60ce59d5")
 {
     <ul class="sidebar-nav" id="sidebar-nav">
-        @if(MenuParrent != null)
-        {
-                foreach (var item in MenuParrent)
+       @if (MenuChill != null && MenuChill.Vai_Tro_Menu_Quyen != null)
+           {
+                foreach (var item in MenuChill.Vai_Tro_Menu_Quyen.GroupBy(n=>n.ma_trang_cha).ToList())
                 {
-                    <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-target="#@item.ma_trang-nav" data-bs-toggle="collapse" href="#">
-                        <i class="bi bi-menu-button-wide"></i><span>@item.ten_trang</span><i class="bi bi-chevron-down ms-auto"></i>
-                    </a>
-                    <ul id="@item.ma_trang-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                        @if (MenuChill != null && MenuChill.Vai_Tro_Menu_Quyen != null)
-                        {
-                           foreach (var item2 in MenuChill.Vai_Tro_Menu_Quyen.Where(n=>n.ma_chuc_nang.Contains(item.ma_trang)).ToList())
-                           {
-                               <li>
-                                    <a href="@item2.url">
-                                        <i class="bi bi-circle"></i><span>@item2.ten_chuc_nang</span>
-                                    </a>
-                               </li>
-                           }
-                        }
-                    </ul>
-                </li>
+                     if (!string.IsNullOrEmpty(item.Key))
+                     {
+                        <li class="nav-item">
+                            <a class="nav-link collapsed" data-bs-target="#@item.Key-nav" data-bs-toggle="collapse" href="#">
+                                <i class="bi bi-menu-button-wide"></i><span>@(HG.WebApp.Helper.HelperSql.GetTenTrang(item.Key))</span><i class="bi bi-chevron-down ms-auto"></i>
+                            </a>
+                            <ul id="@item.Key-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                                   @foreach (var item2 in item)
+                                   {
+                                       <li>
+                                            <a href="@item2.url">
+                                                <i class="bi bi-circle"></i><span>@item2.ten_chuc_nang</span>
+                                            </a>
+                                       </li>
+                                   }
+                        
+                            </ul>
+                        </li>
+                     } 
                 }
-        }
+            }
     </ul>
 }else{
     <ul class="sidebar-nav" id="sidebar-nav">
