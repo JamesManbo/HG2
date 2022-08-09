@@ -1,0 +1,71 @@
+﻿@using HG.WebApp
+@model HG.Entities.HoSo.Ho_So
+@{
+    ViewData["Title"] = "Tiếp nhận hồ sơ"; 
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+   var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
+   var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
+   var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
+   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+   var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
+}
+<div class="card">
+     <div class="maincontent">
+        <div class="maincontentinner">
+            @*start thông tin hồ sơ*@
+            <h4 class="widgettitle">Thông tin hồ sơ : @Model.ma_khach_hang</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <a href="/Luong/SuaLuongXuLy?code=@Model.ma_luong_xu_ly&type=View" style="text-decoration:none"> Luồng xử lý hồ sơ</a>
+                    <div id="form_tiepnhan" class="row">
+                          
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Họ và tên<span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label  type="text" id="ho_ten" name="ho_ten" maxlength="50" value="@Model.ho_ten" placeholder="Nhập họ tên" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ho_ten</label>
+                                    </div>
+                                     <span for="stt" class="col-sm-1 control-label">Ngày sinh <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                        <label type="date" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ho_ten</label>
+                                    </div>
+                                     <span for="nguoi_sua" class="col-sm-1 control-label">Giới tính <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label>@(Model.gioi_tinh == 1 ? "Nam": "Nữ")</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Số giấy tờ<span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label maxlength="50" type="text" id="so_giay_to" name="so_giay_to" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.so_giay_to</label>
+                                    </div>
+                                     <span for="stt" class="col-sm-1 control-label">Điện thoại <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                        <label maxlength="50" type="text" id="dien_thoai"name="dien_thoai" value="@Model.dien_thoai" placeholder="Nhập điện thoại" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.dien_thoai </label>
+                                    </div>
+                                     <span for="nguoi_sua" class="col-sm-1 control-label">Email <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label maxlength="50" type="text" id="email" name="email" value="@Model.email" placeholder="Nhập email" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.email</label>
+                                    </div>
+                                </div>
+                                 <div class="form-group row mb-3">
+                                    <span for="dia_chi" class="col-sm-1 control-label">Địa chỉ <span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                        <label maxlength="250" type="text" id="dia_chi" name="dia_chi" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.dia_chi</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="ten_to_chuc" class="col-sm-1 control-label">Tên cơ quan</span>
+                                    <div class="col-sm-11">
+                                        <label maxlength="50" type="text" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên cơ quan" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ten_to_chuc </label>
+                                    </div>
+                                </div>
+                           
+                                </div>
+                    </div>
+                </div>
+                @*End thông tin hồ sơ*@
+
+        </div>
+     </div>
+     
+</div>
