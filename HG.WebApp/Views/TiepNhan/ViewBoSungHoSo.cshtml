@@ -8,6 +8,7 @@
    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
    var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
+   var LstLichSu = ViewBag.LstLichSu as List<HG.Entities.Entities.HoSo.Ho_So_History>;
 }
 <div class="card">
      <div class="maincontent">
@@ -64,6 +65,54 @@
                     </div>
                 </div>
                 @*End thông tin hồ sơ*@
+           
+                 <h4 class="widgettitle">TT quá trình xử lý</h4>
+                 <div class="widgetcontent">
+                     <div class="dataTable-container">
+                          <table class="table table-bordered responsive">
+                              <thead class="widgettitle">
+                                  <tr>
+                                 
+                                      <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                      <th class="head1" scope="col" data-sortable="" style="width: 15%;">THỜI GIAN</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI THỰC HIỆN</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NỘI DUNG</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI NHẬN</th>
+                                       <th class="head0" scope="col" data-sortable="" style="width: 15%;">HẠN XỬ LÝ</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  @if (LstLichSu != null)
+                                  {
+                                      var stt = 1;
+                                      foreach (var item in LstLichSu)
+                                      {
+                                          <tr>
+                                              @*<input type="checkbox" class="ads_Checkbox" value="@item.Id"  hidden />*@
+                                              <td scope="row">
+                                                  @stt
+                                                  <input type="hidden" name="" id="" value="@item.Id" />
+                                              </td>
+                                              <td>@item.CreatedDateUtc </td>
+                                              <td>@item.CreatedUid </td>
+                                              <td>@item.noi_dung_xu_ly</td>
+                                              <td>NGƯỜI NHẬN</td>
+                                              <td>HẠN XỬ LÝ</td>
+                                          </tr>
+                                          stt++;
+                                      }
+                                  }
+                              </tbody>
+                          </table>
+                      </div>
+                 </div>
+                 <div>
+                               <button type="button" class="btn btn-primary"  onclick="DongYBoSung(@Model.Id)"  style="width: 150px" >Đồng ý bổ sung</button>
+                               <button type="button" class="btn btn-primary"  onclick="InPhieuHuongDan(@Model.Id)" style="width: 150px">In phiếu hướng dẫn hồ sơ</button>
+                               <button type="button" class="btn btn-primary" onclick="LoaiHoSo(@Model.Id)">Loại hồ sơ</button>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/HoSoChoBoSung';" style="width: 150px">Đóng</button>
+                 </div>
+
 
         </div>
      </div>

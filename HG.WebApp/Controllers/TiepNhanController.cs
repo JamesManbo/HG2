@@ -623,7 +623,7 @@ namespace HG.WebApp.Controllers
             ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
-
+            ViewBag.LstLichSu = db.Ho_So_History.Where(N => N.Id == code).ToList();
             return View(hoso);
         }
     }
