@@ -13,6 +13,7 @@ using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AspNetCore.Reporting;
 
 
 namespace HG.WebApp.Controllers
@@ -28,9 +29,11 @@ namespace HG.WebApp.Controllers
         private readonly ThuTucDao _thuTucDao;
         private readonly XuLyHoSoDao _xulyhsDao;
         private readonly HG.Data.Business.HoSo.HoSoDao _hoso;
-        public XuLyHoSoController(IWebHostEnvironment _environment, ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        private readonly IWebHostEnvironment _environment;
+        public XuLyHoSoController(IWebHostEnvironment environment, ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
         {
+            _environment = environment;
             _logger = logger;
             this.userManager = userManager;
             this._config = configuration;
@@ -277,6 +280,26 @@ namespace HG.WebApp.Controllers
             //ViewBag.ma_luong = ma_luong;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinXuLy.cshtml", quaTrinhXuLyModels);
             return Content(result);
+        }
+        
+        public async Task<IActionResult> Print(string Id)
+        {
+            string mintype = "";
+            int exception = 1;
+            var path = @""+this._environment.WebRootPath+"/Reports/PhieuTiepNhan.rdlc";
+            ViewBag.Path = path;
+            EAContext db = new EAContext();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            var hoso = db.Ho_So.Where(n => n.Id == Int32.Parse(Id)).FirstOrDefault();
+            var Get_phieu_hen = _xulyhsDao.Getphieuhen(Int32.Parse(Id));
+            var dm_thanh_phan = _xulyhsDao.GetThanhPhanHoSo(hoso.ma_thu_tuc_hc);
+            LocalReport localReport = new LocalReport(path);
+            
+            localReport.AddDataSource("Get_phieu_hen", Get_phieu_hen.ToList());
+            localReport.AddDataSource("dm_thanh_phan", dm_thanh_phan.ToList());
+            var result = localReport.Execute(RenderType.Pdf, exception, parameters, mintype);
+           // return View(Get_phieu_hen);
+             return File(result.MainStream, "application/pdf");
         }
         [HttpPost]
         public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc)

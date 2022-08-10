@@ -2,6 +2,7 @@
 using HG.Entities;
 using HG.Entities.Entities;
 using HG.Entities.Entities.Luong;
+using HG.Entities.Entities.DanhMuc;
 using HG.Entities.HoSo;
 using HG.Entities.SearchModels;
 using System;
@@ -49,6 +50,40 @@ namespace HG.Data.Business.HoSo
             catch (Exception e)
             {
                 return new PhanCongThucHienModels();
+            }
+        }
+        public List<PhieuHenModel> Getphieuhen(int id)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("Get_phieu_hen", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ID", id, SqlDbType.Int);
+               
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteListObject<PhieuHenModel>();
+
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new List<PhieuHenModel>();
+            }
+        }
+        public List<dm_thanh_phan> GetThanhPhanHoSo(string ma_thu_tuc)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("select * from dm_thanh_phan where ma_thu_tuc ='" + ma_thu_tuc +"'", CommandType.Text);
+               
+
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteListObject<dm_thanh_phan>();
+
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new List<dm_thanh_phan>();
             }
         }
         public List<QuaTrinhXuLy> GetQuaTrinhXuLy(int id)
