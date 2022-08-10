@@ -36,9 +36,13 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="#">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Đăng xuất</span>
+                                <span onclick="LogoutClient()" style="cursor:pointer">Đăng xuất</span>
                             </a>
                         </li>
 
                     </ul><!-- End Profile Dropdown Items -->
                 </li>
+                <script>
+                    function LogoutClient(){
+                     window.location.href = "/User/LogoutClient"}
+                </script>

@@ -256,7 +256,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LogoutClient()
         {
             await this.signInManager.SignOutAsync();
-            return Redirect("/");
+            return RedirectToAction("Login", "User");
         }
         public async Task<IActionResult> ListRole(int page = 1)
         {
