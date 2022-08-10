@@ -202,7 +202,7 @@
                                             <td><a href="/TiepNhan/SuaHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.nguoi_xu_ly </a></td>
                                             <td><a href="/TiepNhan/SuaHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra)) </a></td>
                                             <td><a href="#"><span class="glyphicon glyphicon-print">Chuyển CBXL</span> </a></td>
-                                            <td><a href="#"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
+                                            <td><a href="/XuLyHoSo/Print?Id=@item.Id" target="_blank"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
                                         </tr>
                                         stt++;
                                     }

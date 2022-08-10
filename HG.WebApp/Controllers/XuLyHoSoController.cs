@@ -298,8 +298,8 @@ namespace HG.WebApp.Controllers
             localReport.AddDataSource("Get_phieu_hen", Get_phieu_hen.ToList());
             localReport.AddDataSource("dm_thanh_phan", dm_thanh_phan.ToList());
             var result = localReport.Execute(RenderType.Pdf, exception, parameters, mintype);
-           // return View(Get_phieu_hen);
-             return File(result.MainStream, "application/pdf");
+            //return View(Get_phieu_hen);
+            return File(result.MainStream, "application/pdf");
         }
         [HttpPost]
         public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc)

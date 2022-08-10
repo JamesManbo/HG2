@@ -72,12 +72,16 @@ namespace HG.WebApp.Controllers
             }
            
         }
-        public string TraKetQua(int ho_so_id, string le_phi, string nguoiky, int da_thanh_toan,string filedinhkem )
+        public string TraKetQua(int ho_so_id,  string NguoiKy, int LePhi = 0 , int DaThuPhi = 0, string filedinhkem = "", string YKien = "")
         {
             EAContext db = new EAContext();
             var obj = db.Ho_So.Where(n => n.Id == ho_so_id).FirstOrDefault();
             if (obj != null)
             {
+                obj.da_thu_phi = DaThuPhi;
+                obj.le_phi = LePhi;
+                obj.id_file_dinh_kem = filedinhkem;
+                obj.y_kien = YKien;
                 //update cac thong tin thanh toan, nguoi ky ... vao ho so
                 obj.trang_thai = (int)StatusTraKetQua.HoSoDaTraKQ;
                 //obj.id_trang_thai_xl = 0; //chưa tiếp nhận
