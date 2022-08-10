@@ -35,7 +35,7 @@ namespace HG.Entities.HoSo
         public string? nguoi_phoi_hop { get; set; }
         public DateTime? gio_hen_tra { get; set; }
         public DateTime ngay_hen_tra { get; set; }
-        public int? id_file_dinh_kem { get; set; }
+        public string? id_file_dinh_kem { get; set; }
         public string? y_kien { get; set; }
         public string? lstThanhPhan { get; set; }
         public int? id_trang_thai_hs { get; set; }

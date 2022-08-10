@@ -510,9 +510,9 @@
                             <div class="text-center">
                                <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Thêm</button>
                                <button type="button" class="btn btn-primary" onclick="ChuyenXuLy(@Model.Id)">Chuyển xử lý</button>
-                               @*<button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>*@
-                               <button type="button" class="btn btn-primary">In phiếu hẹn</button>
-                               <button type="button" class="btn btn-primary">In phiếu chuyển</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>
+                               <a type="button" href="/XuLyHoSo/Print?Id=@Model.Id" target="_blank" class="btn btn-primary" style="color: #fff;" >In phiếu hẹn</a>
+                               <a type="button" href="/XuLyHoSo/Print?Id=@Model.Id" target="_blank" class="btn btn-primary" style="color: #fff;">In phiếu chuyển</a>
                                <button type="button" class="btn btn-primary" onclick="TraKetQua(@Model.Id)">Trả kết quả</button>
                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/HoSoDangTiepNhan';">Đóng</button>
                             </div>
@@ -805,7 +805,7 @@
     function CapNhatKetQua(){
          $.ajax({
                   type: "GET",
-                  url: "/ApiHoSo/TraKetQua?ho_so_id=" + ho_so_id,
+                  url: "/ApiHoSo/TraKetQua?ho_so_id=" + ho_so_id + "&NguoiKy=" + $("#NguoiKy").val() + "&LePhi=" + $("#LePhi").val() + "&DaThuPhi=" + $("#DaThuPhi").val() + "&YKien=" + $("#YKien").val() + "&filedinhkem=" + $("#namefilesDinhKem").val() ,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
@@ -813,10 +813,6 @@
                       $("#NotifyVHS").modal("show");
                   }
           });           
-
-
-
-        alert("cập nhật kết quả thành công!");
     }
 </script>
 
