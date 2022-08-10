@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\Reports\BaoCaoSLHS.rdlc" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
     <PackageReference Include="AspNetCore.Unobtrusive.Ajax" Version="2.0.0" />
     <PackageReference Include="AutoMapper" Version="11.0.0" />
@@ -59,10 +55,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\FrontEnd\Avatar\2022\7\26\" />
     <Folder Include="wwwroot\FrontEnd\CMT\2022\7\26\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\Reports\BaoCaoSLHS.rdlc" />
   </ItemGroup>
 
   <ItemGroup>
