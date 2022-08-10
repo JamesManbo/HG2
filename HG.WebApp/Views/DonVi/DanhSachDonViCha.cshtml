@@ -1,0 +1,29 @@
+﻿@model List<HG.Entities.DanhMuc.DonVi.dm_don_vi>
+<script>
+             
+</script>       
+@if (ViewBag.CapCoQuan == "004")
+{
+
+    <label for="stt" class="col-sm-2 control-label">Tên đơn vị cha</label>
+    <div class="col-sm-8">
+        <select name="ma_don_vi_cha" id="ma_don_vi_cha" class="form-control input-default">
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                }
+            }
+        </select>
+    </div>
+
+}
+else
+{
+    <label for="stt" class="col-sm-2 control-label">Tên đơn vị cha</label>
+    <div class="col-sm-8">
+        <select name="ma_don_vi_cha" id="ma_don_vi_cha" class="form-control input-default" disabled>
+        </select>
+    </div>
+}                    
