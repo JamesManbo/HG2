@@ -1,9 +1,9 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Thêm mới đơn vị"; 
+    ViewData["Title"] = "Thêm mới đơn vị";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-       var ListCapDiaBan = ViewBag.ListCapDiaBan as List<HG.Entities.Entities.DanhMuc.DonVi.dm_cap_dia_ban>;
-       var ListDiaBan = ViewBag.ListDiaBan as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
+    var ListCapDiaBan = ViewBag.ListCapDiaBan as List<HG.Entities.Entities.DanhMuc.DonVi.dm_cap_dia_ban>;
+    var ListDiaBan = ViewBag.ListDiaBan as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
 }
 @model HG.Entities.DanhMuc.DonVi.dm_don_vi;
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -57,7 +57,7 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-default" maxlength="250" name="ip_or_website" value="@Model.ip_or_website" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
-                             <div class="col-sm-1">
+                            <div class="col-sm-1">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
                                     Chọn
                                 </button>
@@ -75,7 +75,7 @@
                                 <input type="text" maxlength="250" id="ten_don_vi" class="form-control input-default" name="ten_don_vi" value="@Model.ten_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Mã quốc gia của đơn vị <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" maxlength="250" id="ma_quoc_gia_don_vi" class="form-control input-default" name="ma_quoc_gia_don_vi" value="@Model.ma_quoc_gia_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
@@ -89,76 +89,63 @@
                         </div>
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label">Cấp cơ quan <span style="color:red">(*)</span></label>
-                            <div class="col-sm-8"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                 <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="GetCoQuanChaTheoID(this)" class="form-control input-default"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @if(ListCapDiaBan != null)
+                            <div class="col-sm-8" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="GetCoQuanChaTheoID(this)" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @if (ListCapDiaBan != null)
+                                    {
+                                        foreach (var item in ListCapDiaBan)
                                         {
-                                            foreach (var item in ListCapDiaBan)
+                                            if (item.ma_cap == Model.ma_cap_co_quan)
                                             {
-                                                if(item.ma_cap == Model.ma_cap_co_quan)
-                                                {
-                                                    <option value="@item.ma_cap" selected>@item.ten_cap</option> 
-                                                }else{
-                                                    <option value="@item.ma_cap">@item.ten_cap</option> 
-                                                }
+                                                <option value="@item.ma_cap" selected>@item.ten_cap</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_cap">@item.ten_cap</option>
                                             }
                                         }
-                                 </select>
+                                    }
+                                </select>
                             </div>
                         </div>
-                         <script>
-                                function GetCoQuanChaTheoID(obj){
-                                    $.ajax({
-                                        type: "GET",
-                                        url: "/DonVi/LayDanhSachDiaBanTheoMa?ma_cap_co_quan=" + obj.value ,
-                                        data: "",
-                                        contentType: 'application/json; charset=utf-8',
-                                        success: function(data) {
-                                            $("#chitietmacoquan").html(data);
-                                        }
-                                    });
-                                }
+                        <script>
+                            function GetCoQuanChaTheoID(obj) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/DonVi/DanhSachDonViCha?ma_cap_co_quan=" + obj.value,
+                                    data: "",
+                                    contentType: 'application/json; charset=utf-8',
+                                    success: function(data) {
+                                        $("#chitietmacoquan").html(data);
+                                    }
+                                });
+                            }
                         </script>
-                        <div id="chitietmacoquan">
-                            <div class="row mb-3">
-                                <label for="stt" class="col-sm-2 control-label">Cấp đơn vị cha <span style="color:red">(*)</span></label>
-                                <div class="col-sm-8">                      
-                                  <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" onchange="LayHuyenTheoTinh(this)" class="form-control input-default"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @if(ListDiaBan != null)
+
+                        <div class="row mb-3" id="chitietmacoquan">
+                            <label for="stt" class="col-sm-2 control-label">Cấp đơn vị cha <span style="color:red">(*)</span></label>
+                            <div class="col-sm-8">
+                                <select name="ma_don_vi_cha" id="ma_don_vi_cha" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @if (ListDiaBan != null && Model.ma_cap_co_quan == "004")
                                     {
-                                        <option value="001">Chọn tỉnh/thành phố</option>
-                                        foreach (var item in ListDiaBan.Where(n => n.ma_don_vi_cha == null))
+                                        foreach (var item in ListDiaBan)
                                         {
-                                             if(item.ma_dia_ban == Model.ma_don_vi_cha)
-                                               {
-                                                 <option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option> 
-                                               }
-                                                 <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                            if (item.ma_don_vi == Model.ma_don_vi_cha)
+                                            {
+                                                <option value="@item.ma_don_vi" selected>@item.ten_don_vi</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                            }
+
                                         }
                                     }
-			                      </select>               
-                              </div>   
-                            </div>
-                               <div class="row mb-3">
-                                <label for="stt" class="col-sm-2 control-label">Cấp đơn vị con <span style="color:red">(*)</span></label>                 
-                                 <div class="col-sm-8">                      
-                                               <select name="ma_don_vi_con" id="ma_don_vi_con" onchange="LayPhuongXaTheoQuanHuyen(this)" class="form-control input-default"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                                    @if(ListDiaBan != null)
-                                                    {
-                                                        <option value="001">Chọn Quân/Huyện</option>
-                                                        foreach (var item in ListDiaBan.Where(n=>n.ma_don_vi_con == Model.ma_don_vi_cha).ToList())
-                                                        {
-                                                            if(item.ma_dia_ban == Model.ma_don_vi_con)
-                                                            {
-                                                                <option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option> 
-                                                            }
-                                                             <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
-                                                        }
-                                                    }-
-			                                  </select>                             
-                                 </div>             
+                                </select>
                             </div>
                         </div>
+
+
 
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Số điện thoại</label>
@@ -178,7 +165,7 @@
                                 <input type="text" maxlength="20" id="fax" class="form-control input-default" name="fax" value="@Model.fax" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Ảnh đại diện</label>
                             <div class="col-sm-8">
                                 <input type="file" id="files" name="files" style="display: none">
@@ -203,10 +190,10 @@
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Sử dụng phiên giao dịch</label>
                             <div class="col-sm-8">
-                                <input type="checkbox"  @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="checkbox" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                          <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">Token</label>
                             <div class="col-sm-8">
                                 <input type="file" maxlength="250" id="token" class="form-control input-default" name="token" value="@Model.token" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
@@ -231,7 +218,7 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                            <h4 style="color:red">Thông tin liên kết VNPT Pay</h4>
+                        <h4 style="color:red">Thông tin liên kết VNPT Pay</h4>
                         <div class="clearfix"></div>
                         <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">base url</label>
@@ -258,35 +245,35 @@
                                 <input type="text" maxlength="250" id="lkvnpt_pay_secret_key" class="form-control input-default" name="lkvnpt_pay_secret_key" value="@Model.lkvnpt_pay_secret_key" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="clearfix"></div>
-                            <h4 style="color:red">Thông tin liên kết VNPT Pay - QRCode</h4>
+                        <div class="clearfix"></div>
+                        <h4 style="color:red">Thông tin liên kết VNPT Pay - QRCode</h4>
                         <div class="clearfix"></div>
 
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">merchantClientId_app</label>
                             <div class="col-sm-8">
                                 <input type="text" maxlength="250" id="lkvnpt_qr_clientid_app" class="form-control input-default" name="lkvnpt_qr_clientid_app" value="@Model.lkvnpt_qr_clientid_app" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">merchantName_app</label>
                             <div class="col-sm-8">
                                 <input type="text" maxlength="250" id="lkvnpt_qr_clientname_app" class="form-control input-default" name="lkvnpt_qr_clientname_app" value="@Model.lkvnpt_qr_clientname_app" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">merchantCode_app</label>
                             <div class="col-sm-8">
-                                <input type="text" maxlength="250" id="lkvnpt_qr_clientcode_app" class="form-control input-default" name="lkvnpt_qr_clientcode_app" value="@Model.lkvnpt_qr_clientcode_app"@(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" maxlength="250" id="lkvnpt_qr_clientcode_app" class="form-control input-default" name="lkvnpt_qr_clientcode_app" value="@Model.lkvnpt_qr_clientcode_app" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">terminalId_app</label>
                             <div class="col-sm-8">
                                 <input type="text" maxlength="250" id="lkvnpt_qr_terminalId_app_app" class="form-control input-default" name="lkvnpt_qr_terminalId_app_app" value="@Model.lkvnpt_qr_terminalId_app_app" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                         </div>
-                         <div class="row mb-3">
+                        <div class="row mb-3">
                             <label for="ten_pb" class="col-sm-2 control-label">secret_key_app</label>
                             <div class="col-sm-8">
                                 <input type="text" maxlength="250" id="lkvnpt_qr_secret_key_app" class="form-control input-default" name="lkvnpt_qr_secret_key_app" value="@Model.lkvnpt_qr_secret_key_app" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
@@ -327,37 +314,37 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <div style="overflow-y: auto;">
-                        <div id="pnlMain">
-                            <div>
-                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
-                                    <tbody>
-                                        <tr class="widgettitle">
-                                            <th align="center" scope="col">CHỌN</th>
-                                            <th scope="col">TÊN</th>
-                                            <th scope="col">MÔ TẢ</th>
-                                        </tr>
-                                   @* @if(lst_nhom != null)
+                <div style="overflow-y: auto;">
+                    <div id="pnlMain">
+                        <div>
+                            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                                <tbody>
+                                    <tr class="widgettitle">
+                                        <th align="center" scope="col">CHỌN</th>
+                                        <th scope="col">TÊN</th>
+                                        <th scope="col">MÔ TẢ</th>
+                                    </tr>
+                                    @* @if(lst_nhom != null)
                                     {
-                                        foreach (var item in lst_nhom)
-                                        {
-                                            <tr>
-                                                <td align="center">
-                                                     <a href="/SuperAdmin/SuaNhom?code=@item.ma_nhom&type=@(StatusAction.Edit.ToString())">Chọn</a>
-                                                </td>
-                                                <td>
-                                                    @item.ten_nhom
-                                                </td>
-                                                <td style="width: 25%;">@item.mo_ta</td>
-                                            </tr>
-                                        }
+                                    foreach (var item in lst_nhom)
+                                    {
+                                    <tr>
+                                    <td align="center">
+                                    <a href="/SuperAdmin/SuaNhom?code=@item.ma_nhom&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                    </td>
+                                    <td>
+                                    @item.ten_nhom
+                                    </td>
+                                    <td style="width: 25%;">@item.mo_ta</td>
+                                    </tr>
                                     }
-                                  *@
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                    *@
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -371,7 +358,7 @@
 
 <script>
     $(document).ready(function() {
-      
+
 
         $('#form_don_vi').validate({
             rules: {
@@ -399,7 +386,7 @@
             }
             return JSON.parse(JSON.stringify(data));
         };
-         $("#files").on('change', function () {
+        $("#files").on('change', function() {
             // Checking whether FormData is available in browser
             if (window.FormData !== undefined) {
                 var fileUpload = $(this).get(0);
@@ -418,21 +405,21 @@
                     contentType: false, // Not to set any content header
                     processData: false, // Not to process data
                     data: fileData,
-                    success: function (result) {
+                    success: function(result) {
                         console.log(result);
                         for (var i = 0; i < result.files.length; i++) {
-                              $('#avatar').attr('src', result.files[i]);
-                              $('#avatar1').val(""+result.files[i]+"");
+                            $('#avatar').attr('src', result.files[i]);
+                            $('#avatar1').val("" + result.files[i] + "");
                         }
                     },
-                    error: function (err) {
+                    error: function(err) {
                         alert(err.statusText);
                     }
                 });
             } else {
                 alert("FormData is not supported.");
             }
-        }); 
+        });
     });
 
 </script>
