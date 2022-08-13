@@ -50,7 +50,7 @@ namespace HG.WebApp.Helper
             try
             {
                 var tentthc = "";
-                using (SqlConnection conn = new SqlConnection("Server=DESKTOP-C2VM5FN\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
+                using (SqlConnection conn = new SqlConnection("Server=DESKTOP-S8GUJHO\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
                 //using (SqlConnection conn = new SqlConnection("Data Source=WIN-MEP66BM5GQB\\SQLEXPRESS;Initial Catalog=HG; User ID=sa;Password=123456As."))
                 {
                     conn.Open();

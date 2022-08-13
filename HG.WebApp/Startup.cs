@@ -169,6 +169,11 @@ namespace HG.WebAppApp
                      new { controller = "LogoutClient", action = "User" }
                   );
                     routes.MapRoute(
+                    "DichVuCong",
+                    "DichVuCong", // URL with parameters
+                    new { controller = "News", action = "News" }
+                 );
+                    routes.MapRoute(
                         name: "default",
                         template: "{controller=User}/{action=login}/{id?}");
                 });
