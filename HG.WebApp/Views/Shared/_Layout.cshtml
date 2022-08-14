@@ -198,46 +198,7 @@
           </div>
           <div class="news-list">
             <ul class="list_news_ul">
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
-              <li class="list_news_li">
-                <a class="list_news_a" href="#">Lorem ipsum dolor sit ameted consectetur adipisicing elit. Lorem ipsum
-                  dolor sit ameted consectetur adipisicing elit.
-                </a>
-              </li>
+                @Html.RenderAction("GetListNews","News")
             </ul>
             <a class="view-more-news" href="#" title="Xem danh sách tin đầy đủ">
               <img src="~/BackEnd/assets/img/viewmore-hover.png" /></a>
@@ -308,98 +269,19 @@
           @*<div class="news-content top-title-frame">
             <p>NỘI DUNG TIN</p>
           </div>*@
-          @RenderBody()
           <div class="news-content-inner">
             <div class="news-category">
               <span class="align-middle">THỦ TỤC HÀNH CHÍNH</span>
             </div>
             <div class="news-detail">
-              <span class="news-datetime">Ngày 15/06/2022</span><br /><br />
-              <h4>Hội thảo báo cáo tư vấn cải thiện dịch vụ công trực tuyến</h4><br />
-              <p class="news-summary text-justify"><b>
-                  Sáng ngày 19/01, Học viện Chính trị Quốc gia Hồ Chí Minh phối
-                  hợp tổ chức Hội nghị tư vấn “Cải thiện dịch vụ công trực
-                  tuyến” cho tỉnh Hà Giang, Gia Lai và Trà Vinh. PGS.TS Lê Văn
-                  Lợi - Phó Giám đốc Học viện Chính trị Quốc gia Hồ Chí Minh chủ
-                  trì hội nghị. Dự tại điểm cầu tỉnh Hà Giang có đồng chí Trần
-                  Đức Quý, Tỉnh uỷ viên, Phó Chủ tịch UBND tỉnh cùng lãnh đạo
-                  sở, ngành liên quan trên địa bàn tỉnh.</b>
-              </p>
-              <img alt=""
-                src="https://dichvucong.hagiang.gov.vn/forms/tintuc/images/22119%20%C4%90%E1%BB%93ng%20ch%C3%AD%20Tr%E1%BA%A7n%20%C4%90%E1%BB%A9c%20Qu%C3%BD%2C%20Ph%C3%B3%20Ch%E1%BB%A7%20t%E1%BB%8Bch%20UBND%20t%E1%BB%89nh%20%C4%91%C6%B0a%20ra%20m%E1%BB%99t%20s%E1%BB%91%20gi%E1%BA%A3i%20ph%C3%A1p%20c%E1%BA%A3i%20thi%E1%BB%87n%20d%E1%BB%8Bch%20v%E1%BB%A5%20c%C3%B4ng%20tr%E1%BB%B1c%20tuy%E1%BA%BFn.jpg"
-                style="height: 300px; width: 500px" /><br />
-              <i>Toà​n cảnh hội nghị trực tuyến tại điểm cầu tỉnh Hà Giang</i></br>
-              <p class="text-justify">
-                Qua nghiên cứu, khảo sát thực địa tại tỉnh Hà Giang và làm
-                việc với các đơn vị cấp sở của tỉnh như Sở Nội vụ, Sở Tài
-                nguyên và Môi trường, Công an tỉnh, Bảo hiểm xã hội tỉnh,…
-                đồng thời tập trung tìm hiểu hoạt động cung cấp hai dịch vụ
-                công ở huyện Bắc Quang, Thị trấn Việt Quang, xã Tân Quang, xã
-                Tân Lập thuộc huyện Bắc Quang từ ngày 20 đến ngày 23/10/2021
-                về 2 loại dịch vụ công trực tuyến là: (i) Cấp giấy khai sinh,
-                đăng ký thường trú và cấp thẻ bảo hiểm y tế cho trẻ em dưới 6
-                tuổi (thủ tục “3 trong 1”), (ii) Cấp giấy chứng nhận quyền sử
-                dụng đất và quyền sở hữu tài sản gắn liền với đất. Nhóm nghiên
-                cứu nhận định, mặc dù chính quyền tỉnh Hà Giang đã đầu tư
-                nhiều nguồn lực cho việc cung ứng dịch vụ công trực tuyến
-                nhưng số hồ sơ giải quyết trực tuyến còn thấp, thủ tục còn
-                rườm rà, quy định pháp lý lạc hậu, dịch vụ công trực tuyến mới
-                ở mức độ 2, thói quen và điều kiện vật chất của người dân còn
-                thấp là những thách thức lớn trong việc đưa người dân đến với
-                dịch vụ công trực tuyến.
-              </p>
-              <img alt=""
-                src="https://dichvucong.hagiang.gov.vn/forms/tintuc/images/22119%20C%C3%A1c%20%C4%91%E1%BA%A1i%20bi%E1%BB%83u%20%C4%91i%E1%BB%83m%20c%E1%BA%A7u%20t%E1%BB%89nh%20nghe%20b%C3%A1o%20c%C3%A1o%20%C4%91%E1%BB%81%20d%E1%BA%ABn%20c%E1%BB%A7a%20l%C3%A3nh%20%C4%91%E1%BA%A1o%20H%E1%BB%8Dc%20vi%E1%BB%87n%20Ch%C3%ADnh%20tr%E1%BB%8B%20Qu%E1%BB%91c%20gia%20H%E1%BB%93%20Ch%C3%AD%20Minh.jpg"
-                style="height: 300px; width: 500px" /><br /></br>
-              <p class="text-justify">
-                Đồng chí Trần Đức Quý, Phó Chủ tịch UBND tỉnh đưa ra một số
-                giải pháp cải thiện dịch vụ công trự c tuyến. Phát biểu tại
-                hội thảo, Phó Chủ tịch UBND tỉnh Trần Đức Quý nhấn mạnh, với
-                mục tiêu hướng tới không để ai bị bỏ lại phía sau trong tiến
-                trình phát triển chính quyền điện tử, chuyển đổi số ở các tỉnh
-                có đông dân cư là đồng bào dân tộc thiểu số thì cần có sự phối
-                hợp vào cuộc của các cấp, các ngành; làm từ dễ đến khó, từ địa
-                phương có điều kinh tế tốt đến các nơi có điều kiện kinh tế
-                thấp hơn. Về giải pháp cải thiện dịch vụ công trực tuyến, đồng
-                chí đề nghị cần nâng cấp, quan tâm các điều kiện về cơ sở hạ
-                tầng; tập trung vào nâng cấp hệ thống đường truyền, máy tính,
-                trang thiết bị, nâng cao công tác truyền thông trong nhân dân,
-                đồng thời phải cải cách giảm bớt các thủ tục hành chính tại
-                địa phương. Đồng chí cũng mong muốn học viên Chính trị Quốc
-                gia Hồ Chí Minh và nhóm nghiên cứu sẽ tiếp tục ủng hộ, phối
-                hợp với tỉnh cải thiện dịch vụ công trực tuyến trong thời gian
-                tiếp theo, không chỉ ở các thành phố lớn mà ở cả vùng sâu vùng
-                xa, vùng đặc biệt khó khăn, góp phần phát triển kinh tế - xã
-                hội của tỉnh Hà Giang. <br /><br />
-                Tại hội nghị, các đại biểu được nghe
-                Báo cáo đề dẫn của Lãnh đạo học viện Chính trị Quốc gia Hồ Chí
-                Minh; Báo cáo kết quả nghiên cứu dịch vụ công trực tuyến của
-                tỉnh Hà Giang, Gia Lai và Trà Vinh và trao đổi thảo luận về
-                thực trạng, đề xuất giải pháp cải thiện dịch vụ công trực
-                tuyến trong thời gian tiếp theo. </br></br>
-                <b>Tác giả: Hoàng Huyền
-                  https://hagiang.gov.vn/pages/provincenews.aspx?ItemID=8149</b>​​
-              </p>
+                 @RenderBody()
+              
               <div>Các tin tức khác</div>
               <div class="other-news-line">
                 <div style="float: left; width: 116px; height: 2px; background: red;"></div>
               </div>
               <ul class="other-news">
-                <li><a href="#">TÀI KHOẢN ĐỊNH DANH ĐIỆN TỬ VÌ LỢI ÍCH QUỐC GIA, DÂN TỘC VÀ QUYỀN LỢI CỦA NGƯỜI DÂN
-                    HƯỚNG TỚI MỤC TIÊU CHUYỂN ĐỔI SỐ QUỐC GIA</a></li>
-                <li><a href="#">Hà Giang nằm trong top đầu cả nước về chất lượng đội ngũ cán bộ bộ phận “một cửa”</a>
-                </li>
-                <li><a href="#">Những quy định mới về đánh giá tác động của thủ tục hành chính trong lập đề nghị xây
-                    dựng văn bản quy phạm pháp luật và soạn thảo dự án, dự thảo văn bản quy phạm pháp luật</a></li>
-                <li><a href="#">Hội nghị, tập huấn triển khai văn bản pháp luật về tổ chức cán bộ, thi đua khen thưởng
-                    và cải cách hành chính năm 2021
-                    Lễ kỷ niệm 130 năm thành lập tỉnh, 30 năm tái lập tỉnh và 60 năm Bác Hồ lên thăm Hà Giang</a></li>
-                <li><a href="#">Trực tuyến toàn quốc tập huấn thực hiện báo cáo điện tử</a></li>
-                <li><a href="#">THÔNG BÁO (Về việc tư vấn, hướng dẫn, tiếp nhận và trả kết quả hồ sơ thủ tục hành chính
-                    tại Trung tâm Phục vụ hành chính công tỉnh Hà Giang)</a></li>
-                <li><a href="#">Công an tỉnh Hà Giang xếp thứ 6/63 Công an các tỉnh, thành về chỉ số cải cách hành
-                    chính</a></li>
-                <li><a href="#">Trao đổi, chia sẻ kinh nghiệm về phân cấp trong giải quyết thủ tục hành chính</a></li>
+                  @Html.RenderAction("OtherNews","News")
               </ul>
             </div>
           </div>

@@ -1,0 +1,15 @@
+﻿@model List<HG.Entities.Entities.Tin_Tuc.Tin_Tuc>
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <li>
+            <a href="/XemChiTiet?id=@item.Id">
+               @item.tieu_de
+            </a>
+        </li>
+    }
+}
+
+
+

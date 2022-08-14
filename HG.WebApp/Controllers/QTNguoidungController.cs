@@ -31,7 +31,7 @@ namespace HG.WebApp.Controllers
         }
         #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
-        {
+          {
             var UserId = Guid.Parse(userManager.GetUserId(User));
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.ma_phong_ban = ma_phong_ban;
@@ -214,7 +214,11 @@ namespace HG.WebApp.Controllers
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             var abc = _nguoiDungDao.LayNguoiDungBoiId(Id).asp_nhom;
-            var obj = string.Join(",", _nguoiDungDao.LayNguoiDungBoiId(Id).asp_nhom.Select(n => n.ma_nhom).ToArray()) ;
+            if(abc != null)
+            {
+                var obj = string.Join(",", _nguoiDungDao.LayNguoiDungBoiId(Id).asp_nhom.Select(n => n.ma_nhom).ToArray());
+            }
+            
             return View(_nguoiDungDao.LayNguoiDungBoiId(Id));
         }
         [HttpGet]
