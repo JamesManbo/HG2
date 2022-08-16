@@ -9,6 +9,11 @@ namespace HG.WebApp
         InActive,
         Active
     }
+    public enum TypeHS
+    {
+        MotCua = 0,
+        CongDan = 1
+    }
     public enum StatusTiepNhanHoSo
     {
        HoSoDangTiepNhan = 1,

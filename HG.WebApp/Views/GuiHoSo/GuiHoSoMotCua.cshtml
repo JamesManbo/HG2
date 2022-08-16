@@ -28,10 +28,45 @@
         };
     });
 </script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.error == true)
+{
+    <script>
+        $(document).ready(function () {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+@if (ViewBag.Success == true)
+{
+    <script>
+        $(document).ready(function () {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
 <div class="widgetcontent">
     <div class="form-horizontal">
         <!-- Horizontal Form -->
         <form id="form_congdan" action="/GuiHoSo/GuiHoSoMotCua" method="post" enctype="multipart/form-data">
+            <input name="ma_thu_tuc_hc" value="@ViewBag.MaThuTuc" />
+            <input name="ma_khach_hang" value="@ViewBag.MaKH" />
+            <input name="ma_don_vi" value="@ViewBag.ma_don_vi" />
             <div class="send-document-top top-title-frame">
                 <p>THÔNG TIN HỒ SƠ (Mã khách hàng: @ViewBag.MaKH)</p>
             </div>
@@ -90,7 +125,7 @@
                         Hình thức nhận KQ
                     </span>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input value="0" type="checkbox" onclick="fnnhanquaemail()" id="nhanquaemail" />nhận kết quả qua Email
+                        <input value="0" type="checkbox" onclick="fnnhanquaemail()" id="nhanquaemail" name="nhanquaemail" />nhận kết quả qua Email
                         <script>
                             function fnnhanquaemail() {
                                 if ($('#nhanquaemail').is(':checked')) {
@@ -105,7 +140,7 @@
                         <input  value="@User.Identity.Name"/>
                     </div>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input type="checkbox" onclick="fnnhanquatnvatkq()" id="nhanquatnvatkq" value="0" /> nhận kết quả tại bộ phân TN và TKQ
+                        <input type="checkbox" onclick="fnnhanquatnvatkq()" id="nhanquatnvatkq" name="nhanquatnvatkq" value="0" /> nhận kết quả tại bộ phân TN và TKQ
                         <script>
                             function fnnhanquatnvatkq() {
                                 if ($('#nhanquatnvatkq').is(':checked')) {
@@ -121,7 +156,7 @@
                     <span class="col-md-2 control-label" style="font-weight:bold;">
                     </span>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input type="checkbox" onclick="fnnhanquazalo()" id="nhanquazalo" value="0" /> nhận kết quả qua Zalo
+                        <input type="checkbox" onclick="fnnhanquazalo()" id="nhanquazalo" name="nhanquazalo" value="0" /> nhận kết quả qua Zalo
                         <script>
                             function fnnhanquazalo() {
                                 if ($('#nhanquazalo').is(':checked')) {
@@ -136,9 +171,9 @@
                         <input value="123445566" />
                     </div>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input type="checkbox" onclick="nhanquabuudien()" id="nhanquabuudien" value="0" /> nhận kết quả qua bưu điện
+                        <input type="checkbox" onclick="fnnhanquabuudien()" id="nhanquabuudien" name="nhanquabuudien" value="0" /> nhận kết quả qua bưu điện
                         <script>
-                            function nhanquabuudien() {
+                            function fnnhanquabuudien() {
                                 if ($('#nhanquabuudien').is(':checked')) {
                                     $("#nhanquabuudien").val(1)
                                 } else {
@@ -153,9 +188,9 @@
                         Nhận thông báo
                     </span>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input type="checkbox" onclick="datiepnhan()" id="datiepnhan" value="0" /> đã tiếp nhận
+                        <input type="checkbox" onclick="fndatiepnhan()" id="datiepnhan" name="datiepnhan" value="0" /> đã tiếp nhận
                         <script>
-                            function datiepnhan() {
+                            function fndatiepnhan() {
                                 if ($('#datiepnhan').is(':checked')) {
                                     $("#datiepnhan").val(1)
                                 } else {
@@ -165,9 +200,9 @@
                         </script>
                     </div>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input type="checkbox" onclick="yeucaubosung()" id="yeucaubosung" value="0" /> yêu cầu bổ sung, chỉnh sửa
+                        <input type="checkbox" onclick="fnyeucaubosung()" id="yeucaubosung" name="yeucaubosung" value="0" /> yêu cầu bổ sung, chỉnh sửa
                         <script>
-                            function yeucaubosung() {
+                            function fnyeucaubosung() {
                                 if ($('#yeucaubosung').is(':checked')) {
                                     $("#yeucaubosung").val(1)
                                 } else {
@@ -177,9 +212,9 @@
                         </script>
                     </div>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input type="checkbox" onclick="dacoketqua()" id="dacoketqua" value="0" /> đã có kết quả
+                        <input type="checkbox" onclick="fndacoketqua()" id="dacoketqua" name="dacoketqua" value="0" /> đã có kết quả
                         <script>
-                            function dacoketqua() {
+                            function fndacoketqua() {
                                 if ($('#dacoketqua').is(':checked')) {
                                     $("#dacoketqua").val(1)
                                 } else {
@@ -228,8 +263,46 @@
                                         </td>
 
                                         <td text-align="justify">
-                                            <input type="file" onclick="$('#files_@item.ma_thanh_phan').click();" id="files_@item.ma_thanh_phan" name="filesName_@item.ma_thanh_phan" />
-                                            <input type="text" id="filesName_@item.ma_thanh_phan" name="filesName_@item.ma_thanh_phan" style="display: none" />
+                                            <input type="file" onclick="$('#files_@stt').click();" id="files_@stt" name="filesName_@stt" />
+                                            <input type="text" id="files_thanh_phan_@stt" name="files_thanh_phan_@stt" style="display: none" />
+                                            <script>
+                                                $(document).ready(function () {
+                                                    $("#files-@(stt)").on('change', function () {
+                                                        // Checking whether FormData is available in browser
+                                                        if (window.FormData !== undefined) {
+                                                            var fileUpload = $(this).get(0);
+                                                            var files = fileUpload.files;
+                                                            // Create FormData object
+                                                            var fileData = new FormData();
+                                                            // Looping over all files and add it to FormData object
+                                                            for (var i = 0; i < files.length; i++) {
+                                                                fileData.append(files[i].name, files[i]);
+                                                            }
+                                                            // Adding one more key to FormData object
+                                                            fileData.append('username', 'Manas');
+                                                            $.ajax({
+                                                                url: '/Upload/UploadFilesTP?folder=ThanhPhanCongDan&Id=@item.ma_thanh_phan',
+                                                                type: "POST",
+                                                                contentType: false, // Not to set any content header
+                                                                processData: false, // Not to process data
+                                                                data: fileData,
+                                                                success: function (result) {
+                                                                    console.log(result);
+                                                                    for (var i = 0; i < result.files.length; i++) {
+                                                                        $('#files_thanh_phan_@stt').attr('value', result.files[i]);
+                                                                        //$('#namefile-@(item.Id)').html("" + result.names + "");
+                                                                    }
+                                                                },
+                                                                error: function (err) {
+                                                                    alert(err.statusText);
+                                                                }
+                                                            });
+                                                        } else {
+                                                            alert("FormData is not supported.");
+                                                        }
+                                                    });
+                                                });
+                                            </script>
                                         </td>
                                         <td text-align="left" style="width:25%;"><button>Ký số</button></td>
                                         <td>@item.bieu_mau</td>

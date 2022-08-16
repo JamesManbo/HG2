@@ -8,6 +8,11 @@ namespace HG.Entities.Entities
 {
     public class cd_hoso
     {
+        public string ma_thu_tuc_hc { get; set; }
+        public string? ma_thu_tuc_hc_old { get; set; }
+        public string ma_khach_hang { get; set; }
+        public string? ma_don_vi { get; set; } //ma phong ban
+        public string? ma_linh_vuc { get; set; }
         public string? chiphidukien { set; get; }
         public string? thongtinchitiet { set; get; }
         public int? nhanquaemail { set; get; }

@@ -41,15 +41,18 @@ namespace HG.Entities.HoSo
         public int? id_trang_thai_hs { get; set; }
         public int? id_trang_thai_xl { get; set; }
         public int? id_trang_thai_xl_detail { get; set; }
-        public string? ma_co_quan { get; set; }
+        public string? ma_co_quan { get; set; } //ma don vi or phong ban tuy thuoc doi tuong ho so
         public int? nhan_kq_truc_tuyen { get; set; }
         public int? nhan_kq_bo_phan_mot_cua { get; set; }
         public int? nhan_kq_qua_buu_chinh { get; set; }
         public int? ho_so_chua_du_dk_tiep_nhan_chinh_thuc { get; set; }
+        public int? nhan_kq_zalo { get; set; }
+        public int? nhan_kq_email { get; set; }
         public Decimal? le_phi { get; set; }
         public int? da_thu_phi { get; set; }
         public int? Stt { get; set; }
         public int trang_thai { get; set; }
+        public int type { get; set; }
       
     }
     public class Ho_SoPaging
