@@ -74,6 +74,14 @@ namespace HG.Data.Business.GuiHoSo
             data.dien_thoai_lien_he = item.dien_thoai_lien_he;
             data.id_nguyen_vong = item.id_nguyen_vong;
 
+            data.ten_truong = item.ten_truong;
+            data.ma_uu_tien = item.ma_uu_tien;
+            data.diem_uu_tien = item.diem_uu_tien;
+            data.dat_giai = item.dat_giai;
+            data.diem_khuyen_khich_dat_giai = item.diem_khuyen_khich_dat_giai;
+            data.giai_khac = item.giai_khac;
+            data.diem_khuyen_khich_giai_khac = item.diem_khuyen_khich_giai_khac;
+
             return data;
         }
         //public Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso mapdata(TuyenSinhCapMamNonModel item )
@@ -132,6 +140,16 @@ namespace HG.Data.Business.GuiHoSo
             public int? id_nguyen_vong { get; set; }
             public int? Stt { get; set; }
             public string? chkIsCamKet { get; set; }
+
+            // add
+            public string? ten_truong { get; set; }
+            public string? ma_uu_tien { get; set; }
+            public decimal? diem_uu_tien { get; set; }
+            public string? dat_giai { get; set; }
+            public decimal? diem_khuyen_khich_dat_giai { get; set; }
+
+            public string? giai_khac { get; set; }
+            public decimal? diem_khuyen_khich_giai_khac { get; set; }
 
             // Base 
             public int? Status { get; set; }

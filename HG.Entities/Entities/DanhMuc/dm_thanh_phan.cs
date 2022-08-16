@@ -20,8 +20,8 @@ namespace HG.Entities.Entities.DanhMuc
         public string? mo_ta { get; set; }
         public int bat_buoc { get; set; }
         public string? file_dinh_kem { get; set; }
-        public string url_file { get; set; }
-        public int bieu_mau { get; set; }
+        public string? url_file { get; set; }
+        public int? bieu_mau { get; set; }
         public string? ten_form_nhap { get; set; }
         public string? duong_dan_form_nhap { get; set; }
         public int? ban_goc { get; set; }

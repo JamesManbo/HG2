@@ -1,0 +1,139 @@
+﻿@model List<HG.Entities.Entities.ThuTuc.DmThuTuc>
+<style>
+    .button2{
+        padding: 6px 10px;
+        background: #b92c28;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        margin: 5px 5px;
+        line-height: 25px;
+        text-align: center;
+        text-decoration: none;
+    }
+</style>
+<div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+    <div class="dataTables_length">
+        <label>
+           Tổng 123 bản ghi
+        </label>
+    </div>
+    <div id="dataTable" class="dataTables_wrapper" role="grid">
+        <table class="table table-bordered responsive dataTable" id="dyntable_wrapper" aria-describedby="dyntable_info">
+            <colgroup>
+                <col class="con0" style="width: 20px">
+                <col class="con1" style="width: 2%">
+                <col class="con0" style="width: 13%">
+                <col class="con1" style="width: 20%">
+                <col class="con0" style="width: 15%">
+             
+            </colgroup>
+            <thead class="widgettitle">
+                <tr role="row">
+                    <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="STT: activate to sort column ascending" style="width: 22px;">STT</th>
+                    <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐĂNG NHẬP: activate to sort column ascending" style="width: 190px;">MÃ TTHC</th>
+                    <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐẦY ĐỦ: activate to sort column ascending" style="width: 302px;">THỦ TỤC HÀNH CHÍNH</th>
+                    <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="TÊN ĐẦY ĐỦ: activate to sort column ascending" style="width: 302px;">CƠ QUAN</th>
+                    <th class="head0 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="PHÒNG BAN: activate to sort column ascending" style="width: 494px;">MỨC ĐỘ</th>
+                    <th class="head1 sorting" role="columnheader" tabindex="0" aria-controls="dyntable" rowspan="1" colspan="1" aria-label="CHỨC VỤ: activate to sort column ascending" style="width: 222px;">	GỬI HỒ SƠ</th>
+                </tr>
+            </thead>
+
+            <tbody role="alert" aria-live="polite" aria-relevant="all">
+                @if (Model != null)
+                {
+                    var stt = 1;
+                    foreach (var item in Model)
+                    {
+                        <tr class="gradeX odd">
+                            <td class="">@stt</td>
+                            <td class=" ">
+                                <a href="/GuiHoSo/GuiHoSoMotCua?Ma=@item.ma_thu_tuc">@item.ma_thu_tuc</a>
+                            </td>
+                            <td class="">
+                                <a href="/GuiHoSo/GuiHoSoMotCua?Ma=@item.ma_thu_tuc"> @item.ten_thu_tuc</a>
+                            </td>
+                            <td class="">
+                                <a href="/GuiHoSo/GuiHoSoMotCua?Ma=@item.ma_thu_tuc"> @item.ma_phong_ban</a>
+                            </td>
+                            <td class="">
+                                <a class="button2" href="/GuiHoSo/GuiHoSoMotCua?Ma=@item.ma_thu_tuc"> @(item.thuc_hien == "MD3" ? "Mức độ 3" : item.thuc_hien == "MD2" ? "Mức độ 2" : "Mức độ 4")</a>
+                            </td>
+                              <td class="">
+                                <a class="button2" href="/GuiHoSo/GuiHoSoMotCua?Ma=@item.ma_thu_tuc">
+                                    Gửi hồ sơ &gt;&gt;
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+               
+            </tbody>
+        </table>
+        <div class="dataTables_info" id="dyntable_info">Hiển thị 1 đến @(ViewBag.TotalRecords) của @(ViewBag.TotalRecords) bản ghi</div>
+        <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+            @{
+                var TotalPage = (int)ViewBag.TotalPage;
+                var CurrentPage = (int)ViewBag.CurrentPage;
+                if (TotalPage > 5)
+                {
+                    if (CurrentPage > CurrentPage + 2)
+                    {
+                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                    };
+                    if (CurrentPage > 3)
+                    {
+                        for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                        {
+                            if (i == CurrentPage)
+                            {
+                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                            else
+                            {
+                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            if (i == CurrentPage)
+                            {
+                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                            else
+                            {
+                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                        }
+
+                    }
+
+                    if (CurrentPage < CurrentPage + 2)
+                    {
+                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                    };
+                }
+                else
+                {
+                    for (int i = 1; i <= TotalPage; i++)
+                    {
+                        if (i == CurrentPage)
+                        {
+                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                        }
+                        else
+                        {
+                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                        }
+                    }
+                }
+            }
+        </div>
+</div>
+</div>

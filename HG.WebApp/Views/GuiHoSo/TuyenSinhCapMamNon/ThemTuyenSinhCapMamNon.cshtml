@@ -106,7 +106,7 @@
             });
         })
 
-        
+
 
         function convetArrayToObj(serialized) {
             var FormHelper = {};
@@ -133,9 +133,12 @@
             }
         });
     };
+    // Change truong
+    function ChangeTruong(obj) {
+        $('#txtTenDuAn').val('đăng ký tuyển sinh vào trường ' + $("#id_truong option:selected").text() + ' ' + $("#nam_hoc").val())
+    };
 
-    
-   
+
 </script>
 
 
@@ -165,13 +168,13 @@
                                     <p class="red-asterisk">(*)</p>
                                 </span>
                                 <div class="col-md-7">
-                                    <textarea rows="2" cols="20" id="txtTenDuAn"
+                                    <textarea rows="1" cols="20" id="txtTenDuAn"
                                               name="thong_tin_chi_tiet"
                                               class="Css_Mul" autofocus="true"
-                                              placeholder="Thông tin hồ sơ" style="width: 100%; height: 140px;"
+                                              placeholder="Thông tin hồ sơ" style="width: 100%; height: 66px;"
                                               spellcheck="true"></textarea>
                                 </div>
-                                <div class="col-md-3 col-sm-12 sender-infor">
+                                <div class="col-md-3 col-sm-12" style="text-align: right;">
                                     <a href="javascript: void(0);" data-toggle="modal" data-target="#modalInput"
                                        data-original-title="Thông tin chi tiết người nộp hồ sơ"
                                        onclick="ShowModalUser()"
@@ -179,7 +182,7 @@
                                 </div>
                                 <!-- Modal -->
                                 <div class="modal fade" id="modalInput" tabindex="-1" role="dialog"
-                                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -198,15 +201,15 @@
                                                         </div>
                                                     </div>
                                                     <!-- 2 -->
-                                                  @*  <div class="form-group form-group-new">
-                                                        <span class="col-md-4 control-label" style="font-weight:bold;">
-                                                            Giới
-                                                            tính :
-                                                        </span>
-                                                        <div class="col-md-5">
-                                                            <select style="width:100%;">
-                                                            </select>
-                                                        </div>
+                                                    @*  <div class="form-group form-group-new">
+                                                    <span class="col-md-4 control-label" style="font-weight:bold;">
+                                                    Giới
+                                                    tính :
+                                                    </span>
+                                                    <div class="col-md-5">
+                                                    <select style="width:100%;">
+                                                    </select>
+                                                    </div>
                                                     </div>*@
                                                     <!-- 3 -->
                                                     <div class="form-group form-group-new">
@@ -247,7 +250,7 @@
                                                                 {
                                                                     foreach (var item in lst_phong_ban)
                                                                     {
-                                                                         if (nguoi_dung.ma_phong_ban != null && nguoi_dung.ma_phong_ban.Trim() == item.ma_phong_ban.Trim())
+                                                                        if (nguoi_dung.ma_phong_ban != null && nguoi_dung.ma_phong_ban.Trim() == item.ma_phong_ban.Trim())
                                                                         {
                                                                             <option value="@item.ma_phong_ban" selected>@item.ten_phong_ban</option>
                                                                         }
@@ -256,7 +259,7 @@
                                                                             <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
                                                                         }
                                                                     }
-                                                                   
+
                                                                 }
 
                                                             </select>
@@ -324,6 +327,7 @@
                                                     name="id_truong"
                                                     id="id_truong"
                                                     data-width=""
+                                                    onchange="ChangeTruong(this)"
                                                     data-live-search="true" data-hide-disabled="false">
                                                 <option selected="selected" value="">---- Chọn trường ----</option>
                                                 @foreach (var item in HG.WebApp.Helper.HelperString.ListTruongHocRecords())
@@ -332,6 +336,9 @@
                                                 }
                                             </select>
                                         </div>
+                                        <script>
+
+                                        </script>
                                         <label class="col-md-2 control-label" style="padding-top: 0px!important">
                                             Năm học <span class="red-text">(*)</span>:
                                         </label>
@@ -611,17 +618,20 @@
                                                     1
                                                 </td>
                                                 <td text-align="justify">
-                                                    <p>@ds_thanh_phan_hs[i].ten_thanh_phan</p>
-                                                    <span class="important-box">
-                                                        Bắt
-                                                        buộc
-                                                    </span>
+                                                    <p>
+                                                        @ds_thanh_phan_hs[i].ten_thanh_phan
+                                                        <span class="important-box">
+                                                            Bắt
+                                                            buộc
+                                                        </span>
+                                                    </p>
+
                                                 </td>
 
                                                 <td text-align="justify">
                                                     @*@d.file_dinh_kem*@
                                                     <input type="file" onclick="$('#files_@i').click();" id="files_@i" name="filesName_@i">
-                                                   
+
 
 
                                                     @* <span id="filesName_@i"></span>
@@ -633,7 +643,15 @@
                                                 <td text-align="left" style="width:25%;">@ds_thanh_phan_hs[i].ban_chinh</td>
                                                 <td text-align="center" style="width:14%;">@ds_thanh_phan_hs[i].ban_sao</td>
                                                 <td text-align="center" style="width:14%;">@ds_thanh_phan_hs[i].ban_photo</td>
-                                                <td>@ds_thanh_phan_hs[i].bieu_mau</td>
+                                                <td>
+                                                    @ds_thanh_phan_hs[i].bieu_mau
+                                                    @{
+                                                        if (i == 0)
+                                                        {
+                                                            <a href="~/BackEnd/Uploads/DON_TUYEN_SINH_MN.doc">Tải file</a>
+                                                        }
+                                                    }
+                                                </td>
 
                                             </tr>
                                         }
@@ -690,14 +708,14 @@
         $("#modalInput").modal("hide");
     }
     function LuuNguoiDung() {
-         var data = {
-             PhoneNumber: $("#User_PhoneNumber").val(),
-             ten: $("#User_Ten").val(),
-             ngay_sinh: $("#User_NgaySinh").val(),
-             Email: $("#User_Email").val(),
-             ma_phong_ban: $("#user_ma_phong_ban").val(),
-             ma_chuc_vu: $("#user_ma_chuc_vu").val(),
-         };
+        var data = {
+            PhoneNumber: $("#User_PhoneNumber").val(),
+            ten: $("#User_Ten").val(),
+            ngay_sinh: $("#User_NgaySinh").val(),
+            Email: $("#User_Email").val(),
+            ma_phong_ban: $("#user_ma_phong_ban").val(),
+            ma_chuc_vu: $("#user_ma_chuc_vu").val(),
+        };
         $.ajax({
             type: "Post",
             url: "/GuiHoSo/UpdateNguoiDung",
@@ -710,74 +728,76 @@
         });
     }
     $("#files_0").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
-                    }
-                });
-            } else {
-                alert("FormData is not supported.");
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var name = fileUpload?.name;
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
             }
-        });
+            // Adding one more key to FormData object
+            fileData.append('username', 'Manas');
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    for (var i = 0; i < result.files.length; i++) {
 
-        $("#files_1").on('change', function(i) {
-            // Checking whether FormData is available in browser
-            if (window.FormData !== undefined) {
-                var fileUpload = $(this).get(0);
-                var name = fileUpload?.name;
-                var files = fileUpload.files;
-                // Create FormData object
-                var fileData = new FormData();
-                // Looping over all files and add it to FormData object
-                for (var i = 0; i < files.length; i++) {
-                    fileData.append(files[i].name, files[i]);
-                }
-                // Adding one more key to FormData object
-                fileData.append('username', 'Manas');
-                $.ajax({
-                    url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
-                    type: "POST",
-                    contentType: false, // Not to set any content header
-                    processData: false, // Not to process data
-                    data: fileData,
-                    success: function(result) {
-                        for (var i = 0; i < result.files.length; i++) {
-
-                            $('#' + name).val("" + result.files[i] + "");
-                        }
-                    },
-                    error: function(err) {
-                        alert(err.statusText);
+                        $('#' + name).val("" + result.files[i] + "");
                     }
-                });
-            } else {
-                alert("FormData is not supported.");
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+
+    $("#files_1").on('change', function(i) {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var name = fileUpload?.name;
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
             }
-        });
+            // Adding one more key to FormData object
+            fileData.append('username', 'Manas');
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=TuyenSinhCapMamNon',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    for (var i = 0; i < result.files.length; i++) {
+
+                        $('#' + name).val("" + result.files[i] + "");
+                    }
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+
+
 </script>
 
 

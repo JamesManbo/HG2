@@ -1,0 +1,270 @@
+﻿@model HG.Entities.Entities.ThuTuc.DmThuTuc
+@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var LstThanhPhan = ViewBag.ListThanhPhan as List<HG.Entities.Entities.DanhMuc.dm_thanh_phan>;
+}
+
+<script>
+    $(document).ready(function () {
+        $('#form_congdan').validate({
+            rules: {
+                thongtinchitiet: "required",
+                chiphidukien: "required"
+            },
+            messages: {
+                thongtinchitiet: "Bạn cần nhập thông tin chi tiết!",
+                chiphidukien: "Bạn cần nhập chi phí dự kiến!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+    });
+</script>
+<div class="widgetcontent">
+    <div class="form-horizontal">
+        <!-- Horizontal Form -->
+        <form id="form_congdan" action="/GuiHoSo/GuiHoSoMotCua" method="post" enctype="multipart/form-data">
+            <div class="send-document-top top-title-frame">
+                <p>THÔNG TIN HỒ SƠ (Mã khách hàng: @ViewBag.MaKH)</p>
+            </div>
+            <div class="send-document-content gray-border">
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                        Cơ quan:
+                    </span>
+                    <div class="col-md-7" style="padding-left: 10px;padding-top: 5px;">
+                        <span style="">@Model.ma_phong_ban</span>
+                    </div>
+                    <div class="col-md-3 col-sm-12" >
+                        <a href="javascript: void(0);" data-toggle="modal" data-target="#modalInput"
+                           data-original-title="Thông tin chi tiết người nộp hồ sơ"
+                           onclick="ShowModalUser()"
+                           tooltip="Xem thông tin chi tiết người nộp"><b>Thông tin người nộp</b></a>
+                    </div>
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                        Linh vực:
+                    </span>
+                    <div class="col-md-7" style="padding-left: 10px;padding-top: 5px;">
+                        <span>@Model.ten_linh_vuc</span>
+                    </div>
+                  
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                        Thủ tục:
+                    </span>
+                    <div class="col-md-7" style="padding-left: 10px;padding-top: 5px;">
+                        <span>@Model.ten_thu_tuc</span>
+                    </div>
+                
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                        Thông tin chi tiết
+                        <p class="red-asterisk">(*)</p>
+                    </span>
+                    <div class="col-md-7">
+                        <textarea rows="2" cols="20" id="thongtinchitiet"
+                                  name="thongtinchitiet"
+                                  class="Css_Mul"
+                                  placeholder="Thông tin hồ sơ" style="width: 100%; height: 66px;"
+                                  spellcheck="true"></textarea>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <a class="btn btn-info" tooltip="Xem Hướng dẫn Thủ tục hành chính">Hướng dẫn Thủ tục hành chính</a>
+                    </div>
+                </div>
+                
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                        Hình thức nhận KQ
+                    </span>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input value="0" type="checkbox" onclick="fnnhanquaemail()" id="nhanquaemail" />nhận kết quả qua Email
+                        <script>
+                            function fnnhanquaemail() {
+                                if ($('#nhanquaemail').is(':checked')) {
+                                    $("#nhanquaemail").val(1)
+                                } else {
+                                    $("#nhanquaemail").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input  value="@User.Identity.Name"/>
+                    </div>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input type="checkbox" onclick="fnnhanquatnvatkq()" id="nhanquatnvatkq" value="0" /> nhận kết quả tại bộ phân TN và TKQ
+                        <script>
+                            function fnnhanquatnvatkq() {
+                                if ($('#nhanquatnvatkq').is(':checked')) {
+                                    $("#nhanquatnvatkq").val(1)
+                                } else {
+                                    $("#nhanquatnvatkq").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                    </span>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input type="checkbox" onclick="fnnhanquazalo()" id="nhanquazalo" value="0" /> nhận kết quả qua Zalo
+                        <script>
+                            function fnnhanquazalo() {
+                                if ($('#nhanquazalo').is(':checked')) {
+                                    $("#nhanquazalo").val(1)
+                                } else {
+                                    $("#nhanquazalo").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input value="123445566" />
+                    </div>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input type="checkbox" onclick="nhanquabuudien()" id="nhanquabuudien" value="0" /> nhận kết quả qua bưu điện
+                        <script>
+                            function nhanquabuudien() {
+                                if ($('#nhanquabuudien').is(':checked')) {
+                                    $("#nhanquabuudien").val(1)
+                                } else {
+                                    $("#nhanquabuudien").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-2 control-label" style="font-weight:bold;">
+                        Nhận thông báo
+                    </span>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input type="checkbox" onclick="datiepnhan()" id="datiepnhan" value="0" /> đã tiếp nhận
+                        <script>
+                            function datiepnhan() {
+                                if ($('#datiepnhan').is(':checked')) {
+                                    $("#datiepnhan").val(1)
+                                } else {
+                                    $("#datiepnhan").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input type="checkbox" onclick="yeucaubosung()" id="yeucaubosung" value="0" /> yêu cầu bổ sung, chỉnh sửa
+                        <script>
+                            function yeucaubosung() {
+                                if ($('#yeucaubosung').is(':checked')) {
+                                    $("#yeucaubosung").val(1)
+                                } else {
+                                    $("#yeucaubosung").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+                    <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
+                        <input type="checkbox" onclick="dacoketqua()" id="dacoketqua" value="0" /> đã có kết quả
+                        <script>
+                            function dacoketqua() {
+                                if ($('#dacoketqua').is(':checked')) {
+                                    $("#dacoketqua").val(1)
+                                } else {
+                                    $("#dacoketqua").val(0)
+                                }
+                            }
+                        </script>
+                    </div>
+
+                </div>
+                <a href="/News/HuongDanNhanThongBaoZalo" target="_blank">Hướng dẫn nhận thông báo qua Zalo</a>
+            </div>
+
+            <!-- DANH SACH CAC THANH PHAN -->
+            <div class="result-area">
+                <div class="result-top-title top-title-frame">
+                    <p>DANH SÁCH THÀNH PHẦN HỒ SƠ</p>
+                </div>
+                <div class="result-content">
+                    <table cellspacing="0" cellpadding="4" rules="all"
+                           class="table table-bordered table-result">
+                        <tbody>
+                            <tr class="table-headline">
+                                <th text-align="center" scope="col">STT</th>
+                                <th scope="col" style="width: 45%;">Tên thành phần</th>
+                                <th scope="col" style="width: 10%;">Tệp đính kèm</th>
+                                <th scope="col" style="width: 10%;">Ký số</th>
+                                <th scope="col">Biểu mẫu</th>
+                            </tr>
+                            @if (LstThanhPhan != null){
+                                var stt = 1;
+                                @foreach (var item in LstThanhPhan)
+                                {
+                                    <tr>
+                                        <td text-align="center" style="width:2%;">
+                                            @stt
+                                        </td>
+                                        <td text-align="justify">
+                                            <p>
+                                                @item.ten_thanh_phan
+                                                <span class="important-box">
+                                                    Bắt
+                                                    buộc
+                                                </span>
+                                            </p>
+                                        </td>
+
+                                        <td text-align="justify">
+                                            <input type="file" onclick="$('#files_@item.ma_thanh_phan').click();" id="files_@item.ma_thanh_phan" name="filesName_@item.ma_thanh_phan" />
+                                            <input type="text" id="filesName_@item.ma_thanh_phan" name="filesName_@item.ma_thanh_phan" style="display: none" />
+                                        </td>
+                                        <td text-align="left" style="width:25%;"><button>Ký số</button></td>
+                                        <td>@item.bieu_mau</td>
+                                    </tr>
+                                    stt++;
+                                }
+                            }
+                           
+                        </tbody>
+                    </table>
+                    <div class="form-group form-group-new">
+                        <span class="col-md-2 control-label" style="font-weight:bold;">
+                            Chi phí dự kiến
+                        </span>
+                        <div class="col-md-6">
+                            <div class="" style="text-align: left; margin-top: 5px; margin-bottom: 5px">
+                                <input type="text" style=" width: 100%;" id="chiphidukien" name="chiphidukien" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6 pb-2">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="" style="text-align: left; margin-top: 5px; margin-bottom: 5px">
+                                <input type="submit" name="type_view"
+                                       value="Gửi"
+                                       class="btn-search">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="/News/HuongDanNhanThongBaoZalo" target="_blank">Lịch sử nạp hồ sơ</a>
+        </form><!-- End Horizontal Form -->
+    </div>
+
+</div>

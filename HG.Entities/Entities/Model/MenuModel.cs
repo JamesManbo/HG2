@@ -30,4 +30,12 @@ namespace HG.Entities.Entities.Model
         public string? tu_khoa { get; set; }
         public Guid? userId { get; set; }
     }
+    public class ThuTucCongDanModels : Pagelist
+    {
+        public string? donvi { get; set; }
+        public string? linhvuc { get; set; }
+        public string? mucdo { get; set; }
+        public string? ten_thu_tuc { get; set; }
+        public string? ma_thu_tuc { get; set; }
+    }
 }

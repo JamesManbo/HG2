@@ -56,6 +56,41 @@ namespace HG.Data.Business.ThuTuc
                 return new ThuTucPaging();
             }
         }
+        public ThuTucPaging DanhSanhThuTucCongDan(ThuTucCongDanModels item)
+        {
+            try
+            {
+                ThuTucPaging menu = new ThuTucPaging();
+                menu.Pagelist = new Pagelist();
+                DbProvider.SetCommandText2("dm_danh_sach_thu_tuc_cd_list", CommandType.StoredProcedure);
+                DbProvider.AddParameter("donvi", item.donvi ?? "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("linhvuc", item.linhvuc ?? "", SqlDbType.VarChar);
+                DbProvider.AddParameter("mucdo", item.mucdo ?? "", SqlDbType.VarChar);
+                DbProvider.AddParameter("ten_thu_tuc", item.ten_thu_tuc ?? "", SqlDbType.VarChar);
+                DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc ?? "", SqlDbType.VarChar);
+                // Input params
+                DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
+                DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                DbProvider.ExecuteReader_ToMyReader();
+                // Lấy về danh sách các người dung
+                menu.lstThuTuc = DbProvider.ExecuteReader_frmMyReader<DmThuTuc>();
+                DbProvider.ExecuteReader_NextResult();
+                menu.lstPhongBan = DbProvider.ExecuteReader_frmMyReader<ThuTucPhongBan>();
+                DbProvider.ExecuteReader_NextResult();
+                menu.lstLinhVuc = DbProvider.ExecuteReader_frmMyReader<ThuTucLinhVuc>();
+                DbProvider.ExecuteReader_Close();
+                // Lấy về danh sách các người dung               
+                menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new ThuTucPaging();
+            }
+        }
 
         public ResponseData LuuThuTuc(DmThuTuc item)
         {

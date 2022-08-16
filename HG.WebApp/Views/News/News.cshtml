@@ -1,5 +1,22 @@
 ﻿@using HG.WebApp
+@model HG.Entities.Entities.Tin_Tuc.Tin_Tuc
 @{
    
     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if(Model != null){
+    <span class="news-datetime">Ngày @HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.UpdatedDateUtc == null ? DateTime.Now : (DateTime) Model.UpdatedDateUtc)</span>
+    <br />
+    <br />
+    <h4>@Model.tieu_de</h4>
+    <br />
+    @Html.Raw(Model.noi_dung_chi_tiet)
+    <div>Các tin tức khác</div>
+    <div class="other-news-line">
+        <div style="float: left; width: 116px; height: 2px; background: red;"></div>
+    </div>
+    <ul class="other-news">
+        @Html.RenderAction("OtherNews","News", new {id = Model.Id})
+    </ul>
 }

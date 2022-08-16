@@ -36,5 +36,14 @@ namespace HG.Entities
         public string? dien_thoai_lien_he { get; set; }
         public int? id_nguyen_vong { get; set; }
         public int? Stt { get; set; }
+        // add new
+        public string? ten_truong { get; set; }
+        public string? ma_uu_tien { get; set; }
+        public decimal? diem_uu_tien { get; set; }
+        public string? dat_giai { get; set; }
+        public decimal? diem_khuyen_khich_dat_giai { get; set; }
+
+        public string? giai_khac { get; set; }
+        public decimal? diem_khuyen_khich_giai_khac { get; set; }
     }
 }

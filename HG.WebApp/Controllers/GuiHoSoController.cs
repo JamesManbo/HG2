@@ -1,7 +1,9 @@
 ﻿using HG.Data.Business.DanhMuc;
 using HG.Data.Business.GuiHoSo;
+using HG.Data.Business.ThuTuc;
 using HG.Entities;
 using HG.Entities.DanhMuc.DonVi;
+using HG.Entities.Entities;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.Model;
@@ -13,6 +15,7 @@ using HG.WebApp.Sercurity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 using static HG.Data.Business.GuiHoSo.TuyenSinhCapMamNonDao;
 using static HG.Data.Business.GuiHoSo.TuyenSinhCapTHCSDao;
 using static HG.Data.Business.GuiHoSo.TuyenSinhCapTHPTDao;
@@ -34,6 +37,7 @@ namespace HG.WebApp.Controllers
         private readonly TuyenSinhCapTieuHocDao _tuyensinhcaptieuhocDao;
         private readonly TuyenSinhCapTHCSDao _tuyensinhcapthcsDao;
         private readonly TuyenSinhCapTHPTDao _tuyensinhcapthptDao;
+        private readonly ThuTucDao _thuTucDao;
         //extend sys identity
         public GuiHoSoController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -47,6 +51,7 @@ namespace HG.WebApp.Controllers
             _tuyensinhcaptieuhocDao = new TuyenSinhCapTieuHocDao(DbProvider);
             _tuyensinhcapthcsDao = new TuyenSinhCapTHCSDao(DbProvider);
             _tuyensinhcapthptDao = new TuyenSinhCapTHPTDao(DbProvider);
+            _thuTucDao = new ThuTucDao(DbProvider);
         }
 
         #region Gửi hồ sơ cấp Mầm mon
@@ -234,6 +239,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             #endregion -----------------------
             if (item.chkIsCamKet != "on")
             {
@@ -315,7 +321,7 @@ namespace HG.WebApp.Controllers
             }
             if (noi_dung == "xa_noi_cu_tru")
             {
-                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/TuyenSinhCapMamNon/DiaBanHuyenNoiCuTru.cshtml", LstDiaBan);
+                result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/TuyenSinhCapMamNon/DiaBanXaNoiCuTru.cshtml", LstDiaBan);
             }
             return Content(result);
             //return LstDiaBan;
@@ -487,6 +493,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
             ViewBag.code = code;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             return View("~/Views/GuiHoSo/TuyenSinhCapTieuHoc/GuiTuyenSinhCapTieuHoc.cshtml", modal);
         }
 
@@ -527,6 +534,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             if (item.chkIsCamKet != "on")
             {
                 ViewBag.error = true;
@@ -634,6 +642,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
         }
         public IActionResult GuiTuyenSinhCapTHCS(string code = "")
@@ -673,6 +682,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
             ViewBag.code = code;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             return View("~/Views/GuiHoSo/TuyenSinhCapTHCS/GuiTuyenSinhCapTHCS.cshtml", modal);
         }
 
@@ -713,6 +723,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
 
             if (item.chkIsCamKet != "on")
             {
@@ -817,6 +828,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
         }
 
@@ -857,6 +869,7 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
             ViewBag.code = code;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
             return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
         }
 
@@ -896,18 +909,19 @@ namespace HG.WebApp.Controllers
             ViewBag.lst_don_vi = lstdv;
             ViewBag.lst_dan_toc = lst_dantoc;
             ViewBag.lst_tinh = lst_tinh;
+            ViewBag.nam_hoc = DateTime.Now.Year.ToString() + "-" + (DateTime.Now.Year + 1).ToString();
 
             if (item.chkIsCamKet != "on")
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Vui lòng cam kết khai đúng thông tin!";
-                return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
+                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
             }
-            if (item.filesName_0 == null || item.filesName_2 == null || item.filesName_3 == null || item.filesName_5 == null)
+            if (item.filesName_0 == null || item.filesName_1 == null)
             {
                 ViewBag.error = true;
                 ViewBag.Message = "Chưa có file đính kèm hoặc file đính kèm bị lỗi!";
-                return View("~/Views/GuiHoSo/TuyenSinhCapTHPT/GuiTuyenSinhCapTHPT.cshtml", modal);
+                return View("~/Views/GuiHoSo/TuyenSinhCapMamNon/ThemTuyenSinhCapMamNon.cshtml", modal);
             }
 
             var ds_hs = HG.WebApp.Helper.HelperString.ListThanhPhanHoSoCapTHPTRecords().OrderBy(x => x.stt).ToList();
@@ -953,5 +967,62 @@ namespace HG.WebApp.Controllers
 
         }
         #endregion -------------------------------------
+
+        #region gửi hồ sơ một cửa
+        public IActionResult MotCua()
+        {
+            EAContext db = new EAContext();
+            ViewBag.ListDonVi = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+            ViewBag.ListLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            ViewBag.LstMucDo = db.Dm_Muc_Do_Thuc_Hien.Where(n => n.ma_thuc_hien != "MD1" && n.ma_thuc_hien != "MD2").ToList();
+            return View();
+        }
+        public async Task<IActionResult> CheckSearchDV(string donvi = "", string linhvuc = "", string mucdo = "", string ten_thu_tuc = "", string ma_thu_tuc = "")
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = "", tu_khoa = "", RecordsPerPage = pageSize };
+            var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ViewBag.TotalRecords = LstThuTuc.lstThuTuc.Count();
+            ViewBag.TotalPage = (LstThuTuc.lstThuTuc.Count() / pageSize) + 1;
+            ViewBag.CurrentPage = 1;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/CheckSearchDV.cshtml", LstThuTuc.lstThuTuc);
+            return Content(result);
+        }
+        public IActionResult GuiHoSoMotCua(string Ma = "")
+        {
+            EAContext db = new EAContext();
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = "", tu_khoa = "", RecordsPerPage = pageSize };
+            var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            var obj = new HG.Entities.Entities.ThuTuc.DmThuTuc();
+            var lstThanhPhan = new List<dm_thanh_phan>();
+            if (LstThuTuc != null && LstThuTuc.lstThuTuc != null)
+            {
+                obj = LstThuTuc.lstThuTuc.Where(n => n.ma_thu_tuc == Ma).FirstOrDefault();
+                lstThanhPhan = db.dm_thanh_phan.Where(n => n.ma_thu_tuc == Ma).ToList();
+            };
+            ViewBag.MaKH = "00000" + db.Ho_So.Count() + 1;
+            ViewBag.ListThanhPhan = lstThanhPhan;
+            return View(obj);
+        }
+        [HttpPost]
+        public IActionResult GuiHoSoMotCua(cd_hoso hoso)
+        {
+            //EAContext db = new EAContext();
+            //var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            //ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = "", tu_khoa = "", RecordsPerPage = pageSize };
+            //var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            //var obj = new HG.Entities.Entities.ThuTuc.DmThuTuc();
+            //var lstThanhPhan = new List<dm_thanh_phan>();
+            //if (LstThuTuc != null && LstThuTuc.lstThuTuc != null)
+            //{
+            //    obj = LstThuTuc.lstThuTuc.Where(n => n.ma_thu_tuc == mathutuc).FirstOrDefault();
+            //    lstThanhPhan = db.dm_thanh_phan.Where(n => n.ma_thu_tuc == obj.ma_thu_tuc).ToList();
+            //};
+            //ViewBag.ListThanhPhan = lstThanhPhan;
+            return View();
+        }
+        #endregion
+
     }
 }

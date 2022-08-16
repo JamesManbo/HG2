@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="/BackEnd/Admin/plugin/style.css" rel="stylesheet">
+  <link href="/BackEnd/Admin/plugin/style.css" rel="stylesheet">
   <link href="/BackEnd/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" rel="stylesheet">
   <title>Document</title>
@@ -44,21 +45,28 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mx-auto mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="/view/trang-chu.html">TRANG CHỦ <span class="sr-only"></span></a>
+            <a class="nav-link" href="/DichVuCong">TRANG CHỦ <span class="sr-only"></span></a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/view/thu-tuc.html">THỦ TỤC HÀNH CHÍNH <span class="sr-only"></span></a>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link link-toggle" href="/view/gui-hs-thpt.html">GỬI HỒ SƠ</a>
-            <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false"></a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="/GuiHoSo/ThemTuyenSinhCapMamNon">Gửi hồ sơ tuyển sinh cấp mầm non</a>
-                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTieuHoc">Gửi hồ sơ tuyển sinh cấp tiểu học </a>
-                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHCS">Gửi hồ sơ tuyển sinh cấp THCS </a>
-                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHPT">Gửi hồ sơ tuyển sinh cấp THPT </a>
-            </div>
+                        <a class="nav-link link-toggle" href="/GuiHoSo/MotCua">GỬI HỒ SƠ</a>
+                        <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @if (User.Identity.Name == null)
+                            {
+                                <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                            }
+                            else
+                            {
+                                <a class="dropdown-item" href="/GuiHoSo/MotCua">Gửi hồ sơ một cửa</a>
+                                <a class="dropdown-item" href="/GuiHoSo/ThemTuyenSinhCapMamNon">Gửi hồ sơ tuyển sinh cấp mầm non</a>
+                                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTieuHoc">Gửi hồ sơ tuyển sinh cấp tiểu học </a>
+                                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHCS">Gửi hồ sơ tuyển sinh cấp THCS </a>
+                                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHPT">Gửi hồ sơ tuyển sinh cấp THPT </a>
+                            }
+                         </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">TRA CỨU HỒ SƠ</a>
@@ -85,11 +93,12 @@
             <a class="nav-link link-toggle" href="#">TRỢ GIÚP</a>
             <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
               aria-expanded="false"></a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="#">Item 1</a>
-              <a class="dropdown-item" href="#">Item 2</a>
-            </div>
-          </li>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="/News/HDKySoHoSoDVC" target="_blank">Hướng dẫn sử dụng DVC</a>
+                            <a class="dropdown-item" href="/News/HDSD_TrangChung" target="_blank">Hướng dẫn sử dụng ký số</a>
+                            <a class="dropdown-item" href="/News/HuongDanThanhToanTrucTuyen" target="_blank">Hướng Thanh toán DVC</a>
+                        </div>
+                    </li>
           <li class="nav-item">
             <a class="nav-link" href="#">THANH TOÁN</a>
           </li>

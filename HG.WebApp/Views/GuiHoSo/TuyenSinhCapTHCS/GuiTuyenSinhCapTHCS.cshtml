@@ -136,7 +136,10 @@
         });
     };
 
-
+     // Change truong
+    function ChangeTruong(obj) {
+        $('#txtTenDuAn').val('đăng ký tuyển sinh vào trường ' + $("#id_truong option:selected").text() + ' ' + $("#nam_hoc").val())
+    };
 
 </script>
 
@@ -170,10 +173,10 @@
                                     <textarea rows="2" cols="20" id="txtTenDuAn"
                                               name="thong_tin_chi_tiet"
                                               class="Css_Mul" autofocus="true"
-                                              placeholder="Thông tin hồ sơ" style="width: 100%; height: 140px;"
+                                              placeholder="Thông tin hồ sơ" style="width: 100%; height: 66px;"
                                               spellcheck="true"></textarea>
                                 </div>
-                                <div class="col-md-3 col-sm-12 sender-infor">
+                                <div class="col-md-3 col-sm-12" style="text-align: right;">
                                     <a href="javascript: void(0);" data-toggle="modal" data-target="#modalInput"
                                        data-original-title="Thông tin chi tiết người nộp hồ sơ"
                                        onclick="ShowModalUser()"
@@ -326,6 +329,7 @@
                                                     name="id_truong"
                                                     id="id_truong"
                                                     data-width=""
+                                                      onchange="ChangeTruong(this)"
                                                     data-live-search="true" data-hide-disabled="false">
                                                 <option selected="selected" value="">---- Chọn trường ----</option>
                                                 @foreach (var item in HG.WebApp.Helper.HelperString.ListTruongHocRecords())
@@ -341,8 +345,7 @@
                                             <input class="w-100"
                                                    type="text"
                                                    id="nam_hoc"
-                                                   name="nam_hoc"
-                                                   disabled="disabled"
+                                                   name="nam_hoc" value="@ViewBag.nam_hoc" disabled="disabled"
                                                    placeholder="">
                                         </div>
                                     </div>
@@ -456,7 +459,7 @@
                                     </div>
                                     <div class="form-group form-group-new">
                                         <label class="col-md-2 control-label">Học sinh trường :</label>
-                                        <div class="col-md-6"><input class="w-100" name="ten_truong" type="text" placeholder=""></div>
+                                        <div class="col-md-6"><input class="w-100" name="ten_truong" type="text" placeholder="Thí sinh tuyển sinh vào trường mầm non không phải điền trường thông tin này"></div>
                                     </div>
                                     <!-- 6 -->
                                     <div class="form-group form-group-new ">
@@ -566,7 +569,7 @@
                                         </label>
                                         <div class="col-md-2">
                                             <input class="w-100" 
-                                            name="diem_uu_tien" type="text" placeholder=""  >
+                                            name="diem_uu_tien" type="text" placeholder="Ghi rõ giải mấy thuộc kỳ thi lớp mấy và môn nào"  >
                                         </div>
                                          <label class="col-md-2 control-label">
                                             Điểm khuyến khích:
@@ -757,15 +760,17 @@
                                                     @(i+1)
                                                 </td>
                                                 <td text-align="justify">
-                                                    <p>@ds_thanh_phan_hs[i].ten_thanh_phan</p>
-                                                    @{
-                                                        if(@ds_thanh_phan_hs[i].is_bat_buoc == true) {
-                                                            <span class="important-box">
-                                                                Bắt
-                                                                buộc
-                                                            </span>
+                                                    <p>@ds_thanh_phan_hs[i].ten_thanh_phan
+                                                        @{
+                                                            if(@ds_thanh_phan_hs[i].is_bat_buoc == true) {
+                                                                <span class="important-box">
+                                                                    Bắt
+                                                                    buộc
+                                                                </span>
+                                                            }
                                                         }
-                                                    }
+                                                    </p>
+                                                    
                                                 </td>
 
                                                 <td text-align="justify">
