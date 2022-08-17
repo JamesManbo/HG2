@@ -3,6 +3,7 @@ using HG.Data.Business.HoSo;
 using HG.Data.Business.ThuTuc;
 using HG.Data.Business.User;
 using HG.Data.SqlService;
+using HG.Entities.Entities;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -103,6 +104,44 @@ namespace HG.WebApp.Controllers.Client
             {
                 return "true";
             }
+        }
+        [HttpGet]
+        public IActionResult DangKy()
+        {
+            return View(new NguoiDungCongDan());
+        }
+        [HttpPost]
+        public async Task<IActionResult> DangKy(NguoiDungCongDan item)
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            AspNetUsers user = new AspNetUsers();
+            user.UserName = item.UserName;
+            user.PhoneNumber = item.PhoneNumber;
+            user.Email = item.Email;
+            user.mat_khau = "1";
+            user.ma_chuc_vu = item.ma_chuc_vu;
+            user.ma_phong_ban = item.ma_phong_ban;
+            user.ho_dem = item.ho_dem;
+            user.ten = item.ten;
+            user.ngay_sinh = item.ngay_sinh;
+            user.khoa_tai_khoan = item.khoa_tai_khoan;
+            user.IsAdministrator = item.IsAdministrator;
+            var result = await userManager.CreateAsync(user, user.mat_khau);
+            var db = new EAContext();
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            if (result.Succeeded)
+            {
+                return View("/DichVuCong");
+            }
+            else
+            {
+                ViewBag.Succeeded = false;
+                ViewBag.Message = "Thêm người dùng không thành công!";
+                return View(item);
+            }
+                
         }
     }
 }

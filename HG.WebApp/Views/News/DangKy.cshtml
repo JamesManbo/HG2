@@ -1,0 +1,287 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+@model HG.Entities.Entities.NguoiDungCongDan
+<style>
+	
+.box-white {
+    border: 1px solid #cbcbcb;
+    padding: 0 1px;
+    margin-top: 8px;
+    background-color: white;
+    float: left;
+}
+
+    .box-white .title-new {
+        height: 35px;
+        margin-top: 2px;
+        color: #d41f18;
+        font-weight: bold;
+			background: url(../../wwwroot/BackEnd/assets/img/box2-title-bgr.png) repeat-x;
+        padding-top: 8px;
+        padding-left: 11px;
+    }
+
+.title-new-content {
+    float: left;
+    width: 100%;
+    height: 35px;
+    color: #d41f18;
+    font-weight: bold;
+    background: url(../../wwwroot/BackEnd/assets/img/box2-title-bgr.png) repeat-x;
+    padding-top: 8px;
+    padding-left: 11px;
+}
+
+.box-white-1 {
+    float: left;
+    width: 100%;
+    height: 428px;
+}
+.box-white-1-1 {
+    float: left;
+    width: 100%;
+    min-height: 300px;
+}
+.box-white-1-1 .navbar-nav {
+        list-style-type: none;
+        float: right;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+        .box-white-1-1 .navbar-nav li {
+            display: inline;
+            float: none;
+        }
+
+            .box-white-1-1 .navbar-nav li a {
+                text-decoration: none;
+                background-color: #dfedf8;
+                display: initial;
+                border-radius: 5px 5px 0 0;
+                padding: 11px 10px 7px 10px;
+                color: black;
+                font-weight: bold;
+            }
+
+        .box-white-1-1 .navbar-nav .active a {
+            background-color: white;
+        }
+    .box-white-1 #tabs ul {
+        list-style-type: none;
+        float: right;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+        .box-white-1 #tabs ul li {
+            display: inline;
+        }
+
+            .box-white-1 #tabs ul li a {
+                text-decoration: none;
+                background-color: #dfedf8;
+                border-radius: 5px 5px 0 0;
+                padding: 11px 10px 7px 10px;
+                color: black;
+                font-weight: bold;
+            }
+
+    .box-white-1 #tabs .ui-tabs-active a {
+        background-color: white;
+    }
+
+.box-white-1 {
+    float: left;
+    width: 100%;
+    height: 428px;
+}
+
+    .box-white-1 .navbar-nav {
+        list-style-type: none;
+        float: right;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+        .box-white-1 .navbar-nav li {
+            display: inline;
+            float: none;
+        }
+
+            .box-white-1 .navbar-nav li a {
+                text-decoration: none;
+                background-color: #dfedf8;
+                display: initial;
+                border-radius: 5px 5px 0 0;
+                padding: 11px 10px 7px 10px;
+                color: black;
+                font-weight: bold;
+            }
+
+        .box-white-1 .navbar-nav .active a {
+            background-color: white;
+        }
+
+.box-white-3 {
+    width: 100%;
+    float: left;
+    margin-top: 20px;
+}
+
+.tsc_message_box1.tsc_simple_bg.error {
+    padding: 20px;
+    margin: 15px;
+    background-color: #d85757;
+    border-color: #d23d3d #c52f2f #b42424;
+    color: #fff;
+    background: -moz-linear-gradient(top, #e07070, #AC1A1A);
+    background: -o-linear-gradient(top, #e07070, #AC1A1A);
+    background: -webkit-gradient(linear, left top, left bottom, from(#e07070), to(#AC1A1A));
+    background: -webkit-linear-gradient(top, #E47552, #AC1A1A);
+    background: linear-gradient(top, #e07070, #AC1A1A);
+    filter: PROGID:DXImageTransform.Microsoft.Gradient(startColorStr = '#E07070', endColorStr = '#AC1A1A');
+    -ms-filter: "PROGID:DXImageTransform.Microsoft.Gradient(startColorStr = '#E07070', endColorStr = '#AC1A1A')";
+}
+
+
+</style>
+<div class="box-white box-white-1" style="height: auto;">
+		<div class="title-new">THÔNG TIN NGƯỜI DÙNG</div>
+		<form class="form-horizontal form-horizontal-new">
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Họ tên &nbsp;<span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+					<input name="ten" type="text" value="@Model.ten" id="ten" style="width:100%;">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Giới tính:</label>
+				<div class="col-md-4">
+				<select name="Gender" id="Gender" style="width:100%;">
+						<option selected="selected" value="nam">Nam</option>
+						<option value="nu">Nữ</option>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Ngày sinh  &nbsp;<span id="ctl09_Label5" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+				<input name="ngay_sinh" type="text" value="@Model.ngay_sinh" id="ngay_sinh" class="datepicker hasDatepicker" style="width:100%;">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Email:</label>
+				<div class="col-md-4">
+				<input name="Email" type="text" value="@Model.Email" id="Email" style="width:100%;">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Số điện thoại  &nbsp;<span id="ctl09_Label6" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+				<input name="PhoneNumber" type="text" value="@Model.PhoneNumber" id="PhoneNumber" style="width:100%;">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Loại giấy tờ:</label>
+				<div class="col-md-4">
+					<select name="LoaiGiayToHL" id="LoaiGiayToHL" style="width:100%;">
+						<option value="HC">Hộ Chiếu</option>
+						<option value="CM">CMND</option>
+						<option value="GPLX">Giấy phép lái xe</option>
+						<option value="CCCD">Căn cước công dân</option>
+
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Số giấy tờ  &nbsp;<span id="ctl09_Label8" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+					<input name="SoGiayTo" type="text" value="" id="SoGiayTo" style="width:100%;">
+				</div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Tên cơ quan (Nếu có):</label>
+				<div class="col-md-4">
+				<input name="TenCoQuan" type="text" value="" id="TenCoQuan" style="width:100%;">
+				</div>
+			</div>
+			 <div class="form-group">
+				<label class="col-md-4 control-label">Địa chỉ cơ quan:</label>
+				<div class="col-md-4">
+				<input name="DiaChiCoQuan" type="text" value="" id="DiaChiCoQuan" style="width:100%;">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Địa chỉ cá nhân:</label>
+				<div class="col-md-4">
+					<input name="DiaChi" type="text" value="" id="DiaChi" style="width:100%;">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Tỉnh/Thành phố &nbsp;<span id="ctl09_Label9" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+					<select name="TinhThanh"  id="TinhThanh" style="width:100%;">
+						<option selected="selected" value="01">Thành phố Hà Nội</option>
+						<option value="02">Tỉnh Hà Giang</option>
+						<option value="04">Tỉnh Cao Bằng</option>
+						<option value="06">Tỉnh Bắc Kạn</option>
+					</select>
+					<span id="ctl09_RequiredFieldValidator6" style="color:Red;font-size:11px;display:none;">Tỉnh/Thành phố không được để trống</span>
+				</div>
+
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Quận/Huyện &nbsp;<span id="ctl09_Label7" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+				<select name="QuanHuyen" id="QuanHuyen" style="width:100%;">
+						<option selected="selected" value="001">Quận Ba Đình</option>
+						<option value="002">Quận Hoàn Kiếm</option>
+						<option value="003">Quận Tây Hồ</option>
+						<option value="004">Quận Long Biên</option>
+						<option value="005">Quận Cầu Giấy</option>
+					</select>
+				</div>
+
+			</div>
+
+			<div class="form-group">
+				<label class="col-md-4 control-label">Xã/Phường&nbsp;<span id="" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+				<select name="XaPhuong" id="XaPhuong" style="width:100%;">
+						<option selected="selected" value="00001">Phường Phúc Xá</option>
+						<option value="00004">Phường Trúc Bạch</option>
+						<option value="00006">Phường Vĩnh Phúc</option>
+						<option value="00028">Phường Kim Mã</option>
+						<option value="00031">Phường Giảng Võ</option>
+						<option value="00034">Phường Thành Công</option>
+
+					</select>
+				</div>
+
+			</div>
+		<div class="form-group">
+			<label class="col-md-4 control-label">Mã xác thực:</label>
+			<div class="col-md-4">
+				<input name="CodeVerify" type="text" value="Mã xác thực" id="CodeVerify" style="width:100%;">
+			</div>
+		</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label"></label>
+				<div class="col-md-4">
+					<input type="submit" name="save" value="Lưu" id="save" class="btn-search">
+					<input type="submit" name="cancer" value="Thoát" id="cancer" class="btn-search">
+				</div>
+			</div>
+		</form>
+	</div>

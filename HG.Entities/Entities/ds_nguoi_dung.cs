@@ -115,5 +115,24 @@ namespace HG.Entities.Entities
         public string ma_nhom { get; set; } = "";
         public string ma_vai_tro { get; set; } = "";
     }
+    public class NguoiDungCongDan : IdentityUser<Guid>
+    {
+        public string? ho_dem { get; set; }
+        public string? ten { get; set; }
+        public string? mat_khau { get; set; }
+        public string? anh_dai_dien { get; set; }
+        public string? tinh_trang_hon_nhan { get; set; }
+        public Guid? RoleId { get; set; }
+        public string? ma_phong_ban { get; set; }
+        public string? ma_chuc_vu { get; set; }
+        public int? stt { get; set; }
+        public DateTime? ngay_sinh { get; set; }
+        public string? lstGroup { get; set; }
+        public int? khoa_tai_khoan { get; set; }
+        public int? IsAdministrator { get; set; }
+        public Response? responseErr { get; set; }
 
+        public string? type_view { get; set; }
+
+    }
 }

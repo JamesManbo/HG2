@@ -241,10 +241,10 @@
                          <div class="form-group row">
                             <label class="col-md-2 control-label">Là Administrator</label>
                             <div class="col-md-10">
-                                <input name="IsAdministrator" onclick="IsAdministrator()"  type="checkbox" value="0" id="IsAdministrator" >
+                                <input name="IsAdministrator" onclick="FnIsAdministrator()"  type="checkbox" value="0" id="IsAdministrator" >
                             </div>
                             <script>
-                                        function IsAdministrator() {
+                                        function FnIsAdministrator() {
                                             if ($('#IsAdministrator').is(':checked')) {
                                                 $("#IsAdministrator").val(1)
                                             }else{
