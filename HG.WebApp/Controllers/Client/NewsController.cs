@@ -124,8 +124,8 @@ namespace HG.WebApp.Controllers.Client
             user.ho_dem = item.ho_dem;
             user.ten = item.ten;
             user.ngay_sinh = item.ngay_sinh;
-            user.khoa_tai_khoan = item.khoa_tai_khoan;
-            user.IsAdministrator = item.IsAdministrator;
+            user.khoa_tai_khoan = 0;
+            user.IsAdministrator = 0;
             var result = await userManager.CreateAsync(user, user.mat_khau);
             var db = new EAContext();
             ViewBag.LstNhom = db.Asp_nhom.ToList();
@@ -133,6 +133,7 @@ namespace HG.WebApp.Controllers.Client
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             if (result.Succeeded)
             {
+                //tiep tuc them vao bang mapping
                 return View("/DichVuCong");
             }
             else

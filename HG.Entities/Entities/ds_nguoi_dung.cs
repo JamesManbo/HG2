@@ -125,6 +125,14 @@ namespace HG.Entities.Entities
         public Guid? RoleId { get; set; }
         public string? ma_phong_ban { get; set; }
         public string? ma_chuc_vu { get; set; }
+        public string? LoaiGiayToHL { get; set; }
+        public string? SoGiayTo { get; set; }
+        public string? TenCoQuan { get; set; }
+        public string? DiaChiCoQuan { get; set; }
+        public string? TinhThanh { get; set; }
+        public string? QuanHuyen { get; set; }
+        public string? XaPhuong { get; set; }
+        public string? CodeVerify { get; set; }
         public int? stt { get; set; }
         public DateTime? ngay_sinh { get; set; }
         public string? lstGroup { get; set; }
