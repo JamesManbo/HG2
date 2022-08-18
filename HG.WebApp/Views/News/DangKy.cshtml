@@ -1,5 +1,6 @@
 ﻿@{
-    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+	Layout = "~/Views/Shared/_LayoutClient.cshtml";
+	var lstTinhThanh = ViewBag.DanhSachTinhTP as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
 }
 @model HG.Entities.Entities.NguoiDungCongDan
 <style>
@@ -147,9 +148,12 @@
 
 
 </style>
+<script>
+
+</script>
 <div class="box-white box-white-1" style="height: auto;">
 		<div class="title-new">THÔNG TIN NGƯỜI DÙNG</div>
-		<form class="form-horizontal form-horizontal-new">
+	<form class="form-horizontal form-horizontal-new" id="DangKy" action="/News/DangKy" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label class="col-md-4 control-label">Tên đăng nhập: <span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
@@ -169,7 +173,7 @@
 				<select name="Gender" id="Gender" style="width:100%;">
 						<option selected="selected" value="nam">Nam</option>
 						<option value="nu">Nữ</option>
-
+						<option value="Khac">Khác</option>
 					</select>
 				</div>
 			</div>
@@ -236,49 +240,72 @@
 			<div class="form-group">
 				<label class="col-md-4 control-label">Tỉnh/Thành phố &nbsp;<span id="ctl09_Label9" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-					<select name="TinhThanh"  id="TinhThanh" style="width:100%;">
-						<option selected="selected" value="01">Thành phố Hà Nội</option>
-						<option value="02">Tỉnh Hà Giang</option>
-						<option value="04">Tỉnh Cao Bằng</option>
-						<option value="06">Tỉnh Bắc Kạn</option>
+					<select name="TinhThanh"  id="TinhThanh" style="width:100%;" onchange="TinhThanhChange(this)">
+						<option selected="selected" value="01">Chọn Tỉnh thành</option>
+							@if (lstTinhThanh!= null){
+								foreach (var item in lstTinhThanh)
+								{
+									<option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+								}
+							}
 					</select>
-					<span id="ctl09_RequiredFieldValidator6" style="color:Red;font-size:11px;display:none;">Tỉnh/Thành phố không được để trống</span>
 				</div>
-
 			</div>
-			<div class="form-group">
+			<script>
+				function TinhThanhChange(obj){
+						$.ajax({
+							type: "GET",
+							url: "/News/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value,
+							data: "",
+							contentType: 'application/json; charset=utf-8',
+							success: function (data) {
+								$("#QuanHuyen").html(data);
+							}
+						});
+				}
+			</script>
+			<div class="form-group" id="QuanHuyen">
 				<label class="col-md-4 control-label">Quận/Huyện &nbsp;<span id="ctl09_Label7" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-				<select name="QuanHuyen" id="QuanHuyen" style="width:100%;">
-						<option selected="selected" value="001">Quận Ba Đình</option>
-						<option value="002">Quận Hoàn Kiếm</option>
-						<option value="003">Quận Tây Hồ</option>
-						<option value="004">Quận Long Biên</option>
-						<option value="005">Quận Cầu Giấy</option>
+					<select name="QuanHuyen" id="QuanHuyen" style="width:100%;">
+						<option selected="selected" value="001">Chọn Quận/Huyện</option>
 					</select>
 				</div>
 
 			</div>
-
-			<div class="form-group">
+			<script>
+					function QuanHuyenChange(obj) {
+						$.ajax({
+							type: "GET",
+							url: "/News/LayXaTheoHuyen?ma_dia_ban_con=" + obj.value,
+							data: "",
+							contentType: 'application/json; charset=utf-8',
+							success: function (data) {
+								$("#XaPhuong").html(data);
+							}
+						});
+					}
+			</script>
+			<div class="form-group" id="XaPhuong">
 				<label class="col-md-4 control-label">Xã/Phường&nbsp;<span id="" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-				<select name="XaPhuong" id="XaPhuong" style="width:100%;">
-						<option selected="selected" value="00001">Phường Phúc Xá</option>
-						<option value="00004">Phường Trúc Bạch</option>
-						<option value="00006">Phường Vĩnh Phúc</option>
-						<option value="00028">Phường Kim Mã</option>
-						<option value="00031">Phường Giảng Võ</option>
-						<option value="00034">Phường Thành Công</option>
-
+					<select name="XaPhuong" id="XaPhuong" style="width:100%;">
+						<option selected="selected" value="">Chọn Xã/Phường</option>
 					</select>
 				</div>
 
 			</div>
 		<div class="form-group">
-			<label class="col-md-4 control-label">Mã xác thực:</label>
+			<label class="col-md-4 control-label">Mã xác thực: </label>
 			<div class="col-md-4">
-				<input name="CodeVerify" type="text" value="Mã xác thực" id="CodeVerify" style="width:100%;">
+				<label style="width: 100%;text-align: center;height: 20px;background: blueviolet;color: aliceblue;">@ViewBag.Verify</label>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-4 control-label"></label>
+			<div class="col-md-4">
+				<input name="CodeVerify1" type="text" value="@ViewBag.Verify" id="CodeVerify1" style="width:100%;" hidden>
+				<input name="CodeVerify" type="text" value="" id="CodeVerify" style="width:100%;">
 			</div>
 		</div>
 			<div class="form-group">

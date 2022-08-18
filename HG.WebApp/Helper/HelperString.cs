@@ -15,6 +15,7 @@ namespace HG.WebApp.Helper
         public string LinkPage = "";
         public int TotalPage = 0;
 
+
         private static readonly string[] VietnameseSigns = new string[]
         {
 
@@ -57,7 +58,12 @@ namespace HG.WebApp.Helper
             }
             return str;
         }
-
+        public static string RandomCodeVerify()
+        {
+            Random generator = new Random();
+            int r = generator.Next(100000, 999999);
+            return r.ToString();
+        }
         public static string SerializeObject(object obj)
         {
             System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();

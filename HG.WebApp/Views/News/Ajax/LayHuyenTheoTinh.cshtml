@@ -1,0 +1,14 @@
+﻿@model List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
+
+<label class="col-md-4 control-label">Quận/Huyện &nbsp;<span id="ctl09_Label7" style="color:Red;">(*)</span>:</label>
+<div class="col-md-4">
+	<select name="QuanHuyen" id="QuanHuyen" style="width:100%;" onchange="QuanHuyenChange(this)">
+		<option selected="selected" value="">Chọn Quận/Huyện</option>
+		@if(Model != null){
+			foreach (var item in Model)
+			{
+				<option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+			}
+		}
+	</select>
+</div>

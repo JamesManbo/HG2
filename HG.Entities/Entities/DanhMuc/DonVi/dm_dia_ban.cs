@@ -12,11 +12,11 @@ namespace HG.Entities.Entities.DanhMuc.DonVi
     {
         public string ma_dia_ban { get; set; }
         public string ma_cap { get; set; }
-        public string? ma_don_vi_cha { get; set; }
-        public string? ma_don_vi_con { get; set; }
+        public string? ma_dia_ban_cha { get; set; }
+        public string? ma_dia_ban_con { get; set; }
         public string? ma_dia_ban_con_c2 { get; set; }
         public string ten_dia_ban { get; set; }
-        public string mo_ta_dia_ban { get; set; }
+        public string? mo_ta_dia_ban { get; set; }
         public int? trang_thai { get; set; }
         public int? stt { get; set; }
     }

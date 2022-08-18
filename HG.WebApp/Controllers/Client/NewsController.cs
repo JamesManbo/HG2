@@ -108,6 +108,8 @@ namespace HG.WebApp.Controllers.Client
         [HttpGet]
         public IActionResult DangKy()
         {
+            ViewBag.DanhSachTinhTP = db.dm_dia_ban.Where(n=>n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
+            ViewBag.Verify = HG.WebApp.Helper.HelperString.RandomCodeVerify();
             return View(new NguoiDungCongDan());
         }
         [HttpPost]
@@ -128,8 +130,7 @@ namespace HG.WebApp.Controllers.Client
             user.IsAdministrator = 0;
             var result = await userManager.CreateAsync(user, user.mat_khau);
             var db = new EAContext();
-            ViewBag.LstNhom = db.Asp_nhom.ToList();
-            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             if (result.Succeeded)
             {
@@ -141,8 +142,21 @@ namespace HG.WebApp.Controllers.Client
                 ViewBag.Succeeded = false;
                 ViewBag.Message = "Thêm người dùng không thành công!";
                 return View(item);
-            }
-                
+            }  
+        }
+        public async Task<IActionResult> LayHuyenTheoTinh(string ma_dia_ban_cha)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/News/Ajax/LayHuyenTheoTinh.cshtml", LstDiaBan);
+            return Content(result);
+        }
+        public async Task<IActionResult> LayXaTheoHuyen(string ma_dia_ban_con)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_con == ma_dia_ban_con).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/News/Ajax/LayXaTheoHuyen.cshtml", LstDiaBan);
+            return Content(result);
         }
     }
 }
