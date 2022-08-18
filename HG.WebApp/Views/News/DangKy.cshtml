@@ -149,21 +149,102 @@
 
 </style>
 <script>
+	 $(document).ready(function() {
+		jQuery.validator.addMethod("CodeVerifyValid", function (value, element) {
+			if ($("#CodeVerify1").val() != value) {
+				return false;
+			} else {
+				return true;
+			};
+		}, "Mã không chính xác");
+        $('#DangKy').validate({
+            rules: {
+				ten: "required",
+                UserName: "required",
+				ngay_sinh: "required",
+				PhoneNumber: "required",
+				SoGiayTo: "required",
+				TinhThanh: "required",
+				QuanHuyen: "required",
+				XaPhuong: "required",
+				CodeVerify:{
+					required: true,
+					CodeVerifyValid: true
+				},
+            },
+            messages: {
+				ten: {
+                    required: "Họ tên không được bỏ trống!"
+                },
+				UserName: "Tên đăng nhập không được bỏ trống!",
+				ngay_sinh: "Ngày sinh không được bỏ trống!",
+				PhoneNumber: "Số điện thoại không được bỏ trống!",
+				SoGiayTo: "Số giấy tờ không được bỏ trống!",
+				TinhThanh: "Bạn phải chọn Tỉnh Thành!",
+				QuanHuyen: "Bạn phải chọn Quận Huyện!",
+				XaPhuong: "Bạn phải chọn Xã Phường!",
+				CodeVerify: "Mã xác thực không được bỏ trống!",
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
 
+    });
 </script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+				@ViewBag.Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Succeeded == false)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+@if (ViewBag.Succeeded == false)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
 <div class="box-white box-white-1" style="height: auto;">
 		<div class="title-new">THÔNG TIN NGƯỜI DÙNG</div>
-	<form class="form-horizontal form-horizontal-new" id="DangKy" action="/News/DangKy" method="post" enctype="multipart/form-data">
+		<form class="form-horizontal form-horizontal-new" id="DangKy" action="/News/DangKy" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label class="col-md-4 control-label">Tên đăng nhập: <span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-					<input name="ten" type="text" value="@Model.UserName" id="ten" style="width:100%;">
+				<input name="UserName" type="text" value="@Model.UserName" id="UserName" maxlength="50" style="width:100%;">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-md-4 control-label">Họ tên &nbsp;<span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-					<input name="ten" type="text" value="@Model.ten" id="ten" style="width:100%;">
+				<input name="ten" type="text" value="@Model.ten" maxlength="250" id="ten" style="width:100%;">
 				</div>
 			</div>
 
@@ -181,19 +262,19 @@
 			<div class="form-group">
 				<label class="col-md-4 control-label">Ngày sinh  &nbsp;<span id="ctl09_Label5" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-				<input name="ngay_sinh" type="text" value="@Model.ngay_sinh" id="ngay_sinh" class="datepicker hasDatepicker" style="width:100%;">
+				<input name="ngay_sinh" type="date" value="@Model.ngay_sinh" id="ngay_sinh" class="datepicker hasDatepicker" style="width:100%;">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-md-4 control-label">Email:</label>
 				<div class="col-md-4">
-				<input name="Email" type="text" value="@Model.Email" id="Email" style="width:100%;">
+				<input name="Email" type="text" maxlength="50" value="@Model.Email" id="Email" style="width:100%;">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-md-4 control-label">Số điện thoại  &nbsp;<span id="ctl09_Label6" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-				<input name="PhoneNumber" type="text" value="@Model.PhoneNumber" id="PhoneNumber" style="width:100%;">
+				<input name="PhoneNumber" maxlength="50" type="text" value="@Model.PhoneNumber" id="PhoneNumber" style="width:100%;">
 				</div>
 			</div>
 
@@ -213,7 +294,7 @@
 			<div class="form-group">
 				<label class="col-md-4 control-label">Số giấy tờ  &nbsp;<span id="ctl09_Label8" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
-					<input name="SoGiayTo" type="text" value="" id="SoGiayTo" style="width:100%;">
+				<input name="SoGiayTo" type="text" value="" maxlength="50" id="SoGiayTo" style="width:100%;">
 				</div>
 			</div>
 
@@ -221,27 +302,27 @@
 			<div class="form-group">
 				<label class="col-md-4 control-label">Tên cơ quan (Nếu có):</label>
 				<div class="col-md-4">
-				<input name="TenCoQuan" type="text" value="" id="TenCoQuan" style="width:100%;">
+				<input name="TenCoQuan" type="text" maxlength="50" value="" id="TenCoQuan" style="width:100%;">
 				</div>
 			</div>
 			 <div class="form-group">
 				<label class="col-md-4 control-label">Địa chỉ cơ quan:</label>
 				<div class="col-md-4">
-				<input name="DiaChiCoQuan" type="text" value="" id="DiaChiCoQuan" style="width:100%;">
+				<input name="DiaChiCoQuan" type="text" maxlength="250" value="" id="DiaChiCoQuan" style="width:100%;">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="col-md-4 control-label">Địa chỉ cá nhân:</label>
 				<div class="col-md-4">
-					<input name="DiaChi" type="text" value="" id="DiaChi" style="width:100%;">
+				<input name="DiaChi" type="text" value="" maxlength="250" id="DiaChi" style="width:100%;">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-md-4 control-label">Tỉnh/Thành phố &nbsp;<span id="ctl09_Label9" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
 					<select name="TinhThanh"  id="TinhThanh" style="width:100%;" onchange="TinhThanhChange(this)">
-						<option selected="selected" value="01">Chọn Tỉnh thành</option>
+						<option selected="selected" value="">Chọn Tỉnh thành</option>
 							@if (lstTinhThanh!= null){
 								foreach (var item in lstTinhThanh)
 								{
@@ -268,7 +349,7 @@
 				<label class="col-md-4 control-label">Quận/Huyện &nbsp;<span id="ctl09_Label7" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
 					<select name="QuanHuyen" id="QuanHuyen" style="width:100%;">
-						<option selected="selected" value="001">Chọn Quận/Huyện</option>
+						<option selected="selected" value="">Chọn Quận/Huyện</option>
 					</select>
 				</div>
 
@@ -296,7 +377,7 @@
 
 			</div>
 		<div class="form-group">
-			<label class="col-md-4 control-label">Mã xác thực: </label>
+			<label class="col-md-4 control-label">Mã xác thực <span id="" style="color:Red;">(*)</span>: </label>
 			<div class="col-md-4">
 				<label style="width: 100%;text-align: center;height: 20px;background: blueviolet;color: aliceblue;">@ViewBag.Verify</label>
 			</div>
@@ -305,14 +386,14 @@
 			<label class="col-md-4 control-label"></label>
 			<div class="col-md-4">
 				<input name="CodeVerify1" type="text" value="@ViewBag.Verify" id="CodeVerify1" style="width:100%;" hidden>
-				<input name="CodeVerify" type="text" value="" id="CodeVerify" style="width:100%;">
+				<input name="CodeVerify" type="text" value="" id="CodeVerify" maxlength="10" style="width:100%;">
 			</div>
 		</div>
 			<div class="form-group">
 				<label class="col-md-4 control-label"></label>
 				<div class="col-md-4">
 					<input type="submit" name="save" value="Lưu" id="save" class="btn-search">
-					<input type="submit" name="cancer" value="Thoát" id="cancer" class="btn-search">
+					<input type="button" name="cancer" value="Thoát" id="cancer" class="btn-search">
 				</div>
 			</div>
 		</form>

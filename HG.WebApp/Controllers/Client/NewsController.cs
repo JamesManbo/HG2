@@ -3,12 +3,14 @@ using HG.Data.Business.HoSo;
 using HG.Data.Business.ThuTuc;
 using HG.Data.Business.User;
 using HG.Data.SqlService;
+using HG.Entities;
 using HG.Entities.Entities;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -115,6 +117,7 @@ namespace HG.WebApp.Controllers.Client
         [HttpPost]
         public async Task<IActionResult> DangKy(NguoiDungCongDan item)
         {
+            var db = new EAContext();
             var UserId = Guid.Parse(userManager.GetUserId(User));
             AspNetUsers user = new AspNetUsers();
             user.UserName = item.UserName;
@@ -129,12 +132,29 @@ namespace HG.WebApp.Controllers.Client
             user.khoa_tai_khoan = 0;
             user.IsAdministrator = 0;
             var result = await userManager.CreateAsync(user, user.mat_khau);
-            var db = new EAContext();
-            
-            ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             if (result.Succeeded)
             {
+                var obj = db.AspNetUsers.Where(n => n.UserName == item.UserName && n.ten == item.ten).FirstOrDefault();
                 //tiep tuc them vao bang mapping
+                Asp_user_client usermapping = new Asp_user_client();
+                usermapping.ma_nguoi_dung = obj.Id;
+                usermapping.loai_giay_to = item.LoaiGiayToHL;
+                usermapping.ma_tinh_thanh = item.TinhThanh;
+                usermapping.ma_quan_huyen = item.QuanHuyen;
+                usermapping.ma_xa_phuong = item.XaPhuong;
+                usermapping.so_giay_to = item.SoGiayTo;
+                usermapping.ten_co_quan = item.TenCoQuan;
+                usermapping.dia_chi_co_quan = item.DiaChiCoQuan;
+                usermapping.code_verify = item.CodeVerify;
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_user_client> _userMap = db.Asp_user_client.Add(usermapping);
+                db.SaveChanges();
+                var _result = _userMap.Entity.Id;
+                if (string.IsNullOrEmpty(_result.ToString()))
+                {
+                    ViewBag.Succeeded = false;
+                    ViewBag.Message = "Thêm người dùng không thành công!";
+                    return View(item);
+                }
                 return View("/DichVuCong");
             }
             else
