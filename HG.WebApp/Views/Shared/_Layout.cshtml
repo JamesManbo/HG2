@@ -49,7 +49,7 @@
             @if (User.Identity.Name != null)
             {
                 <div class="logout-info">
-                    <p>Xin chào: User.Identity.Name</p>
+                    <p>Xin chào: @User.Identity.Name</p>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa-solid fa-user"></i>
@@ -57,14 +57,9 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item"  href="/News/ThongTinCaNhan">Thông Tin cá nhân</a>
-                            <a class="dropdown-item" onclick="LogoutClient()">Đăng Xuất</a>
+                            <a class="dropdown-item" href="/User/LogoutClient">Đăng Xuất</a>
                         </div>
                     </div>
-                    <script>
-                        function LogoutClient() {
-                            window.location.href = "/User/LogoutClient"
-                        }
-                    </script>
                 </div>
             }
       

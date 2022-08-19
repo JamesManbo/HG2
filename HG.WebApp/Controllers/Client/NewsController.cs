@@ -178,5 +178,11 @@ namespace HG.WebApp.Controllers.Client
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/News/Ajax/LayXaTheoHuyen.cshtml", LstDiaBan);
             return Content(result);
         }
+
+
+        public IActionResult GroupDonVi()
+        {
+            return PartialView();
+        }
     }
 }
