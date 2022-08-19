@@ -290,53 +290,9 @@ $(document).ready(function() {
                     </div><!-- End Horizontal Form -->
                 </div>
            
-            <div class="widgetcontent" @(ViewBag.Status == 21 || ViewBag.Status == 22  || ViewBag.Status == 26 ? "hidden" : "") >
-                <div class="form-horizontal">
-                    <div id="tt_chitiet" class="row" >
-                   
-                          <div class="form-group row mb-3">
-                                    <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
-                                    <div class="col-md-3">
-                                        <input type="file" id="files" name="files" style="display: none">
-                                        <input type="text" id="file_dinh_kem" name="attach" style="display: none">
-                                        <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
-                                        <img id="attach" style="margin-top: 10px;" width="100" />
-                                    </div>
-                          </div>
-                          
-                         <div class="form-group row mb-3">
-                            
-                                    <span for="ten_to_chuc" class="col-sm-1 control-label">Ý kiến</span>
-                                    <div class="col-sm-11">
-                                        <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="" placeholder="Nhập nội dung"/>
-                                    </div>
-                         </div>      
-                    </div>                   
-                </div>
-
-
-
-        </div>
+          
          <div class="text-center">
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,20) "   style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26 ? "hidden" : "") >Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,26)" style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26 ? "hidden" : "") >Kết thúc</button>
-                               <button type="button" class="btn btn-primary"  onclick="#" style="width: 150px" @(ViewBag.Status != 22 ? "hidden" : "") >Thu hồi</button>
-                               @if(ViewBag.Status == 21)
-                               {
-                                   <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoChuaBoSung';" style="width: 150px">Đóng</button>
-                               }
-                               else if (ViewBag.Status == 22)
-                                {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoDaChuyenXuLy';" style="width: 150px">Đóng</button>
-                                }
-                                else if (ViewBag.Status == 26)
-                                {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoDaPhoiHop';" style="width: 150px">Đóng</button>
-                                }
-                               else
-                               {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoPhoiHop';" style="width: 150px">Đóng</button>
-                               }
+                          <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoGanDenHan';" style="width: 150px">Đóng</button>
                               
                     </div>
     </div>
