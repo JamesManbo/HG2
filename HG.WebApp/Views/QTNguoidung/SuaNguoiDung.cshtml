@@ -281,17 +281,17 @@
                          <div class="form-group row">
                             <label class="col-md-2 control-label">Là Administrator</label>
                             <div class="col-md-10">
-                                <input name="IsAdministrator" onclick="IsAdministrator()" @(@Model.aspNetUsersModel.First().IsAdministrator == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().IsAdministrator)"  type="checkbox" id="IsAdministrator" >
+                                <input name="IsAdministrator" onclick="FnIsAdministrator()" @(@Model.aspNetUsersModel.First().IsAdministrator == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().IsAdministrator)" type="checkbox" id="IsAdministrator">
                             </div>
                             <script>
-                                        function IsAdministrator() {
+                                    function FnIsAdministrator() {
                                             if ($('#IsAdministrator').is(':checked')) {
                                                 $("#IsAdministrator").val(1)
                                             }else{
                                                 $("#IsAdministrator").val(0)
                                             }
                                         }
-                                    </script>
+                            </script>
                         </div>
                         <div class="form-group row">
 									<label class="col-md-2 control-label">Khóa tài khoản</label>

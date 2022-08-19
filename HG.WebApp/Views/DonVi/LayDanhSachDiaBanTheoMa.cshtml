@@ -6,8 +6,8 @@
 {
       <div class="row mb-3">                      
           <label for="stt" class="col-sm-2 control-label">Tỉnh</label>                      
-          <div class="col-sm-8">                      
-              <select name="ma_don_vi_cha" id="ma_don_vi_cha" onchange="LayHuyenTheoTinh(this)" class="form-control input-default">
+          <div class="col-sm-8">
+            <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" onchange="LayHuyenTheoTinh(this)" class="form-control input-default">
                 @if(Model != null)
                 {
                     <option value="001">Chọn tỉnh/thành phố</option>
@@ -29,8 +29,8 @@
 }else{
      <div class="row mb-3">                      
           <label for="stt" class="col-sm-2 control-label">Tỉnh</label>                      
-          <div class="col-sm-8">                      
-              <select name="ma_dia_ban_cha" id="ma_don_vi_cha" class="form-control input-default">
+          <div class="col-sm-8">
+            <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" class="form-control input-default">
                  @if(Model != null)
                  {
                     <option value="001">Chọn tỉnh/thành phố</option>

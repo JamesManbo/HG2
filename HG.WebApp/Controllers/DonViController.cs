@@ -215,7 +215,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayDanhSachDiaBanTheoMa(string ma_cap_co_quan, string matinh)
         {
             EAContext db = new EAContext();
-            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == null).ToList();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null).ToList();
             ViewBag.CapCoQuan = ma_cap_co_quan;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMa.cshtml", LstDiaBan);
             return Content(result);
@@ -232,7 +232,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayHuyenTheoTinh(string ma_dia_ban_cha, string matinh)
         {
             EAContext db = new EAContext();
-            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == ma_dia_ban_cha).ToList();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMaTinh.cshtml", LstDiaBan);
             return Content(result);
         }
@@ -287,7 +287,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.UidName = User.Identity.Name;
                 item.Deleted = 0;
                 item.CreatedDateUtc = DateTime.Now;
-                var obj = eAContext.dm_dia_ban.Where(n => n.ten_dia_ban == item.ten_dia_ban).Count();
+                var obj = eAContext.dm_dia_ban.Where(n => n.ma_dia_ban == item.ma_dia_ban).Count();
                 if (obj > 0)
                 {
                     ViewBag.ErrorCode = 1;
@@ -320,7 +320,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.type_view = StatusAction.Edit.ToString();
                 ViewBag.UserCreate = User.Identity.Name;
                 ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
-                ViewBag.ListDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == null && n.ma_cap == obj.ma_cap).ToList();
+                ViewBag.ListDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null && n.ma_cap == obj.ma_cap).ToList();
                 return View(obj);
             }
             else

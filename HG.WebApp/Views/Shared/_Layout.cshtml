@@ -46,6 +46,23 @@
         <br>
         <p class="link">dichvucong.hagiang.gov.vn</p>
       </div>
+            @if (User.Identity.Name != null)
+            {
+                <div class="logout-info">
+                    <p>Xin chào: @User.Identity.Name</p>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-user"></i>
+                            <i class="drop-icon fa-solid fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item"  href="/News/ThongTinCaNhan">Thông Tin cá nhân</a>
+                            <a class="dropdown-item" href="/User/LogoutClient">Đăng Xuất</a>
+                        </div>
+                    </div>
+                </div>
+            }
+      
       <div class="clearfix"></div>
     </div>
   </section>
@@ -225,6 +242,8 @@
                                 </div>
                             </div>
                         </div>
+                    }else{
+                        @Html.RenderAction("GroupDonVi","News")
                     }
         </div>
         <div class="col-xs-12 col-sm-8 col-lg-9">

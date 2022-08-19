@@ -3,11 +3,14 @@ using HG.Data.Business.HoSo;
 using HG.Data.Business.ThuTuc;
 using HG.Data.Business.User;
 using HG.Data.SqlService;
+using HG.Entities;
+using HG.Entities.Entities;
 using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -103,6 +106,83 @@ namespace HG.WebApp.Controllers.Client
             {
                 return "true";
             }
+        }
+        [HttpGet]
+        public IActionResult DangKy()
+        {
+            ViewBag.DanhSachTinhTP = db.dm_dia_ban.Where(n=>n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
+            ViewBag.Verify = HG.WebApp.Helper.HelperString.RandomCodeVerify();
+            return View(new NguoiDungCongDan());
+        }
+        [HttpPost]
+        public async Task<IActionResult> DangKy(NguoiDungCongDan item)
+        {
+            var db = new EAContext();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            AspNetUsers user = new AspNetUsers();
+            user.UserName = item.UserName;
+            user.PhoneNumber = item.PhoneNumber;
+            user.Email = item.Email;
+            user.mat_khau = "1";
+            user.ma_chuc_vu = item.ma_chuc_vu;
+            user.ma_phong_ban = item.ma_phong_ban;
+            user.ho_dem = item.ho_dem;
+            user.ten = item.ten;
+            user.ngay_sinh = item.ngay_sinh;
+            user.khoa_tai_khoan = 0;
+            user.IsAdministrator = 0;
+            var result = await userManager.CreateAsync(user, user.mat_khau);
+            if (result.Succeeded)
+            {
+                var obj = db.AspNetUsers.Where(n => n.UserName == item.UserName && n.ten == item.ten).FirstOrDefault();
+                //tiep tuc them vao bang mapping
+                Asp_user_client usermapping = new Asp_user_client();
+                usermapping.ma_nguoi_dung = obj.Id;
+                usermapping.loai_giay_to = item.LoaiGiayToHL;
+                usermapping.ma_tinh_thanh = item.TinhThanh;
+                usermapping.ma_quan_huyen = item.QuanHuyen;
+                usermapping.ma_xa_phuong = item.XaPhuong;
+                usermapping.so_giay_to = item.SoGiayTo;
+                usermapping.ten_co_quan = item.TenCoQuan;
+                usermapping.dia_chi_co_quan = item.DiaChiCoQuan;
+                usermapping.code_verify = item.CodeVerify;
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Asp_user_client> _userMap = db.Asp_user_client.Add(usermapping);
+                db.SaveChanges();
+                var _result = _userMap.Entity.Id;
+                if (string.IsNullOrEmpty(_result.ToString()))
+                {
+                    ViewBag.Succeeded = false;
+                    ViewBag.Message = "Thêm người dùng không thành công!";
+                    return View(item);
+                }
+                return View("/DichVuCong");
+            }
+            else
+            {
+                ViewBag.Succeeded = false;
+                ViewBag.Message = "Thêm người dùng không thành công!";
+                return View(item);
+            }  
+        }
+        public async Task<IActionResult> LayHuyenTheoTinh(string ma_dia_ban_cha)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/News/Ajax/LayHuyenTheoTinh.cshtml", LstDiaBan);
+            return Content(result);
+        }
+        public async Task<IActionResult> LayXaTheoHuyen(string ma_dia_ban_con)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_con == ma_dia_ban_con).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/News/Ajax/LayXaTheoHuyen.cshtml", LstDiaBan);
+            return Content(result);
+        }
+
+
+        public IActionResult GroupDonVi()
+        {
+            return PartialView();
         }
     }
 }

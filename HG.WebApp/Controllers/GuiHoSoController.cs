@@ -150,7 +150,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
             }
@@ -187,7 +187,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
             }
@@ -228,7 +228,7 @@ namespace HG.WebApp.Controllers
                 }
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
 
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
@@ -310,7 +310,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext db = new EAContext();
             var LstDiaBan = new List<dm_dia_ban>();
-            LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_don_vi_cha == ma_dia_ban_cha).ToList();
+            LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
             var result = "";
             if (noi_dung == "huyen_noi_sinh")
             {
@@ -440,7 +440,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Ghs_Tuyen_Sinh_Cap_Tieu_Hoc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -480,7 +480,7 @@ namespace HG.WebApp.Controllers
                 lstpb = db.Ghs_Tuyen_Sinh_Cap_Tieu_Hoc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -522,7 +522,7 @@ namespace HG.WebApp.Controllers
 
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -630,7 +630,7 @@ namespace HG.WebApp.Controllers
                 }
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -669,7 +669,7 @@ namespace HG.WebApp.Controllers
                 }
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -711,7 +711,7 @@ namespace HG.WebApp.Controllers
 
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -816,7 +816,7 @@ namespace HG.WebApp.Controllers
                 }
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -856,7 +856,7 @@ namespace HG.WebApp.Controllers
                 }
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
@@ -897,7 +897,7 @@ namespace HG.WebApp.Controllers
 
                 lstdv = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 lst_dantoc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
-                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_don_vi_cha == null).ToList();
+                lst_tinh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
                 ds_phongban = db.Dm_Phong_Ban.ToList();
                 ds_chucvu = db.Dm_Chuc_Vu.ToList();
                 ds_gioitinh = db.Dm_Gioi_Tinh.ToList();
