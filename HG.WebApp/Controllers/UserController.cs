@@ -13,6 +13,7 @@ using System.Text;
 using X.PagedList;
 using HG.WebApp.Sercurity;
 using HG.Data.Business.User;
+using HG.Entities.Entities;
 
 namespace HG.WebApp.Controllers
 {
@@ -318,11 +319,37 @@ namespace HG.WebApp.Controllers
             return "false";
         }
 
-        public async Task<IActionResult> Profile(string username)
+        public async Task<IActionResult> ThongTinCaNhan(string username)
         {
+            EAContext db = new EAContext();
+            var usermap = new NguoiDungCongDan();
             var userdata = await userManager.FindByNameAsync(username);
             ViewBag.ObjectUser = userdata;
-            return View();
+            if (userdata != null)
+            {
+                usermap.ten = userdata.ten;
+                usermap.UserName = userdata.UserName;
+                usermap.PhoneNumber = userdata.PhoneNumber;
+                usermap.Email = userdata.Email;
+                usermap.ngay_sinh = userdata.ngay_sinh;
+                var obj = db.Asp_user_client.Where(n => n.ma_nguoi_dung == userdata.Id).FirstOrDefault();
+                if (obj != null)
+                {
+                    usermap.LoaiGiayToHL = obj.loai_giay_to;
+                    usermap.TinhThanh = obj.ma_tinh_thanh;
+                    usermap.QuanHuyen = obj.ma_quan_huyen;
+                    usermap.XaPhuong = obj.ma_xa_phuong;
+                    usermap.SoGiayTo = obj.so_giay_to;
+                    usermap.TenCoQuan = obj.ten_co_quan;
+                    usermap.DiaChiCoQuan = obj.dia_chi_co_quan;
+                    usermap.CodeVerify = obj.code_verify;
+                }
+            }
+            ViewBag.Verify = usermap.CodeVerify;
+            ViewBag.DanhSachTinhTP = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
+            ViewBag.DanhSachQuanHuyen = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == usermap.TinhThanh).ToList();
+            ViewBag.DanhSachXaPhuong = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_con == usermap.QuanHuyen).ToList();
+            return View(usermap);
         } 
         public async Task<string> SaveProfile(string viewpath, string FirstName, string PhoneNumber, string MaritalStatus, string Website)
         {
