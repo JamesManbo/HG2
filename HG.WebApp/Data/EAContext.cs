@@ -17,6 +17,7 @@ using HG.Entities.Entities.HoSo;
 using HG.Entities.Entities.CauHinh;
 using HG.Entities.Entities.Tin_Tuc;
 using HG.Entities.Entities.News;
+using HG.Entities.Entities.DichVuCong;
 
 namespace HG.WebApp.Data
 {
@@ -79,6 +80,7 @@ namespace HG.WebApp.Data
         public virtual DbSet<Dm_menu> Dm_menus { get; set; }
         public virtual DbSet<ho_so_thanh_phan> ho_so_thanh_phan { get; set; }
         public virtual DbSet<Asp_user_client> Asp_user_client { get; set; }
+        public virtual DbSet<GopYDanhGia> GopYDanhGia { get; set; }
         //End TuanTA
 
         // AnTX Gửi hồ sơ 

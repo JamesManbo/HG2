@@ -76,49 +76,73 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mx-auto mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="/DichVuCong">TRANG CHỦ <span class="sr-only"></span></a>
-          </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/DichVuCong">TRANG CHỦ <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/view/thu-tuc.html">THỦ TỤC HÀNH CHÍNH <span class="sr-only"></span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link link-toggle" href="/GuiHoSo/MotCua">GỬI HỒ SƠ</a>
+                        <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            @if (User.Identity.Name == null)
+                            {
+                                <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                            }
+                            else
+                            {
+                                <a class="dropdown-item" href="/GuiHoSo/MotCua">Gửi hồ sơ một cửa</a>
+                                <a class="dropdown-item" href="/GuiHoSo/ThemTuyenSinhCapMamNon">Gửi hồ sơ tuyển sinh cấp mầm non</a>
+                                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTieuHoc">Gửi hồ sơ tuyển sinh cấp tiểu học </a>
+                                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHCS">Gửi hồ sơ tuyển sinh cấp THCS </a>
+                                <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHPT">Gửi hồ sơ tuyển sinh cấp THPT </a>
+                            }
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        @if (User.Identity.Name == null)
+                        {
+                            <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="#">TRA CỨU HỒ SƠ</a>
+                        }
+                    </li>
+                    <li class="nav-item">
+                        @if (User.Identity.Name == null)
+                        {
+                            <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="#">ĐÁNH GIÁ</a>
+                        }
+
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link link-toggle" href="#">BÁO CÁO - THỐNG KÊ</a>
+                        <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false"></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="#">Báo cáo tỏng hợp</a>
+                            <a class="dropdown-item" href="#">Thống kê tổng hợp</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+
+                        @if (User.Identity.Name == null)
+                        {
+                            <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="/DichVuCong/GopY">GÓP Ý</a>
+                        }
+                    </li>
           <li class="nav-item">
-            <a class="nav-link" href="/GuiHoSo/MotCua">THỦ TỤC HÀNH CHÍNH <span class="sr-only"></span></a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link link-toggle" href="/GuiHoSo/MotCua">GỬI HỒ SƠ</a>
-            <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false"></a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    @if (User.Identity.Name == null)
-                    {
-                         <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
-                    }else{
-                        <a class="dropdown-item" href="/GuiHoSo/MotCua">Gửi hồ sơ một cửa</a>
-                        <a class="dropdown-item" href="/GuiHoSo/ThemTuyenSinhCapMamNon">Gửi hồ sơ tuyển sinh cấp mầm non</a>
-                        <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTieuHoc">Gửi hồ sơ tuyển sinh cấp tiểu học </a>
-                        <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHCS">Gửi hồ sơ tuyển sinh cấp THCS </a>
-                        <a class="dropdown-item" href="/GuiHoSo/GuiTuyenSinhCapTHPT">Gửi hồ sơ tuyển sinh cấp THPT </a>
-                    }
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">TRA CỨU HỒ SƠ</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">ĐÁNH GIÁ</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link link-toggle" href="#">BÁO CÁO - THỐNG KÊ</a>
-            <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-              aria-expanded="false"></a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="#">Báo cáo tỏng hợp</a>
-              <a class="dropdown-item" href="#">Thống kê tổng hợp</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">GÓP Ý</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">PHẢN ÁNH KIẾN NGHỊ</a>
+            <a class="nav-link" href="https://dichvucong.gov.vn/p/phananhkiennghi/pakn-gui-pakn.html" target="_blank">PHẢN ÁNH KIẾN NGHỊ</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link link-toggle" href="#">TRỢ GIÚP</a>
@@ -183,7 +207,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text h-100" id="basic-addon1"><i class="fa-solid fa-lock"></i></span>
                                         </div>
-                                        <input type="text" class="form-control" id="txtMatKhau" placeholder="Mật khẩu" aria-label="Mật khẩu" aria-describedby="basic-addon1" />
+                                        <input type="password" class="form-control" id="txtMatKhau" placeholder="Mật khẩu" aria-label="Mật khẩu" aria-describedby="basic-addon1" />
                                     </div>
                                     <label class="checkbox-inline">
                                         <input class="form-check-input" id="checkbox-remember" type="checkbox" />

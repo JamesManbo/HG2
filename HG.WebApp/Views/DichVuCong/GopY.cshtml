@@ -1,0 +1,159 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+@model HG.Entities.Entities.DichVuCong.GopYDanhGia;
+<script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
+<script>
+    $(document).ready(function () {
+        CKEDITOR.replace('noi_dung');
+    });
+    $(document).ready(function () {
+        $('#form_gopy').validate({
+            rules: {
+                ma_don_vi: "required",
+                ho_va_ten: "required",
+                dia_chi: "required",
+                so_dien_thoai: "required",
+                noi_dung: "required"
+            },
+            messages: {
+                ma_don_vi: {
+                    required: "Bạn phải chọn đơn vị!"
+                },
+                ho_va_ten: "Bạn chưa nhập họ và tên!!",
+                dia_chi: "Địa chỉ không được bỏ trống!",
+                so_dien_thoai: "Số điện thoại không được bỏ trống!",
+                noi_dung: "Nội dung không được bỏ trống!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+    });
+</script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Succeeded == false)
+{
+    <script>
+        $(document).ready(function () {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+<div class="col-lg-12">
+    <div class="maincontent">
+        <div class="maincontentinner">
+            @*<h4 class="widgettitle">Cập nhật thông tin phòng ban</h4>*@
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_gopy" action="/DichVuCong/GopY" method="post" enctype="multipart/form-data">
+                        <div class="send-document-top top-title-frame">
+                            <p>Góp Ý</p>
+                        </div>
+                        <div class="send-document-content gray-border">
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Chọn đơn vị cần góp ý
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">Chọn Đơn Vị</option>
+                                         @if (ViewBag.LstDonVi != null)
+                                        {
+                                            var LstDonVi = ViewBag.LstDonVi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+                                            foreach (var item in LstDonVi)
+                                                {
+                                                    <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                     Họ và tên
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="ho_va_ten" name="ho_va_ten" class="Css_Mul" maxlength="50" placeholder="Thông tin hồ sơ" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Địa chỉ
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="dia_chi" name="dia_chi" class="Css_Mul" placeholder="Nhập địa chỉ" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Số điện thoại
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="so_dien_thoai" name="so_dien_thoai" class="Css_Mul" maxlength="15" placeholder="Nhập số điện thoại" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Email
+                                  
+                                </span>
+                                <div class="col-md-8">
+                                    <input type="email" maxlength="50" id="email" name="email" class="Css_Mul" placeholder="Nhập email" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Nội dung
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <textarea id="noi_dung" style="width: 100%; height: 333px;" class="form-control input-default" placeholder="Mô tả" name="noi_dung"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-5 control-label" style="font-weight:bold;">
+                                    
+                                </span>
+                                <div class="col-md-7">
+                                    <input type="submit" name="ctl09$Sent" value="GỬI ĐI" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;
+    width: 100px;">
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
