@@ -299,6 +299,32 @@ namespace HG.WebApp.Controllers
             ViewBag.MaThuTuc = ma_thu_tuc;
             return View(hs);
         }
+        public IActionResult HoSoTheoDoiDonDoc(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            //hs mới tiếp nhận status = 1
+
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoTheoDoiDonDoc };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
         public IActionResult ViewHoSo(int code, string type)
         {
             
