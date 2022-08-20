@@ -8,7 +8,7 @@ namespace HG.WebApp.Helper
     public class HelperSql
     {
       
-        readonly static EAContext db = new EAContext();
+        private readonly static EAContext db = new EAContext();
         public static string GetTenTrang(string ma_trang)
         {
             try
@@ -101,6 +101,14 @@ namespace HG.WebApp.Helper
             {
                 return "Admin";
             }
+        }
+        public static int TotalHSTS()
+        {
+            var manon = db.Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso.Count();
+            var tieuhoc = db.Ghs_Tuyen_Sinh_Cap_Tieu_Hoc_Hoso.Count();
+            var trunghoc = db.Ghs_Tuyen_Sinh_Cap_THCS_Hoso.Count();
+            var phothong = db.Ghs_Tuyen_Sinh_Cap_THPT_Hoso.Count();
+            return manon + tieuhoc+ trunghoc + phothong;
         }
 
     }

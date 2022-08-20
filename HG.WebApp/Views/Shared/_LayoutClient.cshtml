@@ -31,22 +31,23 @@
         <br>
         <p class="link">dichvucong.hagiang.gov.vn</p>
       </div>
-       @if (User.Identity.Name != null)
+            @if (User.Identity.Name != null)
             {
-            <div class="logout-info">
-                    <p>Xin chào: User.Identity.Name</p>
+                <div class="logout-info">
+                    <p>Xin chào: @User.Identity.Name</p>
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa-solid fa-user"></i>
                             <i class="drop-icon fa-solid fa-caret-down"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="/News/ThongTinCaNhan">Thông Tin cá nhân</a>
-                            <a class="dropdown-item" href="/User/LogoutClient" >Đăng Xuất</a>
+                            <a class="dropdown-item" href="/User/ThongTinCaNhan?username=@User.Identity.Name">Thông Tin cá nhân</a>
+                            <a class="dropdown-item" href="/User/LogoutClient">Đăng Xuất</a>
                         </div>
                     </div>
-            </div>
+                </div>
             }
+            
             <div class="clearfix"></div>
     </div>
   </section>
@@ -85,11 +86,26 @@
                          </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">TRA CỨU HỒ SƠ</a>
+                        @if (User.Identity.Name == null)
+                        {
+                            <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="#">TRA CỨU HỒ SƠ</a>
+                        }
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">ĐÁNH GIÁ</a>
-          </li>
+                        @if (User.Identity.Name == null)
+                        {
+                            <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="#">ĐÁNH GIÁ</a>
+                        }
+
+                    </li>
           <li class="nav-item dropdown">
             <a class="nav-link link-toggle" href="#">BÁO CÁO - THỐNG KÊ</a>
             <a class="dropdown-toggle " href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
@@ -100,10 +116,18 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">GÓP Ý</a>
+            
+                        @if (User.Identity.Name == null)
+                        {
+                            <a class="dropdown-item" href="/DichVuCong">Bạn chưa đăng nhập, bấm vào đây để đăng nhập lại</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link" href="/DichVuCong/GopY">GÓP Ý</a>
+                        }
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">PHẢN ÁNH KIẾN NGHỊ</a>
+             <a class="nav-link" href="https://dichvucong.gov.vn/p/phananhkiennghi/pakn-gui-pakn.html" target="_blank">PHẢN ÁNH KIẾN NGHỊ</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link link-toggle" href="#">TRỢ GIÚP</a>
