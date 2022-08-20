@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+<style>
+    .TableSelect {
+        float: left;
+        width: 100%;
+        border: 1px solid #d1d1d1;
+        margin: 15px 0;
+    }
+
+    .divFunction {
+        float: left;
+        padding: 20px 5px;
+        width: 50%;
+        text-align: center;
+    }
+    .lblNameFunction {
+        float: left;
+        height: 44px;
+        margin: 0;
+        width: 100%;
+        font-size: 14px;
+        color: blue;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    .container-fluid {
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .div_khaosat_left {
+        text-align: right;
+    }
+    .div_khaosat_right {
+        text-align: left;
+    }
+</style>
+<div class="col-lg-12">
+    <div class="maincontent">
+        <div class="maincontentinner">
+            @*<h4 class="widgettitle">Cập nhật thông tin phòng ban</h4>*@
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <div >
+                        <div class="send-document-top top-title-frame">
+                            <p>ĐÁNH GIÁ CHẤT LƯỢNG - ĐÁNH GIÁ NHÂN VIÊN</p>
+                        </div>
+                        <div class="gray-border" style="padding-bottom: 160px;">
+                            @*View danh gia*@
+                            <div id="ctl09_Div_Khaosatdanhgia" style="float :left ; width :100%; padding :0px 15px 15px 15px">
+                                <div id="ctl09_pnlHome2" class="pnlFix">
+
+                                    <div class="rounded" style=" border-top-left-radius: 5px; border-top-right-radius: 5px;">
+                                        <div style="padding-bottom: 10px; padding-top: 10px;">
+                                            <div class="TableSelect">
+                                                <div class="divFunction" style="border-right :1px solid #d4d4d4;">
+                                                    <label class="lblNameFunction">ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ</label>
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 div_khaosat_left"><input type="button" value="ĐÁNH GIÁ" id="ctl09_khaosat" class="Button-KSDG btn btn-primary" style="background: #06599f; width: 130px"></div>
+                                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 div_khaosat_right"><input type="button" value="XEM KẾT QUẢ" id="ctl09_KQ_khaosat" class="Button-KSDG btn btn-primary" style="background: #06599f;  width: 130px"></div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="divFunction">
+                                                    <label class="lblNameFunction" style="color :#D41F18;">ĐÁNH GIÁ NHÂN VIÊN</label>
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 div_khaosat_left"><a href="/DichVuCong/DanhGiaCanBo"> <input type="button" value="ĐÁNH GIÁ" class="btn btn-primary" style="background :#D41F18; width: 130px"></a></div>
+                                                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 div_khaosat_right"><a href="/DichVuCong/XemDanhGiaCanBo"><input type="button" value="XEM KẾT QUẢ" class="btn btn-primary" style="background :#D41F18;  width: 130px"></a></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+                

@@ -46,6 +46,7 @@ namespace HG.WebApp.Controllers.Client
             var UserId = Guid.Parse(userManager.GetUserId(User));
             using (var db = new EAContext())
             {
+                item.Type = 0;
                 item.CreatedDateUtc = DateTime.Now;
                 item.CreatedUid = UserId;
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<GopYDanhGia> _gopy = db.GopYDanhGia.Add(item);
@@ -72,10 +73,27 @@ namespace HG.WebApp.Controllers.Client
                 return View();
             }
         }
-        public IActionResult DanhGia()
+        public IActionResult DanhGiaView()
         {
             return View();
         }
+        public IActionResult DanhGiaCanBo()
+        {
+            var listDV = new List<dm_don_vi>();
+            using (var db = new EAContext())
+            {
+                listDV = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+            }
+            ViewBag.Message = "";
+            ViewBag.LstDonVi = listDV;
+            return View();
+        }
+        public IActionResult XemDanhGiaCanBo()
+        {
+            return View();
+        }
+
+
         public IActionResult TraCuuHoSo()
         {
             return View();
