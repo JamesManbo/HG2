@@ -1,5 +1,8 @@
-﻿@{
+﻿@using HG.WebApp;
+@{
     Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var Profile = ViewBag.Profile as AspNetUsers;
+    var LstHoSo = ViewBag.LstHoSo as List<HG.Entities.HoSo.Ho_So>;
 }
 <script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
 <script>
@@ -7,22 +10,20 @@
         CKEDITOR.replace('noi_dung');
     });
     $(document).ready(function () {
-        $('#form_gopy').validate({
+        $('#form_dgcb').validate({
             rules: {
                 ma_don_vi: "required",
-                ho_va_ten: "required",
-                dia_chi: "required",
-                so_dien_thoai: "required",
-                noi_dung: "required"
+                ma_phong_ban: "required",
+                ma_can_bo: "required",
+                //ma_ho_so: "required"
             },
             messages: {
                 ma_don_vi: {
                     required: "Bạn phải chọn đơn vị!"
                 },
-                ho_va_ten: "Bạn chưa nhập họ và tên!!",
-                dia_chi: "Địa chỉ không được bỏ trống!",
-                so_dien_thoai: "Số điện thoại không được bỏ trống!",
-                noi_dung: "Nội dung không được bỏ trống!"
+                ma_phong_ban: "Bạn phải chọn phòng ban!",
+                ma_can_bo: "Bạn phải chọn cán bộ!",
+                //ma_ho_so: "Bạn phải chọn mã hồ sơ!",
             }
         });
         function convetArrayToObj(serialized) {
@@ -38,6 +39,31 @@
 
     });
 </script>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Succeeded == false)
+{
+    <script>
+        $(document).ready(function () {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
 <div class="col-lg-12">
     <div class="maincontent">
         <div class="maincontentinner">
@@ -45,7 +71,7 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_gopy" action="/DichVuCong/GopY" method="post" enctype="multipart/form-data">
+                    <form id="form_dgcb" action="/DichVuCong/DanhGiaCanBo" method="post" enctype="multipart/form-data">
                         <div class="send-document-top top-title-frame">
                             <p>ĐÁNH GIÁ NHÂN VIÊN</p>
                         </div>
@@ -69,22 +95,39 @@
                                     </select>
                                 </div>
                             </div>
+                            <script>
+                                function DonViChange(madonvi){
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/DichVuCong/LayPhongBanBoiDonVi?ma_don_vi=" + madonvi.value,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function (data) {
+                                            $("#PhongBan").html(data);
+                                        }
+                                    });
+                                }
+                                function PhongBanChange(maphongban) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/DichVuCong/LayNguoiDungBoiPhongBan?ma_phong_ban=" + maphongban.value,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function (data) {
+                                            $("#CanBo").html(data);
+                                        }
+                                    });
+                                }
+                            </script>
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;">
                                     Chọn phòng ban
                                     <p class="red-asterisk">(*)</p>
                                 </span>
-                                <div class="col-md-8">
-                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                <div class="col-md-8" id="PhongBan">
+                                    <select name="ma_phong_ban" id="ma_phong_ban" style="width:100%;" onchange="DonViChange(this)">
                                         <option selected="selected" value="">-------Phòng ban-------</option>
-                                        @if (ViewBag.LstDonVi != null)
-                                        {
-                                            var LstDonVi = ViewBag.LstDonVi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
-                                            foreach (var item in LstDonVi)
-                                            {
-                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
-                                            }
-                                        }
+                                        
                                     </select>
                                 </div>
                             </div>
@@ -93,8 +136,8 @@
                                     Chọn cán bộ cần đánh giá
                                     <p class="red-asterisk">(*)</p>
                                 </span>
-                                <div class="col-md-8">
-                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                <div class="col-md-8" id="CanBo">
+                                    <select name="ma_can_bo" id="ma_can_bo" style="width:100%;" onchange="DonViChange(this)">
                                         <option selected="selected" value="">-------Cán bộ-------</option>
                                         @if (ViewBag.LstDonVi != null)
                                         {
@@ -125,10 +168,10 @@
                                 <div class="col-md-8">
                                     <div class="col-md-8">
 
-                                        <input id="Danhgia_0" type="radio" name="Danhgia_0" onclick="fnDanhgia_0()" value="1" checked="checked"><label for="ctl09_RadioDanhgia_0">&nbsp;&nbsp;Hài lòng</label>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Hài lòng</label>
                                         <br>
                                         <br>
-                                        <input id="Danhgia_1" type="radio" name="Danhgia_0" onclick="fnDanhgia_1()" value="0"><label for="ctl09_RadioDanhgia_1">&nbsp;&nbsp;Không hài lòng</label>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Không hài lòng</label>
                                         <script>
                                             function fnDanhgia_0() {
                                                 if ($('#Danhgia_0').is(':checked')) {
@@ -176,7 +219,7 @@
                                     <p class="red-asterisk">(*)</p>
                                 </span>
                                 <div class="col-md-8">
-                                    <input id="nguoi_danh_gia" name="nguoi_danh_gia" class="Css_Mul" placeholder="Nhập họ và tên" maxlength="250" style="width: 100%;" />
+                                    <input id="nguoi_danh_gia" disabled name="nguoi_danh_gia" class="Css_Mul" value="@(Profile.ho_dem + " " + Profile.ten)" placeholder="Nhập họ và tên" maxlength="250" style="width: 100%;" />
                                 </div>
                             </div>
                             <div class="form-group form-group-new">
@@ -184,7 +227,7 @@
                                     số điện thoại
                                 </span>
                                 <div class="col-md-8">
-                                    <input id="so_dien_thoai" name="so_dien_thoai" class="Css_Mul" placeholder="Nhập số điện thoại" maxlength="250" style="width: 100%;" />
+                                    <input id="so_dien_thoai" disabled name="so_dien_thoai" class="Css_Mul" value="@(Profile.PhoneNumber == null ? 0 : Profile.PhoneNumber)" placeholder="Nhập số điện thoại" maxlength="250" style="width: 100%;" />
                                 </div>
                             </div>
                             <div class="form-group form-group-new">
@@ -192,23 +235,33 @@
                                     Địa chỉ
                                 </span>
                                 <div class="col-md-8">
-                                    <input id="dia_chi" name="dia_chi" class="Css_Mul" placeholder="Nhập địa chỉ" maxlength="250" style="width: 100%;" />
+                                    <input id="dia_chi" name="dia_chi" class="Css_Mul" value="" placeholder="Nhập địa chỉ" maxlength="250" style="width: 100%;" />
                                 </div>
                             </div>
+                          
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;">
-                                    Số điện thoại
+                                    Email  
                                 </span>
                                 <div class="col-md-8">
-                                    <input id="so_dien_thoai" name="so_dien_thoai" class="Css_Mul" maxlength="15" placeholder="Nhập số điện thoại" style="width: 100%;" />
+                                    <input type="email" disabled maxlength="50" id="email" value="@(Profile.Email == null ? "" : Profile.Email)" name="email" class="Css_Mul" placeholder="Nhập email" style="width: 100%;" />
                                 </div>
-                            </div>
+                            </div> 
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;">
                                     Mã hồ sơ  <p class="red-asterisk">(*)</p>
                                 </span>
                                 <div class="col-md-8">
-                                    <input type="email" maxlength="50" id="email" name="email" class="Css_Mul" placeholder="Nhập email" style="width: 100%;" />
+                                    <select name="ma_ho_so" id="ma_ho_so" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">-------Chọn hồ sơ-------</option>
+                                        @if (LstHoSo != null)
+                                        {
+                                            foreach (var item in LstHoSo)
+                                            {
+                                               <option value="@item.Id">@item.ten_ho_so</option>
+                                            }
+                                        }
+                                    </select>
                                 </div>
                             </div>
                          
@@ -217,8 +270,8 @@
                                     
                                 </span>
                                 <div class="col-md-7">
-                                    <input type="submit" name="ctl09$Sent" value="GỬI ĐI" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
-                                    <input type="button" name="ctl09$Sent" value="Đóng" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
+                                    <input type="submit" value="GỬI ĐI" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
+                                    <input type="button" value="Đóng" id="ctl09_Sent" class="btn btn-primary" onclick="window.location.href = '/DichVuCong/DanhGiaView'" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
                                 </div>
                             </div>
                         </div>

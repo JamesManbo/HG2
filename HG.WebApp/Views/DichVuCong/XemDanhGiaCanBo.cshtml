@@ -82,12 +82,40 @@
                                     </select>
                                 </div>
                             </div>
+                            <script>
+                                function DonViChange(madonvi) {
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/DichVuCong/LayPhongBanBoiDonVi?ma_don_vi=" + madonvi.value,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function (data) {
+                                            $("#PhongBan").html(data);
+                                        }
+                                    });
+                                }
+                                function XemDanhGiaCanBo() {
+                                    if ($('select#ma_phong_ban option:selected').val() == "" || $('select#ma_phong_ban option:selected').val() == 0 || $('select#ma_phong_ban option:selected').val() == undefined) {
+                                            alert("Bạn phải chọn đơn vị và phòng ban!");
+                                        return false;
+                                    }
+                                    $.ajax({
+                                        type: "get",
+                                        url: "/dichvucong/AjaxXemDanhGiaCanBo?ma_phong_ban=" + $('select#ma_phong_ban option:selected').val(),
+                                        data: "",
+                                        contenttype: 'application/json; charset=utf-8',
+                                        success: function (data) {
+                                            $("#ViewCB").html(data);
+                                        }
+                                    });
+                                }
+                            </script>
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;">
                                     Chọn phòng ban
                                     <p class="red-asterisk">(*)</p>
                                 </span>
-                                <div class="col-md-8">
+                                <div class="col-md-8" id="PhongBan">
                                     <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
                                         <option selected="selected" value="">-------Đơn Vị-------</option>
                                         @if (ViewBag.LstDonVi != null)
@@ -104,65 +132,12 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-5 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-7">
-                                    <button style="width:100px; height: 30px; background :#D41F18; color: antiquewhite; border: 0px"> Xem </button>
+                                    <button style="width:100px; height: 30px; background :#D41F18; color: antiquewhite; border: 0px" onclick="XemDanhGiaCanBo()"> Xem </button>
                                 </div>
                             </div>
                             @*View danh gia*@
-                            <div class="container-fluid" style="float :left ; width:100%; ">
-                                <div class="row" style="padding-top:10px; padding-bottom:10px ; border-top:1px solid #d1d1d1; ">
-                                    <div class=" col-xs-12 col-sm-12 col-md-6 col-lg-6 row-contain  ">
-                                        <div class="left-khao-sat"> <img src="~/BackEnd/Admin/Images/avatar.png" style="width:125px; height:125px; margin-bottom:5px; "></div>
-                                        <div class="right-khao-sat" style="text-align :left ;">
-                                            <div class="lablestyle">
-                                                <label>Họ tên:</label>
-                                                <strong><lable> Khuất Hồng Vân</lable></strong>
-                                                <br>
-                                            </div>
-                                            <div class="lablestyle">
-                                                <label>Ngày sinh:</label>
-                                                <strong><lable>  07/04/2015</lable></strong>
-                                                <br>
-                                            </div>
-                                            <div class="lablestyle">
-                                                <label>Phòng ban:</label>
-                                                <strong><lable>  Phòng DN Kinh tế tập thể và Tư nhân</lable></strong><br>
-                                            </div>
-                                            <div class="lablestyle"><label>Chức vụ:</label><strong><lable>  Chuyên viên</lable></strong><br> </div>
-                                            <div class="lablestyle">
-                                                <label>Tổng số người đánh giá là:&nbsp;</label>
-                                                <strong><lable>  0</lable></strong>
-                                            </div>
-                                        </div>
-                                        <div style="width:100%; float:left ; text-align :left ;">
-                                            <label style="font-weight: normal;">Hài lòng:&nbsp;</label>
-                                            <strong><lable style="color:blue">  0</lable></strong>
-                                            <lable>% (0 lượt đánh giá)<br> <lable>Không hài lòng: &nbsp;</lable><strong><lable style="color:blue">0</lable></strong><lable>% (0 lượt đánh giá)</lable></lable>
-                                        </div>
-                                    </div>
-                                    <div class=" col-xs-12 col-sm-12 col-md-6 col-lg-6 row-contain  ">
-                                        <div class="  left-khao-sat "> <img src="~/BackEnd/Admin/Images/avatar.png" style="width:125px; height:125px; margin-bottom:5px; "></div>
-                                        <div class="  right-khao-sat  " style="text-align :left ;">
-                                            <div class="lablestyle">
-                                                <label>Họ tên:</label><strong><lable> Lê Thị Quyết</lable></strong><br>
-                                            </div>
-                                            <div class="lablestyle">
-                                                <label>Ngày sinh:</label><strong><lable>  08/04/2015</lable></strong><br>
-                                            </div>
-                                            <div class="lablestyle"><label>Phòng ban:</label><strong><lable>  Phòng DN Kinh tế tập thể và Tư nhân</lable></strong><br> </div>
-                                            <div class="lablestyle"><label>Chức vụ:</label><strong><lable>  Cán bộ một cửa</lable></strong><br> </div>
-                                            <div class="lablestyle"><label>Tổng số người đánh giá là:&nbsp;</label><strong><lable>  0</lable></strong></div>
-                                        </div>
-                                        <div style="width:100%; float:left ; text-align :left ;">
-                                            <label style="font-weight: normal;">Hài lòng:&nbsp;</label><strong><lable style="color:blue">  0</lable></strong>
-                                            <lable>
-                                                % (0 lượt đánh giá)<br> <lable>Không hài lòng: &nbsp;</lable><strong>
-                                                    <lable style="color:blue">0</lable>
-                                                </strong>
-                                                <lable>% (0 lượt đánh giá)</lable>
-                                            </lable>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="container-fluid" style="float :left ; width:100%; " id="ViewCB">
+                                
                             </div>
 
 

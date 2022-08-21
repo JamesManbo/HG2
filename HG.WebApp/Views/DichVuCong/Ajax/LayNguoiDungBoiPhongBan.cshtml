@@ -1,0 +1,12 @@
+﻿@model List<HG.WebApp.AspNetUsers>
+
+<select name="ma_can_bo" id="ma_can_bo" style="width:100%;">
+    <option selected="selected" value="">-------Cán bộ-------</option>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <option value="@item.UserName"> @(item.ho_dem + " " + item.ten)</option>
+        }
+    }
+</select>

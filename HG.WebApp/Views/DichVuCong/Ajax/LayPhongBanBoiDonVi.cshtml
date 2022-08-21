@@ -1,0 +1,12 @@
+﻿@model List<HG.Entities.Dm_Phong_Ban>
+
+<select name="ma_phong_ban" id="ma_phong_ban" style="width:100%;" onchange="PhongBanChange(this)">
+    <option selected="selected" value="">-------Phòng ban-------</option>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
+        }
+    }
+</select>

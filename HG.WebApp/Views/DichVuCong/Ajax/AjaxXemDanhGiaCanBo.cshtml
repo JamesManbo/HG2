@@ -1,0 +1,41 @@
+﻿@using HG.WebApp;
+@model List<AspNetUsers>;
+
+    @if(Model != null){
+        <div class="row" style="padding-top:10px; padding-bottom:10px ; border-top:1px solid #d1d1d1; ">
+            @foreach(var item in Model){
+                <div class=" col-xs-12 col-sm-12 col-md-6 col-lg-6 row-contain  ">
+                    <div class="left-khao-sat"> <img src="~/BackEnd/Admin/Images/avatar.png" style="width:125px; height:125px; margin-bottom:5px; "></div>
+                    <div class="right-khao-sat" style="text-align :left ;">
+                        <div class="lablestyle">
+                            <label>Họ tên:</label>
+                            <strong><lable> @(item.ho_dem + " " + item.ten)</lable></strong>
+                            <br>
+                        </div>
+                        <div class="lablestyle">
+                            <label>Ngày sinh:</label>
+                            <strong><lable>  @(item.ngay_sinh)</lable></strong>
+                            <br>
+                        </div>
+                        <div class="lablestyle">
+                            <label>Phòng ban:</label>
+                            <strong><lable>  Phòng DN Kinh tế tập thể và Tư nhân</lable></strong><br>
+                        </div>
+                        <div class="lablestyle"><label>Chức vụ:</label><strong><lable>  Chuyên viên</lable></strong><br> </div>
+                        <div class="lablestyle">
+                            <label>Tổng số người đánh giá là:&nbsp;</label>
+                            <strong><lable>  0</lable></strong>
+                        </div>
+                    </div>
+                    <div style="width:100%; float:left ; text-align :left ;">
+                        <label style="font-weight: normal;">Hài lòng:&nbsp;</label>
+                        <strong><lable style="color:blue">  0</lable></strong>
+                        <lable>% (0 lượt đánh giá)<br> <lable>Không hài lòng: &nbsp;</lable><strong><lable style="color:blue">0</lable></strong>
+                        <lable>% (0 lượt đánh giá)</lable></lable>
+                    </div>
+                </div>
+            }
+        </div>
+    }else{
+
+    }
