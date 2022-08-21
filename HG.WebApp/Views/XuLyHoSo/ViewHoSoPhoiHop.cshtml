@@ -319,7 +319,7 @@ $(document).ready(function() {
         </div>
          <div class="text-center">
                                <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,20) "   style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26 ? "hidden" : "") >Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,26)" style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26 || || ViewBag.Status == (int)StatusXuLyHoSo.HoSoTheoDoiDonDoc ? "hidden" : "") >Kết thúc</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,26)" style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26 || ViewBag.Status == (int)StatusXuLyHoSo.HoSoTheoDoiDonDoc ? "hidden" : "") >Kết thúc</button>
                                <button type="button" class="btn btn-primary"  onclick="#" style="width: 150px" @(ViewBag.Status != 22 ? "hidden" : "") >Thu hồi</button>
                                @if(ViewBag.Status == 21)
                                {
