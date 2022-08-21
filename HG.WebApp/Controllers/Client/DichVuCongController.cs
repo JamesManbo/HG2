@@ -169,6 +169,28 @@ namespace HG.WebApp.Controllers.Client
             ViewBag.LstHoSo = lstHS;
             return View();
         }
+        [HttpPost]
+        public string DanhGiaChatLuongDichVu(DanhGiaDichVu item)
+        {
+            var successed = 0;
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            using (var db = new EAContext())
+            {
+                item.nguoi_danh_gia = UserId;
+                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<DanhGiaDichVu> _gopy = db.DanhGiaDichVu.Add(item);
+                db.SaveChanges();
+                successed = _gopy.Entity.Id;
+            };
+            if(successed > 0)
+            {
+                return "Thêm mới đánh giá dịch vụ đơn vị thành công!";
+            }
+            else
+            {
+                return "Thêm mới đánh giá dịch vụ đơn vị không thành công!";
+            }
+           
+        }
 
         public IActionResult TraCuuHoSo()
         {

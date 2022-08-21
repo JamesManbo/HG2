@@ -4,6 +4,63 @@
     var Profile = ViewBag.Profile as AspNetUsers;
     var LstHoSo = ViewBag.LstHoSo as List<HG.Entities.HoSo.Ho_So>;
 }
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+      //var filterDay = $('#filterDay input:radio:checked').val()
+      function SaveDanhGiaDichVu(){
+          var CauHoi1 = $('#CauHoi1 input:radio:checked').val() ;
+          var CauHoi2 = $('#CauHoi2 input:radio:checked').val();
+          var CauHoi3 = $('#CauHoi3 input:radio:checked').val();
+          var CauHoi4 = $('#CauHoi4 input:radio:checked').val();
+          var CauHoi5 = $('#CauHoi5 input:radio:checked').val();
+          var CauHoi6 = $('#CauHoi6 input:radio:checked').val();
+          var CauHoi7 = $('#CauHoi7 input:radio:checked').val();
+          var CauHoi8 = $('#CauHoi8 input:radio:checked').val();
+          var CauHoi9 = $('#CauHoi9 input:radio:checked').val();
+          var CauHoi10 = $('#CauHoi10 input:radio:checked').val();
+          var CauHoi11 = $('#CauHoi11 input:radio:checked').val();
+          var CauHoi12 = $('#CauHoi12 input:radio:checked').val();
+          var CauHoi13 = $('#CauHoi13 input:radio:checked').val();
+          var ma_don_vi = $('select#ma_don_vi option:selected').val();
+          if(ma_don_vi == || ma_don_vi == ""){
+              alert("Bạn phải chọn đơn vị đánh giá!");
+              return false;
+          }
+          if( CauHoi1 == "" || CauHoi2 == ""|| CauHoi4 == ""|| CauHoi3 == ""|| CauHoi5 == ""|| CauHoi6 == ""|| CauHoi7 == ""|| CauHoi8 == ""|| CauHoi9 == ""|| CauHoi10 == ""|| CauHoi11 == ""|| CauHoi12 == ""|| CauHoi13 == ""){
+              alert("Bạn phải chọn hết câu hỏi!");
+              return false; 
+          }
+          let data = { ma_don_vi:ma_don_vi,
+                       nguoi_danh_gia:"Doe",
+                       ma_ho_so:$('select#ma_ho_so option:selected').val(),
+                       CauHoi1:CauHoi1,
+                       CauHoi2:CauHoi2,
+                       CauHoi3:CauHoi3,
+                       CauHoi4:CauHoi4,
+                       CauHoi5:CauHoi5,
+                       CauHoi6:CauHoi6,
+                       CauHoi7:CauHoi7,
+                       CauHoi8:CauHoi8,
+                       CauHoi9:CauHoi9,
+                       CauHoi10:CauHoi10,
+                       CauHoi11:CauHoi11,
+                       CauHoi12:CauHoi12,
+                       CauHoi13:CauHoi13
+          };
+        $.ajax({
+            type: "Post",
+            url: "../DichVuCong/DanhGiaChatLuongDichVu",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                alert(data)
+            }
+        });
+      }
+
+  </script>
 <div class="col-lg-12">
     <div class="maincontent">
         <div class="maincontentinner">
@@ -11,7 +68,7 @@
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
-                    <form id="form_dgcb" action="/DichVuCong/DanhGiaCanBo" method="post" enctype="multipart/form-data">
+                    <form id="form_dgdv" method="post" enctype="multipart/form-data">
                         <div class="send-document-top top-title-frame">
                             <p>ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ</p>
                         </div>
@@ -76,13 +133,13 @@
                                 <div class="col-md-8">
                                     <select name="ma_ho_so" id="ma_ho_so" style="width:100%;" onchange="DonViChange(this)">
                                         <option selected="selected" value="">-------Chọn hồ sơ-------</option>
-                                       @* @if (LstHoSo != null)
+                                        @if (LstHoSo != null)
                                         {
                                             foreach (var item in LstHoSo)
                                             {
                                                <option value="@item.Id">@item.ten_ho_so</option>
                                             }
-                                        }*@
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -103,33 +160,16 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
-
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Gây khó dễ nhưng không có lý do chính đáng</label>
+                                    <div class="col-md-8 form-check" id="CauHoi1">
+                                        <input type="radio" name="BangTieuChi01_01" class="form-check-input" value="1" ><label>&nbsp;&nbsp;Gây khó dễ nhưng không có lý do chính đáng</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Bình thường</label>
+                                        <input type="radio" name="BangTieuChi01_01"  class="form-check-input"  value="2"><label>&nbsp;&nbsp;Bình thường</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất tận tình, rõ ràng, chu đáo</label>
+                                        <input type="radio" name="BangTieuChi01_01"  class="form-check-input"  value="3" ><label>&nbsp;&nbsp;Rất tận tình, rõ ràng, chu đáo</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Tận tình, rõ ràng</label>
+                                        <input type="radio" name="BangTieuChi01_01" class="form-check-input" value="4"><label>&nbsp;&nbsp;Tận tình, rõ ràng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Qua loa, khó hiểu</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input type="radio" name="BangTieuChi01_01"  class="form-check-input" value="5" ><label>&nbsp;&nbsp;Qua loa, khó hiểu</label>
                                     </div>
 
                                 </div>
@@ -153,33 +193,17 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi2">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất lịch sự và đúng mực</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi02_01" value="1"><label>&nbsp;&nbsp;Rất lịch sự và đúng mực</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Lịch sự, dễ gần, dễ hỏi</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi02_01" value="2"><label>&nbsp;&nbsp;Lịch sự, dễ gần, dễ hỏi</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Bình thường</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi02_01" value="3" ><label>&nbsp;&nbsp;Bình thường</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Thờ ơ, khó gần</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi02_01" value="4"><label>&nbsp;&nbsp;Thờ ơ, khó gần</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Khó chịu, không lịch sự</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi02_01" value="5"><label> &nbsp;&nbsp;Khó chịu, không lịch sự</label>
                                     </div>
                                 </div>
                             </div>
@@ -202,33 +226,17 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi3">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi03_01" value="1" ><label>&nbsp;&nbsp;Rất hài lòng</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi03_01" value="2"><label>&nbsp;&nbsp; Hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi03_01" value="3"><label>&nbsp;&nbsp;Chấp nhận được</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi03_01" value="4"><label>&nbsp;&nbsp; Không hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi03_01" value="5" ><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
                                     </div>
                                 </div>
                             </div>
@@ -251,33 +259,18 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi4">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi04_01" value="1"><label>&nbsp;&nbsp;Rất hài lòng</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi04_01" value="2"><label>&nbsp;&nbsp; Hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi04_01" value="3"><label>&nbsp;&nbsp;Chấp nhận được</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi04_01" value="4"><label>&nbsp;&nbsp; Không hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input type="radio" class="form-check-input" name="BangTieuChi04_01" value="5"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -300,31 +293,15 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi5">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <input class="form-check-input" id="" type="radio" name="BangTieuChi05_01" value="1"><label>&nbsp;&nbsp;Rất hài lòng</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Rộng rãi,thoải mái, lịch sự</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi05_01" value="2"><label>&nbsp;&nbsp;  Rộng rãi,thoải mái, lịch sự</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chưa thoải mái lắm</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi05_01" value="3" ><label>&nbsp;&nbsp;Chưa thoải mái lắm</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Rất bất tiện</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi05_01" value="4"><label>&nbsp;&nbsp; Rất bất tiện</label>
                                     </div>
                                 </div>
                             </div>
@@ -347,33 +324,17 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi6">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Đến là gặp được ngay</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi06_01" value="1" ><label>&nbsp;&nbsp;Đến là gặp được ngay</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Dưới 30 phút</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi06_01" value="2"><label>&nbsp;&nbsp;  Dưới 30 phút</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Trên 30 phút</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi06_01" value="3" ><label>&nbsp;&nbsp;Trên 30 phút</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi06_01" value="4"><label>
                                             &nbsp;&nbsp; Đến một vài lần mới gặp
                                         </label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -396,29 +357,14 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi7">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Sớm hẹn</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi07_01" value="1"><label>&nbsp;&nbsp;Sớm hẹn</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Đúng hẹn</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi07_01" value="2"><label>&nbsp;&nbsp;  Đúng hẹn</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Trễ hẹn</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi07_01" value="3" ><label>&nbsp;&nbsp;Trễ hẹn</label>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -441,29 +387,13 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi8">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Một lần</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi08_01" value="1"><label>&nbsp;&nbsp;Một lần</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Hai lần</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi08_01" value="2"><label>&nbsp;&nbsp;  Hai lần</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Trên 2 lần</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi08_01" value="3"><label>&nbsp;&nbsp;Trên 2 lần</label>
                                     </div>
                                 </div>
                             </div>
@@ -486,29 +416,13 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi9">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;01 - 02 lần</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi09_01"  value="1" ><label>&nbsp;&nbsp;01 - 02 lần</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  03 - 04 lần</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi09_01" value="2"><label>&nbsp;&nbsp;  03 - 04 lần</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Từ 05 lần trở lên</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi09_01" value="3"><label>&nbsp;&nbsp;Từ 05 lần trở lên</label>
                                     </div>
                                 </div>
                             </div>
@@ -531,33 +445,18 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi10">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Không phải chi trả thêm</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi10_01" value="1"><label>&nbsp;&nbsp;Không phải chi trả thêm</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Xuất phát từ tình cảm (tự nguyện)</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi10_01" value="2"><label>&nbsp;&nbsp;Xuất phát từ tình cảm (tự nguyện)</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Xã giao bình thường</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi10_01"  value="3"><label>&nbsp;&nbsp;Xã giao bình thường</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Muốn được giải quyết sớm công việc</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi10_01" value="4" ><label>&nbsp;&nbsp;Muốn được giải quyết sớm công việc</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Do công chức gợi ý</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi10_01" value="5"><label>&nbsp;&nbsp;Do công chức gợi ý</label>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -580,29 +479,14 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi11">
 
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;1 nơi</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi11_01"  value="1" ><label>&nbsp;&nbsp;1 nơi</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;2 nơi</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi11_01" value="2"><label>&nbsp;&nbsp;2 nơi</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;trên 3 nơi</label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi11_01" value="3"><label>&nbsp;&nbsp;trên 3 nơi</label>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -625,32 +509,17 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                    <div class="col-md-8 form-check" id="CauHoi12">
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi12_01" value="1"><label>&nbsp;&nbsp;Rất hài lòng</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi12_01"  value="2"><label>&nbsp;&nbsp; Hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi12_01" value="3"><label>&nbsp;&nbsp;Chấp nhận được</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi12_01" value="4"><label>&nbsp;&nbsp; Không hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi12_01" value="5"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -673,33 +542,17 @@
                             <div class="form-group form-group-new">
                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
                                 <div class="col-md-8">
-                                    <div class="col-md-8">
+                                    <div class="col-md-8 form-check" id="CauHoi13">
 
-                                       <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                       <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi13_01" value="1" ><label>&nbsp;&nbsp;Rất hài lòng</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi13_01" value="2"><label>&nbsp;&nbsp; Hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi13_01" value="3" ><label>&nbsp;&nbsp;Chấp nhận được</label>
                                         <br>
-                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <input class="form-check-input" id="khong_hai_long" type="radio" name="BangTieuChi13_01" value="4"><label>&nbsp;&nbsp; Không hài lòng</label>
                                         <br>
-                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
-                                        <script>
-                                            function fnDanhgia_0() {
-                                                if ($('#Danhgia_0').is(':checked')) {
-                                                    $("#Danhgia_0").val(1)
-                                                } else {
-                                                    $("#Danhgia_0").val(0)
-                                                }
-                                            }
-                                            function fnDanhgia_1() {
-                                                if ($('#Danhgia_1').is(':checked')) {
-                                                    $("#Danhgia_1").val(1)
-                                                } else {
-                                                    $("#Danhgia_1").val(0)
-                                                }
-                                            }
-                                        </script>
+                                        <input class="form-check-input" id="hai_long" type="radio" name="BangTieuChi13_01" value="5"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
                                     </div>
                                 </div>
                             </div>
@@ -709,7 +562,7 @@
                                     
                                 </span>
                                 <div class="col-md-7">
-                                    @*<input type="submit" value="GỬI ĐI" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">*@
+                                    <input type="button" value="Đánh giá" id="ctl09_Sent" class="btn btn-primary" onclick="SaveDanhGiaDichVu()" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
                                     <input type="button" value="Đóng" id="ctl09_Sent" class="btn btn-primary" onclick="window.location.href = '/DichVuCong/DanhGiaView'" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
                                 </div>
                             </div>
@@ -724,5 +577,3 @@
 </div>
 
 
-
-				
