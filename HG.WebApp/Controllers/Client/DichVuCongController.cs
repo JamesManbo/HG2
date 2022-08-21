@@ -151,13 +151,30 @@ namespace HG.WebApp.Controllers.Client
             ViewBag.LstDonVi = listDV;
             return View();
         }
-
+        public IActionResult DanhGiaChatLuongDichVu()
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            var listDV = new List<dm_don_vi>();
+            var ObjUser = new AspNetUsers();
+            var lstHS = new List<Ho_So>();
+            using (var db = new EAContext())
+            {
+                listDV = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                ObjUser = db.AspNetUsers.Where(n => n.Id == UserId).FirstOrDefault();
+                lstHS = db.Ho_So.Where(n => n.CreatedUid == UserId).ToList();
+            }
+            ViewBag.Message = "";
+            ViewBag.LstDonVi = listDV;
+            ViewBag.Profile = ObjUser;
+            ViewBag.LstHoSo = lstHS;
+            return View();
+        }
 
         public IActionResult TraCuuHoSo()
         {
             return View();
         }
-        public async  Task<IActionResult> LayPhongBanBoiDonVi(string ma_don_vi)
+        public async Task<IActionResult> LayPhongBanBoiDonVi(string ma_don_vi)
         {
             var listPB = new List<Dm_Phong_Ban>();
             using (var db = new EAContext())

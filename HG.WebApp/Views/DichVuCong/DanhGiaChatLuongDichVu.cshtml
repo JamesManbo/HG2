@@ -1,0 +1,728 @@
+﻿@using HG.WebApp;
+@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var Profile = ViewBag.Profile as AspNetUsers;
+    var LstHoSo = ViewBag.LstHoSo as List<HG.Entities.HoSo.Ho_So>;
+}
+<div class="col-lg-12">
+    <div class="maincontent">
+        <div class="maincontentinner">
+            @*<h4 class="widgettitle">Cập nhật thông tin phòng ban</h4>*@
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_dgcb" action="/DichVuCong/DanhGiaCanBo" method="post" enctype="multipart/form-data">
+                        <div class="send-document-top top-title-frame">
+                            <p>ĐÁNH GIÁ CHẤT LƯỢNG DỊCH VỤ</p>
+                        </div>
+                        <div class="send-document-content gray-border">
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Chọn đơn vị cần đánh giá
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">-------Đơn Vị-------</option>
+                                         @if (ViewBag.LstDonVi != null)
+                                        {
+                                            var LstDonVi = ViewBag.LstDonVi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+                                            foreach (var item in LstDonVi)
+                                                {
+                                                    <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                   Họ tên đánh giá
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="nguoi_danh_gia" disabled name="nguoi_danh_gia" class="Css_Mul" value="@(Profile.ho_dem + " " + Profile.ten)" placeholder="Nhập họ và tên" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    số điện thoại
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="so_dien_thoai" disabled name="so_dien_thoai" class="Css_Mul" value="@(Profile.PhoneNumber == null ? 0 : Profile.PhoneNumber)" placeholder="Nhập số điện thoại" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Địa chỉ
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="dia_chi" disabled name="dia_chi" class="Css_Mul" value="" placeholder="Nhập địa chỉ" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                          
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Email  
+                                </span>
+                                <div class="col-md-8">
+                                    <input type="email" disabled maxlength="50" id="email" value="@(Profile.Email == null ? "" : Profile.Email)" name="email" class="Css_Mul" placeholder="Nhập email" style="width: 100%;" />
+                                </div>
+                            </div> 
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Mã hồ sơ  <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <select name="ma_ho_so" id="ma_ho_so" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">-------Chọn hồ sơ-------</option>
+                                       @* @if (LstHoSo != null)
+                                        {
+                                            foreach (var item in LstHoSo)
+                                            {
+                                               <option value="@item.Id">@item.ten_ho_so</option>
+                                            }
+                                        }*@
+                                    </select>
+                                </div>
+                            </div>
+                            @*start danh gia*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>1.Quý khách đánh giá như thế nào về cách hướng dẫn hồ sơ thực hiện thủ tục hành chính của nhân viên tiếp nhận hồ sơ?</label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Gây khó dễ nhưng không có lý do chính đáng</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Bình thường</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất tận tình, rõ ràng, chu đáo</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Tận tình, rõ ràng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Qua loa, khó hiểu</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @*2*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        2.Quý khách đánh giá như thế nào về thái độ giao tiếp của nhân viên tiếp nhận hồ sơ?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất lịch sự và đúng mực</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Lịch sự, dễ gần, dễ hỏi</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Bình thường</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Thờ ơ, khó gần</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Khó chịu, không lịch sự</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*3*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        3.Quý khách có hài lòng về sự phục vụ của nhân viên tiếp nhận hồ sơ?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                             @*4*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        4.Đánh giá chung về mức độ hài lòng đối với nhân viên tiếp nhận hồ sơ?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*5*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        5.Quý khách có hài lòng về nơi đón tiếp của Bộ phận tiếp nhận và trả kết quả không?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Rộng rãi,thoải mái, lịch sự</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chưa thoải mái lắm</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Rất bất tiện</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*6*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        6.Khi đến Bộ phận tiếp nhận và trả kết quả, Quý khách đợi bao nhiêu lâu để gặp nhân viên tiếp, làm việc?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Đến là gặp được ngay</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Dưới 30 phút</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Trên 30 phút</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>
+                                            &nbsp;&nbsp; Đến một vài lần mới gặp
+                                        </label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                             @*7*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        7.Công việc của Quý khách có được giải quyết đúng hẹn không?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Sớm hẹn</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Đúng hẹn</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Trễ hẹn</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*8*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                       8.Trước khi gửi hồ sơ Quý khách phải đến mấy lần?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Một lần</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  Hai lần</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Trên 2 lần</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*9*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        9.Từ khi gửi hồ sơ đến khi nhận kết quả, Quý khách đã đi lại với cơ quan giải quyết thủ tục hành chính mấy lần?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;01 - 02 lần</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;  03 - 04 lần</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Từ 05 lần trở lên</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                             @*10*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        10.Lý do Quý khách phải chi trả thêm một khoản tiền (như: thù lao, môi giới, tư vấn, giúp đỡ, “bồi dưỡng” công chức,... ) ngoài quy định khi giải quyết công việc?
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Không phải chi trả thêm</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;Xuất phát từ tình cảm (tự nguyện)</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Xã giao bình thường</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Muốn được giải quyết sớm công việc</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Do công chức gợi ý</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*11*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        11.Số cơ quan Quý khách phải đến để giải quyết một thủ tục hành chính
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;1 nơi</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp;2 nơi</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;trên 3 nơi</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*12*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        11.Số cơ quan Quý khách phải đến để giải quyết một thủ tục hành chính
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*13*@
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>
+                                                        11.Số cơ quan Quý khách phải đến để giải quyết một thủ tục hành chính
+                                                    </label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                       <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Rất hài lòng</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label>&nbsp;&nbsp;Chấp nhận được</label>
+                                        <br>
+                                        <input id="khong_hai_long" type="radio" name="khong_hai_long" onclick="fnDanhgia_1()" value="0"><label>&nbsp;&nbsp; Không hài lòng</label>
+                                        <br>
+                                        <input id="hai_long" type="radio" name="hai_long" onclick="fnDanhgia_0()" value="1" checked="checked"><label> &nbsp;&nbsp;Không thể chấp nhận được </label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+                            @*end danh gia*@
+                            <div class="form-group form-group-new">
+                                <span class="col-md-5 control-label" style="font-weight:bold;">
+                                    
+                                </span>
+                                <div class="col-md-7">
+                                    @*<input type="submit" value="GỬI ĐI" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">*@
+                                    <input type="button" value="Đóng" id="ctl09_Sent" class="btn btn-primary" onclick="window.location.href = '/DichVuCong/DanhGiaView'" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+				
