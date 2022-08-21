@@ -1,0 +1,232 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+<script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
+<script>
+    $(document).ready(function () {
+        CKEDITOR.replace('noi_dung');
+    });
+    $(document).ready(function () {
+        $('#form_gopy').validate({
+            rules: {
+                ma_don_vi: "required",
+                ho_va_ten: "required",
+                dia_chi: "required",
+                so_dien_thoai: "required",
+                noi_dung: "required"
+            },
+            messages: {
+                ma_don_vi: {
+                    required: "Bạn phải chọn đơn vị!"
+                },
+                ho_va_ten: "Bạn chưa nhập họ và tên!!",
+                dia_chi: "Địa chỉ không được bỏ trống!",
+                so_dien_thoai: "Số điện thoại không được bỏ trống!",
+                noi_dung: "Nội dung không được bỏ trống!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+    });
+</script>
+<div class="col-lg-12">
+    <div class="maincontent">
+        <div class="maincontentinner">
+            @*<h4 class="widgettitle">Cập nhật thông tin phòng ban</h4>*@
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <!-- Horizontal Form -->
+                    <form id="form_gopy" action="/DichVuCong/GopY" method="post" enctype="multipart/form-data">
+                        <div class="send-document-top top-title-frame">
+                            <p>ĐÁNH GIÁ NHÂN VIÊN</p>
+                        </div>
+                        <div class="send-document-content gray-border">
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Chọn đơn vị
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">-------Đơn Vị-------</option>
+                                         @if (ViewBag.LstDonVi != null)
+                                        {
+                                            var LstDonVi = ViewBag.LstDonVi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+                                            foreach (var item in LstDonVi)
+                                                {
+                                                    <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                                }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Chọn phòng ban
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">-------Phòng ban-------</option>
+                                        @if (ViewBag.LstDonVi != null)
+                                        {
+                                            var LstDonVi = ViewBag.LstDonVi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+                                            foreach (var item in LstDonVi)
+                                            {
+                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Chọn cán bộ cần đánh giá
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <select name="ma_don_vi" id="ma_don_vi" style="width:100%;" onchange="DonViChange(this)">
+                                        <option selected="selected" value="">-------Cán bộ-------</option>
+                                        @if (ViewBag.LstDonVi != null)
+                                        {
+                                            var LstDonVi = ViewBag.LstDonVi as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+                                            foreach (var item in LstDonVi)
+                                            {
+                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>
+                                                    <label>1. Đánh giá mức độ hài lòng đối với công chức tại Bộ phận tiếp nhận và trả kết quả</label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                <div class="col-md-8">
+                                    <div class="col-md-8">
+
+                                        <input id="Danhgia_0" type="radio" name="Danhgia_0" onclick="fnDanhgia_0()" value="1" checked="checked"><label for="ctl09_RadioDanhgia_0">&nbsp;&nbsp;Hài lòng</label>
+                                        <br>
+                                        <br>
+                                        <input id="Danhgia_1" type="radio" name="Danhgia_0" onclick="fnDanhgia_1()" value="0"><label for="ctl09_RadioDanhgia_1">&nbsp;&nbsp;Không hài lòng</label>
+                                        <script>
+                                            function fnDanhgia_0() {
+                                                if ($('#Danhgia_0').is(':checked')) {
+                                                    $("#Danhgia_0").val(1)
+                                                } else {
+                                                    $("#Danhgia_0").val(0)
+                                                }
+                                            }
+                                            function fnDanhgia_1() {
+                                                if ($('#Danhgia_1').is(':checked')) {
+                                                    $("#Danhgia_1").val(1)
+                                                } else {
+                                                    $("#Danhgia_1").val(0)
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <table id="ctl09_BangTieuChi" style="width: 95%; text-align: left; margin: 5px auto; padding: 10px; border-color: white!important;">
+                                    <tbody>
+                                        <tr id="ctl09_tdlydo" style="">
+                                            <td style="padding: 10px 0px 10px 0px;">
+                                                <strong>
+                                                    <label>2. Lý do chưa hài lòng</label>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="form-group form-group-new">
+                                 <span class="col-md-2 control-label" style="font-weight:bold;"></span>
+                                 <div class="col-md-8">
+                                      <textarea name="noi_dung" rows="2" cols="20" id="noi_dung" class="txtSearch" style="color:Black;border-color:Blue;height:80px;width:100%;"></textarea>
+                                 </div>
+                            </div>
+                            
+
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                   Họ tên đánh giá
+                                    <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="nguoi_danh_gia" name="nguoi_danh_gia" class="Css_Mul" placeholder="Nhập họ và tên" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    số điện thoại
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="so_dien_thoai" name="so_dien_thoai" class="Css_Mul" placeholder="Nhập số điện thoại" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Địa chỉ
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="dia_chi" name="dia_chi" class="Css_Mul" placeholder="Nhập địa chỉ" maxlength="250" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Số điện thoại
+                                </span>
+                                <div class="col-md-8">
+                                    <input id="so_dien_thoai" name="so_dien_thoai" class="Css_Mul" maxlength="15" placeholder="Nhập số điện thoại" style="width: 100%;" />
+                                </div>
+                            </div>
+                            <div class="form-group form-group-new">
+                                <span class="col-md-2 control-label" style="font-weight:bold;">
+                                    Mã hồ sơ  <p class="red-asterisk">(*)</p>
+                                </span>
+                                <div class="col-md-8">
+                                    <input type="email" maxlength="50" id="email" name="email" class="Css_Mul" placeholder="Nhập email" style="width: 100%;" />
+                                </div>
+                            </div>
+                         
+                            <div class="form-group form-group-new">
+                                <span class="col-md-5 control-label" style="font-weight:bold;">
+                                    
+                                </span>
+                                <div class="col-md-7">
+                                    <input type="submit" name="ctl09$Sent" value="GỬI ĐI" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
+                                    <input type="button" name="ctl09$Sent" value="Đóng" id="ctl09_Sent" class="btn btn-primary" style="margin-left: 25px; margin-bottom: 5px;background: #06599f;  width: 100px;">
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
