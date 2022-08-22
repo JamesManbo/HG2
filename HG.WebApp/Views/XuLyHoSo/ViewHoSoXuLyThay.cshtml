@@ -289,11 +289,70 @@ $(document).ready(function() {
                        
                     </div><!-- End Horizontal Form -->
                 </div>
-           
-            <div class="widgetcontent" @(ViewBag.Status == (int)StatusXuLyHoSo.HoSoChuaBoSung || ViewBag.Status == (int)StatusXuLyHoSo.HoSoDaChuyenXuLy  || ViewBag.Status == (int)StatusXuLyHoSo.HoSoDaPhoiHop ? "hidden" : "") >
+            <h4 class="widgettitle">Ký hồ sơ   </h4>
+            <div class="widgetcontent">
                 <div class="form-horizontal">
                     <div id="tt_chitiet" class="row" >
-                   
+                           <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
+                                    <div class="col-md-3">
+                                       <label  type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="@phancongthuchien == null ? "" : @phancongthuchien.han_xu_ly" ></label>
+                                    </div>
+                          </div>
+                           <div class="form-group row mb-3">
+                                    
+                                    <div class="form-group row">
+                                    <label class="col-md-2 control-label">Người nhận</label>
+                                    <div class="col-md-10">
+                                        <select name="Id_nguoi_nhan" id="Id_nguoi_nhan" class="form-control input-default form-select" placeholder="Phòng ban">
+                                            <option value="0">------------ Chọn người nhận ------------</option>
+                                            @if(LstNguoiDung != null)
+                                            {
+                                                 foreach (var item in LstNguoiDung)
+                                                 {
+                                                     if(phancongthuchien != null && phancongthuchien.Id_nguoi_nhan == @item.Id)
+                                                        {
+                                                            <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
+                                                        }
+                                                        else
+                                                        {
+                                                             <option value="@item.Id">@item.ho_dem @item.ten</option>
+                                                        }
+                                                   
+                                                 }   
+                                            }
+                                    
+                                        </select>
+                                    </div>
+                                </div>
+                          </div>
+                           <div class="form-group row mb-3">
+                                    
+                                    <div class="form-group row">
+                                    <label class="col-md-2 control-label">Người phối hợp</label>
+                                    <div class="col-md-10">
+                                        <select name="Id_nguoi_phoi_hop" id="Id_nguoi_phoi_hop" class="form-control input-default form-select" placeholder="Phòng ban">
+                                            <option value="0">------------ Chọn người phối hợp ------------</option>
+                                            @if(LstNguoiDung != null)
+                                            {
+                                                 foreach (var item in LstNguoiDung)
+                                                 {
+                                                       if(phancongthuchien != null && phancongthuchien.Id_nguoi_phoi_hop == @item.Id)
+                                                        {
+                                                            <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
+                                                        }
+                                                        else
+                                                        {
+                                                             <option value="@item.Id">@item.ho_dem @item.ten</option>
+                                                        }
+                                                   
+                                                 }   
+                                            }
+                                    
+                                        </select>
+                                    </div>
+                                </div>
+                          </div>
                           <div class="form-group row mb-3">
                                     <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
                                     <div class="col-md-3">
@@ -318,29 +377,9 @@ $(document).ready(function() {
 
         </div>
          <div class="text-center">
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,20) "   style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26 ? "hidden" : "") >Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,26)" style="width: 150px" @(ViewBag.Status == 21 || ViewBag.Status == 22 || ViewBag.Status == 26  || ViewBag.Status == (int)StatusXuLyHoSo.HoSoTheoDoiDonDoc ? "hidden" : "") >Kết thúc</button>
-                               <button type="button" class="btn btn-primary"  onclick="#" style="width: 150px" @(ViewBag.Status != 22 ? "hidden" : "") >Thu hồi</button>
-                               @if(ViewBag.Status == 21)
-                               {
-                                   <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoChuaBoSung';" style="width: 150px">Đóng</button>
-                               }
-                               else if (ViewBag.Status == 22)
-                                {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoDaChuyenXuLy';" style="width: 150px">Đóng</button>
-                                }
-                                else if (ViewBag.Status == 26)
-                                {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoDaPhoiHop';" style="width: 150px">Đóng</button>
-                                }
-                                else if (ViewBag.Status == (int)StatusXuLyHoSo.HoSoTheoDoiDonDoc)
-                                {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoTheoDoiDonDoc';" style="width: 150px">Đóng</button>
-                                }
-                               else
-                               {
-                                    <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoPhoiHop';" style="width: 150px">Đóng</button>
-                               }
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,@Model.trang_thai) "   style="width: 150px">Lưu</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,(int)@StatusXuLyHoSo.HoSoDaKy))" style="width: 150px">Ký hồ sơ</button>                            
+                               <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoXuLyThay';" style="width: 150px">Đóng</button>
                               
                     </div>
     </div>
@@ -380,13 +419,13 @@ $(document).ready(function() {
         debugger;
         var data = {};
         data.Id_ho_so = id;
-        //data.han_xu_ly =  $("#han_xu_ly").val();
+        data.han_xu_ly =  $("#han_xu_ly").val();
         //data.ma_quy_trinh =  $("#ma_quy_trinh").val();
-        //data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
-        //data.Id_nguoi_phoi_hop = $("#Id_nguoi_phoi_hop").val();
+        data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
+        data.Id_nguoi_phoi_hop = $("#Id_nguoi_phoi_hop").val();
         data.file_dinh_kem = $("#file_dinh_kem").val();
         data.y_kien = $("#y_kien").val();
-        data.trang_thai = 20;
+        data.trang_thai = trangthai;
        // data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
         var promise = $.ajax({
             url: "/XuLyHoSo/LuuPhanCongXuLy",
@@ -404,7 +443,7 @@ $(document).ready(function() {
             contentType: 'application/x-www-form-urlencoded',          
             success: function(result) {
                 $("#NotifyVHS").modal("show");
-                window.location.href = window.location.origin + "/XuLyHoSo/HoSoPhoiHop"
+                window.location.href = window.location.origin + "/XuLyHoSo/HoSoXuLyThay"
             }
         });
         $.when(promise1, promise2).then(
@@ -487,7 +526,8 @@ $(document).ready(function() {
             <div class="modal-footer">
                  <div class="form-horizontal">
                     <div class="row">
-                          <button type="button" class="btn btn-secondary modal-footer-btnclose"  onclick="LuuThongTinHoSo(@Model.Id,98)">Lưu</button>
+                          <button type="button" class="btn btn-secondary modal-footer-btnclose"  onclick="LuuThongTinHoSo(@Model.Id,23)">Lưu</button>
+                           
                            <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
                      </div>
                       </div>

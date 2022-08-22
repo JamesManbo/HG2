@@ -47,7 +47,8 @@ namespace HG.WebApp
         HoSoDaPhoiHop = 26,
         HoSoGanQuaHan = 27,
         HoSoTheoDoiDonDoc = 28,
-        HoSoChoChuyenMotCua = 29
+        HoSoChoChuyenMotCua = 29,
+        HoSoXuLyThay = 30
     }
 
     public enum StatusChuyenXuLyHS
