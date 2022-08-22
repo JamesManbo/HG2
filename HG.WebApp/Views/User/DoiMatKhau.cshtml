@@ -1,0 +1,242 @@
+﻿@{
+	Layout = "~/Views/Shared/_LayoutClient.cshtml";
+}
+@model HG.Entities.Entities.NguoiDungCongDan
+<style>
+	
+.box-white {
+    border: 1px solid #cbcbcb;
+    padding: 0 1px;
+    margin-top: 8px;
+    background-color: white;
+    float: left;
+}
+
+    .box-white .title-new {
+        height: 35px;
+        margin-top: 2px;
+        color: #d41f18;
+        font-weight: bold;
+			background: url(../../wwwroot/BackEnd/assets/img/box2-title-bgr.png) repeat-x;
+        padding-top: 8px;
+        padding-left: 11px;
+    }
+
+.title-new-content {
+    float: left;
+    width: 100%;
+    height: 35px;
+    color: #d41f18;
+    font-weight: bold;
+    background: url(../../wwwroot/BackEnd/assets/img/box2-title-bgr.png) repeat-x;
+    padding-top: 8px;
+    padding-left: 11px;
+}
+
+.box-white-1 {
+    float: left;
+    width: 100%;
+    height: 428px;
+}
+.box-white-1-1 {
+    float: left;
+    width: 100%;
+    min-height: 300px;
+}
+.box-white-1-1 .navbar-nav {
+        list-style-type: none;
+        float: right;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+        .box-white-1-1 .navbar-nav li {
+            display: inline;
+            float: none;
+        }
+
+            .box-white-1-1 .navbar-nav li a {
+                text-decoration: none;
+                background-color: #dfedf8;
+                display: initial;
+                border-radius: 5px 5px 0 0;
+                padding: 11px 10px 7px 10px;
+                color: black;
+                font-weight: bold;
+            }
+
+        .box-white-1-1 .navbar-nav .active a {
+            background-color: white;
+        }
+    .box-white-1 #tabs ul {
+        list-style-type: none;
+        float: right;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+        .box-white-1 #tabs ul li {
+            display: inline;
+        }
+
+            .box-white-1 #tabs ul li a {
+                text-decoration: none;
+                background-color: #dfedf8;
+                border-radius: 5px 5px 0 0;
+                padding: 11px 10px 7px 10px;
+                color: black;
+                font-weight: bold;
+            }
+
+    .box-white-1 #tabs .ui-tabs-active a {
+        background-color: white;
+    }
+
+.box-white-1 {
+    float: left;
+    width: 100%;
+    height: 428px;
+}
+
+    .box-white-1 .navbar-nav {
+        list-style-type: none;
+        float: right;
+        margin-top: -20px;
+        margin-right: 10px;
+    }
+
+        .box-white-1 .navbar-nav li {
+            display: inline;
+            float: none;
+        }
+
+            .box-white-1 .navbar-nav li a {
+                text-decoration: none;
+                background-color: #dfedf8;
+                display: initial;
+                border-radius: 5px 5px 0 0;
+                padding: 11px 10px 7px 10px;
+                color: black;
+                font-weight: bold;
+            }
+
+        .box-white-1 .navbar-nav .active a {
+            background-color: white;
+        }
+
+.box-white-3 {
+    width: 100%;
+    float: left;
+    margin-top: 20px;
+}
+
+.tsc_message_box1.tsc_simple_bg.error {
+    padding: 20px;
+    margin: 15px;
+    background-color: #d85757;
+    border-color: #d23d3d #c52f2f #b42424;
+    color: #fff;
+    background: -moz-linear-gradient(top, #e07070, #AC1A1A);
+    background: -o-linear-gradient(top, #e07070, #AC1A1A);
+    background: -webkit-gradient(linear, left top, left bottom, from(#e07070), to(#AC1A1A));
+    background: -webkit-linear-gradient(top, #E47552, #AC1A1A);
+    background: linear-gradient(top, #e07070, #AC1A1A);
+    filter: PROGID:DXImageTransform.Microsoft.Gradient(startColorStr = '#E07070', endColorStr = '#AC1A1A');
+    -ms-filter: "PROGID:DXImageTransform.Microsoft.Gradient(startColorStr = '#E07070', endColorStr = '#AC1A1A')";
+}
+
+
+</style>
+<script>
+	 $(document).ready(function() {
+        jQuery.validator.addMethod("new_password_valid", function (value, element) {
+            if ($("#confirm_password").val() != value) {
+				return false;
+			} else {
+				return true;
+			};
+		}, "Mật khẩu confirm không chính xác!");
+        $('#DoiMatKhau').validate({
+            rules: {
+                old_password: "required",
+                new_password:{
+                    required: true,
+                    new_password_valid: true
+                }, 
+                confirm_password: "required"
+            },
+            messages: {
+                old_password: "Mật khẩu hiện tại không được bỏ trống!",
+                new_password: "Mật khẩu mới không được bỏ trống!",
+                confirm_password: "Xác thực không được bỏ trống!"
+            }
+        });
+        function convetArrayToObj(serialized) {
+            var FormHelper = {};
+            var s = '';
+            var data = {};
+            for (s in serialized) {
+                if (serialized[s]['name'] != 'query')
+                    data[serialized[s]['name']] = serialized[s]['value']
+            }
+            return JSON.parse(JSON.stringify(data));
+        };
+
+    });
+</script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+				@ViewBag.Message
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (ViewBag.Succeeded == false)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+
+<div class="box-white box-white-1" style="height: auto;">
+		<div class="title-new">THÔNG TIN THAY ĐỔI MẬT KHẨU</div>
+    <form class="form-horizontal form-horizontal-new" id="DoiMatKhau" action="/User/DoiMatKhau" method="post" enctype="multipart/form-data">
+            <input name="username" type="text" value="@User.Identity.Name" style="width:100%;" hidden>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Mật khẩu cũ: <span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+                <input name="old_password" type="password" value="@ViewBag.old_password" id="old_password" maxlength="50" style="width:100%;">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Mật khẩu mới &nbsp;<span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+                <input name="new_password" type="password" value="@ViewBag.new_password" maxlength="250" id="new_password" style="width:100%;">
+				</div>
+			</div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">Nhập lại mật khẩu mới &nbsp;<span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
+            <div class="col-md-4">
+                <input name="confirm_password" type="password" value="@ViewBag.confirm_password" maxlength="250" id="confirm_password" style="width:100%;">
+            </div>
+        </div>
+			<div class="form-group">
+				<label class="col-md-4 control-label"></label>
+				<div class="col-md-4">
+					<input type="submit" name="save" value="Thay đổi" id="save" class="btn-search">
+					<input type="button" name="cancer" value="Thoát" onclick="window.location.href='/DichVuCong'" id="cancer" class="btn-search">
+				</div>
+			</div>
+		</form>
+	</div>

@@ -385,5 +385,58 @@ namespace HG.WebApp.Controllers
             }
             return PartialView();
         }
+        public IActionResult DoiMatKhau()
+        {
+            ViewBag.old_password = "";
+            ViewBag.new_password = "";
+            ViewBag.confirm_password = "";
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> DoiMatKhau(string username, string old_password, string new_password, string confirm_password)
+        {
+            EAContext db = new EAContext();
+            ViewBag.old_password = old_password;
+            ViewBag.new_password = new_password;
+            ViewBag.confirm_password = confirm_password;
+            if (new_password != confirm_password)
+            {
+                ViewBag.Message = "Mật khẩu không giống nhau!";
+                ViewBag.Succeeded = false;
+                return View();
+            };
+            var obj = db.AspNetUsers.Where(n => n.UserName == username && n.mat_khau == old_password).AsNoTracking().FirstOrDefault();  
+            if(obj == null)
+            {
+                ViewBag.Message = "Mật khẩu không chính xác";
+                ViewBag.Succeeded = false;
+                return View();
+            };
+            var user = await userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+
+                ViewBag.Message = "Mật khẩu không chính xác";
+                ViewBag.Succeeded = false;
+                return View();
+            };
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await userManager.ResetPasswordAsync(user, token, new_password);
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Thay đổi mật khẩu thành công";
+                ViewBag.Succeeded = false;
+                return View();
+            }
+            else
+            {
+                ViewBag.Message = "Thay đổi mật khẩu không thành công";
+                ViewBag.Succeeded = false;
+                return View();
+            }
+        }
+
+
     }
 }
