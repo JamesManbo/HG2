@@ -110,6 +110,53 @@ namespace HG.WebApp.Helper
             var phothong = db.Ghs_Tuyen_Sinh_Cap_THPT_Hoso.Count();
             return manon + tieuhoc+ trunghoc + phothong;
         }
-
+        public static string GetNamePB(string ma_phong_ban)
+        {
+            try
+            {
+                var countrecord = db.Dm_Phong_Ban.Where(n => n.ma_phong_ban == ma_phong_ban).FirstOrDefault();
+                return countrecord == null ? "" : countrecord.ten_phong_ban;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+        public static int TongNguoiDanhGia(string Username)
+        {
+            try
+            {
+                var countrecord = db.GopYDanhGia.Where(n => n.ma_can_bo == Username).Count();
+                return countrecord;
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+        }
+        public static int TongHaiLong(string Username)
+        {
+            try
+            {
+                var countrecord = db.GopYDanhGia.Where(n => n.hai_long == 1 && n.ma_can_bo == Username).Count();
+                return countrecord;
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+        }
+        public static int TongKhongHaiLong(string Username)
+        {
+            try
+            {
+                var countrecord = db.GopYDanhGia.Where(n => n.khong_hai_long == 1 && n.ma_can_bo == Username).Count();
+                return countrecord;
+            }
+            catch (Exception e)
+            {
+                return 0;
+            }
+        }
     }
 }

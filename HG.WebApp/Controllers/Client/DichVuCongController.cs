@@ -34,12 +34,16 @@ namespace HG.WebApp.Controllers.Client
         public IActionResult GopY()
         {
             var listDV = new List<dm_don_vi>();
+            var ObjUser = new AspNetUsers();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             using (var db = new EAContext())
             {
                 listDV = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
+                ObjUser = db.AspNetUsers.Where(n => n.Id == UserId).FirstOrDefault();
             }
             ViewBag.Message = ""; 
             ViewBag.LstDonVi = listDV;
+            ViewBag.Profile = ObjUser;
             return View( new GopYDanhGia());
         }
         [HttpPost]
@@ -192,10 +196,7 @@ namespace HG.WebApp.Controllers.Client
            
         }
 
-        public IActionResult TraCuuHoSo()
-        {
-            return View();
-        }
+        
         public async Task<IActionResult> LayPhongBanBoiDonVi(string ma_don_vi)
         {
             var listPB = new List<Dm_Phong_Ban>();
@@ -233,7 +234,14 @@ namespace HG.WebApp.Controllers.Client
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DichVuCong/Ajax/AjaxXemDanhGiaCanBo.cshtml", listCB);
             return Content(result);
         }
-
+        public IActionResult TraCuuHoSo()
+        {
+            return View();
+        }
+        public IActionResult HoSo()
+        {
+            return View();
+        }
 
     }
 }

@@ -19,19 +19,21 @@
                         </div>
                         <div class="lablestyle">
                             <label>Phòng ban:</label>
-                            <strong><lable>  Phòng DN Kinh tế tập thể và Tư nhân</lable></strong><br>
+                        <strong><lable>  @HG.WebApp.Helper.HelperSql.GetNamePB(item.ma_phong_ban)</lable></strong><br>
                         </div>
                         <div class="lablestyle"><label>Chức vụ:</label><strong><lable>  Chuyên viên</lable></strong><br> </div>
                         <div class="lablestyle">
                             <label>Tổng số người đánh giá là:&nbsp;</label>
-                            <strong><lable>  0</lable></strong>
+                        <strong><lable>  @HG.WebApp.Helper.HelperSql.TongNguoiDanhGia(item.UserName)</lable></strong>
                         </div>
                     </div>
                     <div style="width:100%; float:left ; text-align :left ;">
                         <label style="font-weight: normal;">Hài lòng:&nbsp;</label>
-                        <strong><lable style="color:blue">  0</lable></strong>
-                        <lable>% (0 lượt đánh giá)<br> <lable>Không hài lòng: &nbsp;</lable><strong><lable style="color:blue">0</lable></strong>
-                        <lable>% (0 lượt đánh giá)</lable></lable>
+                    <strong><lable style="color:blue"> @HG.WebApp.Helper.HelperSql.TongHaiLong(item.UserName)</lable></strong>
+                    <lable>
+                        % (@HG.WebApp.Helper.HelperSql.TongHaiLong(item.UserName) lượt đánh giá)<br> <lable>Không hài lòng: &nbsp;</lable><strong><lable style="color:blue">@HG.WebApp.Helper.HelperSql.TongKhongHaiLong(item.UserName)</lable></strong>
+                        <lable>% (@HG.WebApp.Helper.HelperSql.TongKhongHaiLong(item.UserName) lượt đánh giá)</lable>
+                    </lable>
                     </div>
                 </div>
             }
