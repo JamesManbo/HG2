@@ -617,5 +617,19 @@ namespace HG.WebApp.Controllers
                 return 1;
             }    
         }
+        [HttpPost]
+        public async Task<int> GuiLienThong(string id)
+        {
+            var user = userManager.GetUserId(User);
+            var result = _xulyhsDao.GuiHoSoLienThong(Int32.Parse( id),"Sở", user);
+            if (result == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 }

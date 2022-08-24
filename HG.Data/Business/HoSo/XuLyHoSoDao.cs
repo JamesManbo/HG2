@@ -52,6 +52,7 @@ namespace HG.Data.Business.HoSo
                 return new PhanCongThucHienModels();
             }
         }
+        
         public List<PhieuHenModel> Getphieuhen(int id)
         {
             try
@@ -119,6 +120,23 @@ namespace HG.Data.Business.HoSo
                 DbProvider.AddParameter("CreatedUid", Guid.Parse(userid), SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("UpdatedUid", Guid.Parse(userid), SqlDbType.UniqueIdentifier);
               
+
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteNonQuery();
+                return 0;
+            }
+            catch (Exception e)
+            {
+                return 1;
+            }
+        }
+        public int GuiHoSoLienThong(int id,string donvinhan,string userid)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("insert into ho_so_lien_thong values(newid(),'"+id+"',N'"+donvinhan+ "','',N'xử lý',getdate(),'"+ Guid.Parse(userid) + "',null,null)", CommandType.Text);
+
+               
 
                 // Lấy về danh sách các trường học
                 var obj = DbProvider.ExecuteNonQuery();
