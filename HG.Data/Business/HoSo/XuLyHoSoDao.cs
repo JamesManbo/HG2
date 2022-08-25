@@ -107,6 +107,8 @@ namespace HG.Data.Business.HoSo
         {
             try
             {
+               
+
                 DbProvider.SetCommandText2("them_sua_phan_luong_xu_ly", CommandType.StoredProcedure);
                 DbProvider.AddParameter("Id", item.Id == null? Guid.Empty : item.Id, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("Id_ho_so", item.Id_ho_so, SqlDbType.Int);

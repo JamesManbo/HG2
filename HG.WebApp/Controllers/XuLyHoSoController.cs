@@ -363,8 +363,8 @@ namespace HG.WebApp.Controllers
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code,18);
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = hoso.ma_thu_tuc_hc, RecordsPerPage = 25 };
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -382,7 +382,7 @@ namespace HG.WebApp.Controllers
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -401,7 +401,7 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -421,7 +421,7 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -441,7 +441,7 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -461,7 +461,7 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -481,7 +481,7 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -511,7 +511,7 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
