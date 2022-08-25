@@ -55,7 +55,12 @@ namespace HG.Data.Business.ThuTuc
                 return new ThuTucPaging();
             }
         }
-
+        public List<DmThuTuc> GetDanhSachThuTuc(string ma_thu_tuc)
+        {
+            DbProvider.SetCommandText2("select * from dm_thu_tuc_hc where ma_thu_tuc = '"+ma_thu_tuc+"'", CommandType.Text);
+            var menu = DbProvider.ExecuteListObject<DmThuTuc>();
+            return menu;
+        }
         public ResponseData LuuThuTuc(DmThuTuc item)
         {
             var response = new ResponseData();
