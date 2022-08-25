@@ -118,7 +118,7 @@ namespace HG.WebApp.Controllers.Client
         public async Task<IActionResult> DangKy(NguoiDungCongDan item)
         {
             var db = new EAContext();
-            var UserId = Guid.Parse(userManager.GetUserId(User));
+            //var UserId = Guid.Parse(userManager.GetUserId(User));
             AspNetUsers user = new AspNetUsers();
             user.UserName = item.UserName;
             user.PhoneNumber = item.PhoneNumber;

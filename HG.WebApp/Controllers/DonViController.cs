@@ -215,7 +215,7 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> LayDanhSachDiaBanTheoMa(string ma_cap_co_quan, string matinh)
         {
             EAContext db = new EAContext();
-            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null).ToList();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.ma_dia_ban_cha == null || n.ma_dia_ban_cha == "001").ToList();
             ViewBag.CapCoQuan = ma_cap_co_quan;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/LayDanhSachDiaBanTheoMa.cshtml", LstDiaBan);
             return Content(result);

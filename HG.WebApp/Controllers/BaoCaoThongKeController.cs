@@ -81,7 +81,7 @@ namespace HG.WebApp.Controllers
                 data.DenNgay = new DateTime(2022, 08, 17);
                 data.ChonNgay = true;
                 var items = _baocaoDao.BaoCaoSoLuongHoSo(data.Nam, data.Quy, data.ChonNgay, data.TuNgay, data.DenNgay);
-                using var report = new LocalReport();
+                using var report = new Microsoft.Reporting.NETCore.LocalReport();
                 var title = data.ChonNgay ? $"SỐ LƯỢNG HỒ SƠ TỪ NGÀY {data.TuNgay.ToString("dd/MM/yyyy")} ĐẾN NGÀY {data.DenNgay.ToString("dd/MM/yyyy")}" : $"SỐ LƯỢNG HỒ SƠ THEO QUÝ {data.Quy} NĂM {data.Nam}";
                 ReportHelper.LoadBaoCaoSoLuong(report, items, title);
                 var pdf = report.Render(renderFormat);

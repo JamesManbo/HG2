@@ -20,7 +20,7 @@ namespace HG.Entities.HoSo
         public string dien_thoai { get; set; }
         public string email { get; set; }
         public string? ten_to_chuc { get; set; }
-        public string dia_chi { get; set; }
+        public string? dia_chi { get; set; }
         public string ten_ho_so { get; set; }
         public string ma_linh_vuc { get; set; }
         //public string ten_lich_vuc { get; set; }
@@ -51,8 +51,8 @@ namespace HG.Entities.HoSo
         public Decimal? le_phi { get; set; }
         public int? da_thu_phi { get; set; }
         public int? Stt { get; set; }
-        public int trang_thai { get; set; }
-        public int type { get; set; }
+        public int? trang_thai { get; set; }
+        public int? type { get; set; }
       
     }
     public class Ho_SoPaging

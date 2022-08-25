@@ -104,7 +104,8 @@ namespace HG.WebApp.Controllers
             var lv = new List<Dm_Linh_Vuc>();
             HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 20 };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
-            hs = hs.Where(e => e.nguoi_phoi_hop == userManager.GetUserId(User).ToUpper()).ToList();
+            hs = hs.Where(e => e.trang_thai == (int)StatusXuLyHoSo.HoSoPhoiHop).ToList();
+            //hs = hs.Where(e => e.nguoi_phoi_hop == userManager.GetUserId(User).ToUpper()).ToList();
             using (var db = new EAContext())
             {
                 lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
