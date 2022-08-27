@@ -47,7 +47,7 @@ namespace HG.WebApp.Controllers
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() {tu_khoa = txtSearch, CurrentPage = 1, ma_phong_ban = ma_phong_ban,userId = UserId, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
-            if(UserId.ToString() == "a5bb3600-4454-4b24-4610-08da60bcee60")
+            if (_sys.LaQuanTriTatCaDonVi(UserId))
             {
                 ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
             }
@@ -224,7 +224,7 @@ namespace HG.WebApp.Controllers
             var UserId = Guid.Parse(userManager.GetUserId(User));
             var db = new EAContext();
             ViewBag.LstNhom = db.Asp_nhom.ToList();
-            if (UserId.ToString() == "a5bb3600-4454-4b24-4610-08da60bcee60")
+            if (_sys.LaQuanTriTatCaDonVi(UserId))
             {
                 ViewBag.ListPhongBan = db.Dm_Phong_Ban.ToList();
             }
@@ -250,7 +250,7 @@ namespace HG.WebApp.Controllers
             var db = new EAContext();
             var UserId = Guid.Parse(userManager.GetUserId(User));
             ViewBag.LstNhom = db.Asp_nhom.ToList();
-            if (UserId.ToString() == "a5bb3600-4454-4b24-4610-08da60bcee60")
+            if (_sys.LaQuanTriTatCaDonVi(UserId))
             {
                 ViewBag.ListPhongBan = db.Dm_Phong_Ban.ToList();
             }

@@ -102,5 +102,13 @@ namespace HG.Data.Business.Sys
                 return false;
             }
         }
+        public bool LaQuanTriTatCaDonVi(Guid userId)
+        {
+            if (userId.ToString() == "a5bb3600-4454-4b24-4610-08da60bcee60")
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
