@@ -136,7 +136,7 @@ namespace HG.Data.Business.HoSo
         {
             try
             {
-                DbProvider.SetCommandText2("insert into ho_so_lien_thong values(newid(),'"+id+"',N'"+donvinhan+ "','',N'xử lý',getdate(),'"+ Guid.Parse(userid) + "',null,null)", CommandType.Text);
+                DbProvider.SetCommandText2("insert into ho_so_lien_thong values(newid(),'"+id+"',N'"+donvinhan+ "',null,N'xử lý',null,getdate(),'"+ Guid.Parse(userid) + "',null,null)", CommandType.Text);
 
                
 
@@ -147,6 +147,40 @@ namespace HG.Data.Business.HoSo
             catch (Exception e)
             {
                 return 1;
+            }
+        }
+        public List<ListHoSoLienThong> GetHoSoLienThong(int? id)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("select a.CreatedDateUtc Ngay,c.ten_vi_nhan Don_vi_nhan,a.Trang_thai_gui trang_thai_gui,a.Kieu_lien_thong,b.UserName Nguoi_thuc_hien,a.Trang_thai trang_thai  from ho_so_lien_thong a inner join AspNetUsers b on a.CreatedUid = b.Id inner join dm_don_vi c on a.Ma_don_vi = c.ma_don_vi  where Id_ho_so= " + id+"", CommandType.Text);
+
+
+
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteListObject<ListHoSoLienThong>();
+                return obj;
+            }
+            catch (Exception e)
+            {
+                return new List<ListHoSoLienThong>();
+            }
+        }
+        public List<ListKetQuaLienThong> GetHoSoNhanLienThong(int? id)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("select a.CreatedDateUtc Ngay,c.ten_don_vi Don_vi_tra_loi,a.Noi_dung,a.File_dinh_kem  from ho_so_lien_thong a  inner join dm_don_vi c on a.Id_don_vi = c.ma_don_vi  where Id_ho_so= " + id + "", CommandType.Text);
+
+
+
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteListObject<ListKetQuaLienThong>();
+                return obj;
+            }
+            catch (Exception e)
+            {
+                return new List<ListKetQuaLienThong>();
             }
         }
 

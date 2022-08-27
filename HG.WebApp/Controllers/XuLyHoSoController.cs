@@ -352,6 +352,32 @@ namespace HG.WebApp.Controllers
             ViewBag.MaThuTuc = ma_thu_tuc;
             return View(hs);
         }
+        public IActionResult HoSoLienThong(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
+        {
+            //hs mới tiếp nhận status = 1
+
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoLienThong };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+
+            using (var db = new EAContext())
+            {
+                lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            };
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
+            ViewBag.MaLinhVuc = ma_linh_vuc;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            return View(hs);
+        }
         public IActionResult ViewHoSo(int code, string type)
         {
             
@@ -468,6 +494,26 @@ namespace HG.WebApp.Controllers
             return View(hoso);
         }
         public IActionResult ViewHoSoGanDenHan(int code, string type)
+        {
+
+            EAContext db = new EAContext();
+            ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.type_view = StatusAction.View.ToString();
+            ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
+            var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+            ViewBag.Status = hoso.trang_thai;
+            //Lấy thủ tục bởi mã lv
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
+            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            //Lấy biểu mẫu
+            ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
+
+            return View(hoso);
+        }
+        public IActionResult ViewHoSoLienThong(int code, string type)
         {
 
             EAContext db = new EAContext();
@@ -622,7 +668,7 @@ namespace HG.WebApp.Controllers
         public async Task<int> GuiLienThong(string id)
         {
             var user = userManager.GetUserId(User);
-            var result = _xulyhsDao.GuiHoSoLienThong(Int32.Parse( id),"Sở", user);
+            var result = _xulyhsDao.GuiHoSoLienThong(Int32.Parse( id),"1", user);
             if (result == 0)
             {
                 return 0;
@@ -631,6 +677,28 @@ namespace HG.WebApp.Controllers
             {
                 return 1;
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> LayThongTinLienThong(string ma_ho_so, string type)
+        {
+            //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
+            List<ListHoSoLienThong> Listhosolienthong = new List<ListHoSoLienThong>();
+            ViewBag.view_type = type;
+            Listhosolienthong = _xulyhsDao.GetHoSoLienThong(Int32.Parse(ma_ho_so));
+            //ViewBag.ma_luong = ma_luong;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinGuiLienThong.cshtml", Listhosolienthong);
+            return Content(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> LayThongTinNhanLienThong(string ma_ho_so, string type)
+        {
+            //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
+            List<ListKetQuaLienThong> Listhosolienthong = new List<ListKetQuaLienThong>();
+            ViewBag.view_type = type;
+            Listhosolienthong = _xulyhsDao.GetHoSoNhanLienThong(Int32.Parse(ma_ho_so));
+            //ViewBag.ma_luong = ma_luong;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/XuLyHoSo/ThongTinNhanLienThong.cshtml", Listhosolienthong);
+            return Content(result);
         }
     }
 }
