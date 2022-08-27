@@ -58,7 +58,8 @@ namespace HG.Entities.Entities
         public DateTime? ngay_sinh { get; set; }
         public string? lstGroup { get; set; }
         public int? khoa_tai_khoan { get; set; }
-        public int? IsAdministrator { get; set; }
+        public int? IsAdministratorPB { get; set; }
+        public int? IsAdministratorDV { get; set; }
         public Response? responseErr { get; set; }
 
         public string? type_view { get; set; }
@@ -92,7 +93,8 @@ namespace HG.Entities.Entities
         public string? ma_phong_ban { get; set; }
         public string? ma_chuc_vu { get; set; }
         public int? khoa_tai_khoan { get; set; }
-        public int? IsAdministrator { get; set; }
+        public int? IsAdministratorPB { get; set; }
+        public int? IsAdministratorDV { get; set; }
         public int? stt { get; set; }
         public DateTime? ngay_sinh { get; set; }
         public int? Deleted { get; set; }

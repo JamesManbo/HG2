@@ -222,6 +222,8 @@ namespace HG.Data.Business.NguoiDung
                 DbProvider.AddParameter("ngay_sinh", item.ngay_sinh, SqlDbType.DateTime);
                 DbProvider.AddParameter("UserId", guid, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("khoa_tai_khoan", item.khoa_tai_khoan, SqlDbType.Int);
+                DbProvider.AddParameter("IsAdministratorPB", item.IsAdministratorPB, SqlDbType.Int);
+                DbProvider.AddParameter("IsAdministratorDV", item.IsAdministratorDV, SqlDbType.Int);
                 // Output params
                 DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 DbProvider.AddParameter("ReturnMsg", DBNull.Value, SqlDbType.NVarChar, 100, ParameterDirection.Output);

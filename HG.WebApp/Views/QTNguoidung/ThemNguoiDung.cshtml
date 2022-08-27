@@ -239,7 +239,7 @@
                             </div>
                         </div>
                          <div class="form-group row">
-                            <label class="col-md-2 control-label">Là Administrator</label>
+                            <label class="col-md-2 control-label">Là Administrator Phòng ban</label>
                             <div class="col-md-10">
                                 <input name="IsAdministrator" onclick="FnIsAdministrator()"  type="checkbox" value="0" id="IsAdministrator" >
                             </div>
@@ -252,6 +252,21 @@
                                             }
                                         }
                                     </script>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Là Administrator Đơn vị</label>
+                            <div class="col-md-10">
+                                <input name="IsAdministratorDV" onclick="FnIsAdministratorDV()" type="checkbox" value="0" id="IsAdministratorDV">
+                            </div>
+                            <script>
+                                function FnIsAdministratorDV() {
+                                    if ($('#IsAdministratorDV').is(':checked')) {
+                                        $("#IsAdministratorDV").val(1)
+                                    } else {
+                                        $("#IsAdministratorDV").val(0)
+                                    }
+                                }
+                            </script>
                         </div>
                         <div class="form-group row">
                         <label class="col-md-2 control-label">Khóa tài khoản</label>

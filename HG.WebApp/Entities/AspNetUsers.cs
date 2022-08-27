@@ -25,7 +25,13 @@ namespace HG.WebApp
         public int? Deleted { get; set; }
         public int? khoa_tai_khoan { get; set; }
         public int? Type { get; set; }
-        public int? IsAdministrator { get; set; }
+        public int? IsAdministratorPB { get; set; }
+        public int? IsAdministratorDV { get; set; }
+        public DateTime? CreatedDateUtc { get; set; }
+        public Guid? CreatedUid { get; set; }
+        public DateTime? UpdatedDateUtc { get; set; }
+        public Guid? UpdatedUid { get; set; }
+        public Guid? DeletedBy { get; set; }
 
 
     }

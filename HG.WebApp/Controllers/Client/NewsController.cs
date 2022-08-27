@@ -130,7 +130,8 @@ namespace HG.WebApp.Controllers.Client
             user.ten = item.ten;
             user.ngay_sinh = item.ngay_sinh;
             user.khoa_tai_khoan = 0;
-            user.IsAdministrator = 0;
+            user.IsAdministratorDV = 0;
+            user.IsAdministratorPB = 0;
             var result = await userManager.CreateAsync(user, user.mat_khau);
             if (result.Succeeded)
             {

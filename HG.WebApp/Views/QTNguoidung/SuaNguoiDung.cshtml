@@ -279,18 +279,33 @@
                             </div>
                         </div>
                          <div class="form-group row">
-                            <label class="col-md-2 control-label">Là Administrator</label>
+                            <label class="col-md-2 control-label">Là Administrator phòng ban</label>
                             <div class="col-md-10">
-                                <input name="IsAdministrator" onclick="FnIsAdministrator()" @(@Model.aspNetUsersModel.First().IsAdministrator == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().IsAdministrator)" type="checkbox" id="IsAdministrator">
+                                <input name="IsAdministratorPB" onclick="FnIsAdministrator()" @(@Model.aspNetUsersModel.First().IsAdministratorPB == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().IsAdministratorPB)" type="checkbox" id="IsAdministratorPB">
                             </div>
                             <script>
                                     function FnIsAdministrator() {
-                                            if ($('#IsAdministrator').is(':checked')) {
-                                                $("#IsAdministrator").val(1)
+                                            if ($('#IsAdministratorPB').is(':checked')) {
+                                                $("#IsAdministratorPB").val(1)
                                             }else{
-                                                $("#IsAdministrator").val(0)
+                                                $("#IsAdministratorPB").val(0)
                                             }
                                         }
+                            </script>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Là Administrator đơn vị</label>
+                            <div class="col-md-10">
+                                <input name="IsAdministratorDV" onclick="FnIsAdministratorDV()" @(@Model.aspNetUsersModel.First().IsAdministratorDV == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().IsAdministratorDV)" type="checkbox" id="IsAdministratorDV">
+                            </div>
+                            <script>
+                                function FnIsAdministratorDV() {
+                                    if ($('#IsAdministratorDV').is(':checked')) {
+                                        $("#IsAdministratorDV").val(1)
+                                    } else {
+                                        $("#IsAdministratorDV").val(0)
+                                    }
+                                }
                             </script>
                         </div>
                         <div class="form-group row">
