@@ -316,6 +316,25 @@ namespace HG.WebApp.Controllers
             return RedirectToAction("ListNguoiDung");
         }
         #endregion
+        #region uyquyenxuly
+        public IActionResult UyQuyenXuLy(string txtSearch = "")
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            // ViewBag.ma_phong_ban = ma_phong_ban;
+           
+            ViewBag.txtSearch = txtSearch;
+            EAContext eAContext = new EAContext();
+            HelperString stringHelper = new HelperString();
+            NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { tu_khoa = txtSearch, CurrentPage = 1, RecordsPerPage = pageSize };
+            var user = userManager.GetUserId(User);
+            var ds = _nguoiDungDao.LayDsUyQuyenPhanTrang(nguoidungOnlSearchItem,user);
+            ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
+            // ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
+            ViewBag.CurrentPage = 1;
+            return View(ds.listUyQuyen);
+        }
+        #endregion
         #region nguoidungonl
         public IActionResult ListNguoiDungOnline(string txtSearch = "",  int trang_thai = 1, int da_xoa = 0)
         {
