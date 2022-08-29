@@ -114,6 +114,40 @@ namespace HG.Data.Business.NguoiDung
                 return new ds_nguoi_dung_paging_online();
             }
         }
+        public Danh_sach_uy_quyen LayDsUyQuyenPhanTrang(NguoiDungOnlSearchItem item,string UserId)
+        {
+            try
+            {
+                Danh_sach_uy_quyen ds_Nguoi_Dung_Paging = new Danh_sach_uy_quyen();
+                var abc = 1;
+                DbProvider.SetCommandText2("uyquyen$danhsanh$phantrang", CommandType.StoredProcedure);
+                if (item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
+                else if (item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
+
+                // Input params
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
+                DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
+                DbProvider.AddParameter("@ma_nguoi_dung", UserId, SqlDbType.NVarChar);
+                //DbProvider.AddParameter("da_xoa", item.da_xoa, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                ds_Nguoi_Dung_Paging.listUyQuyen = DbProvider.ExecuteListObject<ListUyQuyenModel>();
+                ds_Nguoi_Dung_Paging.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return ds_Nguoi_Dung_Paging;
+            }
+            catch (Exception e)
+            {
+                return new Danh_sach_uy_quyen();
+            }
+        }
         public string ThemMoi(NguoiDungModels item, Guid guid)
         {
             try
@@ -165,6 +199,27 @@ namespace HG.Data.Business.NguoiDung
                 var obj = DbProvider.ExecuteNonQuery();
                 var NewId = DbProvider.Command.Parameters["ma_nguoi_dung_moi"].Value.ToString();
                 return NewId == null ? "" : NewId;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+
+        }
+        public string AddUserUyQuyen(UyQuyenXuLyModel item,string UserId)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("insert into Uy_quyen_xu_ly values(newid(),'"+item.Id_nguoi_uy_quyen+"','"+item.Id_nguoi_duoc_uy_quyen+"','"+item.Id_thu_tuc_hc+"'" +
+                    "'"+item.Tu_ngay+ "','" + item.Den_ngay + "','"+DateTime.Now+ "','" + UserId + "',null,null)", CommandType.Text);
+                // Input params
+               
+
+              
+                // Lấy về danh sách các người dung
+                var obj = DbProvider.ExecuteNonQuery();
+
+                return "Ok";
             }
             catch (Exception e)
             {
