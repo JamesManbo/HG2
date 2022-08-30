@@ -105,10 +105,9 @@
     <div class="maincontent">
         <div class="maincontentinner">
             <div class="widget">
-                <h4 class="widgettitle">Cập nhật người uỷ quyền</h4>
-                <form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/SuaUyQuyenXuLy" method="post" enctype="multipart/form-data">
+                <h4 class="widgettitle">Thêm mới người uỷ quyền</h4>
+                <form class="widgetcontent" id="FNguoiDung" action="/QTNguoiDung/ThemUyQuyenXuLy" method="post" enctype="multipart/form-data">
                     <div class="form-horizontal">
-                        <input name="Id" id="Id" value="@Model.Id" hidden/>
                         <div class="form-group row">
                             <label class="col-md-2 control-label">
                                 Người uỷ quyền                                
@@ -130,10 +129,6 @@
                                     {
                                          foreach (var item in lst_nguoi_dung.asp_Nhoms)
                                          {
-                                             if(Model.Id_nguoi_duoc_uy_quyen == item.Id)
-                                            {
-                                                 <option value="@item.Id" selected>@(item.ho_dem + item.ten)</option>
-                                            }
                                             <option value="@item.Id">@(item.ho_dem + item.ten) </option>
                                          }   
                                     }
@@ -159,10 +154,6 @@
                                     {
                                          foreach (var item in lst_thu_tuc_hc)
                                          {
-                                              if(Model.Id_thu_tuc_hc == item.ma_thu_tuc)
-                                            {
-                                                 <option value="@item.ma_thu_tuc" selected>@item.ten_thu_tuc</option>
-                                            }
                                             <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option>
                                          }   
                                     }
@@ -173,11 +164,11 @@
                          <div class="form-group row mb-3">
                                     <label  class="col-sm-2 control-label">Uỷ quyền từ ngày</label>
                                     <div class="col-md-3">
-                                        <input type="date" class="form-control input-default" name="Tu_ngay" value="@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.Tu_ngay)")>
+                                        <input type="date" class="form-control input-default" name="Tu_ngay" value="")>
                                     </div>
                                     <label  class="col-sm-1 control-label">Đến ngày</label>
                                     <div class="col-md-3">
-                                        <input type="date" class="form-control input-default" name="Den_ngay" value="@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.Den_ngay)")>
+                                        <input type="date" class="form-control input-default" name="Den_ngay" value="")>
                                     </div>
                                      
                                 </div>

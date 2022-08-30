@@ -210,7 +210,7 @@ namespace HG.Data.Business.NguoiDung
         {
             try
             {
-                DbProvider.SetCommandText2("insert into Uy_quyen_xu_ly values(newid(),'"+item.Id_nguoi_uy_quyen+"','"+item.Id_nguoi_duoc_uy_quyen+"','"+item.Id_thu_tuc_hc+"'" +
+                DbProvider.SetCommandText2("insert into Uy_quyen_xu_ly values(newid(),'"+UserId+"','"+item.Id_nguoi_duoc_uy_quyen+"','"+item.Id_thu_tuc_hc+"'," +
                     "'"+item.Tu_ngay+ "','" + item.Den_ngay + "','"+DateTime.Now+ "','" + UserId + "',null,null)", CommandType.Text);
                 // Input params
                
@@ -224,6 +224,46 @@ namespace HG.Data.Business.NguoiDung
             catch (Exception e)
             {
                 return "";
+            }
+
+        }
+        public string UpdateUserUyQuyen(UyQuyenXuLyModel item)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("Update Uy_quyen_xu_ly set Id_nguoi_duoc_uy_quyen = '" + item.Id_nguoi_duoc_uy_quyen + "', Id_thu_tuc_hc = '" + item.Id_thu_tuc_hc + "',Tu_ngay = '" + item.Tu_ngay + "',Den_ngay = '" + item.Den_ngay + "' where Id = '"+item.Id+"'", CommandType.Text);
+                // Input params
+
+
+
+                // Lấy về danh sách các người dung
+                var obj = DbProvider.ExecuteNonQuery();
+
+                return "Ok";
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+
+        }
+        public UyQuyenXuLyModel GetUyQuyenbyId(string Id)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("select * from Uy_quyen_xu_ly where Id='"+Id+"'", CommandType.Text);
+                // Input params
+
+
+
+                // Lấy về danh sách các người dung
+                var obj = DbProvider.ExecuteObject<UyQuyenXuLyModel>();
+
+                return obj;
+            }
+            catch (Exception e)
+            {
+                return new UyQuyenXuLyModel();
             }
 
         }
