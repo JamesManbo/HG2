@@ -1,10 +1,10 @@
-﻿@model HG.Entities.Entities.NguoiDungModels
+﻿@model HG.Entities.Entities.UyQuyenXuLyModel
 @{
     ViewData["Title"] = "Thêm mới";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var LstNhom = ViewBag.LstNhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
     var lst_thu_tuc_hc = ViewBag.lst_thu_tuc_hc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
-    var lst_nguoi_dung = ViewBag.ListNguoiDung as List<HG.WebApp.AspNetUsers>;
+    var lst_nguoi_dung = ViewBag.ListNguoiDung as HG.Entities.Entities.ds_nguoi_dung_paging;
     var UserName = ViewBag.UserName as string;
     
 }
@@ -113,7 +113,7 @@
                                 Người uỷ quyền                                
                             </label>
                             <div class="col-md-9">
-                                <input name="UserName" maxlength="50" onfocusout="CheckedCode(this)" type="text" id="UserName" class="form-control input-default" value="@UserName">
+                                <input name="UserName" maxlength="50" type="text" id="UserName" class="form-control input-default" value="@UserName">
                             </div>
                            
 
@@ -122,12 +122,12 @@
                             <label class="col-md-2 control-label">
                                 Người được uỷ quyền                                
                             </label>
-                            <div class="col-md-10">
-                                <select name="ma_nguoi_dung" id="ma_nguoi_dung" class="form-control input-default form-select" placeholder="Phòng ban">
+                            <div class="col-md-9">
+                                <select name="Id_nguoi_duoc_uy_quyen" id="Id_nguoi_duoc_uy_quyen" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Chọn người được uỷ quyền ------------</option>
                                     @if(lst_nguoi_dung != null)
                                     {
-                                         foreach (var item in lst_nguoi_dung)
+                                         foreach (var item in lst_nguoi_dung.asp_Nhoms)
                                          {
                                             <option value="@item.Id">@(item.ho_dem + item.ten) </option>
                                          }   
@@ -147,8 +147,8 @@
 
                         <div class="form-group row">
                             <label class="col-md-2 control-label">Thủ tục uỷ quyền</label>
-                            <div class="col-md-10">
-                                <select name="ma_thu_tuc" id="ma_thu_tuc" class="form-control input-default form-select" placeholder="Phòng ban">
+                            <div class="col-md-9">
+                                <select name="Id_thu_tuc_hc" id="Id_thu_tuc_hc" class="form-control input-default form-select" placeholder="Phòng ban">
                                     <option value="0">------------ Chọn thủ tục ------------</option>
                                     @if(lst_thu_tuc_hc != null)
                                     {
@@ -162,7 +162,7 @@
                             </div>
                         </div>
                          <div class="form-group row mb-3">
-                                    <label  class="col-sm-1 control-label">Uỷ quyền từ ngày</label>
+                                    <label  class="col-sm-2 control-label">Uỷ quyền từ ngày</label>
                                     <div class="col-md-3">
                                         <input type="date" class="form-control input-default" name="Tu_ngay" value="")>
                                     </div>
@@ -174,7 +174,7 @@
                                 </div>
                          <div class="text-center">
                             
-                            <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
+                            <button type="submit" class="btn btn-primary" name="type_view" value="">Lưu</button>
                             <button type="button" class="btn btn-secondary" onclick="window.location.href='/QTNguoidung/UyQuyenXuLy';">Đóng</button>
                         </div>
 
@@ -205,9 +205,9 @@
                                             <th scope="col">Tên đăng nhập</th>
                                             <th scope="col">Tên đầy đủ</th>
                                         </tr>
-                                        @if(lst_nguoi_dung != null && lst_nguoi_dung)
+                                        @if(lst_nguoi_dung != null && lst_nguoi_dung.asp_Nhoms != null)
                                         {
-                                             foreach (var item in lst_nguoi_dung)
+                                             foreach (var item in lst_nguoi_dung.asp_Nhoms)
                                             {
                                                 <tr>
                                                 <td align="center">

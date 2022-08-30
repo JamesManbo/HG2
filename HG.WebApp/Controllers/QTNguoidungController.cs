@@ -346,52 +346,62 @@ namespace HG.WebApp.Controllers
             ViewBag.LstNhom = db.Asp_nhom.ToList();
             ViewBag.UserName = userManager.GetUserName(User);
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
-            ViewBag.lst_thu_tuc_hc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ViewBag.lst_thu_tuc_hc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
 
-            return PartialView(new NguoiDungModels() { UserName = UserName });
+            return PartialView(new UyQuyenXuLyModel() { Id_nguoi_duoc_uy_quyen = null });
+        }
+        [HttpGet]
+        public IActionResult SuaUyQuyenXuLy(string Id)
+        {
+            var db = new EAContext();
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.UserName = userManager.GetUserName(User);
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            ViewBag.lst_thu_tuc_hc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
+            ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
+
+            return PartialView(_nguoiDungDao.GetUyQuyenbyId(Id));
         }
         [HttpPost]
-        public async Task<IActionResult> ThemUyQuyenXuLy(UserOnlineModels item)
+        public async Task<IActionResult> ThemUyQuyenXuLy(UyQuyenXuLyModel item)
         {
-            var UserId = Guid.Parse(userManager.GetUserId(User));
-            AspNetUsers user = new AspNetUsers();
-            user.UserName = item.Email;
-            user.PhoneNumber = item.PhoneNumber;
-            user.Email = item.Email;
-            user.mat_khau = item.mat_khau;
-            user.anh_dai_dien = item.anh_dai_dien;
-            user.anh_cmt = item.anh_cmt;
-            user.ho_khau_tt = item.ho_khau_tt;
-            user.ten = item.ten;
-            user.Type = 1;
-            user.khoa_tai_khoan = item.khoa_tai_khoan;
-            var result = await userManager.CreateAsync(user, item.mat_khau);
-            var db = new EAContext();
+            var UserId = userManager.GetUserId(User);
+            var result = _nguoiDungDao.AddUserUyQuyen(item, UserId);
             //ViewBag.LstNhom = db.Asp_nhom.ToList();
             //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
             //ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
-            if (result.Succeeded)
+           
+            if (result == "Ok")
             {
-                //if (item.lstGroup != null)
-                //{
-                //    for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
-                //    {
-                //        _nguoiDungDao.ThemMoi_NguoiDung_Nhom(user.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
-                //    }
-                //}
-            };
-            if (result.Succeeded)
+                return RedirectToAction("UyQuyenXuLy", "QTnguoidung");
+            }
+            else
             {
-                if (item.type_view == StatusAction.Add.ToString())
-                {
-                    return RedirectToAction("listNguoiDungOnline", "QTnguoidung");
-                }
-                else if (item.type_view == StatusAction.View.ToString())
-                {
-                    return RedirectToAction("ViewNguoiDungOnline", "QTnguoidung", new { Id = user.Id, type = StatusAction.View.ToString() });
-                }
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+                return View(item);
+            }
+            ViewBag.ErrorCode = 1;
+            ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+            return View(item);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> SuaUyQuyenXuLy(UyQuyenXuLyModel item)
+        {
+            
+            var result = _nguoiDungDao.UpdateUserUyQuyen(item);
+            //ViewBag.LstNhom = db.Asp_nhom.ToList();
+            //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            //ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+
+            if (result == "Ok")
+            {
+                return RedirectToAction("UyQuyenXuLy", "QTnguoidung");
             }
             else
             {
