@@ -1,6 +1,7 @@
 ﻿using HG.Data.Business.NguoiDung;
 using HG.Entities;
 using HG.Entities.Entities;
+using HG.Data.Business.ThuTuc;
 using HG.Entities.Entities.Nhom;
 using HG.Entities.SearchModels;
 using HG.WebApp.Data;
@@ -8,12 +9,14 @@ using HG.WebApp.Helper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using HG.Entities.Entities.Model;
 
 namespace HG.WebApp.Controllers
 {
     public class QTNguoidungController : BaseController
     {
         private readonly NguoiDungDao _nguoiDungDao;
+        private readonly ThuTucDao _thuTucDao;
         private readonly ILogger<QTNguoidungController> _logger;
         private readonly IConfiguration _config;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -28,6 +31,7 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _nguoiDungDao = new NguoiDungDao(DbProvider);
+            _thuTucDao = new ThuTucDao(DbProvider);
         }
         #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
@@ -333,6 +337,72 @@ namespace HG.WebApp.Controllers
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
             ViewBag.CurrentPage = 1;
             return View(ds.listUyQuyen);
+        }
+        [HttpGet]
+        public IActionResult ThemUyQuyenXuLy(string UserName = "")
+        {
+            var db = new EAContext();
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ViewBag.LstNhom = db.Asp_nhom.ToList();
+            ViewBag.UserName = userManager.GetUserName(User);
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            ViewBag.lst_thu_tuc_hc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
+            ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
+
+            return PartialView(new NguoiDungModels() { UserName = UserName });
+        }
+        [HttpPost]
+        public async Task<IActionResult> ThemUyQuyenXuLy(UserOnlineModels item)
+        {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            AspNetUsers user = new AspNetUsers();
+            user.UserName = item.Email;
+            user.PhoneNumber = item.PhoneNumber;
+            user.Email = item.Email;
+            user.mat_khau = item.mat_khau;
+            user.anh_dai_dien = item.anh_dai_dien;
+            user.anh_cmt = item.anh_cmt;
+            user.ho_khau_tt = item.ho_khau_tt;
+            user.ten = item.ten;
+            user.Type = 1;
+            user.khoa_tai_khoan = item.khoa_tai_khoan;
+            var result = await userManager.CreateAsync(user, item.mat_khau);
+            var db = new EAContext();
+            //ViewBag.LstNhom = db.Asp_nhom.ToList();
+            //ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            //ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
+            if (result.Succeeded)
+            {
+                //if (item.lstGroup != null)
+                //{
+                //    for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
+                //    {
+                //        _nguoiDungDao.ThemMoi_NguoiDung_Nhom(user.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
+                //    }
+                //}
+            };
+            if (result.Succeeded)
+            {
+                if (item.type_view == StatusAction.Add.ToString())
+                {
+                    return RedirectToAction("listNguoiDungOnline", "QTnguoidung");
+                }
+                else if (item.type_view == StatusAction.View.ToString())
+                {
+                    return RedirectToAction("ViewNguoiDungOnline", "QTnguoidung", new { Id = user.Id, type = StatusAction.View.ToString() });
+                }
+            }
+            else
+            {
+                ViewBag.ErrorCode = 1;
+                ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+                return View(item);
+            }
+            ViewBag.ErrorCode = 1;
+            ViewBag.ErrorMsg = "Có lỗi xảy ra !!!!";
+            return View(item);
+
         }
         #endregion
         #region nguoidungonl
