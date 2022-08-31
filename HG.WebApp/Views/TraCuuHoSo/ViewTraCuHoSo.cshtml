@@ -1,0 +1,193 @@
+﻿@using HG.WebApp
+@model HG.Entities.HoSo.Ho_So
+@{
+    ViewData["Title"] = "Tiếp nhận hồ sơ";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
+    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
+    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
+    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+    var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
+    var LstLichSu = ViewBag.LstLichSu as List<HG.Entities.Entities.HoSo.Ho_So_History>;
+}
+<div class="card">
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <a href="/TiepNhan/SuaHoSo?code=@Model.Id&type=@(StatusAction.View.ToString())" style="text-decoration:none"><span class="fa-file" style="margin-left: 10%"></span> Chi tiết hồ sơ</a>
+                    <a href="/TiepNhan/SuaHoSo?code=@Model.Id&type=@(StatusAction.View.ToString())" style="text-decoration:none"><span class="fa-file" style="margin-left: 10%"></span> Hồ sơ liên thông</a>
+                    <a href="/Luong/SuaLuongXuLy?code=@Model.ma_luong_xu_ly&type=View" style="text-decoration:none"><span class="fa-file" style="margin-left: 10%"></span> Luồng xử lý hồ sơ</a>
+                </div>
+            </div>
+            @*start thông tin hồ sơ*@
+            <h4 class="widgettitle">Thông tin hồ sơ : @Model.ma_khach_hang</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="form_tiepnhan" class="row">
+
+                        <div class="form-group row mb-3">
+                            <span for="mota" class="col-sm-1 control-label">Họ và tên<span style="color:red">(*)</span></span>
+                            <div class="col-md-3">
+                                <label type="text" id="ho_ten" name="ho_ten" maxlength="50" value="@Model.ho_ten" placeholder="Nhập họ tên" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ho_ten</label>
+                            </div>
+                            <span for="stt" class="col-sm-1 control-label">Ngày sinh <span style="color:red">(*)</span></span>
+                            <div class="col-md-3">
+                                <label type="date" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ho_ten</label>
+                            </div>
+                            <span for="nguoi_sua" class="col-sm-1 control-label">Giới tính <span style="color:red">(*)</span></span>
+                            <div class="col-md-3">
+                                <label>@(Model.gioi_tinh == 1 ? "Nam" : "Nữ")</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="mota" class="col-sm-1 control-label">Số giấy tờ<span style="color:red">(*)</span></span>
+                            <div class="col-md-3">
+                                <label maxlength="50" type="text" id="so_giay_to" name="so_giay_to" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.so_giay_to</label>
+                            </div>
+                            <span for="stt" class="col-sm-1 control-label">Điện thoại <span style="color:red">(*)</span></span>
+                            <div class="col-md-3">
+                                <label maxlength="50" type="text" id="dien_thoai" name="dien_thoai" value="@Model.dien_thoai" placeholder="Nhập điện thoại" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.dien_thoai </label>
+                            </div>
+                            <span for="nguoi_sua" class="col-sm-1 control-label">Email <span style="color:red">(*)</span></span>
+                            <div class="col-md-3">
+                                <label maxlength="50" type="text" id="email" name="email" value="@Model.email" placeholder="Nhập email" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.email</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="dia_chi" class="col-sm-1 control-label">Địa chỉ <span style="color:red">(*)</span></span>
+                            <div class="col-sm-11">
+                                <label maxlength="250" type="text" id="dia_chi" name="dia_chi" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.dia_chi</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="ten_to_chuc" class="col-sm-1 control-label">Tên cơ quan</span>
+                            <div class="col-sm-11">
+                                <label maxlength="50" type="text" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên cơ quan" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ten_to_chuc </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            @*End thông tin hồ sơ*@
+            <h4 class="widgettitle">Thông tin hồ sơ</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="tt_chitiet" class="row">
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Tên hồ sơ<span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                       <label maxlength="50" type="text" id="ten_ho_so" name="ten_ho_so" value="@Model.ten_ho_so" placeholder="Nhập tên hồ sơ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ten_ho_so </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Lĩnh vực<span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                           <label>@LstLinhVuc.Where(n=>n.ma_linh_vuc == Model.ma_linh_vuc).Select(n=>n.ten_linh_vuc).FirstOrDefault().ToString()</label>
+                                    </div>
+                                </div>
+                                 <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Thủ tục hành chính<span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                    @if(LstThuTuc != null) {
+                                        var obj = LstThuTuc.Where(n => n.ma_thu_tuc == Model.ma_thu_tuc_hc).Select(n => n.ten_thu_tuc).FirstOrDefault();
+                                        <label>@(obj == null ? "" : obj.ToString()) </label>
+                                    }
+                                    </div>
+                                </div>
+                                <script>
+                                     function LayThuTucByLinhVuc(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#ThuTucXL").html(data);
+                                           }
+                                       });          
+                                    }
+                                    function GetLuongByTTHC(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value + "&type=Add" + "&ma_luong=" + $("#ma_luong_xu_ly").val(),
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#LuongXuLy").html(data);
+                                           }
+                                       });          
+                                    } 
+                                    function GetNguoiXLNguoiPH(ma_luong_data) {
+                                          $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/GetNguoiXLNguoiPH?ma_luong=" + ma_luong_data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                              //$("#nguoi_xu_ly select").val(data.nguoi_xl_mac_dinh).change();
+                                              console.log(data.nguoi_xl_mac_dinh)
+                                              $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                           }
+                                       });        
+                                    }
+                                </script>
+                                <div id="LuongXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.View.ToString(), lstThanhPhan = Model.lstThanhPhan, ma_luong = Model.ma_luong_xu_ly})
+                                </div>
+                            </div>
+                    </div><!-- End Horizontal Form -->
+                </div>
+            <h4 class="widgettitle">TT quá trình xử lý</h4>
+            <div class="widgetcontent">
+                <div class="dataTable-container">
+                    <table class="table table-bordered responsive">
+                        <thead class="widgettitle">
+                            <tr>
+
+                                <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                <th class="head1" scope="col" data-sortable="" style="width: 15%;">THỜI GIAN</th>
+                                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI THỰC HIỆN</th>
+                                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NỘI DUNG</th>
+                                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI NHẬN</th>
+                                <th class="head0" scope="col" data-sortable="" style="width: 15%;">HẠN XỬ LÝ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (LstLichSu != null)
+                            {
+                                var stt = 1;
+                                foreach (var item in LstLichSu)
+                                {
+                                    <tr>
+                                        @*<input type="checkbox" class="ads_Checkbox" value="@item.Id"  hidden />*@
+                                        <td scope="row">
+                                            @stt
+                                            <input type="hidden" name="" id="" value="@item.Id" />
+                                        </td>
+                                        <td>@item.CreatedDateUtc </td>
+                                        <td>@item.CreatedUid </td>
+                                        <td>@item.noi_dung_xu_ly</td>
+                                        <td>NGƯỜI NHẬN</td>
+                                        <td>HẠN XỬ LÝ</td>
+                                    </tr>
+                                    stt++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    function DongYBoSung(ho_so_id) {
+        alert("Đồng ý bổ sung thành công!")
+    }
+    function LoaiHoSo(ho_so_id) {
+        alert("Loại hồ sơ thành công!")
+    }
+</script>

@@ -34,6 +34,7 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _nguoiDungDao = new NguoiDungDao(DbProvider);
+            _sys = new SystemDao(DbProvider);
         }
         #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)

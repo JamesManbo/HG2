@@ -9,7 +9,7 @@
         <div class="col-md-8">
                <select name="ma_thu_tuc" id="ma_thu_tuc" onchange="HoSoPaging(this)" class="form-control input-default">
                    <option value="" selected>-Chọn thủ tục-</option> 
-                    @if(Model != null)
+                    @if(Model != null && Model.lstThuTuc != null)
                     {
                          foreach (var item in Model.lstThuTuc)
                          {

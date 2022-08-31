@@ -29,4 +29,5 @@ namespace HG.Entities.SearchModels
         public int? qua_han { get; set; }
         public int? trang_thai_hs { get; set; }
     }
+  
 }
