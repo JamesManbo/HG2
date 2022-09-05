@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 
 namespace HG.WebApp.Helper
 {
+    
     public class HelperSql
     {
       
@@ -50,8 +51,8 @@ namespace HG.WebApp.Helper
             try
             {
                 var tentthc = "";
-                using (SqlConnection conn = new SqlConnection("Server=DESKTOP-S8GUJHO\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
-                //using (SqlConnection conn = new SqlConnection("Data Source=WIN-MEP66BM5GQB\\SQLEXPRESS;Initial Catalog=HG; User ID=sa;Password=123456As."))
+                //using (SqlConnection conn = new SqlConnection("Server=DESKTOP-S8GUJHO\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
+                using (SqlConnection conn = new SqlConnection("Server=WIN-20421CI14U0\\SQLEXPRESS2014;Initial Catalog=HG; User ID=sa;Password=abcABC123"))
                 {
                     conn.Open();
 

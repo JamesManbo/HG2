@@ -14,6 +14,7 @@ using X.PagedList;
 using HG.WebApp.Sercurity;
 using HG.Data.Business.User;
 using HG.Entities.Entities;
+using HG.Entities;
 
 namespace HG.WebApp.Controllers
 {
@@ -350,7 +351,61 @@ namespace HG.WebApp.Controllers
             ViewBag.DanhSachQuanHuyen = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == usermap.TinhThanh).ToList();
             ViewBag.DanhSachXaPhuong = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_con == usermap.QuanHuyen).ToList();
             return View(usermap);
-        } 
+        }
+        [HttpPost]
+        public async Task<IActionResult> ThongTinCaNhan(NguoiDungCongDan item)
+        {
+            var db = new EAContext();
+            //var UserId = Guid.Parse(userManager.GetUserId(User));
+            var user = await userManager.FindByNameAsync(item.UserName);
+            if (user != null)
+            {
+                user.UserName = item.UserName;
+                user.PhoneNumber = item.PhoneNumber;
+                user.Email = item.Email;
+                user.mat_khau = "1";
+                user.ma_chuc_vu = item.ma_chuc_vu;
+                user.ma_phong_ban = item.ma_phong_ban;
+                user.ho_dem = item.ho_dem;
+                user.ten = item.ten;
+                user.ngay_sinh = item.ngay_sinh;
+                user.khoa_tai_khoan = 0;
+                user.IsAdministratorDV = 0;
+                user.IsAdministratorPB = 0;
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                if (item !=null)
+                {
+                    var obj = db.AspNetUsers.Where(n => n.UserName == item.UserName && n.ten == item.ten).FirstOrDefault();
+                    //tiep tuc them vao bang mapping
+                    Asp_user_client usermapping = new Asp_user_client();
+                    usermapping.ma_nguoi_dung = obj.Id;
+                    usermapping.loai_giay_to = item.LoaiGiayToHL;
+                    usermapping.ma_tinh_thanh = item.TinhThanh;
+                    usermapping.ma_quan_huyen = item.QuanHuyen;
+                    usermapping.ma_xa_phuong = item.XaPhuong;
+                    usermapping.so_giay_to = item.SoGiayTo;
+                    usermapping.ten_co_quan = item.TenCoQuan;
+                    usermapping.dia_chi_co_quan = item.DiaChiCoQuan;
+                    usermapping.code_verify = item.CodeVerify;
+                    db.Entry(usermapping).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("News", "News");
+                }
+                else
+                {
+                    ViewBag.Succeeded = false;
+                    ViewBag.Message = "Cập nhật không thành công!";
+                    return View(item);
+                }
+            }
+            else
+            {
+                ViewBag.Succeeded = false;
+                ViewBag.Message = "Cập nhật không thành công!";
+                return View(item);
+            }
+        }
         public async Task<string> SaveProfile(string viewpath, string FirstName, string PhoneNumber, string MaritalStatus, string Website)
         {
             var user = await userManager.FindByNameAsync(User.Identity.Name);
@@ -383,6 +438,22 @@ namespace HG.WebApp.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
+            return PartialView();
+        }
+        public IActionResult CurrentUserClient()
+        {
+            if (User.Identity.Name == null)
+            {
+                return RedirectToAction("News", "News");
+            }
+            EAContext db = new EAContext();
+            var obj = db.AspNetUsers.Where(n => n.UserName == User.Identity.Name).FirstOrDefault();
+            var NameUid = "";
+            if(obj != null)
+            {
+                NameUid = (obj.ho_dem == null ? "" : obj.ho_dem) + " " + (obj.ten == null ? "" : obj.ten);
+            }
+            ViewBag.NameUid = NameUid;
             return PartialView();
         }
         public IActionResult DoiMatKhau()

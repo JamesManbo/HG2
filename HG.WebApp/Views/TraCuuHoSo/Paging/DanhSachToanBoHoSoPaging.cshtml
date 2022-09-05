@@ -29,7 +29,7 @@
                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc) </a></td>
                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.CreatedDateUtc </a></td>
-                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.trang_thai </a></td>
+                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperStatus.GetListStatus().Where(n=>n.value == item.trang_thai).FirstOrDefault().name </a></td>
                     </tr>
                     stt++;
                 }

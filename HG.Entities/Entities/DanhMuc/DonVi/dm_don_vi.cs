@@ -14,8 +14,9 @@ namespace HG.Entities.DanhMuc.DonVi
         public string ma_quoc_gia_don_vi { get; set; }
         public string ip_or_website { get; set; }
         public string ma_cap_co_quan { get; set; }
-        public string? ma_don_vi_cha { get; set; }
-        public string? ma_don_vi_con { get; set; }
+        public string? ma_dia_ban_cha { get; set; }
+        public string? ma_dia_ban_con { get; set; }
+        public string? ma_dia_ban_con_c1 { get; set; }
         public int la_dich_vu_cong { get; set; }
         public string? so_dien_thoai { get; set; }
         public string? email { get; set; }

@@ -1,4 +1,5 @@
 ﻿using HG.Data.Business.DanhMuc;
+using HG.Data.Business.Sys;
 using HG.Entities;
 using HG.Entities.DanhMuc.DonVi;
 using HG.Entities.Entities.DanhMuc;
@@ -24,6 +25,7 @@ namespace HG.WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         Sercutiry sercutiry = new Sercutiry();
         private readonly DanhMucDao _danhmucDao;
+        private readonly SystemDao _sys;
 
         //extend sys identity
         public DanhMucController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
@@ -34,6 +36,7 @@ namespace HG.WebApp.Controllers
             this._config = configuration;
             this._httpContextAccessor = httpContextAccessor;
             _danhmucDao = new DanhMucDao(DbProvider);
+            _sys = new SystemDao(DbProvider);
         }
 
         #region Phong Ban
@@ -240,6 +243,7 @@ namespace HG.WebApp.Controllers
         #region Lĩnh vực
         public IActionResult LinhVuc()
         {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var currentPage = 1;
             var totalRecored = 0;
@@ -247,7 +251,14 @@ namespace HG.WebApp.Controllers
             using (var db = new EAContext())
             {
                 var ds = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
-                linhvuc = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                if (_sys.LaQuanTriTatCaDonVi(UserId))
+                {
+                    linhvuc = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                }
+                else
+                {
+                    linhvuc = ds.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                }
                 totalRecored = ds.Count();
             }
             ViewBag.TotalRecored = totalRecored;
@@ -260,7 +271,7 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> LinhVucPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
         {
-            // var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             var totalRecored = 0;
             var result = "";
             using (var db = new EAContext())
@@ -268,7 +279,15 @@ namespace HG.WebApp.Controllers
                 var ds = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).OrderBy(n => n.Stt.HasValue ? n.Stt : 999999).ToList();
                 if (!String.IsNullOrEmpty(tu_khoa))
                 {
-                    ds = ds.Where(n => n.ma_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                    if (_sys.LaQuanTriTatCaDonVi(UserId))
+                    {
+                        ds = ds.Where(n => n.ma_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                    }
+                    else
+                    {
+                        ds = ds.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId) && n.ma_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                        //dv = db.dm_don_vi.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).ToList();
+                    }
                 }
                 var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 totalRecored = ds.Count();
@@ -284,7 +303,21 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ThemLinhVuc(string code = "")
         {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             ViewBag.code = code;
+            var dv = new List<dm_don_vi>();
+            using (var db = new EAContext())
+            {
+                if (_sys.LaQuanTriTatCaDonVi(UserId))
+                {
+                    dv = db.dm_don_vi.ToList();
+                }
+                else
+                {
+                    dv = db.dm_don_vi.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).ToList();
+                }
+            }
+            ViewBag.lst_don_vi = dv;
             return View("~/Views/DanhMuc/LinhVuc/ThemLinhVuc.cshtml");
         }
 
@@ -315,12 +348,22 @@ namespace HG.WebApp.Controllers
 
         public IActionResult SuaLinhVuc(string code, string type)
         {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             var linhvuc = new Dm_Linh_Vuc();
+            var dv = new List<dm_don_vi>();
             using (var db = new EAContext())
             {
+                if (_sys.LaQuanTriTatCaDonVi(UserId))
+                {
+                    dv = db.dm_don_vi.ToList();
+                }
+                else
+                {
+                    dv = db.dm_don_vi.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).ToList();
+                }
                 linhvuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
             }
-            //var linhvuc = eAContext.Dm_Linh_Vuc.Where(n => n.Deleted == 0 && n.ma_linh_vuc == code).FirstOrDefault();
+            ViewBag.lst_don_vi = dv;
             ViewBag.type_view = type;
             return View("~/Views/DanhMuc/LinhVuc/SuaLinhVuc.cshtml", linhvuc);
         }

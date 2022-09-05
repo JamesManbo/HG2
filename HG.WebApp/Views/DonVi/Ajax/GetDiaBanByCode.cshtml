@@ -1,0 +1,75 @@
+﻿@model List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>     
+@if(ViewBag.CapCoQuan == "004")
+{
+      <div class="row mb-3">                      
+          <label for="stt" class="col-sm-2 control-label">Tỉnh</label>                      
+          <div class="col-sm-8">
+            <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" onchange="TinhThanhChange(this)" class="form-control input-default">
+                @if(Model != null)
+                {
+                    <option value="001">Chọn tỉnh/thành phố</option>
+                    foreach (var item in Model)
+                    {
+                         <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                    }
+                }
+			  </select>               
+          </div>                      
+      </div>
+
+    <div class="row mb-3" id="QuanHuyen">
+        <label for="stt" class="col-sm-2 control-label">Quận/Huyện</label>                      
+          <div class="col-sm-8">                      
+              <input type="number" readonly class="form-control input-default" name="stt">                      
+          </div>                      
+    </div>
+    <div class="row mb-3" id="XaPhuong">
+        <label for="stt" class="col-sm-2 control-label">Phường/Xã</label>
+        <div class="col-sm-8">
+            <input type="number" readonly class="form-control input-default" name="stt">
+        </div>
+    </div>
+    <script>
+        function TinhThanhChange(obj) {
+            $.ajax({
+                type: "GET",
+                url: "/DonVi/TinhThanhChange?ma_dia_ban_cha=" + obj.value,
+                data: "",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $("#QuanHuyen").html(data);
+                }
+            });
+        }
+        function QuanHuyenChange(obj) {
+            $.ajax({
+                type: "GET",
+                url: "/DonVi/LayXaTheoHuyen?ma_dia_ban_con=" + obj.value,
+                data: "",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $("#XaPhuong").html(data);
+                }
+            });
+        }
+    </script>
+}else{
+     <div class="row mb-3">                      
+          <label for="stt" class="col-sm-2 control-label">Tỉnh</label>                      
+          <div class="col-sm-8">
+            <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" class="form-control input-default">
+                 @if(Model != null)
+                 {
+                    <option value="001">Chọn tỉnh/thành phố</option>
+                    foreach (var item in Model)
+                    {
+                         <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                    }
+                 }
+			  </select>                    
+          </div>                      
+      </div> 
+     
+}
+
+                                

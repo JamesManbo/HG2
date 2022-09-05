@@ -119,6 +119,7 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("uid", item.CreatedUid ?? Guid.Empty, SqlDbType.UniqueIdentifier);
                 DbProvider.AddParameter("uid_name", item.UidName ?? "", SqlDbType.NVarChar);
                 DbProvider.AddParameter("stt", item.Stt ?? null, SqlDbType.Int);
+                DbProvider.AddParameter("ma_don_vi", item.ma_don_vi, SqlDbType.VarChar);
                 DbProvider.AddParameter("ma_loi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
                 // Lấy về danh sách các trường học
                 DbProvider.ExecuteNonQuery();

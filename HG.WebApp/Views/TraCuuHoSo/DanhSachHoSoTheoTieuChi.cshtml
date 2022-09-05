@@ -4,6 +4,8 @@
     ViewData["Title"] = "Hồ sơ chờ bổ sung";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var LstLinhVuc = ViewBag.LstLinhVuc as List<Dm_Linh_Vuc>;
+    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+    var list_phong_ban = ViewBag.ListPhongBan as List<HG.Entities.Dm_Phong_Ban>;
 }
 @model List<HG.Entities.HoSo.Ho_So>
 
@@ -27,27 +29,27 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Mã hồ sơ:</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control input-default" maxlength="50" name="ma_ho_so" id="ma_ho_so" >
+                            <input type="text" class="form-control input-default" maxlength="50" name="ma_ho_so" value="@ViewBag.ma_ho_so" id="ma_ho_so" >
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Tên người nộp:</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control input-default" maxlength="50" name="ten_nguoi_nop" id="ten_nguoi_nop">
+                            <input type="text" class="form-control input-default" maxlength="50" name="ten_nguoi_nop" value="@ViewBag.ma_ho_so" id="ten_nguoi_nop">
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Cán bộ tiếp nhận:</label>
                         <div class="col-md-2">
                             <select name="can_bo_tiep_nhan" id="can_bo_tiep_nhan" class="form-control input-default">
                                 <option value="" selected>-Chọn cán bộ tiếp nhận-</option>
-                                @if (LstLinhVuc != null)
+                                @if (LstNguoiDung != null)
                                 {
-                                    foreach (var item in LstLinhVuc)
+                                    foreach (var item in LstNguoiDung)
                                     {
-                                        if (item.ma_linh_vuc == ViewBag.MaLinhVuc)
+                                        if (item.Id == ViewBag.can_bo_tiep_nhan)
                                         {
-                                            <option value="@item.ma_linh_vuc" selected>@item.ten_linh_vuc</option>
+                                            <option value="@item.Id" selected>@(item.ho_dem ?? "" + item.ten ?? "") </option>
                                         }
                                         else
                                         {
-                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                            <option value="@item.Id">@(item.ho_dem ?? "" + item.ten ?? "")</option>
                                         }
                                     }
                                 }
@@ -59,18 +61,20 @@
                         <div class="col-md-2">
                             <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default">
                                 <option value="" selected>-Chọn phòng ban-</option>
-                                @if (LstLinhVuc != null)
+                                @if(list_phong_ban != null)
                                 {
-                                    foreach (var item in LstLinhVuc)
+                                    foreach (var item in list_phong_ban)
                                     {
-                                        if (item.ma_linh_vuc == ViewBag.MaLinhVuc)
+                                        if (item.ma_phong_ban == ViewBag.ma_phong_ban)
                                         {
-                                            <option value="@item.ma_linh_vuc" selected>@item.ten_linh_vuc</option>
+                                            <option value="@item.ma_phong_ban" selected> @item.ten_phong_ban</option>
+
                                         }
                                         else
                                         {
-                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                            <option value="@item.ma_phong_ban">@item.ten_phong_ban</option>
                                         }
+
                                     }
                                 }
                             </select>
@@ -79,17 +83,17 @@
                         <div class="col-md-2">
                             <select name="can_bo_xu_ly" id="can_bo_xu_ly" class="form-control input-default">
                                 <option value="" selected>-Chọn cán bộ xử lý-</option>
-                                @if (LstLinhVuc != null)
+                                @if (LstNguoiDung != null)
                                 {
-                                    foreach (var item in LstLinhVuc)
+                                    foreach (var item in LstNguoiDung)
                                     {
-                                        if (item.ma_linh_vuc == ViewBag.MaLinhVuc)
+                                        if (item.Id == ViewBag.can_bo_tiep_nhan)
                                         {
-                                            <option value="@item.ma_linh_vuc" selected>@item.ten_linh_vuc</option>
+                                            <option value="@item.Id" selected>@(item.ho_dem ?? "" + item.ten ?? "") </option>
                                         }
                                         else
                                         {
-                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                            <option value="@item.Id">@(item.ho_dem ?? "" + item.ten ?? "")</option>
                                         }
                                     }
                                 }
@@ -99,19 +103,16 @@
                         <div class="col-md-2">
                             <select name="ma_trang_thai" id="ma_trang_thai" class="form-control input-default">
                                 <option value="" selected>-Chọn trạng thái-</option>
-                                @if (LstLinhVuc != null)
+                                @foreach (var item in HG.WebApp.Helper.HelperStatus.GetListStatus())
                                 {
-                                    foreach (var item in LstLinhVuc)
-                                    {
-                                        if (item.ma_linh_vuc == ViewBag.MaLinhVuc)
+                                        if (item.value == ViewBag.ma_trang_thai)
                                         {
-                                            <option value="@item.ma_linh_vuc" selected>@item.ten_linh_vuc</option>
+                                            <option value="@item.value" selected>@item.name</option>
                                         }
                                         else
                                         {
-                                            <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                            <option value="@item.value">@item.name</option>
                                         }
-                                    }
                                 }
                             </select>
                         </div>
@@ -119,23 +120,33 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Từ ngày:</label>
                         <div class="col-md-2">
-                            <input type="date" class="form-control input-default" maxlength="50" name="tu_ngay" id="tu_ngay">
+                            <input type="date" class="form-control input-default" maxlength="50" name="tu_ngay" value="@ViewBag.tu_ngay" id="tu_ngay">
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Đến ngày:</label>
                         <div class="col-md-2">
-                            <input type="date" class="form-control input-default" maxlength="50" name="den_ngay" id="den_ngay">
+                            <input type="date" class="form-control input-default" maxlength="50" value="@ViewBag.den_ngay" name="den_ngay" id="den_ngay">
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Tình trạng:</label>
                         <div class="col-md-2">
                             <select name="tinh_trang" id="tinh_trang" class="form-control input-default">
-                                <option value="00" selected>-Tất cả-</option>
-                                <option value="01" selected>-Đúng hạn-</option>
-                                <option value="02" selected>-Quá hạn-</option>
+                                @if(ViewBag.tinh_trang == "02"){
+                                    <option value="00" selected>-Tất cả-</option>
+                                    <option value="01">-Đúng hạn-</option>
+                                    <option value="02" selected>-Quá hạn-</option>
+                                }else if(ViewBag.tinh_trang == "01"){
+                                    <option value="00">-Tất cả-</option>
+                                    <option value="01" selected>-Đúng hạn-</option>
+                                    <option value="02">-Quá hạn-</option>
+                                }else{
+                                    <option value="00" selected>-Tất cả-</option>
+                                    <option value="01">-Đúng hạn-</option>
+                                    <option value="02">-Quá hạn-</option>
+                                }
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Lĩnh vực</label>
+                        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Lĩnh vực:</label>
                         <div class="col-md-8">
                             <select name="ma_linh_vuc" id="ma_linh_vuc" onchange="LayThuTucByLinhVuc(this)" class="form-control input-default">
                                 <option value="" selected>-Chọn lĩnh vực-</option>
@@ -191,7 +202,7 @@
                     </script>
                     <div id="thutucbylinhvuc">
                         <div class="row mb-3">
-                            <label for="stt" class="col-sm-2 control-label" style="text-align: right">Thủ tục</label>
+                            <label for="stt" class="col-sm-2 control-label" style="text-align: right">Thủ tục:</label>
                             <div class="col-sm-8">
                                 <input type="number" class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
@@ -254,7 +265,7 @@
                                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
                                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc) </a></td>
                                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.CreatedDateUtc </a></td>
-                                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.trang_thai </a></td>
+                                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperStatus.GetListStatus().Where(n=>n.value == item.trang_thai).FirstOrDefault().name</a></td>
                                     </tr>
                                     stt++;
                                 }

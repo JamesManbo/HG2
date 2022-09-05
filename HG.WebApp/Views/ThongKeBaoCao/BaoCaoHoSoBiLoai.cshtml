@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "Báo cáo hồ sơ bị loại";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-table"></span></div>
+        <div class="pagetitle">
+            <h5>Báo cáo</h5>
+            <h1>@ViewData["Title"]</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <!-- Table with stripped rows -->
+            @using (Html.BeginForm("BaoCaoSoLuong", "BaoCaoThongKe", FormMethod.Post, new { id = "formBaoCao" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="widget">
+                    <h4 class="widgettitle">Chọn tiêu chí</h4>
+                    <div class="widgetcontent">
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Cán bộ tiếp nhận</label>
+                            <div class="col-md-2">
+                                <select name="CanBoTiepNhan" id="nam" onchange="" class="form-select form-control input-default">
+                                    <option>Nguyễn Văn An</option>
+                                    <option>Nguyễn Văn Bình</option>
+                                    <option>Nguyễn Thu Hương</option>
+
+                                </select>
+                                <script>
+                                   
+                                </script>
+                            </div>
+                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban</label>
+                            <div class="col-md-2">
+                                <select name="Quy" id="quy" onchange="" class="form-select form-control input-default">
+                                    <option >---Chọn---</option>
+                                    <option>Tài chính kế toán</option>
+                                    <option>Tổ chức</option>
+                                    <option>Kế hoạch</option>
+                                </select>
+
+                                <script>
+                                    $("select#my-select option")
+                                        .each(function () { this.selected = (this.text == myVal); });
+                                </script>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                          
+                            <label for="inputPassword" class="col-md-1 control-label" style="text-align: right">Từ ngày</label>
+                            <div class="col-md-2">
+                                <input type="date" class="form-control input-default" name="TuNgayStr" value="" placeholder="Từ ngày">
+                            </div>
+                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Đến ngày</label>
+                            <div class="col-md-2">
+                                <input type="date" class="form-control input-default" name="DenNgayStr" value="" placeholder="Đến ngày">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+
+                          
+                            <label for="inputPassword" class="col-md-1 control-label" style="text-align: right">Phòng ban</label>
+                            <div class="col-md-2">
+                              <select name="Quy" id="quy" onchange="" class="form-select form-control input-default">
+                                    <option >---Chọn---</option>
+                                    <option>Tài chính kế toán</option>
+                                    <option>Tổ chức</option>
+                                    <option>Kế hoạch</option>
+                                </select>
+
+                            </div>
+                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Lĩnh vực</label>
+                            <div class="col-md-2">
+                                <select name="Quy" id="quy" onchange="" class="form-select form-control input-default">
+                                    <option>---Chọn---</option>
+                                    <option>Tài chính kế toán</option>
+                                    <option>Tổ chức</option>
+                                    <option>Kế hoạch</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <input type="submit" value="Xem" class="btn btn-primary" style="width:100px;" id="btn-submit" onclick="return false;" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                <iframe id="iframeReport" style="width:100%; min-height:500px">
+
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<script>
+    function getFormData(formId) {
+        var $form = $(formId);
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+    }
+
+    $(function () {
+        $('#btn-submit').click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/baocaothongke/GetBaoCaoHoSoBiLoai",
+                data: getFormData('#formBaoCao'),
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    $('#iframeReport').attr('src', 'data:application/pdf;base64, ' + data)
+                }
+            });
+        });
+
+        
+    });
+</script>

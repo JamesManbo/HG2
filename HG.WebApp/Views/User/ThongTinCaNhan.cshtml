@@ -236,7 +236,7 @@
 
 <div class="box-white box-white-1" style="height: auto;">
 		<div class="title-new">THÔNG TIN NGƯỜI DÙNG</div>
-		<form class="form-horizontal form-horizontal-new" id="DangKy" action="/News/DangKy" method="post" enctype="multipart/form-data">
+		<form class="form-horizontal form-horizontal-new" id="DangKy" action="/User/ThongTinCaNhan" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label class="col-md-4 control-label">Tên đăng nhập: <span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
@@ -359,7 +359,7 @@
 					{
 						foreach (var item in DanhSachQuanHuyen)
 						{
-							if (item.ma_dia_ban_cha == Model.QuanHuyen)
+							if (item.ma_dia_ban_con == Model.QuanHuyen)
 							{
 								<option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option>
 							}
@@ -395,7 +395,7 @@
 					{
 						foreach (var item in DanhSachXaPhuong)
 						{
-							if (item.ma_dia_ban_con == Model.XaPhuong)
+							if (item.ma_dia_ban_con_c2 == Model.XaPhuong)
 							{
 								<option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option>
 							}

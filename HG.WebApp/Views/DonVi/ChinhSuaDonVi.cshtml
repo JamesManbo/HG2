@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var ListCapDiaBan = ViewBag.ListCapDiaBan as List<HG.Entities.Entities.DanhMuc.DonVi.dm_cap_dia_ban>;
     var ListDiaBan = ViewBag.ListDiaBan as List<HG.Entities.DanhMuc.DonVi.dm_don_vi>;
+    var ListTinhThanh = ViewBag.ListTinhThanh as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
+    var ListQuanHuyen = ViewBag.ListQuanHuyen as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
+    var ListXaPhuong = ViewBag.ListXaPhuong as List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
 }
 @model HG.Entities.DanhMuc.DonVi.dm_don_vi;
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -108,42 +111,100 @@
                                 </select>
                             </div>
                         </div>
-                        <script>
-                            function GetCoQuanChaTheoID(obj) {
-                                $.ajax({
-                                    type: "GET",
-                                    url: "/DonVi/DanhSachDonViCha?ma_cap_co_quan=" + obj.value,
-                                    data: "",
-                                    contentType: 'application/json; charset=utf-8',
-                                    success: function(data) {
-                                        $("#chitietmacoquan").html(data);
-                                    }
-                                });
-                            }
-                        </script>
-
-                        <div class="row mb-3" id="chitietmacoquan">
-                            <label for="stt" class="col-sm-2 control-label">Cấp đơn vị cha <span style="color:red">(*)</span></label>
-                            <div class="col-sm-8">
-                                <select name="ma_don_vi_cha" id="ma_don_vi_cha" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @if (ListDiaBan != null && Model.ma_cap_co_quan == "004")
-                                    {
-                                        foreach (var item in ListDiaBan)
+                        @if(Model.ma_cap_co_quan == "004"){
+                             <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Tỉnh/Thành Phố</label>
+                                <div class="col-sm-8">
+                                    <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ListTinhThanh != null)
                                         {
-                                            if (item.ma_don_vi == Model.ma_don_vi_cha)
+                                            <option value="001">Chọn tỉnh/thành phố</option>
+                                            foreach (var item in ListTinhThanh)
                                             {
-                                                <option value="@item.ma_don_vi" selected>@item.ten_don_vi</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
-                                            }
+                                                if (item.ma_dia_ban == Model.ma_dia_ban_cha)
+                                                {
+                                                    <option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                                }
 
+                                            }
                                         }
-                                    }
-                                </select>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Quận/Huyện</label>
+                                <div class="col-sm-8">
+                                    <select name="ma_dia_ban_con" id="ma_dia_ban_con" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ListQuanHuyen != null)
+                                        {
+                                            <option value="001">Chọn Quận/Huyện</option>
+                                            foreach (var item in ListQuanHuyen)
+                                            {
+                                                if (item.ma_dia_ban == Model.ma_dia_ban_con)
+                                                {
+                                                    <option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                                }
+
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Xã/Phường</label>
+                                <div class="col-sm-8">
+                                    <select name="ma_dia_ban_con_c1" id="ma_dia_ban_con_c1" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ListXaPhuong != null)
+                                        {
+                                            <option value="001">Chọn Xã/Phường</option>
+                                            foreach (var item in ListXaPhuong)
+                                            {
+                                                if (item.ma_dia_ban == Model.ma_dia_ban_con_c1)
+                                                {
+                                                    <option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                                }
+
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }else {
+                            <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label">Tỉnh</label>
+                                <div class="col-sm-8">
+                                    <select name="ma_dia_ban_cha" id="ma_dia_ban_cha" class="form-control input-default" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @if (ListTinhThanh != null)
+                                        {
+                                            <option value="001">Chọn tỉnh/thành phố</option>
+                                            foreach (var item in ListTinhThanh)
+                                            {
+                                                if(item.ma_dia_ban == Model.ma_dia_ban_cha){
+                                                    <option value="@item.ma_dia_ban" selected>@item.ten_dia_ban</option>
+                                                }else{
+                                                    <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                                                }
+                                                
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        }
+
+                        
 
 
 

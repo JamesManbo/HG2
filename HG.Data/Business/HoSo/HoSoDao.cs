@@ -3,6 +3,7 @@ using HG.Entities;
 using HG.Entities.Entities;
 using HG.Entities.Entities.Nhom;
 using HG.Entities.HoSo;
+using HG.Entities.Search;
 using HG.Entities.SearchModels;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,47 @@ namespace HG.Data.Business.HoSo
                 
             }
         }
-      
+        public List<Ho_So> TimKiemHoSoTheoTieuChi(HoSoPaging item , HoSoFilter hoSoFilter, out int total)
+        {
+            try
+            {
+                List<Ho_So> result = new List<Ho_So>();
+                var abc = 1;
+                if (item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
+                else if (item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
+                DbProvider.SetCommandText2("[dbo].[hoso$filter]", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
+                DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
+                DbProvider.AddParameter("ma_trang_thai",  hoSoFilter.ma_trang_thai, SqlDbType.Int);
+                DbProvider.AddParameter("ma_ho_so",  hoSoFilter.ma_ho_so, SqlDbType.Int);
+                DbProvider.AddParameter("ten_nguoi_nop",  hoSoFilter.ten_nguoi_nop, SqlDbType.NVarChar);
+                DbProvider.AddParameter("can_bo_tiep_nhan", hoSoFilter.can_bo_tiep_nhan, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_phong_ban",  hoSoFilter.ma_phong_ban, SqlDbType.NVarChar);
+                DbProvider.AddParameter("can_bo_xu_ly", hoSoFilter.can_bo_xu_ly, SqlDbType.NVarChar);
+                DbProvider.AddParameter("tinh_trang",  hoSoFilter.tinh_trang ?? "00", SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_linh_vuc",  hoSoFilter.ma_linh_vuc , SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_thu_tuc_hc",  hoSoFilter.ma_thu_tuc_hc, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                // Lấy về danh sách các người dung
+                result = DbProvider.ExecuteListObject<Ho_So>();
+                total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                total = 0;
+                return new List<Ho_So>();
+
+            }
+        }
 
     }
 }

@@ -46,24 +46,7 @@
         <br>
         <p class="link">dichvucong.hagiang.gov.vn</p>
       </div>
-            @if (User.Identity.Name != null)
-            {
-                <div class="logout-info">
-                    <p>Xin chào: @User.Identity.Name</p>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa-solid fa-user"></i>
-                            <i class="drop-icon fa-solid fa-caret-down"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item"  href="/User/ThongTinCaNhan?username=@User.Identity.Name">Thông Tin cá nhân</a>
-                            <a class="dropdown-item"  href="/User/DoiMatKhau?username=@User.Identity.Name">Đổi mật khẩu</a>
-                            <a class="dropdown-item" href="/User/LogoutClient">Đăng Xuất</a>
-                        </div>
-                    </div>
-                </div>
-            }
-      
+           @Html.RenderAction("CurrentUserClient","User")
       <div class="clearfix"></div>
     </div>
   </section>
@@ -218,7 +201,7 @@
                                         <button type="button" class="btn-common btn-login" onclick="LoginDVC()">
                                             Đăng nhập
                                         </button>
-                                        <button type="button" class="btn-common btn-register" onclick="LogoutDVC()">
+                                        <button type="button" class="btn-common btn-register" onclick="RegisterDVC()">
                                             Đăng ký
                                         </button>
                                     </div>
@@ -248,6 +231,9 @@
                                                     }
                                                 }
                                             });
+                                        }
+                                        function RegisterDVC(){
+                                            window.location.href = "/News/DangKy"
                                         }
                                     </script>
                                     <div class="lg-chucnang">

@@ -97,12 +97,18 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
+            var nd = new List<AspNetUsers>();
+            var pb = new List<Dm_Phong_Ban>();
             HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = "", tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 120 };
-            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            hs = _hoso.TimKiemHoSoTheoTieuChi(hoSoPaging, hoSoFilter, out totalRecored);
             using (var db = new EAContext())
             {
                 lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
+                nd = db.AspNetUsers.ToList();
+                pb = db.Dm_Phong_Ban.ToList();
             };
+            ViewBag.LstNguoiDung = nd;
+            ViewBag.ListPhongBan = pb;
             ViewBag.LstLinhVuc = lv;
             ViewBag.CurrentPage = 1;
             ViewBag.TotalRecored = totalRecored;
@@ -111,13 +117,20 @@ namespace HG.WebApp.Controllers
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
             ViewBag.txtSearch = txtSearch;
+            
 
             //handle các data đã filter ở đây
-
-            //ViewBag.MaHoSo = ma_linh_vuc;
-            //ViewBag.TenHoSo = ma_linh_vuc;
-            //ViewBag.MaLinhVuc = ma_linh_vuc;
-            //ViewBag.MaThuTuc = ma_thu_tuc;
+            ViewBag.ma_ho_so = hoSoFilter.ma_ho_so;
+            ViewBag.ten_nguoi_nop = hoSoFilter.ten_nguoi_nop;
+            ViewBag.can_bo_tiep_nhan = hoSoFilter.can_bo_tiep_nhan;
+            ViewBag.ma_phong_ban = hoSoFilter.ma_phong_ban;
+            ViewBag.can_bo_xu_ly = hoSoFilter.can_bo_xu_ly;
+            ViewBag.ma_trang_thai = hoSoFilter.ma_trang_thai;
+            ViewBag.tu_ngay = hoSoFilter.tu_ngay;
+            ViewBag.den_ngay = hoSoFilter.den_ngay;
+            ViewBag.tinh_trang = hoSoFilter.tinh_trang;
+            ViewBag.MaLinhVuc = hoSoFilter.ma_linh_vuc;
+            ViewBag.MaThuTuc = hoSoFilter.ma_thu_tuc_hc;
             return View(hs);
         }
     }

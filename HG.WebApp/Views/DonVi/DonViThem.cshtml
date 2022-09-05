@@ -104,22 +104,11 @@
                             function GetCoQuanChaTheoID(obj) {
                                 $.ajax({
                                     type: "GET",
-                                    url: "/DonVi/LayDanhSachDiaBanTheoMa?ma_cap_co_quan=" + obj.value,
+                                    url: "/DonVi/LayDanhSachDiaBanTheoMa_new?ma_cap_co_quan=" + obj.value,
                                     data: "",
                                     contentType: 'application/json; charset=utf-8',
                                     success: function(data) {
                                         $("#chitietmacoquan").html(data);
-                                    }
-                                });
-                            }
-                            function LayHuyenTheoTinh(obj) {
-                                $.ajax({
-                                    type: "GET",
-                                    url: "/DonVi/LayHuyenTheoTinh?ma_dia_ban_cha=" + obj.value,
-                                    data: "",
-                                    contentType: 'application/json; charset=utf-8',
-                                    success: function(data) {
-                                        $("#slHuyen").html(data);
                                     }
                                 });
                             }

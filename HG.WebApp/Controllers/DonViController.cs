@@ -109,24 +109,48 @@ namespace HG.WebApp.Controllers
 
             if (type == StatusAction.Edit.ToString())
             {
-                EAContext eAContext = new EAContext();
-                ViewBag.ListCapDiaBan = eAContext.dm_cap_dia_ban.ToList();
-                ViewBag.ListDiaBan = eAContext.dm_don_vi.Where(n => n.Deleted == 0 && n.ma_cap_co_quan == "003").ToList();
+                EAContext db = new EAContext();
+                ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
+                ViewBag.ListDiaBan = db.dm_don_vi.Where(n => n.Deleted == 0 && n.ma_cap_co_quan == "003").ToList();
                 ViewBag.type_view = StatusAction.Edit.ToString();
-                var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
+                var obj = db.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
                 if (obj != null && obj.CreatedUid != null)
                 {
                     ViewBag.CreateUserName = await userManager.GetUserNameAsync(await userManager.FindByIdAsync(obj.CreatedUid.ToString()));
+                    //lấy danh sách địa bàn cha (tỉnh thành)
+                    ViewBag.ListTinhThanh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
+                    //lấy danh sách địa bàn con
+                    if (obj.ma_dia_ban_con != null)
+                    {
+                        ViewBag.ListQuanHuyen = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == obj.ma_dia_ban_cha).ToList();
+                    };
+                    //lấy danh sách địa bàn con c1 (xã phường)
+                    if (obj.ma_dia_ban_con_c1 != null)
+                    {
+                        ViewBag.ListXaPhuong = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_con == obj.ma_dia_ban_con).ToList();
+                    };
                 }
                 return View(obj);
             }
             else
             {
-                EAContext eAContext = new EAContext();
-                ViewBag.ListCapDiaBan = eAContext.dm_cap_dia_ban.ToList();
+                EAContext db = new EAContext();
+                ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
                 ViewBag.type_view = StatusAction.View.ToString();
-                ViewBag.ListDiaBan = eAContext.dm_don_vi.Where(n => n.Deleted == 0 && n.ma_cap_co_quan == "003").ToList();
-                var obj = eAContext.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
+                ViewBag.ListDiaBan = db.dm_don_vi.Where(n => n.Deleted == 0 && n.ma_cap_co_quan == "003").ToList();
+                var obj = db.dm_don_vi.Where(n => n.ma_don_vi == code).FirstOrDefault();
+                //lấy danh sách địa bàn cha (tỉnh thành)
+                ViewBag.ListTinhThanh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
+                //lấy danh sách địa bàn con
+                if (obj.ma_dia_ban_con != null)
+                {
+                    ViewBag.ListQuanHuyen = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == obj.ma_dia_ban_cha).ToList();
+                };
+                //lấy danh sách địa bàn con c1 (xã phường)
+                if (obj.ma_dia_ban_con_c1 != null)
+                {
+                    ViewBag.ListXaPhuong = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_con == obj.ma_dia_ban_con).ToList();
+                };
                 return View(obj);
             }
         }
@@ -238,6 +262,31 @@ namespace HG.WebApp.Controllers
         }
 
 
+        public async Task<IActionResult> LayDanhSachDiaBanTheoMa_new(string ma_cap_co_quan)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.ma_dia_ban_cha == null || n.ma_dia_ban_cha == "001").ToList();
+            ViewBag.CapCoQuan = ma_cap_co_quan;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/Ajax/GetDiaBanByCode.cshtml", LstDiaBan);
+            return Content(result);
+        }
+        //Lấy Huyện theo tỉnh new
+        public async Task<IActionResult> TinhThanhChange(string ma_dia_ban_cha)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == ma_dia_ban_cha).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/Ajax/TinhThanhChange.cshtml", LstDiaBan);
+            return Content(result);
+        }
+        public async Task<IActionResult> LayXaTheoHuyen(string ma_dia_ban_con)
+        {
+            EAContext db = new EAContext();
+            var LstDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_con == ma_dia_ban_con).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/Ajax/LayXaTheoHuyen.cshtml", LstDiaBan);
+            return Content(result);
+        }
+
+
         #region Cấp địa bàn
         public IActionResult DiaBan(string txtSearch)
         {
@@ -313,13 +362,26 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult SuaDiaBan(int code, string type)
         {
+            EAContext db = new EAContext();
+            ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
+            var obj = db.dm_dia_ban.Where(n => n.Id == code).FirstOrDefault();
+            //lấy danh sách địa bàn cha (tỉnh thành)
+            ViewBag.ListTinhThanh = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == null).ToList();
+            //lấy danh sách địa bàn con
+            if (obj.ma_dia_ban_cha != null)
+            {
+                ViewBag.ListQuanHuyen = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_cha == obj.ma_dia_ban_cha).ToList();
+            };
+            //lấy danh sách địa bàn con c1 (xã phường)
+            if (obj.ma_dia_ban_con != null)
+            {
+                ViewBag.ListXaPhuong = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_con == obj.ma_dia_ban_con).ToList();
+            };
             if (type == StatusAction.Edit.ToString())
             {
-                EAContext db = new EAContext();
-                var obj = db.dm_dia_ban.Where(n => n.Id == code).FirstOrDefault();
                 ViewBag.type_view = StatusAction.Edit.ToString();
                 ViewBag.UserCreate = User.Identity.Name;
-                ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
+                
                 ViewBag.ListDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null && n.ma_cap == obj.ma_cap).ToList();
                 return View(obj);
             }
@@ -327,7 +389,7 @@ namespace HG.WebApp.Controllers
             {
                 EAContext eAContext = new EAContext();
                 ViewBag.type_view = StatusAction.View.ToString();
-                return View(eAContext.dm_dia_ban.Where(n => n.Id == code).FirstOrDefault());
+                return View(obj);
             }
         }
         [HttpPost]

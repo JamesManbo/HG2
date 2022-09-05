@@ -18,10 +18,10 @@ namespace HG.Data.Business.DanhMuc
 
         }
 
-       
 
 
-        public List<BaoCaoSoLuong> BaoCaoSoLuongHoSo(int nam, int quy, bool chonngay, DateTime tuNgay, DateTime denNgay)
+
+        public List<EBaoCaoSoLuong> GetBaoCaoSoLuongHoSo(int nam, int quy, bool chonngay, DateTime tuNgay, DateTime denNgay)
         {
             try
             {
@@ -33,14 +33,60 @@ namespace HG.Data.Business.DanhMuc
                 DbProvider.AddParameter("denNgayInt", denNgay.ToString("yyyyMMdd"), SqlDbType.BigInt);
 
                 // Lấy về danh sách các trường học
-                var obj = DbProvider.ExecuteListObject<BaoCaoSoLuong>();
+                var obj = DbProvider.ExecuteListObject<EBaoCaoSoLuong>();
                 return obj;
             }
             catch (Exception ex)
             {
-                return new List<BaoCaoSoLuong>();
+                return new List<EBaoCaoSoLuong>();
             }
         }
 
+
+
+        public List<EBaoCaoTheoNguoiXuLy> GetBaoCaoTheoNguoiXuLy(string maphongban, string nguoixuly, string linhvuc, string thutuc, DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("usp_hoso_baocao_theonguoixuly", CommandType.StoredProcedure);
+                DbProvider.AddParameter("maphongban", maphongban);
+                DbProvider.AddParameter("nguoixuly", nguoixuly);
+                DbProvider.AddParameter("linhvuc", linhvuc);
+                DbProvider.AddParameter("thutuc", thutuc);
+                DbProvider.AddParameter("tuNgayInt", tuNgay.ToString("yyyyMMdd"), SqlDbType.BigInt);
+                DbProvider.AddParameter("denNgayInt", denNgay.ToString("yyyyMMdd"), SqlDbType.BigInt);
+
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteListObject<EBaoCaoTheoNguoiXuLy>();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                return new List<EBaoCaoTheoNguoiXuLy>();
+            }
+        }
+
+        public List<EBaoCaoHoSoBiLoai> GetBaoCaoHoSoBiLoai(string maphongban, string nguoitiepnhan, string linhvuc, string thutuc, int tinhtrang, DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("usp_hoso_baocao_hosobiloai", CommandType.StoredProcedure);
+                DbProvider.AddParameter("maphongban", maphongban);
+                DbProvider.AddParameter("nguoitiepnhan", nguoitiepnhan);
+                DbProvider.AddParameter("linhvuc", linhvuc);
+                DbProvider.AddParameter("thutuc", thutuc);
+                DbProvider.AddParameter("tinhtrang", tinhtrang);
+                DbProvider.AddParameter("tuNgayInt", tuNgay.ToString("yyyyMMdd"), SqlDbType.BigInt);
+                DbProvider.AddParameter("denNgayInt", denNgay.ToString("yyyyMMdd"), SqlDbType.BigInt);
+
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteListObject<EBaoCaoHoSoBiLoai>();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                return new List<EBaoCaoHoSoBiLoai>();
+            }
+        }
     }
 }

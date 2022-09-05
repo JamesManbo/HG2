@@ -1,0 +1,16 @@
+﻿@model List<HG.Entities.Entities.DanhMuc.DonVi.dm_dia_ban>;
+
+
+ <label for="stt" class="col-sm-2 control-label">Quận/Huyện</label>                      
+ <div class="col-sm-8">
+    <select name="ma_dia_ban_con" id="ma_dia_ban_con" onchange="QuanHuyenChange(this)" class="form-control input-default">
+                    @if(Model != null)
+                    {
+                        <option value="">Chọn Quân/Huyện</option>
+                        foreach (var item in Model)
+                        {
+                             <option value="@item.ma_dia_ban">@item.ten_dia_ban</option>
+                        }
+                    }
+			  </select>                             
+ </div>               

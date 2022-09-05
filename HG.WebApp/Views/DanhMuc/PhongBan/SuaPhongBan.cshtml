@@ -48,27 +48,7 @@
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
                     <form id="form_pb" action="/DanhMuc/SuaPhongBan?code=@Model.ma_phong_ban&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
-                        <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Đơn vị <span style="color:red">(*)</span> </label>
-                            <div class="col-sm-8">
-                                <select id="ma_don_vi" class="form-select form-control input-default" name="ma_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    <option selected="selected" value="">---- Chọn đơn vị ----</option>
-                                    @if (lst_don_vi != null)
-                                        foreach (var item in lst_don_vi)
-                                        {
-                                            if (Model.ma_don_vi != null && Model.ma_don_vi == item.ma_don_vi)
-                                            {
-                                                <option value="@item.ma_don_vi" selected>@item.ten_don_vi</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
-                                            }
-
-                                        }
-                                </select>
-                            </div>
-                        </div>
+                        
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã phòng ban <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
@@ -97,6 +77,27 @@
                                     }
 
                                 </script>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="ten_pb" class="col-sm-2 control-label">Đơn vị <span style="color:red">(*)</span> </label>
+                            <div class="col-sm-8">
+                                <select id="ma_don_vi" class="form-select form-control input-default" name="ma_don_vi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <option selected="selected" value="">---- Chọn đơn vị ----</option>
+                                    @if (lst_don_vi != null)
+                                        foreach (var item in lst_don_vi)
+                                        {
+                                            if (Model.ma_don_vi != null && item.ma_don_vi == Model.ma_don_vi)
+                                            {
+                                                <option value="@item.ma_don_vi" selected>@item.ten_don_vi</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.ma_don_vi">@item.ten_don_vi</option>
+                                            }
+
+                                        }
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">

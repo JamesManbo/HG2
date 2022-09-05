@@ -156,7 +156,7 @@ namespace HG.WebApp.Controllers.Client
                     ViewBag.Message = "Thêm người dùng không thành công!";
                     return View(item);
                 }
-                return View("/DichVuCong");
+                return RedirectToAction("News","News");
             }
             else
             {

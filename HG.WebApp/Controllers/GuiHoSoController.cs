@@ -1030,6 +1030,13 @@ namespace HG.WebApp.Controllers
                 des.type = (int)TypeHS.CongDan;
                 des.ma_khach_hang = hoso.ma_khach_hang;
                 des.ma_thu_tuc_hc = hoso.ma_thu_tuc_hc;
+                des.dia_chi = "";
+                des.ma_linh_vuc = hoso.ma_linh_vuc ?? "";
+                des.dien_thoai = "";
+                des.email = "";
+                des.ten_ho_so = "";
+                des.ngay_hen_tra = DateTime.Parse("26/08/1111");
+                des.ma_luong_xu_ly = "0";
                 des.nhan_kq_qua_buu_chinh = hoso.nhanquabuudien;
                 des.nhan_kq_truc_tuyen = hoso.nhanquatnvatkq;
                 des.nhan_kq_zalo = hoso.nhanquazalo;
