@@ -13,7 +13,7 @@ namespace HG.Entities.Entities
         public string ma_khach_hang { get; set; }
         public string? ma_don_vi { get; set; } //ma phong ban
         public string? ma_linh_vuc { get; set; }
-        public string? chiphidukien { set; get; }
+        public decimal? chiphidukien { set; get; }
         public string? thongtinchitiet { set; get; }
         public int? nhanquaemail { set; get; }
         public int? nhanquatnvatkq { set; get; }

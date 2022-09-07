@@ -171,7 +171,8 @@
 					required: true,
 					CodeVerifyValid: true
 				},
-            },
+				mat_khau: "required"
+				},
             messages: {
 				ten: {
                     required: "Họ tên không được bỏ trống!"
@@ -184,6 +185,7 @@
 				QuanHuyen: "Bạn phải chọn Quận Huyện!",
 				XaPhuong: "Bạn phải chọn Xã Phường!",
 				CodeVerify: "Mã xác thực không được bỏ trống!",
+				mat_khau: "Mât khẩu không được bỏ trống"
             }
         });
         function convetArrayToObj(serialized) {
@@ -239,6 +241,12 @@
 				<label class="col-md-4 control-label">Tên đăng nhập: <span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
 				<div class="col-md-4">
 				<input name="UserName" type="text" value="@Model.UserName" id="UserName" maxlength="50" style="width:100%;">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-md-4 control-label">Mật khẩu: <span id="ctl09_Label4" style="color:Red;">(*)</span>:</label>
+				<div class="col-md-4">
+					<input name="mat_khau" type="password" value="@Model.mat_khau" id="mat_khau" maxlength="50" style="width:100%;">
 				</div>
 			</div>
 			<div class="form-group">

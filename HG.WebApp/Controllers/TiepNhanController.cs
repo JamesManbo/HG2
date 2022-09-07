@@ -61,6 +61,14 @@ namespace HG.WebApp.Controllers
             ViewBag.ma_luong = ma_luong;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayLuongThanhPhanByMaTTHC.cshtml", lstObj);
             return Content(result);
+        }
+        public IActionResult GetTPByTTHCInPartial(string ma_thu_tuc, string type, string lstThanhPhan = "", string ma_luong = "")
+        {
+            var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
+            ViewBag.view_type = type;
+            ViewBag.lstThanhPhan = lstThanhPhan;
+            ViewBag.ma_luong = ma_luong;
+            return PartialView(lstObj);
         } 
         public JsonResult GetNguoiXLNguoiPH(string ma_luong, string ten_buoc = "")
         {
@@ -247,6 +255,7 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult HoSoDangTiepNhan(string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
         {
+            var userId = Guid.Parse(userManager.GetUserId(User));
             //hs mới tiếp nhận status = 1
             var currentPage = 1;
             var totalRecored = 0;
@@ -256,20 +265,20 @@ namespace HG.WebApp.Controllers
             {
                 using (var db = new EAContext())
                 {
-                    var ds = db.Ho_So.Where(n => n.Deleted != 1 && (n.ten_ho_so ?? "").Contains(txtSearch) && n.trang_thai == 1).ToList();
-                    hs = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 1, userid = userId.ToString() };
+                    hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
                     lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-                    totalRecored = ds.Count();
+                    totalRecored = hs.Count();
                 }
             }
             else
             {
                 using (var db = new EAContext())
                 {
-                    var ds = db.Ho_So.Where(n => n.Deleted != 1 && n.trang_thai == 1).ToList();
-                    hs = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 1, userid = userId.ToString() };
+                    hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
                     lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-                    totalRecored = ds.Count();
+                    totalRecored = hs.Count();
                 }
             }
             ViewBag.LstLinhVuc = lv;
@@ -288,10 +297,11 @@ namespace HG.WebApp.Controllers
         public IActionResult HoSoChuyenChuaXL(int currentPage = 1, string txtSearch = "", string ma_linh_vuc = "", string ma_thu_tuc = "", int pageSize = 25)
         {
             //hs mới tiếp nhận status = 1
+            var userId = Guid.Parse(userManager.GetUserId(User));
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1,tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 2 };
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1,tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 2, userid = userId.ToString() };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
             using (var db = new EAContext())
             {
@@ -387,10 +397,12 @@ namespace HG.WebApp.Controllers
                 ViewBag.LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
                 return View(hoso);
             }
-           
-            ViewBag.type_view = StatusAction.Edit.ToString();
-            var obj = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
-            return View(obj);
+            else
+            {
+                ViewBag.type_view = StatusAction.Edit.ToString();
+                var obj = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+                return View(obj);
+            }
         }
         public IActionResult ViewHoSo(int code, string type)
         {

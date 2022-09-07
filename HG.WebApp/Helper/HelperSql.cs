@@ -51,8 +51,8 @@ namespace HG.WebApp.Helper
             try
             {
                 var tentthc = "";
-                //using (SqlConnection conn = new SqlConnection("Server=DESKTOP-S8GUJHO\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
-                using (SqlConnection conn = new SqlConnection("Server=WIN-20421CI14U0\\SQLEXPRESS2014;Initial Catalog=HG; User ID=sa;Password=abcABC123"))
+                //using (SqlConnection conn = new SqlConnection("Server=DESKTOP-ER8BTDC\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
+                using (SqlConnection conn = new SqlConnection("Server=WIN-20421CI14U0\\SQLEXPRESS2014;Database=HG; User ID=sa;Password=abcABC123"))
                 {
                     conn.Open();
 
@@ -111,6 +111,49 @@ namespace HG.WebApp.Helper
             var phothong = db.Ghs_Tuyen_Sinh_Cap_THPT_Hoso.Count();
             return manon + tieuhoc+ trunghoc + phothong;
         }
+        public static int TotalDangKyKhieuNai()
+        {
+            return db.Ho_So.Where(n => n.trang_thai == (int)StatusTiepNhanHoSo.HoSoDangTiepNhan && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSDangSoan()
+        {
+            return db.Ho_So.Where(n => n.trang_thai == (int) StatusTiepNhanHoSo.HoSoTrucTuyen && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSMoiDangKy()
+        {
+            return db.Ho_So.Where(n => (n.trang_thai == (int)StatusTiepNhanHoSo.HoSoDangTiepNhan || n.trang_thai == (int)StatusTiepNhanHoSo.HoSoTrucTuyen) && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSYeuCauNapTien()
+        {
+            return db.Ho_So.Where(n => n.type == (int)TypeHS.CongDan && ( n.le_phi == 0 || n.le_phi == null )).Count();
+        }
+        public static int TotalHSDaNapTien()
+        {
+            return db.Ho_So.Where(n => n.le_phi > 0 && n.type == (int)TypeHS.CongDan).Count();
+        }
+        
+        public static int TotalHSDaTraKQ()
+        {
+            return db.Ho_So.Where(n => n.trang_thai == (int)StatusTraKetQua.HoSoDaTraKQ && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSDungXuLy()
+        {
+            return db.Ho_So.Where(n => n.trang_thai == (int)StatusTraKetQua.HoSoChoTraKS && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSHoanThanhXuLy()
+        {
+            return db.Ho_So.Where(n => n.trang_thai  == (int)StatusTraKetQua.HoSoDaTraKQ && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSDangXuLy()
+        {
+            return db.Ho_So.Where(n => n.trang_thai == (int)StatusTiepNhanHoSo.HoSoDangXL && n.type == (int)TypeHS.CongDan).Count();
+        }
+        public static int TotalHSKhongDuocNhan()
+        {
+            return db.Ho_So.Where(n => n.trang_thai == 0 && n.type == (int)TypeHS.CongDan).Count();
+        }
+
+
         public static string GetNamePB(string ma_phong_ban)
         {
             try

@@ -26,12 +26,13 @@ namespace HG.Data.Business.HoSo
             try
             {
                 List<Ho_So> result = new List<Ho_So>();
+
                 var abc = 1;
-                if(item.CurrentPage > 1)
+                if (item.CurrentPage > 1)
                 {
                     abc = (item.CurrentPage - 1) * item.RecordsPerPage;
                 }
-                else if(item.CurrentPage == 1)
+                else if (item.CurrentPage == 1)
                 {
                     abc = 0;
                 }
@@ -45,18 +46,19 @@ namespace HG.Data.Business.HoSo
                 DbProvider.AddParameter("dung_han", item.dung_han, SqlDbType.Int);
                 DbProvider.AddParameter("qua_han", item.qua_han, SqlDbType.Int);
                 DbProvider.AddParameter("trang_thai", item.trang_thai_hs, SqlDbType.Int);
+                DbProvider.AddParameter("userid", item.userid == null ? "" : item.userid, SqlDbType.NVarChar);
                 // Output params
                 DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
 
                 // Lấy về danh sách các người dung
                 result = DbProvider.ExecuteListObject<Ho_So>();
-                total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                total = result.Count();
                 return result;
             }
-            catch(Exception e) {
+            catch (Exception e)
+            {
                 total = 0;
-                return new List<Ho_So>(); 
-                
+                return new List<Ho_So>();
             }
         }
         public List<Ho_So> TimKiemHoSoTheoTieuChi(HoSoPaging item , HoSoFilter hoSoFilter, out int total)

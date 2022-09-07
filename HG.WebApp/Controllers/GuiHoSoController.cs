@@ -13,6 +13,7 @@ using HG.WebApp.Entities;
 using HG.WebApp.Helper;
 using HG.WebApp.Models.DanhMuc;
 using HG.WebApp.Sercurity;
+using Intuit.Ipp.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -1005,13 +1006,16 @@ namespace HG.WebApp.Controllers
             ViewBag.MaKH = "00000" + db.Ho_So.Count() + 1;
             ViewBag.ListThanhPhan = lstThanhPhan;
             ViewBag.MaThuTuc = Ma;
-            ViewBag.ma_don_vi = "";
+            var user = db.AspNetUsers.Where(n => n.UserName == User.Identity.Name).FirstOrDefault();
+            ViewBag.sodienthoai = user == null ? "098xx": user.PhoneNumber;
             return View(obj);
         }
         [HttpPost]
         public IActionResult GuiHoSoMotCua(cd_hoso hoso)
         {
             EAContext db = new EAContext();
+            var user_obj = db.AspNetUsers.Where(n => n.UserName == User.Identity.Name).FirstOrDefault();
+            var user_id = Guid.Parse(userManager.GetUserId(User));
             var hosoId = 0;
             var lstThanhPhan = new List<dm_thanh_phan>();
             //lấy lại thủ tục vừa chọn có thể người dùng tạo hs mới
@@ -1028,6 +1032,10 @@ namespace HG.WebApp.Controllers
             {
                 Ho_So des = new Ho_So();
                 des.type = (int)TypeHS.CongDan;
+                des.trang_thai = (int)StatusTiepNhanHoSo.HoSoTrucTuyen;
+                des.nguoi_xu_ly = user_id.ToString();
+                des.CreatedUid = user_id;
+                des.ho_ten = user_obj == null ? "" : user_obj.UserName;
                 des.ma_khach_hang = hoso.ma_khach_hang;
                 des.ma_thu_tuc_hc = hoso.ma_thu_tuc_hc;
                 des.dia_chi = "";
@@ -1035,8 +1043,11 @@ namespace HG.WebApp.Controllers
                 des.dien_thoai = "";
                 des.email = "";
                 des.ten_ho_so = "";
-                des.ngay_hen_tra = DateTime.Parse("26/08/1111");
+                des.ngay_hen_tra = DateTime.Now.AddDays(5);
+                des.gio_hen_tra = DateTime.Now;
                 des.ma_luong_xu_ly = "0";
+                des.le_phi = hoso.chiphidukien;
+
                 des.nhan_kq_qua_buu_chinh = hoso.nhanquabuudien;
                 des.nhan_kq_truc_tuyen = hoso.nhanquatnvatkq;
                 des.nhan_kq_zalo = hoso.nhanquazalo;

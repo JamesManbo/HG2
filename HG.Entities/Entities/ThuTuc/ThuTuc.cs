@@ -21,6 +21,7 @@ namespace HG.Entities.Entities.ThuTuc
         public string ma_linh_vuc { get; set; }
         public string ten_linh_vuc { get; set; }
         public string ma_phong_ban { get; set; }
+        public string ten_phong_ban { get; set; }
         public int so_ngay_xl { get; set; }
         public decimal le_phi_truoc { get; set; }
         public decimal le_phi_sau { get; set; }

@@ -64,9 +64,9 @@
     <div class="form-horizontal">
         <!-- Horizontal Form -->
         <form id="form_congdan" action="/GuiHoSo/GuiHoSoMotCua" method="post" enctype="multipart/form-data">
-            <input name="ma_thu_tuc_hc" value="@ViewBag.MaThuTuc" />
-            <input name="ma_khach_hang" value="@ViewBag.MaKH" />
-            <input name="ma_don_vi" value="@ViewBag.ma_don_vi" />
+            <input name="ma_thu_tuc_hc" value="@ViewBag.MaThuTuc" hidden />
+            <input name="ma_khach_hang" value="@ViewBag.MaKH" hidden />
+            <input name="ma_don_vi" value="@ViewBag.ma_don_vi" hidden />
             <div class="send-document-top top-title-frame">
                 <p>THÔNG TIN HỒ SƠ (Mã khách hàng: @ViewBag.MaKH)</p>
             </div>
@@ -76,10 +76,10 @@
                         Cơ quan:
                     </span>
                     <div class="col-md-7" style="padding-left: 10px;padding-top: 5px;">
-                        <span style="">@Model.ma_phong_ban</span>
+                        <span style="">@Model.ten_phong_ban</span>
                     </div>
                     <div class="col-md-3 col-sm-12" >
-                        <a href="javascript: void(0);" data-toggle="modal" data-target="#modalInput"
+                        <a href="/User/ThongTinCaNhan?@User.Identity.Name" data-toggle="modal" data-target="#modalInput"
                            data-original-title="Thông tin chi tiết người nộp hồ sơ"
                            onclick="ShowModalUser()"
                            tooltip="Xem thông tin chi tiết người nộp"><b>Thông tin người nộp</b></a>
@@ -168,7 +168,7 @@
                         </script>
                     </div>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
-                        <input value="123445566" />
+                        <input value="@ViewBag.sodienthoai"  />
                     </div>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
                         <input type="checkbox" onclick="fnnhanquabuudien()" id="nhanquabuudien" name="nhanquabuudien" value="0" /> nhận kết quả qua bưu điện

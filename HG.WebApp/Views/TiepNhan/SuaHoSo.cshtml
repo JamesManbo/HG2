@@ -217,7 +217,7 @@
                                     }
                                 </script>
                                 <div id="LuongXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.Edit.ToString(), ma_luong = Model.ma_luong_xu_ly , lstThanhPhan = Model.lstThanhPhan})
+                                    @Html.RenderAction("GetTPByTTHCInPartial","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.Edit.ToString(), ma_luong = Model.ma_luong_xu_ly , lstThanhPhan = Model.lstThanhPhan})
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label class="col-sm-1 control-label"></label>

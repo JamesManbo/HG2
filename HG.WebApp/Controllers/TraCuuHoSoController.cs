@@ -9,6 +9,8 @@ using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using HG.Entities.Search;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace HG.WebApp.Controllers
 {
@@ -132,6 +134,60 @@ namespace HG.WebApp.Controllers
             ViewBag.MaLinhVuc = hoSoFilter.ma_linh_vuc;
             ViewBag.MaThuTuc = hoSoFilter.ma_thu_tuc_hc;
             return View(hs);
+        }
+
+
+        public IActionResult TimKiemHoSoLienThong(int trang_thai = 0, string tu_khoa = "", string Oid = "")
+        {
+            EAContext db = new EAContext();
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            var lstQuery = db.Ho_So.Where(n => n.Id != 0 && n.trang_thai == (int)StatusXuLyHoSo.HoSoLienThong);
+            var id = 0;
+            var tab = 1;
+            if (Oid != "")
+            {
+                id = Convert.ToInt32(Oid.Split("-")[0]);
+                tab = Convert.ToInt32(Oid.Split("-")[1]);
+            }
+            if(trang_thai != 0)
+            {
+                lstQuery = lstQuery.Where(n => n.id_trang_thai_xl_detail == trang_thai);
+            }
+            if (!string.IsNullOrEmpty(tu_khoa))
+            {
+                lstQuery = lstQuery.Where(n => n.ten_ho_so.Contains(tu_khoa));
+            }
+           
+            //ViewBag.type_view = type;
+            ViewBag.TotalPage = (lstQuery.Count() / pageSize) + ((lstQuery.Count() % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.PageSize = 0;
+            ViewBag.TotalRecored = lstQuery.Count();
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? lstQuery.Count() : pageSize;
+            ViewBag.active = tab;
+            //href = "/CauHinhHeThong/CauHinh?don_vi=&type=@StatusAction.Edit.ToString()&Oid=@(item.id.ToString()+" - 2")
+            return View(lstQuery.ToList());
+        }
+        public async Task<IActionResult> TimKiemHoSoLienThongPaging(int currentPage = 1, string tu_khoa = "", string ma_thu_tuc = "", int tat_ca = 1, int dung_han = 0, int qua_han = 0, int trang_thai = 120, int pageSize = 25)
+        {
+            var totalRecored = 0;
+            var hs = new List<Ho_So>();
+            var lv = new List<Dm_Linh_Vuc>();
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = currentPage, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = dung_han, qua_han = qua_han, RecordsPerPage = pageSize, trang_thai_hs = 120 };
+            hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
+            ViewBag.LstLinhVuc = lv;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalRecored = totalRecored;
+            ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = tu_khoa;
+            ViewBag.MaThuTuc = ma_thu_tuc;
+            ViewBag.trang_thai = trang_thai;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TraCuuHoSo/Paging/TimKiemHoSoLienThongPaging.cshtml", hs);
+            return Content(result);
         }
     }
 }

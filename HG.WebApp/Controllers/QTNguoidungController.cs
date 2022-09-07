@@ -80,21 +80,23 @@ namespace HG.WebApp.Controllers
             }
 
         }
-        public string ResetPassword(string id)
+        public async Task<bool> ResetPassword(string id)
         {
-            EAContext db = new EAContext();
-            var uid = Guid.Parse(id);
-            var obj = db.AspNetUsers.Where(n => n.Id == uid).FirstOrDefault();
-            if (obj != null)
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
             {
-                obj.mat_khau = "1";
-                db.Entry(obj).State = EntityState.Modified;
-                db.SaveChanges();
-                return "Mở khóa thành công!";
+                return false;
+            }
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            var result = await userManager.ResetPasswordAsync(user, token, "MyN3wP@ssw0rd");
+            if (result.Succeeded)
+            {
+                return true;
             }
             else
             {
-                return "Mở khóa thất bại!";
+                return false;
             }
 
         }

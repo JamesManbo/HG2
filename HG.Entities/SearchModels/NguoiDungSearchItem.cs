@@ -21,13 +21,15 @@ namespace HG.Entities.SearchModels
         public int? da_xoa { get; set; }
         public Guid? userId { get; set; }
     }
-    public class HoSoPaging : Pagelist{
+    public class HoSoPaging : Pagelist
+    {
         public string? ma_thu_tuc { get; set; }
         public string? tu_khoa { get; set; }
         public int? tat_ca { get; set; }
         public int? dung_han { get; set; }
         public int? qua_han { get; set; }
         public int? trang_thai_hs { get; set; }
+        public string? userid { get; set; }
     }
-  
+
 }

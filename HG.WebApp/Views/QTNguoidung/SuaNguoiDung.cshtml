@@ -63,12 +63,18 @@
     function DatLaiMatKhau(abc){
          $.ajax({
                   type: "GET",
-                  url: "/QTNguoidung/ResetPassword?Id=" + abc,
+            url: "/QTNguoidung/ResetPassword?Id=" + abc,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
-                        $("#exampleModalTitle").html("Đặt lại mật khẩu thành công hahaha!")
-                        $("#exampleModal").modal("show");
+                      if(data == true){
+                            $("#exampleModalTitle").html("Đặt lại mật khẩu thành công ha!")
+                            $("#exampleModal").modal("show");
+                      }else{
+                            $("#exampleModalTitle").html("Đặt lại mật khẩu không thành công ha!")
+                            $("#exampleModal").modal("show");
+                      }
+                        
                   }
           });           
     }

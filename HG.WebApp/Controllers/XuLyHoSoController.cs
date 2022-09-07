@@ -54,7 +54,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 18 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 18,userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
             using (var db = new EAContext())
             {
@@ -78,7 +79,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 19 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 19, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
             using (var db = new EAContext())
             {
@@ -102,10 +104,10 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 20 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 20, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
-            hs = hs.Where(e => e.trang_thai == (int)StatusXuLyHoSo.HoSoPhoiHop).ToList();
-            //hs = hs.Where(e => e.nguoi_phoi_hop == userManager.GetUserId(User).ToUpper()).ToList();
+            hs = hs.Where(e => e.nguoi_phoi_hop == userManager.GetUserId(User).ToUpper()).ToList();
             using (var db = new EAContext())
             {
                 lv = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
@@ -128,7 +130,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 21 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 21, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
            
             using (var db = new EAContext())
@@ -153,7 +156,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 23 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 23, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -178,7 +182,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 22 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 22, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -203,7 +208,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 24 };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 24, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -229,7 +235,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoChoChuyenMotCua};
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 29, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -255,7 +262,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoDaPhoiHop };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 26, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -281,7 +289,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoGanQuaHan };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 27, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -307,7 +316,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoTheoDoiDonDoc };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 28, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -333,7 +343,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoXuLyThay };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 30, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -359,7 +370,8 @@ namespace HG.WebApp.Controllers
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusXuLyHoSo.HoSoLienThong };
+            var user = userManager.GetUserId(User);
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = txtSearch, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = 31,userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
 
             using (var db = new EAContext())
@@ -579,11 +591,11 @@ namespace HG.WebApp.Controllers
             localReport.AddDataSource("Get_phieu_hen", Get_phieu_hen.ToList());
             localReport.AddDataSource("dm_thanh_phan", dm_thanh_phan.ToList());
             var result = localReport.Execute(RenderType.Pdf, exception, parameters, mintype);
-            //return View(Get_phieu_hen);
-            return File(result.MainStream, "application/pdf");
+           // return View(Get_phieu_hen);
+             return File(result.MainStream, "application/pdf");
         }
         [HttpPost]
-        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc)
+        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc, string y_kien = "")
         {
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
             EAContext db = new EAContext();
@@ -591,6 +603,7 @@ namespace HG.WebApp.Controllers
             
             var title = "";
             hoso.trang_thai = trangthai;
+            hoso.y_kien = y_kien;
             switch (trangthai)
             {
                 case 18:
