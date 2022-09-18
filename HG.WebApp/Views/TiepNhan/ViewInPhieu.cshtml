@@ -1,0 +1,149 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Thông tin in phiếu";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>;
+    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
+    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
+    var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
+}
+<script src="/BackEnd/Admin/plugin/ckeditor/ckeditor.js"></script>
+@model HG.Entities.HoSo.Ho_So
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        -
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.ErrorMsg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewBag.ErrorCode > 0)
+{
+    <script>
+        $(document).ready(function () {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+<style>
+    .underline-partion {
+        width: 100%;
+        border-bottom: 1px solid #f0ad4e;
+        margin-bottom: 20px;
+        font-style: italic;
+        font-weight: bold;
+        padding-bottom: 4px;
+    }
+
+    .label-warning {
+        background-color: #f0ad4e;
+    }
+</style>
+<div class="card">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>In Phiếu</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Thông tin in phiếu</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="form_tiepnhan" class="row">
+                          <div class="form-group row mb-3">
+                            <span for="ma_pb" class="col-sm-2 control-label">Loại phiếu:</span>
+                            <div class="col-sm-4" style="margin-top: 5px">
+                                <input type="radio" id="LoaiPhieu1" name="LoaiPhieu1" /> <label>Phiếu hướng dẫn cung cấp hồ sơ</label>
+                            </div>
+                            <span for="ma_pb" class="col-sm-2 control-label"></span>
+                            <div class="col-sm-4" style="margin-top: 5px">
+                                <input type="radio" id="LoaiPhieu2" name="LoaiPhieu2"/> <label>Phiếu đề nghị bổ sung hồ sơ</label> 
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="ma_pb" class="col-sm-2 control-label">Mã khách hàng:</span>
+                            <div class="col-sm-4" style="margin-top: 5px">
+                                <label type="text" maxlength="50">@Model.ma_khach_hang</label>
+                            </div>
+                            <span for="ten_pb" class="col-sm-2 control-label">Mã hồ sơ: </span>
+                            <div class="col-sm-4" style="margin-top: 5px">
+                                <label>@Model.Id</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="mota" class="col-sm-2 control-label">Họ và tên:</span>
+                            <div class="col-md-4" style="margin-top: 5px">
+                                <label>@Model.ho_ten</label>
+                            </div>
+                            <span for="stt" class="col-sm-2 control-label">Số chứng thực:</span>
+                            <div class="col-md-4" style="margin-top: 5px">
+                                <label>@Model.so_giay_to</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <span for="mota" class="col-sm-2 control-label">Trung tâm HCCC:</span>
+                            <div class="col-md-4"style="margin-top: 5px">
+                                <label>@Model.so_giay_to</label>
+                            </div>
+                            <span for="stt" class="col-sm-2 control-label">Số điện thoại hỗ trợ:</span>
+                            <div class="col-md-4" style="margin-top: 5px">
+                                <label>@Model.dien_thoai </label>
+                            </div>
+                          
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="dia_chi" class="col-sm-2 control-label">Ngày nộp hồ sơ:</span>
+                            <div class="col-sm-10" style="margin-top: 5px">
+                                <label>@(Model.CreatedDateUtc == null ? Model.ngay_hen_tra : Model.CreatedDateUtc)</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="dia_chi" class="col-sm-2 control-label">Tên thủ tục hành chính:</span>
+                            <div class="col-sm-10" style="margin-top: 5px">
+                                <label>@HG.WebApp.Helper.HelperSql.GetNameHTHC(Model.ma_thu_tuc_hc)</label>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="dia_chi" class="col-sm-2 control-label">Nhận thông báo:</span>
+                            <div class="col-sm-10" style="margin-top: 5px">
+                                <textarea id="nhanthongbao" name="nhanthongbao">@(Model.id_file_dinh_kem == null ? "" : Model.id_file_dinh_kem)</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <button type="button" onclick="NhapMoi()" class="btn btn-primary" style="color: #fff;">Nhập mới</button>
+                            <a type="button" onclick="SaveAndPrint(@Model.Id)" target="_blank" class="btn btn-primary" style="color: #fff;">Lưu và In</a>
+                            <a type="button" href="/TiepNhan/HoSoChoTiepNhanChuaChinhThuc" class="btn btn-primary" style="color: #fff;">Đóng</a>
+                        </div>
+                    </div>
+
+                </div><!-- End Horizontal Form -->
+            </div>
+
+        </div>
+    </div>
+
+</div>
+   <script>
+        CKEDITOR.replace('nhanthongbao');
+        function NhapMoi(){
+            CKEDITOR.instances['nhanthongbao'].setData('');
+        }
+        function SaveAndPrint(id)
+        {
+            var desc = CKEDITOR.instances['nhanthongbao'].getData();
+             window.location.href = '/XuLyHoSo/SaveAndPrint?Id=' + id + '&noidung=' + desc
+        }
+   </script>
+

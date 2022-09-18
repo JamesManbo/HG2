@@ -1,0 +1,177 @@
+﻿@model HG.Entities.LuongThanhPhanModels
+@using HG.WebApp;
+<script>
+    $(document).ready(function () {
+        $('#selectAll').click(function () {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $(':checkbox:checked').each(function (i) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $('input[name="lstThanhPhan"]').attr('value', val);
+            //$("#lstCode").val(val);
+        });
+        $('.ads_Checkbox').click(function () {
+            var val = [];
+            $(':checkbox:checked').each(function (i) {
+                if ($('#selectAll').is(':checked')) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                } else {
+                    val[i] = $(this).val();
+                }
+
+            });
+            $('input[name="lstThanhPhan"]').attr('value', val);
+        });
+    });
+</script>
+@{
+    var danhsachThanhPhan = ViewBag.lstThanhPhan as string;
+    var maluongdachon = ViewBag.ma_luong as string;
+}
+<div class="form-group row mb-3">
+    <label for="mota" class="col-sm-1 control-label">Luồng xử lý<span style="color:red">(*)</span></label>
+    <div class="col-sm-11">
+        <select name="ma_luong_xu_ly" id="ma_luong_xu_ly" onchange="GetNguoiXLNguoiPH(this)" class="form-control input-default" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
+            <option value="">Chọn luồng xử lý</option>
+            @if (@Model.dm_Luong_Xu_Lies != null)
+            {
+                for (var item = 0; item < @Model.dm_Luong_Xu_Lies.Count(); item++)
+                {
+                    if (@Model.dm_Luong_Xu_Lies[item].ma_luong == maluongdachon)
+                    {
+                        <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong" selected>@Model.dm_Luong_Xu_Lies[item].ten_luong</option>
+                    }
+                    else
+                    {
+                        <option value="@Model.dm_Luong_Xu_Lies[item].ma_luong">@Model.dm_Luong_Xu_Lies[item].ten_luong</option>
+                    }
+                }
+            }
+        </select>
+    </div>
+</div>
+<input id="lstThanhPhan" name="lstThanhPhan" value="@danhsachThanhPhan" hidden />
+
+<div class="form-group row mb-3">
+    <label for="mota" class="col-sm-1 control-label">Hồ sơ gồm </label>
+    <div class="col-sm-11">
+        <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="gridThanhPhanHoSo" style="font-size:13px;border-collapse:collapse;">
+            <tbody @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>
+                <tr style="background-color:#EEEEEE;">
+                    <th scope="col">STT</th>
+                    <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                        Đã nộp
+                        <input type="checkbox" name="" id="selectAll" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "") />
+                    </th>
+                    <th align="center">Tên thành phần</th>
+                    <th align="center" scope="col" style="white-space: nowrap; text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Đính kèm</th>
+                    <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
+                    <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản chính</th>
+                    <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản sao</th>
+                    <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản photo</th>
+                    <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Ký thành phần</th>
+                </tr>
+                @*start body*@
+
+                @if (@Model.dm_thanh_phan != null)
+                {
+                    var stt = 1;
+                    foreach (var item in Model.dm_thanh_phan)
+                    {
+                        <tr>
+                            <td align="center" style="width:4%;">
+                                @stt
+                            </td>
+                            <td>
+                                <input type="checkbox" class="ads_Checkbox" id="addData-@(item.ma_thanh_phan)" name="@item.ma_thanh_phan" @((danhsachThanhPhan ?? "").ToString().Contains(item.ma_thanh_phan) ? "checked" : "" ) value="@item.ma_thanh_phan" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "") />
+                            </td>
+                            @*<input id="addData-@(item.ma_thanh_phan)" name="addData-@(item.ma_thanh_phan)" hidden />*@
+                            <td>
+                                <span id="Label3">@item.ten_thanh_phan</span>
+                            </td>
+                            <td align="center" style="width:15%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <div class="fileupload fileupload-new" data-provides="fileupload">
+                                    <div class="input-append">
+                                        <input type="file" id="files-@(item.Id)" name="files" style="display: none">
+                                        <input type="text" id="name-@(item.Id)" name="name-@(item.Id)" style="display: none">
+                                        <button type="button" onclick="$('#files-@(item.Id)').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <label type="text" id="namefile-@(item.Id)" name="namefile-@(item.Id)" readonly></label> <input type="button" id="btnDelete-@(item.Id)" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFile(@item.Id)">
+                                    </div>
+                                    <script>
+                                        $("#btnDelete-@(item.Id)").click(function () {
+                                            $('#namefile-@(item.Id)').html("");
+                                            $("#btnDelete-"@(item.Id)).hide();
+                                           
+                                        });
+                                        $(document).ready(function () {
+                                            $("#files-@(item.Id)").on('change', function () {
+                                                // Checking whether FormData is available in browser
+                                                if (window.FormData !== undefined) {
+                                                    var fileUpload = $(this).get(0);
+                                                    var files = fileUpload.files;
+                                                    // Create FormData object
+                                                    var fileData = new FormData();
+                                                    // Looping over all files and add it to FormData object
+                                                    for (var i = 0; i < files.length; i++) {
+                                                        fileData.append(files[i].name, files[i]);
+                                                    }
+                                                    // Adding one more key to FormData object
+                                                    fileData.append('username', 'Manas');
+                                                    $.ajax({
+                                                        url: '/Upload/UploadFilesTP?folder=ThanhPhanTTHC&Id=@item.Id',
+                                                        type: "POST",
+                                                        contentType: false, // Not to set any content header
+                                                        processData: false, // Not to process data
+                                                        data: fileData,
+                                                        success: function (result) {
+                                                            console.log(result);
+                                                            for (var i = 0; i < result.files.length; i++) {
+                                                                //$('#avatar').attr('src', result.files[i]);
+                                                                $('#namefile-@(item.Id)').html("" + result.names + "");
+                                                                $("#btnDelete").show();
+                                                            }
+                                                        },
+                                                        error: function (err) {
+                                                            alert(err.statusText);
+                                                        }
+                                                    });
+                                                } else {
+                                                    alert("FormData is not supported.");
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </td>
+                            <td align="center" style="width:5%;">
+                                <button type="button" class="btn btn-primary" @((danhsachThanhPhan ?? "").ToString().Contains(item.ma_thanh_phan) ? "" : "disabled" ) data-bs-toggle="modal" id="addData-@(item.ma_thanh_phan)" data-bs-target="#ChonBieuMau" @(ViewBag.view_type == StatusAction.View.ToString()? "" : "hidden")>Chọn</button>
+                            </td>
+                            <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                            </td>
+                            <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <input name="BanSao" type="text" value="@item.ban_sao" id="BanSao" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                            </td>
+                            <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <input name="BanPhoTo" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                            </td>
+                            <td align="center" style="width:5%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
