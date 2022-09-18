@@ -5,7 +5,7 @@
    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
-   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.Entities.AspNetUsersModel>;
 }
 @model HG.Entities.Entities.HoSoModels
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -33,16 +33,17 @@
 }
 <style>
     .underline-partion {
-    width: 100%;
+    width: 10%%;
     border-bottom: 1px solid #f0ad4e;
     margin-bottom: 20px;
     font-style: italic;
     font-weight: bold;
-    padding-bottom: 4px;
 }
 .label-warning {
     background-color: #f0ad4e;
 }
+
+    
 </style>
 <div class="card">
     <div class="pageheader">
@@ -62,26 +63,27 @@
                     <!-- Horizontal Form -->
                     <form id="form_tiepnhan" action="/TiepNhan/TiepNhanHoSoMoi" method="post" enctype="multipart/form-data" class="row">
                             <div class="underline-partion">
-                                     <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin khách hàng</p>
+                                     <p id="ctl14_p_KLT" class="label label-warning lable-partion" style="width:10%">Thông tin khách hàng</p>
                             </div>  
                                 <div class="form-group row mb-3">
                                         <label for="ma_pb" class="col-sm-1 control-label">Mã khách hàng</label>
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_khach_hang"  id="ma_khach_hang" value="@Model.ma_khach_hang" placeholder="Nhập CMT hoặc mã khách hàng đã có">
                                         </div>
-                                        <label for="ten_pb" class="col-sm-1 control-label">Tìm kiếm </label>
-                                        <div class="col-sm-7">
-                                            <input type="checkbox" value="">
-                                        </div>
+                            <div class="col-sm-1" style="text-align:right">
+                                <input type="checkbox" value="">
+                            </div>
+                                        <label for="ten_pb" class="col-sm-1 control-label" style="text-align:left">Tìm kiếm </label>
+                                       
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Họ và tên<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input  type="text" id="ho_ten" name="ho_ten" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ tên">
+                                <input type="text" id="ho_ten" name="ho_ten" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ và tên người nộp">
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Ngày sinh <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input type="date" class="form-control input-default" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh">
+                                <input type="date" class="form-control input-default" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" onfocus="this.showPicker()">
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giới tính <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
@@ -96,11 +98,11 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Số giấy tờ<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="number" id="so_giay_to" name="so_giay_to" class="form-control input-default" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ">
+                                       <input maxlength="50" type="number" id="so_giay_to" name="so_giay_to" min="0" class="form-control input-default" value="@Model.so_giay_to" placeholder="Số CMND, căn cước, hộ chiếu">
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Điện thoại <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input maxlength="50" type="text" id="dien_thoai" class="form-control input-default" name="dien_thoai" value="@Model.dien_thoai" placeholder="Nhập điện thoại">
+                                <input maxlength="50" type="text" id="dien_thoai" class="form-control input-default" name="dien_thoai" value="@Model.dien_thoai" placeholder="Số điện thoại chỉ nhập dạng số">
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Email <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
@@ -114,18 +116,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
-                                    <label for="ten_to_chuc" class="col-sm-1 control-label">Tên cơ quan</label>
+                            <label for="ten_to_chuc" class="col-sm-1 control-label">Tên tổ chức</label>
                                     <div class="col-sm-11">
-                                        <input maxlength="50" type="text" class="form-control input-default" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên cơ quan">
+                                        <input maxlength="50" type="text" class="form-control input-default" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên tổ chức">
                                     </div>
                                 </div>
                             <div class="underline-partion">
-                                     <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin hồ sơ</p>
+                            <p id="ctl14_p_KLT" class="label label-warning lable-partion" style="width:10%">Thông tin hồ sơ</p>
                             </div>  
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Tên hồ sơ<span style="color:red">(*)</span></label>
                                     <div class="col-sm-11">
-                                       <input maxlength="50" type="text" id="ten_ho_so" name="ten_ho_so" class="form-control input-default" value="@Model.ten_ho_so" placeholder="Nhập tên hồ sơ">
+                                       <input maxlength="100" type="text" id="ten_ho_so" name="ten_ho_so" class="form-control input-default" value="@Model.ten_ho_so" placeholder="Nhập tên dự án, công trình, dịch vụ">
                                     </div>
                                 </div>
                                 <div class="form-group row mb-3">
@@ -348,7 +350,7 @@
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Ghi chú</label>
                                     <div class="col-sm-11">
-                                        <input maxlength="50" type="text" id="ghi_chu" name="ghi_chu" class="form-control input-default" value="@Model.ghi_chu" placeholder="Nhập tên hồ sơ">
+                                        <input maxlength="200" type="text" id="ghi_chu" name="ghi_chu" class="form-control input-default" value="@Model.ghi_chu" placeholder="Ghi chú">
                                     </div>
                                 </div>
 
@@ -401,7 +403,7 @@
                                     }
                                 </script>
                             <div class="underline-partion">
-                                     <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin chuyển xử lý</p>
+                            <p id="ctl14_p_KLT" class="label label-warning lable-partion" style="width:10%">Thông tin chuyển xử lý</p>
                             </div>  
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Người xử lý <span style="color:red">(*)</span></label>
@@ -412,7 +414,7 @@
                                                 {
                                                     foreach (var item in LstNguoiDung)
                                                     {
-                                                        <option value="@item.Id">@(item.ho_dem + item.ten)</option> 
+                                                        <option value="@item.       Id">@(item.ho_dem + item.ten)</option> 
                                                     }
                                                 }
 			                            </select>
@@ -446,31 +448,36 @@
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Ngày hẹn trả <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                        <input maxlength="50" type="date" id="ngay_hen_tra" class="form-control input-default" name="ngay_hen_tra" value="@Model.ngay_hen_tra" placeholder="Nhập điện thoại">
+                                <input maxlength="50" type="date" id="ngay_hen_tra" class="form-control input-default" name="ngay_hen_tra" value="@Model.ngay_hen_tra" placeholder="Nhập điện thoại" onfocus="this.showPicker()">
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giờ hẹn trả <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@(HG.WebApp.Common.HelperDateTime.DateTimeToHHmm(ViewBag.NgayTiepNhan))" placeholder="Nhập giờ hẹn trả" />
+                                <input maxlength="50" type="time" class="form-control input-default" id="gio_hen_tra" name="gio_hen_tra" value="@(HG.WebApp.Common.HelperDateTime.DateTimeToHHmm(ViewBag.NgayTiepNhan))" placeholder="Nhập giờ hẹn trả" onfocus="this.showPicker()" />
                                     </div>
                                 </div>
                                  <div class="form-group row mb-3">
-                                    <label for="mota" class="col-sm-3 control-label" style="color:red">Hồ sơ chưa đủ điều kiện tiếp nhận chính thức</label>
-                                    <div class="col-sm-8">
-                                        <input type="checkbox" name="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" conclick="ChuaDuDieuKien()"id="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" placeholder="Nhập người tiếp nhận">
+                                      <div class="col-sm-1">
+                                        <input type="checkbox" name="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" conclick="ChuaDuDieuKien()"id="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" style="text-align:right" placeholder="Nhập người tiếp nhận">
                                     </div>
+                                    <label for="mota" class="col-sm-3 control-label" style="color:red;text-align:left">Hồ sơ chưa đủ điều kiện tiếp nhận chính thức</label>
+                                   
                                 </div>
                                 <div class="underline-partion">
-                                     <p id="ctl14_p_KLT" class="label label-warning lable-partion">Thông tin chuyển lệ phí</p>
+                            <p id="ctl14_p_KLT" class="label label-warning lable-partion" style="width:10%">Thông tin lệ phí</p>
                                 </div> 
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Lệ phí<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                       <input maxlength="50" type="number" id="le_phi" name="le_phi" class="form-control input-default" value="@Model.le_phi" placeholder="Nhập số giấy tờ">
+                                       <input maxlength="50" type="number" id="le_phi" name="le_phi" class="form-control input-default" value="@Model.le_phi" placeholder="Lệ phí">
                                     </div>
-                                     <label for="stt" class="col-sm-1 control-label">Đã thu phí <span style="color:red">(*)</span></label>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" id="da_thu_phi" onclick="DaThuPhi()"  name="da_thu_phi" value="@Model.da_thu_phi" >
+                                      <div class="col-md-1">
+                                        <input type="checkbox" id="da_thu_phi" onclick="DaThuPhi()" style="text-align:right" name="da_thu_phi" value="@Model.da_thu_phi" >
                                     </div>
+                                     <label for="stt" class="col-sm-1 control-label" style="text-align:right">Đã thu phí</label>
+                                  
+                                    
+                                </div>
+                                <div class="form-group row mb-3">
                                      <label for="nguoi_sua" class="col-sm-1 control-label"><a href="#" style="color:blue">Biên lai thu phí</a></label>
                                 </div>
                         <div class="text-center">
@@ -535,6 +542,7 @@
                 gio_hen_tra: "Bạn chưa nhập giờ hẹn trả!"
             }
         });
+ 
         function convetArrayToObj(serialized) {
             var FormHelper = {};
             var s = '';
@@ -552,19 +560,19 @@
         });
     });
     function CheckedCode(abc){
-         //$.ajax({
-         //         type: "GET",
-         //         url: "/TiepNhan/KiemTraMaKH?code=" + abc.value,
-         //         data: "",
-         //         contentType: 'application/json; charset=utf-8',
-         //         success: function(data) {
-         //             if (data == "") {
-         //                 window.location.href = '/SuperAdmin/ThemNhom?ma_nhom=' + abc.value;
-         //             } else {
-         //                 window.location.href = '/SuperAdmin/SuaNhom?code=' + abc.value +"&type=Edit"
-         //             }
-         //         }
-         // });           
+         $.ajax({
+                  type: "GET",
+                  url: "/TiepNhan/KiemTraMaKH?code=" + abc.value,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      if (data == "") {
+                          window.location.href = '/SuperAdmin/ThemNhom?ma_nhom=' + abc.value;
+                      } else {
+                          window.location.href = '/SuperAdmin/SuaNhom?code=' + abc.value +"&type=Edit"
+                      }
+                  }
+          });           
     }
     function DeleteFileDinhKemTP(filenumber){
         if (filenumber == 1) {
@@ -620,6 +628,7 @@
                 alert("FormData is not supported.");
             }
         });
+
         $("#files2").on('change', function () {
             // Checking whether FormData is available in browser
             if (window.FormData !== undefined) {

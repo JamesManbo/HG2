@@ -7,27 +7,36 @@
     <ul class="sidebar-nav" id="sidebar-nav">
        @if (MenuChill != null && MenuChill.Vai_Tro_Menu_Quyen != null)
            {
-                foreach (var item in MenuChill.Vai_Tro_Menu_Quyen.GroupBy(n=>n.ma_trang_cha).ToList())
+            foreach (var item in MenuChill.Vai_Tro_Menu_Quyen.Where(n => n.cap_trang == 0).Distinct().ToList())
                 {
-                     if (!string.IsNullOrEmpty(item.Key))
-                     {
-                        <li class="nav-item">
-                            <a class="nav-link collapsed" data-bs-target="#@item.Key-nav" data-bs-toggle="collapse" href="#">
-                                <i class="bi bi-menu-button-wide"></i><span>@(HG.WebApp.Helper.HelperSql.GetTenTrang(item.Key))</span><i class="bi bi-chevron-down ms-auto"></i>
-                            </a>
-                            <ul id="@item.Key-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                                   @foreach (var item2 in item)
-                                   {
-                                       <li>
-                                            <a href="@item2.url">
-                                                <i class="bi bi-circle"></i><span>@item2.ten_chuc_nang</span>
-                                            </a>
-                                       </li>
-                                   }
-                        
-                            </ul>
-                        </li>
-                     } 
+                      <li class="nav-item">
+                        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                            <i class="bi bi-menu-button-wide"></i><span>@(HG.WebApp.Helper.HelperSql.GetTenTrang(item.ma_chuc_nang))</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        @if (MenuChill.Vai_Tro_Menu_Quyen.Where(n=>n.cap_trang == 1 && n.ma_trang_cha == item.ma_chuc_nang).Count() > 0){
+                         <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                            @foreach (var item2 in MenuChill.Vai_Tro_Menu_Quyen.Where(n=>n.cap_trang == 1 && n.ma_trang_cha == item.ma_chuc_nang).GroupBy(test => test.ma_chuc_nang).Select(grp => grp.First()).ToList())
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link parent-custom collapsed" data-bs-target="#components-nav2" data-bs-toggle="collapse" href="@item2.url">
+                                        <i class="bi bi-circle"></i><span>@(HG.WebApp.Helper.HelperSql.GetTenTrang(item2.ma_chuc_nang)) </span><i class="bi bi-chevron-down ms-auto"></i>
+                                    </a>
+                                    <ul id="components-nav2" class="nav-content custom collapse" data-bs-parent="#nav-content">
+                                        @foreach (var item3 in MenuChill.Vai_Tro_Menu_Quyen.Where(n=>n.cap_trang == 2 && n.ma_trang_cha == item2.ma_chuc_nang).GroupBy(test => test.ma_chuc_nang).Select(grp => grp.First()).ToList())
+                                        {
+                                            <li>
+                                                <a href="@item3.url">
+                                                    <i class="bi bi-circle"></i><span>@(HG.WebApp.Helper.HelperSql.GetTenTrang(item3.ma_chuc_nang))</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    }
+                       
+                    </li>
                 }
             }
     </ul>
@@ -38,11 +47,18 @@
                     <i class="bi bi-menu-button-wide"></i><span>Tiếp Nhận</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="/TiepNhan/TiepNhanHoSoMoi">
-                            <i class="bi bi-circle"></i><span>Tiếp nhận hồ sơ</span>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link parent-custom collapsed" data-bs-target="#components-nav2" data-bs-toggle="collapse" href="/TiepNhan/TiepNhanHoSoMoi">
+                        <i class="bi bi-circle"></i><span>Tiếp nhận hồ sơ </span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="components-nav2" class="nav-content custom collapse" data-bs-parent="#nav-content">
+                        <li>
+                            <a href="/TiepNhan/TiepNhanHoSoMoi">
+                                <i class="bi bi-circle"></i><span>Tiếp nhận hồ sơ</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                     <li>
                         <a href="/TiepNhan/HoSoDangTiepNhan">
                             <i class="bi bi-circle"></i><span>Hồ sơ đang tiếp nhận</span>
@@ -64,7 +80,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/TiepNhan/HoSoTiepNhanChuaChinhThuc">
+                    <a href="/TiepNhan/HoSoChoTiepNhanChuaChinhThuc">
                             <i class="bi bi-circle"></i><span>Hồ sơ chưa chính thức</span>
                         </a>
                     </li>
@@ -177,7 +193,11 @@
                             <i class="bi bi-circle"></i><span>Chuyên mục con</span>
                         </a>
                     </li>
-
+                    <li>
+                        <a href="/DonVi/DonVi">
+                            <i class="bi bi-circle"></i><span>danh sách đơn vị</span>
+                        </a>
+                    </li>
 
                 </ul>
             </li><!-- End Components Nav -->
@@ -371,7 +391,9 @@
                         <a href="/TraCuuHoSo/TimKiemHoSoLienThong">
                             <i class="bi bi-circle"></i><span>Tra cứu hồ sơ liên thông</span>
                         </a>
+                      
                     </li>
+                
                 </ul>
             </li><!-- End Forms Nav -->
            
@@ -405,11 +427,7 @@
                             <i class="bi bi-circle"></i><span>Phân quyền</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="/DonVi/DonVi">
-                            <i class="bi bi-circle"></i><span>DM đơn vị</span>
-                        </a>
-                    </li>
+                    
                 </ul>
             </li>
 
@@ -450,7 +468,28 @@
                     </li>
                 </ul>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#formtrakq-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-journal-text"></i><span>Trả kết quả</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="formtrakq-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="/TraKetQua/HoSoDaTraKetQua">
+                            <i class="bi bi-circle"></i><span>Hồ sơ đã trả kết quả</span>
+                        </a>
+                    </li>
+                    <li>
+                         <a href="/TraKetQua/HoSoChoTraKetQua">
+                                <i class="bi bi-circle"></i><span>Hồ sơ chờ trả kết quả</span>
+                         </a>
+                    </li>
+                    <li>
+                    <a href="/TraKetQua/HoSoDaCoKQGD1">
+                            <i class="bi bi-circle"></i><span>Hồ sơ đã có kết quả giai đoạn 1</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Forms Nav -->
              <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#formtintuc-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-journal-text"></i><span>Quản lý tin tức</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -471,4 +510,5 @@
             </li><!-- End Forms Nav -->
 
         </ul>
+        
 }

@@ -28,10 +28,11 @@
                     <tr>
                         <td><input type="checkbox" class="ads_Checkbox" value="@item.ma_gan_luong" /></td>
                         <td scope="row">
-                            @(stt+ViewBag.PageSize)
+                            @(stt + ViewBag.PageSize)
                             <input type="hidden" name="" id="" value="@item.ma_gan_luong" />
                         </td>
-                        
+                        <td><a href="/Luong/SuaGanLuongXuLy?Id=@item.Id&type=@(StatusAction.View.ToString())">@item.ten_gan_luong</a></td>
+
                         <td>@item.mo_ta</td>
                        
                         <td>

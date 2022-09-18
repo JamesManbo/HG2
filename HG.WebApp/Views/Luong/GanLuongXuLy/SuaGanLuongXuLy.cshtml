@@ -1,6 +1,6 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục quốc tịch";
+    ViewData["Title"] = "Cập nhật gán luồng xử lý";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
      var LuongXuLy = ViewBag.LuongXuLy as List<HG.Entities.Dm_luong_Key>;
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
@@ -16,7 +16,7 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Luồng xử lý</h1>
+            <h1>Gán luồng xử lý</h1>
         </div>
     </div>
     @if (ViewBag.error > 0)
@@ -34,7 +34,7 @@
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã luồng <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
-                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã luồng" name="ma_luong" maxlength="25" value="@Model.ganLuongXuLyModel.ma_gan_luong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <input type="text" onfocusout="CheckMa(this)" class="form-control input-default" placeholder="Mã luồng" name="ma_gan_luong" maxlength="25" value="@Model.ganLuongXuLyModel.ma_gan_luong" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
                                 @if (ViewBag.type_view == StatusAction.Edit.ToString())
@@ -182,19 +182,11 @@
                        
 
                         <div class="text-center">
-                            @if (ViewBag.type_view == StatusAction.View.ToString())
-                            {
-
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ThemGanLuongXuLy';">Thêm</button>
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/SuaGanLuongXuLy?code=@Model.ganLuongXuLyModel.ma_gan_luong&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                            }
-                            @if (ViewBag.type_view == StatusAction.Edit.ToString())
-                            {
-                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
-                                <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
-                            }
-                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=@Model.ganLuongXuLyModel.ma_gan_luong')">Xóa</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
+                          
+                            <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ThemGanLuongXuLy';">Thêm</button>
+                            <button type="submit" class="btn btn-primary" name="type">Lưu</button>
+                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaGanLuongXuLy?Id=@Model.ganLuongXuLyModel.Id')">Xóa</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/GanLuongXuLy';">Đóng</button>
 
                            
                         </div>

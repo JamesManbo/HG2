@@ -1,4 +1,4 @@
-﻿
+﻿@using HG.WebApp
 @model List<HG.Entities.Entities.GanLuongXuLy.Gan_Luong_Xu_Ly>
 
 <div style="overflow-y: auto;">
@@ -13,9 +13,11 @@
                     </tr>
                     @foreach (var item in Model)
                     {
+                       
                         <tr>
                             <td align="center">
-                                <a>Chọn</a>
+                               
+                                <a href="/Luong/SuaGanluongXuLy?Id=@item.Id&type=@(StatusAction.Edit.ToString())">Chọn</a>
                             </td>
                             <td>
                                 @item.ten_gan_luong

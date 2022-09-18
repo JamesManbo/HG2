@@ -1,6 +1,6 @@
 ﻿@using HG.WebApp
 @{
-    ViewData["Title"] = "Danh mục khai báo luồng xử lý";
+    ViewData["Title"] = "Thông tin gán luồng";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var LuongXuLy = ViewBag.LuongXuLy as List<HG.Entities.Dm_luong_Key>;
     var lst_phong_ban = ViewBag.lst_phong_ban as List<HG.Entities.Dm_Phong_Ban>;
@@ -182,12 +182,12 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Luồng xử lý</h1>
+            <h1>Gán luồng xử lý</h1>
         </div>
     </div>
     <div class="maincontent">
         <div class="maincontentinner">
-            <h4 class="widgettitle">Cập nhật thông tin luồng xử lý</h4>
+            <h4 class="widgettitle">Cập nhật thông tin gán luồng xử lý</h4>
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
@@ -206,7 +206,7 @@
                                     function myModalPopup() {
                                         $.ajax({
                                             type: "GET",
-                                            url: "../Luong/RenderViewLuongXuLy",
+                                            url: "../Luong/RenderViewGanLuongXuLy",
                                             data: "",
                                             contentType: 'application/json; charset=utf-8',
                                             success: function(data) {

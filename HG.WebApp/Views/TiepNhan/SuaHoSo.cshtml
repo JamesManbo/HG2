@@ -6,7 +6,7 @@
    //var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
-   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.Entities.AspNetUsersModel>;
 }
 @model HG.Entities.HoSo.Ho_So
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -505,7 +505,18 @@
                             
                             
                         </div>
-                         @if (ViewBag.type_view == StatusAction.View.ToString())
+                         @if (ViewBag.type_view == StatusAction.View.ToString() && ViewBag.isSend == true )
+                        {
+                            <div class="text-center">
+                               <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Thêm</button>
+                               <button type="button" class="btn btn-primary" onclick="TiepNhanChinhThuc(@Model.Id)">Tiếp nhận chính thức</button>
+                               <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.SaveAndTranfer.ToString())">Sửa</button>
+                               <a type="button" href="/TiepNhan/ViewInPhieu?code=@Model.Id" target="_blank" class="btn btn-primary" style="color: #fff;" >In phiếu</a>
+                               <a type="button" href="/TiepNhan/XoaHoSo?Id=@Model.Id" target="_blank" class="btn btn-primary" style="color: #fff;">Xóa</a>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/HoSoChoTiepNhanChuaChinhThuc';">Đóng</button>
+                            </div>
+                        }
+                         @if (ViewBag.type_view == StatusAction.View.ToString() && ViewBag.isSend == false)
                         {
                             <div class="text-center">
                                <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Thêm</button>
@@ -517,7 +528,7 @@
                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/TiepNhan/HoSoDangTiepNhan';">Đóng</button>
                             </div>
                         }
-                        @if (ViewBag.type_view == StatusAction.Edit.ToString())
+                        @if (ViewBag.type_view == StatusAction.Edit.ToString() && ViewBag.isSend == false)
                         {
                             <div class="text-center">
                                <button type="submit" class="btn btn-primary"  onclick="window.location.href='/TiepNhan/TiepNhanHoSoMoi';">Lưu</button>
@@ -791,6 +802,18 @@
          $.ajax({
                   type: "GET",
                   url: "/ApiHoSo/ChuyenXuLy?ho_so_id=" + ho_so_id,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      $("#NotifyVHSTitle").html(data);
+                      $("#NotifyVHS").modal("show");
+                  }
+          });           
+    }   
+    function TiepNhanChinhThuc(ho_so_id){
+         $.ajax({
+                  type: "GET",
+                  url: "/ApiHoSo/TiepNhanChinhThuc?ho_so_id=" + ho_so_id,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
