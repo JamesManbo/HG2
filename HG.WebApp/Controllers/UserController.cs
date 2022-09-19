@@ -442,10 +442,6 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult CurrentUserClient()
         {
-            if (User.Identity.Name == null)
-            {
-                return RedirectToAction("News", "News");
-            }
             EAContext db = new EAContext();
             var obj = db.AspNetUsers.Where(n => n.UserName == User.Identity.Name).FirstOrDefault();
             var NameUid = "";

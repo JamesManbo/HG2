@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HG.Entities.Entities.Model;
 using System.Configuration;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 namespace HG.WebApp.Controllers
 {
@@ -25,6 +26,7 @@ namespace HG.WebApp.Controllers
         private readonly UserManager<AspNetUsers> userManager;
         private readonly SignInManager<AspNetUsers> signInManager;
         private readonly SystemDao _sys;
+        private readonly HG.Data.Business.HoSo.HoSoDao _hoso;
         public QTNguoidungController(ILogger<QTNguoidungController> logger, UserManager<AspNetUsers> userManager, SignInManager<AspNetUsers> signInManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
        : base(configuration, httpContextAccessor)
         {
@@ -35,6 +37,7 @@ namespace HG.WebApp.Controllers
             this._httpContextAccessor = httpContextAccessor;
             _nguoiDungDao = new NguoiDungDao(DbProvider);
             _sys = new SystemDao(DbProvider);
+            _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
         }
         #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
@@ -47,17 +50,10 @@ namespace HG.WebApp.Controllers
             ViewBag.txtSearch = txtSearch;
             EAContext eAContext = new EAContext();
             HelperString stringHelper = new HelperString();
-            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() {tu_khoa = txtSearch, CurrentPage = 1, ma_phong_ban = ma_phong_ban,userId = UserId, trang_thai = trang_thai, da_xoa = da_xoa, RecordsPerPage = pageSize };
+            NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = ma_phong_ban, tu_khoa = txtSearch, trang_thai = 0, da_xoa = 0, RecordsPerPage = pageSize };
             var ds = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
             ViewBag.TotalRecords = ds.Pagelist.TotalRecords;
-            if (_sys.LaQuanTriTatCaDonVi(UserId))
-            {
-                ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
-            }
-            else
-            {
-                ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.Where(n => n.ma_phong_ban == _sys.GetMaPhongBanByUserId(UserId)).ToList();
-            }
+            ViewBag.ListPhongBan = _nguoiDungDao.DanhSachPhongBanByDonVi(UserId);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + 1;
             ViewBag.CurrentPage = 1;
             return View(ds.asp_Nhoms);
@@ -89,7 +85,7 @@ namespace HG.WebApp.Controllers
             }
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
 
-            var result = await userManager.ResetPasswordAsync(user, token, "MyN3wP@ssw0rd");
+            var result = await userManager.ResetPasswordAsync(user, token, "1");
             if (result.Succeeded)
             {
                 return true;
@@ -145,9 +141,10 @@ namespace HG.WebApp.Controllers
         [HttpGet]
         public IActionResult ThemNguoiDung(string UserName = "")
         {
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.lst_phong_ban = _nguoiDungDao.DanhSachPhongBanByDonVi(UserId);
             var db = new EAContext();
             ViewBag.LstNhom = db.Asp_nhom.ToList();
-            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
@@ -159,7 +156,8 @@ namespace HG.WebApp.Controllers
         {
             var db = new EAContext();
             ViewBag.LstNhom = db.Asp_nhom.ToList();
-            ViewBag.lst_phong_ban = db.Dm_Phong_Ban.ToList();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.lst_phong_ban = _nguoiDungDao.DanhSachPhongBanByDonVi(UserId);
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungOnlSearchItem nguoidungOnlSearchItem = new NguoiDungOnlSearchItem() { CurrentPage = 1, trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungOnlPhanTrang(nguoidungOnlSearchItem);
@@ -229,15 +227,7 @@ namespace HG.WebApp.Controllers
             var UserId = Guid.Parse(userManager.GetUserId(User));
             var db = new EAContext();
             ViewBag.LstNhom = db.Asp_nhom.ToList();
-            if (_sys.LaQuanTriTatCaDonVi(UserId))
-            {
-                ViewBag.ListPhongBan = db.Dm_Phong_Ban.ToList();
-            }
-            else
-            {
-                ViewBag.lst_phong_ban = db.Dm_Phong_Ban.Where(n => n.ma_phong_ban == _sys.GetMaPhongBanByUserId(UserId)).ToList();
-            }
-            
+            ViewBag.lst_phong_ban = _nguoiDungDao.DanhSachPhongBanByDonVi(UserId);
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
@@ -246,8 +236,14 @@ namespace HG.WebApp.Controllers
             {
                 var obj = string.Join(",", _nguoiDungDao.LayNguoiDungBoiId(Id).asp_nhom.Select(n => n.ma_nhom).ToArray());
             }
-            
-            return View(_nguoiDungDao.LayNguoiDungBoiId(Id));
+            var _user = _nguoiDungDao.LayNguoiDungBoiId(Id);
+            //lấy từ nhóm và vai trò
+            var NhomByUser = _nguoiDungDao.LayNhomBoiNguoiDung(Id);
+            if (NhomByUser != null)
+            {
+                _user.asp_nhom.AddRange(NhomByUser);
+            };
+            return View(_user);
         }
         [HttpGet]
         public IActionResult ViewNguoiDung(Guid Id, string type)
@@ -255,18 +251,18 @@ namespace HG.WebApp.Controllers
             var db = new EAContext();
             var UserId = Guid.Parse(userManager.GetUserId(User));
             ViewBag.LstNhom = db.Asp_nhom.ToList();
-            if (_sys.LaQuanTriTatCaDonVi(UserId))
-            {
-                ViewBag.ListPhongBan = db.Dm_Phong_Ban.ToList();
-            }
-            else
-            {
-                ViewBag.lst_phong_ban = db.Dm_Phong_Ban.Where(n => n.ma_phong_ban == _sys.GetMaPhongBanByUserId(UserId)).ToList();
-            }
+            ViewBag.ListPhongBan = _nguoiDungDao.DanhSachPhongBanByDonVi(UserId);
             ViewBag.lst_chuc_vu = db.Dm_Chuc_Vu.ToList();
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
-            return View(_nguoiDungDao.LayNguoiDungBoiId(Id));
+            var _user = _nguoiDungDao.LayNguoiDungBoiId(Id);
+            //lấy từ nhóm và vai trò
+            var NhomByUser = _nguoiDungDao.LayNhomBoiNguoiDung(Id);
+            if (NhomByUser != null)
+            {
+                _user.asp_nhom.AddRange(NhomByUser);
+            };
+            return View(_user);
         }
        
         [HttpPost]
@@ -277,11 +273,21 @@ namespace HG.WebApp.Controllers
             try {
                 if (ObjId.ErrorCode == 0)
                 {
-                    if(item.lstGroup != null)
+                    //lấy từ nhóm và vai trò
+                    var NhomByUser = _nguoiDungDao.LayNhomBoiNguoiDung(item.Id);
+                    var NhomByUserString = "";
+                    if (NhomByUser != null)
+                    {
+                        NhomByUserString = string.Join(",", NhomByUser.Select(n => n.ma_nhom).ToArray());
+                    };
+                    if (item.lstGroup != null)
                     {
                         for (int i = 0; i < item.lstGroup.Split(",").Length; i++)
                         {
-                            _nguoiDungDao.ThemMoi_NguoiDung_Nhom(item.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
+                            if (!NhomByUserString.Contains(item.lstGroup.Split(",")[i].ToString()))
+                            {
+                                _nguoiDungDao.ThemMoi_NguoiDung_Nhom(item.Id, item.lstGroup.Split(",")[i].ToString(), UserId);
+                            }
                         }
                     };
                     if (item.type_view == StatusAction.Add.ToString())
@@ -675,7 +681,7 @@ namespace HG.WebApp.Controllers
             EAContext eAContext = new EAContext();
             ViewBag.ma_nhom = code;
             ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
-            ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            ViewBag.lst_nguoi_dung = _hoso.DanhSachNguoiDung();
             var lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(code);
             ViewBag.lst_nhom_nguoi_dung = lst_nhom_nguoi_dung;
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
@@ -718,15 +724,13 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult QLNhomVaitroChitiet(phong_ban_nhom_nguoi_dung item)
         {
-            
-            
             int pageSize = 25;
             var currentPage = 1;
             var UserId = Guid.Parse(userManager.GetUserId(User));
             item.CreatedUid = UserId;
             EAContext eAContext = new EAContext();
             ViewBag.lst_nhom = eAContext.Asp_nhom.Where(n => n.Deleted == 0).ToList();
-            ViewBag.lst_nguoi_dung = eAContext.AspNetUsers.ToList();
+            ViewBag.lst_nguoi_dung = _hoso.DanhSachNguoiDung();
             ViewBag.ls_vai_tro = eAContext.Asp_dm_vai_tro.ToList();
             ViewBag.ListPhongBan = eAContext.Dm_Phong_Ban.ToList();
             var totalRecored = eAContext.Asp_dm_vai_tro.Count();
@@ -770,12 +774,22 @@ namespace HG.WebApp.Controllers
             }
             else
             {
-                //if (string.IsNullOrEmpty(item.lstGroup))
-                //{
-                //    ViewBag.type_view = StatusAction.View.ToString();
-                //    return View();
-                //}
+                //Asp_user_nhom lấy người dùng thuộc nhóm này, nếu người dùng nào ko có trong list này sẽ bị xóa
+                if (item != null)
+                {
+                    var lstUserGroup = _nguoiDungDao.ListNguoiDungByMaNhom(item.ma_nhom);
+                    foreach (var k in lstUserGroup)
+                    {
+                        if (!item.lstGroup.Contains(k.ma_nguoi_dung.ToString().ToLower()))
+                        {
+                            _nguoiDungDao.XoaNguoiDungByMaNhom(item.ma_nhom, k.ma_nguoi_dung);
+                            //ko tồn tại thì xóa
+                        }
+                    }
+                }
                 var obj = _nguoiDungDao.ThemMoiNhomNguoiDung(item);
+                //remove nếu người dùng bị xóa nằm trong nhóm user 
+
                 ViewBag.lst_nhom_nguoi_dung = _nguoiDungDao.GetNhomNguoiDungByMaNhom(item.ma_nhom);
                 if (obj.ErrorCode == 0)
                 {
