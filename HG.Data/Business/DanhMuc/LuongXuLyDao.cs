@@ -4,6 +4,7 @@ using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.GanLuongXuLy;
 using HG.Entities.Entities.Luong;
 using HG.Entities.Entities.Model;
+using HG.Entities.Entities.ThuTuc;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -301,6 +302,20 @@ namespace HG.Data.Business.DanhMuc
             catch (Exception e)
             {
                 return new List<Dm_thu_tuc_hc>();
+            }
+        }
+        public DmThuTuc GetThuTucByCode(string ma_thu_tuc)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("select * from dm_thu_tuc_hc where ma_thu_tuc = '"+ma_thu_tuc+"'", CommandType.Text);
+                // Lấy về danh sách các người dung
+                var menu = DbProvider.ExecuteObject<DmThuTuc>();
+                return menu;
+            }
+            catch (Exception e)
+            {
+                return new DmThuTuc();
             }
         }
         public string CheckMaGanLuong(string ma_gan_luong)
