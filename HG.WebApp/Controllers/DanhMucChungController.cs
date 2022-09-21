@@ -36,17 +36,30 @@ namespace HG.WebApp.Controllers
         }
 
         #region Quốc tịch
-        public IActionResult QuocTich()
+        public IActionResult QuocTich(string txtSearch = "" )
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var currentPage = 1;
             var totalRecored = 0;
+            ViewBag.txtSearch = txtSearch;
             var quoc_tich = new List<Dm_Quoc_Tich>();
-            using (var db = new EAContext())
+            if (string.IsNullOrEmpty(txtSearch))
             {
-                var ds = db.Dm_Quoc_Tich.Where(n => n.Deleted == 0).ToList();
-                quoc_tich = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
-                totalRecored = ds.Count();
+                using (var db = new EAContext())
+                {
+                    var ds = db.Dm_Quoc_Tich.Where(n => n.Deleted == 0).ToList();
+                    quoc_tich = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
+            }
+            else
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.Dm_Quoc_Tich.Where(n => n.Deleted == 0 && n.ten_quoc_tich.Contains(txtSearch)).ToList();
+                    quoc_tich = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
             }
             ViewBag.TotalRecored = totalRecored;
             ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
@@ -170,25 +183,37 @@ namespace HG.WebApp.Controllers
         #endregion
 
         #region Giới Tính
-        public IActionResult GioiTinh()
+        public IActionResult GioiTinh(string txtSearch = "")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var currentPage = 1;
             var totalRecored = 0;
             var gioi_tinh = new List<Dm_Gioi_Tinh>();
-            using (var db = new EAContext())
+            if (string.IsNullOrEmpty(txtSearch))
             {
-                var ds = db.Dm_Gioi_Tinh.Where(n => n.Deleted == 0).ToList();
-                gioi_tinh = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
-                totalRecored = ds.Count();
+                using (var db = new EAContext())
+                {
+                    var ds = db.Dm_Gioi_Tinh.Where(n => n.Deleted == 0).ToList();
+                    gioi_tinh = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
+            }
+            else
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.Dm_Gioi_Tinh.Where(n => n.Deleted == 0 && n.ten_gioi_tinh.Contains(txtSearch)).ToList();
+                    gioi_tinh = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
             }
             ViewBag.TotalRecored = totalRecored;
             ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? totalRecored : pageSize;
+            ViewBag.txtSearch = txtSearch;
             return View("~/Views/DanhMucChung/GioiTinh/GioiTinh.cshtml", gioi_tinh);
-
         }
 
         public IActionResult ThemGioiTinh()
@@ -283,18 +308,32 @@ namespace HG.WebApp.Controllers
         #endregion
 
         #region Tôn giáo
-        public IActionResult TonGiao()
+        public IActionResult TonGiao(string txtSearch = "")
         {
+            ViewBag.txtSearch = txtSearch;
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var currentPage = 1;
             var totalRecored = 0;
             var ton_giao = new List<Dm_Ton_Giao>();
-            using (var db = new EAContext())
+            if (string.IsNullOrEmpty(txtSearch))
             {
-                var ds = db.Dm_Ton_Giao.Where(n => n.Deleted == 0).ToList();
-                ton_giao = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
-                totalRecored = ds.Count();
+                using (var db = new EAContext())
+                {
+                    var ds = db.Dm_Ton_Giao.Where(n => n.Deleted == 0).ToList();
+                    ton_giao = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
             }
+            else
+            {
+                using (var db = new EAContext())
+                {
+                    var ds = db.Dm_Ton_Giao.Where(n => n.Deleted == 0 && n.ten_ton_giao.Contains(txtSearch)).ToList();
+                    ton_giao = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                }
+            }
+           
             ViewBag.TotalRecored = totalRecored;
             ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
@@ -453,6 +492,7 @@ namespace HG.WebApp.Controllers
                 ViewBag.CurrentPage = currentPage;
                 ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
                 ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                ViewBag.Stt = (currentPage - 1) * pageSize;
                 result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMucChung/DanToc/DanTocPaging.cshtml", datapage);
 
             }
@@ -461,6 +501,8 @@ namespace HG.WebApp.Controllers
 
         public IActionResult ThemDanToc()
         {
+            EAContext db = new EAContext();
+            ViewBag.ListDanToc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
             return View("~/Views/DanhMucChung/DanToc/ThemDanToc.cshtml");
         }
 
@@ -493,10 +535,13 @@ namespace HG.WebApp.Controllers
         public IActionResult SuaDanToc(string code, string type)
         {
             var quoc_tich = new Dm_Dan_Toc();
+            var lstDanToc = new List<Dm_Dan_Toc>();
             using (var db = new EAContext())
             {
                 quoc_tich = db.Dm_Dan_Toc.Where(n => n.Deleted == 0 && n.ma_dan_toc == code).FirstOrDefault();
+                lstDanToc = db.Dm_Dan_Toc.Where(n => n.Deleted != 1).ToList();
             }
+            ViewBag.ListDanToc = lstDanToc;
             ViewBag.type_view = type;
             return View("~/Views/DanhMucChung/DanToc/SuaDanToc.cshtml", quoc_tich);
         }
@@ -539,10 +584,10 @@ namespace HG.WebApp.Controllers
 
         public async Task<IActionResult> RenderViewDanToc()
         {
-            var lst = new List<Dm_Ton_Giao>();
+            var lst = new List<Dm_Dan_Toc>();
             using (var db = new EAContext())
             {
-                lst = db.Dm_Ton_Giao.Where(n => n.Deleted == 0).ToList();
+                lst = db.Dm_Dan_Toc.Where(n => n.Deleted == 0).ToList();
             }
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DanhMucChung/DanToc/ViewDanToc.cshtml", lst);
             return Content(result);

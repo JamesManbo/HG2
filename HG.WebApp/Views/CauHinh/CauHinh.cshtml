@@ -120,14 +120,24 @@
                                     </div>
                             </div>
                             <div class="form-group row">
-                            <label class="col-md-2 control-label ">Cấu hình gửi mail</label>
+                            
                                     <div class="col-md-2">
-                                        <input name="cau_hinh_gui_mail" @(Model.cau_hinh_gui_email == 1 ? "checked" : "") type="checkbox" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    <input name="cau_hinh_gui_mail" value="@Model.cau_hinh_gui_email" id="cau_hinh_gui_mail" @(Model.cau_hinh_gui_email == 1 ? "checked" : "") onclick="CauHinhGuiMailClick()" type="checkbox" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") />
                                     </div>
+                                    <label class="col-md-2 control-label ">Cấu hình gửi mail</label>
                                     <div class="col-md-2">
-                                        <input onclick="KiemTraCauHinhMail()" type="button" value="Kiểm tra cấu hình mail" class="btn btn-primary" @(Model.cau_hinh_gui_email == 1 ? "disabled" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "")/>
+                                        <input onclick="KiemTraCauHinhMail()" type="button" value="Kiểm tra cấu hình mail" class="btn btn-primary" @(Model.cau_hinh_gui_email == 1 ? "disabled" : "") @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "") />
                                     </div>
                                     <script>
+                                         function CauHinhGuiMailClick(){
+                                                    if ($('#cau_hinh_gui_mail').is(':checked')) {
+                                                        $("#cau_hinh_gui_mail").val(1);
+                                                        $('#hcauhinhgm').css('display','block');
+                                                    } else {
+                                                        $("#cau_hinh_gui_mail").val(0)
+                                                        $('#hcauhinhgm').css('display','none');
+                                                    }
+                                        }
                                         function KiemTraCauHinhMail(){
                                             $.ajax({
                                                 type: "GET",
@@ -146,30 +156,32 @@
                                         }
                                     </script>
                             </div>
-                            <div class="form-group row">
-                            <label class="col-md-2 control-label ">Máy chủ SMTP</label>
-                                    <div class="col-md-8">
-                                        <input name="may_chu_smtp" type="text" maxlength="50" value="@Model.may_chu_smtp" id="may_chu_smtp" class="form-control input-default" placeholder="Máy chủ SMTP" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    </div>
-                            </div>
-                            <div class="form-group row">
-                            <label class="col-md-2 control-label ">Cổng SMTP</label>
-                                    <div class="col-md-8">
-                                        <input name="cong_smtp" type="text" maxlength="50" value="@Model.cong_smtp" id="cong_smtp" class="form-control input-default" placeholder="Cổng SMTP" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    </div>
-                            </div>
+                            <div id="hcauhinhgm" style="display:none">
+                                <div class="form-group row">
+                                <label class="col-md-2 control-label ">Máy chủ SMTP</label>
+                                        <div class="col-md-8">
+                                            <input name="may_chu_smtp" type="text" maxlength="50" value="@Model.may_chu_smtp" id="may_chu_smtp" class="form-control input-default" placeholder="Máy chủ SMTP" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                <label class="col-md-2 control-label ">Cổng SMTP</label>
+                                        <div class="col-md-8">
+                                            <input name="cong_smtp" type="text" maxlength="50" value="@Model.cong_smtp" id="cong_smtp" class="form-control input-default" placeholder="Cổng SMTP" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        </div>
+                                </div>
                           
-                            <div class="form-group row">
-                            <label class="col-md-2 control-label ">Tài khoản đăng nhập</label>
-                                    <div class="col-md-8">
-                                        <input name="tai_khoan_dang_nhap" type="text" maxlength="50" value="@Model.tai_khoan_dang_nhap" id="tai_khoan_dang_nhap" class="form-control input-default" placeholder="Tài khoản đăng nhập" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    </div>
-                            </div>
-                            <div class="form-group row">
-                            <label class="col-md-2 control-label ">Mật khẩu đăng nhập</label>
-                                    <div class="col-md-8">
-                                        <input name="mat_khau_dang_nhap" type="password" maxlength="150" value="@Model.mat_khau_dang_nhap" id="mat_khau_dang_nhap" class="form-control input-default" placeholder="Mật khẩu đăng nhập" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
-                                    </div>
+                                <div class="form-group row">
+                                <label class="col-md-2 control-label ">Tài khoản đăng nhập</label>
+                                        <div class="col-md-8">
+                                            <input name="tai_khoan_dang_nhap" type="text" maxlength="50" value="@Model.tai_khoan_dang_nhap" id="tai_khoan_dang_nhap" class="form-control input-default" placeholder="Tài khoản đăng nhập" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                <label class="col-md-2 control-label ">Mật khẩu đăng nhập</label>
+                                        <div class="col-md-8">
+                                            <input name="mat_khau_dang_nhap" type="password" maxlength="150" value="@Model.mat_khau_dang_nhap" id="mat_khau_dang_nhap" class="form-control input-default" placeholder="Mật khẩu đăng nhập" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        </div>
+                                </div>
                             </div>
                             <div class="form-group row">
                             <label class="col-md-2 control-label ">ID VNPT Pay</label>

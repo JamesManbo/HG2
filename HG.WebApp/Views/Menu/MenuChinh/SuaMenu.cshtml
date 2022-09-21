@@ -33,7 +33,7 @@
                                 <input type="text" class="form-control input-default" placeholder="Mã trang" name="ma_trang" maxlength="25" value="@Model.ma_trang" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "") >
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "")>
                                     Chọn
                                 </button>
 

@@ -200,7 +200,7 @@
             $('#chi_tra_kq_kckqlt').val($(this).is(':checked'));
         });
 
-        var ngctxl = "@Model.thuTuc.don_vi_ltxl";
+        var ngctxl = @Model.thuTuc != null ? "@Model.thuTuc.don_vi_ltxl: " : "";
         var arrNgctxl = ngctxl.split(",");
         if (arrNgctxl != "") {
             arrNgctxl.forEach(function(i) {
@@ -224,7 +224,7 @@
             $("#multiselect2").append($('<option>', { value: e.params.data.id, text: e.params.data.text }));
         });
 
-        var ngphxl = "@Model.thuTuc.don_vi_ltph";
+        var ngphxl = @Model.thuTuc != null ? "Model.thuTuc.don_vi_ltph " : "";
 
         var arrNgphxl = ngphxl.split(",");
 
@@ -1354,12 +1354,12 @@
         <div class="modal-content">
             <div class="modal-header widgettitle">
                 <h5 class="modal-title">Danh sách</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -1466,12 +1466,12 @@
         <div class="modal-content">
             <div class="modal-header widgettitle">
                 <h5 class="modal-title">Danh sách</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body basicModaltp_ct">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

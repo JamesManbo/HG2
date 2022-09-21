@@ -33,10 +33,11 @@ namespace HG.WebApp.Controllers
         }
         public async Task<IActionResult> HoSoBoSungPaging(int currentPage = 1, string tu_khoa = "", string ma_thu_tuc = "", int tat_ca = 1, int dung_han = 0, int qua_han = 0, int trang_thai = 1, int pageSize = 25)
         {
+            var user = userManager.GetUserId(User);
             var totalRecored = 0;
             var hs = new List<Ho_So>();
             var lv = new List<Dm_Linh_Vuc>();
-            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = currentPage, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = dung_han, qua_han = qua_han, RecordsPerPage = pageSize, trang_thai_hs = trang_thai };
+            HoSoPaging hoSoPaging = new HoSoPaging() { CurrentPage = 1, tu_khoa = tu_khoa, ma_thu_tuc = ma_thu_tuc, tat_ca = 1, dung_han = 0, qua_han = 0, RecordsPerPage = pageSize, trang_thai_hs = (int)StatusTiepNhanHoSo.HoSoChoBoSung, userid = user };
             hs = _hoso.HoSoPaging(hoSoPaging, out totalRecored);
             ViewBag.LstLinhVuc = lv;
             ViewBag.CurrentPage = 1;
@@ -69,6 +70,28 @@ namespace HG.WebApp.Controllers
             else
             {
                 return "Chuyển xử lý hồ sơ lỗi !";
+            }
+           
+        } 
+        public string TiepNhanChinhThuc(int ho_so_id)
+        {
+            EAContext db = new EAContext();
+            var obj = db.Ho_So.Where(n => n.Id == ho_so_id).FirstOrDefault();
+            if (obj != null)
+            {
+                obj.trang_thai = (int)StatusTiepNhanHoSo.HoSoDangTiepNhan;
+                obj.id_trang_thai_xl = 0; //chưa tiếp nhận
+                obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                obj.UpdatedDateUtc = DateTime.Now;
+                obj.ho_so_chua_du_dk_tiep_nhan_chinh_thuc = 0;
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+                SaveLogHS(ho_so_id, "Hồ sơ chuyển qua đang tiếp nhận", (int)StatusTiepNhanHoSo.HoSoChoTiepNhanChuaChinhThuc, (int)StatusTiepNhanHoSo.HoSoDangTiepNhan, Guid.Parse(userManager.GetUserId(User)));
+                return "Chuyển đang tiếp nhận hồ sơ thành công!";
+            }
+            else
+            {
+                return "Chuyển đang tiếp nhận hồ sơ lỗi !";
             }
            
         }

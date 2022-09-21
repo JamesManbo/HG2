@@ -12,7 +12,7 @@
         <div class="pageicon"><span class="iconfa-pencil"></span></div>
         <div class="pagetitle">
             <h5>Thông tin</h5>
-            <h1>Quốc tịch</h1>
+            <h1>Bước xử lý</h1>
         </div>
     </div>
     @if (ViewBag.error > 0)
@@ -26,14 +26,13 @@
                 <div class="form-horizontal">
                     <!-- Horizontal Form -->
                     <form id="form_pb" action="/luong/SuaBuocXuLy?code=@Model.ma_buoc_xu_ly&type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
-                        >
                         <div class="row mb-3">
                             <label for="ma_pb" class="col-sm-2 control-label">Mã bước <span style="color:red">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-default" placeholder="Mã bước xử lý" name="ma_buoc_xu_ly" maxlength="25" value="@Model.ma_buoc_xu_ly" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
                             </div>
                             <div class="col-sm-1">
-                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                <button type="button" class="btn btn-primary" onclick="myModalPopup()" data-bs-toggle="modal" data-bs-target="#basicModal" @(ViewBag.type_view == StatusAction.View.ToString() ? "hidden" : "")>
                                     Chọn
                                 </button>
 
@@ -80,13 +79,13 @@
                         <div class="row mb-3">
                             <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_sua" value="@Model.UpdatedDateUtc">
+                                <input disabled type="date" class="form-control input-default" id="ngay_sua" value="@(Model.UpdatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.UpdatedDateUtc))">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
                             <div class="col-sm-8">
-                                <input disabled type="text" class="form-control input-default" id="ngay_tao" value="@Model.CreatedDateUtc">
+                                <input disabled type="date" class="form-control input-default" id="ngay_tao" value="@(Model.CreatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.CreatedDateUtc))">
                             </div>
                         </div>
                         @if (ViewBag.type_view == StatusAction.View.ToString())

@@ -5,6 +5,7 @@ using HG.Entities;
 using HG.Entities.Entities;
 using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.Model;
+using HG.Entities.Entities.ThuTuc;
 using HG.Entities.HoSo;
 using HG.Entities.SearchModels;
 using HG.WebApp.Data;
@@ -69,7 +70,13 @@ namespace HG.WebApp.Controllers
             ViewBag.lstThanhPhan = lstThanhPhan;
             ViewBag.ma_luong = ma_luong;
             return PartialView(lstObj);
-        } 
+        }
+        public DmThuTuc GetThuTucByCode(string ma_thu_tuc)
+        {
+            var lstObj = _danhmucDao.GetThuTucByCode(ma_thu_tuc);
+
+            return lstObj;
+        }
         public JsonResult GetNguoiXLNguoiPH(string ma_luong, string ten_buoc = "")
         {
             var lstNguoiXl = _danhmucDao.LayNguoiXLNguoiPHXLByMaLuong(ma_luong, "Tiếp nhận hồ sơ");
@@ -91,6 +98,10 @@ namespace HG.WebApp.Controllers
             {
                 //lọc insert các thành phần theo thủ tục sau đó insert hồ sơ
                 des.trang_thai = 1; //đang tiếp nhận
+                if (des.ho_so_chua_du_dk_tiep_nhan_chinh_thuc == 1)
+                {
+                    des.trang_thai = 11;
+                }
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ho_So> _hoso = db.Ho_So.Add(des);
                 db.SaveChanges();
                 hosoId = _hoso.Entity.Id;
@@ -98,6 +109,12 @@ namespace HG.WebApp.Controllers
             else if (type_view == StatusAction.Add.ToString())
             {
                 des.trang_thai = 1; //đang tiếp nhận
+                if (des.ho_so_chua_du_dk_tiep_nhan_chinh_thuc == 1)
+                {
+                    des.trang_thai = 11;
+                }
+                 
+               
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ho_So> _hoso = db.Ho_So.Add(des);
                 db.SaveChanges();
                 hosoId = _hoso.Entity.Id;
@@ -105,6 +122,10 @@ namespace HG.WebApp.Controllers
             else if (type_view == StatusAction.SaveAndTranfer.ToString()) //lưu và chuyển
             {
                 des.trang_thai = 2;
+                if (des.ho_so_chua_du_dk_tiep_nhan_chinh_thuc == 1)
+                {
+                    des.trang_thai = 11;
+                }
                 Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Ho_So> _hoso = db.Ho_So.Add(des);
                 db.SaveChanges();
                 hosoId = _hoso.Entity.Id;//hs đã chuyển và Đang chờ xử lý và Chuyển chưa xử lý

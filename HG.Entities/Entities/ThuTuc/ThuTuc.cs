@@ -48,6 +48,8 @@ namespace HG.Entities.Entities.ThuTuc
         public bool luong { get; set; }
         public string UidName { get; set; }
         public int count_tp { get; set; }
+        [NotMapped]
+        public string? ten_don_vi { get; set; }
     }
     public class MapLuong
     {

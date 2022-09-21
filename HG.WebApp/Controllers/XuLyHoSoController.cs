@@ -594,8 +594,38 @@ namespace HG.WebApp.Controllers
            // return View(Get_phieu_hen);
              return File(result.MainStream, "application/pdf");
         }
+        public async Task<IActionResult> SaveAndPrint(int Id, string noidung = "")
+        {
+            EAContext db = new EAContext();
+            var obj = db.Ho_So.Where(n => n.Id == Id).FirstOrDefault();
+            if (obj != null)
+            {
+               
+                obj.id_file_dinh_kem = noidung; //chưa tiếp nhận
+                obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
+                obj.UpdatedDateUtc = DateTime.Now;
+                obj.ho_so_chua_du_dk_tiep_nhan_chinh_thuc = 0;
+                db.Entry(obj).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            string mintype = "";
+            int exception = 1;
+            var path = @"" + this._environment.WebRootPath + "/Reports/PhieuTiepNhan.rdlc";
+            ViewBag.Path = path;
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            var hoso = db.Ho_So.Where(n => n.Id == Id).FirstOrDefault();
+            var Get_phieu_hen = _xulyhsDao.Getphieuhen(Id);
+            var dm_thanh_phan = _xulyhsDao.GetThanhPhanHoSo(hoso.ma_thu_tuc_hc);
+            LocalReport localReport = new LocalReport(path);
+
+            localReport.AddDataSource("Get_phieu_hen", Get_phieu_hen.ToList());
+            localReport.AddDataSource("dm_thanh_phan", dm_thanh_phan.ToList());
+            var result = localReport.Execute(RenderType.Pdf, exception, parameters, mintype);
+            // return View(Get_phieu_hen);
+            return File(result.MainStream, "application/pdf");
+        }
         [HttpPost]
-        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc, string y_kien = "")
+        public async Task<IActionResult> LuuThongTinHoSo(string Id, string type,int trangthai,int trangthaitruoc)
         {
             //var lstObj = _danhmucDao.LayLuongThanhPhanByMaTTHC(ma_thu_tuc);
             EAContext db = new EAContext();
@@ -603,7 +633,6 @@ namespace HG.WebApp.Controllers
             
             var title = "";
             hoso.trang_thai = trangthai;
-            hoso.y_kien = y_kien;
             switch (trangthai)
             {
                 case 18:

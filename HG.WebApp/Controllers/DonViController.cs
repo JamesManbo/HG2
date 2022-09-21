@@ -65,6 +65,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext db = new EAContext();
             ViewBag.ListCapDiaBan = db.dm_cap_dia_ban.ToList();
+            ViewBag.ListDonVi = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
             //ViewBag.ListDiaBan = db.dm_dia_ban.Where(n => n.Deleted == 0 && n.ma_dia_ban_cha == null && n.ma_cap == obj.ma_cap).ToList();
             return View(new dm_don_vi());
         }
@@ -130,6 +131,7 @@ namespace HG.WebApp.Controllers
                         ViewBag.ListXaPhuong = db.dm_dia_ban.Where(n => n.Deleted != 1 && n.ma_dia_ban_con == obj.ma_dia_ban_con).ToList();
                     };
                 }
+                ViewBag.ListDonVi = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                 return View(obj);
             }
             else
@@ -205,9 +207,10 @@ namespace HG.WebApp.Controllers
             {
                 using (var db = new EAContext())
                 {
-                    var ds = db.dm_don_vi.Where(n => n.Deleted == 0).ToList();
+                    var ds = db.dm_don_vi.Where(n => n.Deleted != 1).ToList();
                     var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                     totalRecored = ds.Count();
+                    ViewBag.Stt = (currentPage - 1) * pageSize;
                     ViewBag.TotalRecored = totalRecored;
                     ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
                     ViewBag.CurrentPage = currentPage;
@@ -221,7 +224,7 @@ namespace HG.WebApp.Controllers
             {
                 using (var db = new EAContext())
                 {
-                    var ds = db.dm_don_vi.Where(n => n.Deleted == 0 && (n.ten_don_vi ?? "").Contains(tu_khoa)).ToList();
+                    var ds = db.dm_don_vi.Where(n => n.Deleted != 1 && (n.ten_don_vi ?? "").Contains(tu_khoa)).ToList();
                     var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                     totalRecored = ds.Count();
                     ViewBag.TotalRecored = totalRecored;
@@ -288,7 +291,62 @@ namespace HG.WebApp.Controllers
 
 
         #region Cấp địa bàn
-        public IActionResult DiaBan(string txtSearch)
+        public async Task<IActionResult> DiaBanPaging(int currentPage = 0, int pageSize = 0, string tu_khoa = "", string ma_tinh = "")
+        {
+            var totalRecored = 0;
+            var result = "";
+            var ds = new List<dm_dia_ban>();
+            if (string.IsNullOrEmpty(tu_khoa))
+            {
+                using (var db = new EAContext())
+                {
+                    if (string.IsNullOrEmpty(ma_tinh))
+                    {
+                        ds = db.dm_dia_ban.Where(n => n.Deleted != 1).ToList();
+                    }
+                    else
+                    {
+                        ds = db.dm_dia_ban.Where(n => n.Deleted != 1 &&  (n.ma_dia_ban_cha == ma_tinh || n.ma_dia_ban_con == ma_tinh )).ToList();
+                    }
+                    var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                    ViewBag.Stt = (currentPage - 1) * pageSize;
+                    ViewBag.TotalRecored = totalRecored;
+                    ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                    ViewBag.CurrentPage = currentPage;
+                    ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+                    ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                    result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/DiaBanPaging.cshtml", datapage);
+
+                }
+            }
+            else
+            {
+                using (var db = new EAContext())
+                {
+                    if (string.IsNullOrEmpty(ma_tinh))
+                    {
+                        ds = db.dm_dia_ban.Where(n => n.Deleted != 1 && (n.ten_dia_ban ?? "").Contains(tu_khoa)).ToList();
+                    }
+                    else
+                    {
+                        ds = db.dm_dia_ban.Where(n => n.Deleted != 1 && (n.ten_dia_ban ?? "").Contains(tu_khoa) && (n.ma_dia_ban_cha == ma_tinh || n.ma_dia_ban_con == ma_tinh)).ToList();
+                    }
+                    var datapage = ds.Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                    totalRecored = ds.Count();
+                    ViewBag.TotalRecored = totalRecored;
+                    ViewBag.TotalPage = (totalRecored / pageSize) + ((totalRecored % pageSize) > 0 ? 1 : 0);
+                    ViewBag.CurrentPage = currentPage;
+                    ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
+                    ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? totalRecored : currentPage * pageSize;
+                    result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/DonVi/DiaBanPaging.cshtml", datapage);
+
+                }
+            }
+
+            return Content(result);
+        }
+        public IActionResult DiaBan(string txtSearch= "")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             var currentPage = 1;

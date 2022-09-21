@@ -7,14 +7,14 @@
 }
 <script>
     function CheckSearchDV(){
-        var donvi = document.getElementById("donvi").options[document.getElementById("donvi").selectedIndex].value;
-        var linhvuc = document.getElementById("linhvuc").options[document.getElementById("linhvuc").selectedIndex].value;
-        var mucdo = document.getElementById("mucdo").options[document.getElementById("mucdo").selectedIndex].value;
+        var donvi = $("#donvi").val() == undefined ? "" : $("#donvi").val();
+        var linhvuc = $("#ma_linh_vuc").val() == undefined ? "" : $("#ma_linh_vuc").val();
+        var mucdo = $("#ma_muc_do").val() == undefined ? "" : $("#ma_muc_do").val();
         var txtDichVu = $("#txtDichVu").val();
         var txtMaDichVu = $("#txtMaDichVu").val();
         $.ajax({
             type: "GET",
-            url: "../GuiHoSo/CheckSearchDV?donvi=" + donvi + "&linhvuc=" + linhvuc + "&mucdo=" + mucdo + "&ten_thu_tuc" + txtDichVu + "&ma_thu_tuc=" +txtMaDichVu,
+            url: "../GuiHoSo/CheckSearchDV?donvi=" + donvi + "&linhvuc=" + linhvuc + "&mucdo=" + mucdo + "&ten_thu_tuc=" + txtDichVu + "&ma_thu_tuc=" +txtMaDichVu,
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
@@ -42,17 +42,17 @@
 <div class="widgetcontent">
     <div class="form-horizontal">
         <div class="send-document-top top-title-frame">
-            <p>THÔNG TIN HỒ SƠ</p>
+            <p>LĨNH VỰC THỦ TỤC HÀNH CHÍNH</p>
         </div>
         <div class="send-document-content gray-border">
-                    <div class="title-new">Tìm kiếm thủ tục hành chính</div>
+            <div class="title-new" style="color:red">Chọn lĩnh vực</div>
                     <div class="form-horizontal">
 
                         <div class="form-group form-group-new">
                             <span id="ctl09_DV" class="col-md-4 control-label" style="font-weight:bold;">Chọn cơ quan:</span>
                             <div class="col-md-5">
-                                <select name="donvi" id="donvi"  style="width:100%;">
-			                        <option selected="selected" value="ALL">Toàn bộ cơ quan giải quyết</option>
+                                <select name="donvi" id="donvi"  style="width:100%;" onchange="LayLinhVucByDonVi(this)">
+			                        <option selected="selected" value="">Toàn bộ cơ quan giải quyết</option>
                                     @if (LstDonVi != null){
                                         foreach (var item in LstDonVi)
                                         {
@@ -62,20 +62,32 @@
 		                        </select>
                             </div>
                         </div>
-                        
+                        <script>
+                              function LayLinhVucByDonVi(obj){
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/GuiHoSo/LayLinhVucByDonVi?ma_don_vi=" + obj.value ,
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function (data) {
+                                            $("#linhvuc").html(data);
+                                        }
+                                    });
+                              }
+                        </script>
 
-                        <div class="form-group form-group-new">
+                        <div class="form-group form-group-new" id="linhvuc">
                             <label class="col-md-4 control-label">Lĩnh vực:</label>
                             <div class="col-md-5">
                             <select name="linhvuc" id="linhvuc" style="width:100%;">
 			                        <option selected="selected" value="0">Toàn bộ lĩnh vực</option>
-                                    @if (LstLinhVuc != null)
+                                    @*@if (LstLinhVuc != null)
                                     {
                                         foreach (var item in LstLinhVuc)
                                         {
                                             <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
                                         }
-                                    }
+                                    }*@
 		                        </select>
                             </div>
                         </div>
@@ -95,8 +107,8 @@
                         <div class="form-group form-group-new">
                             <label class="col-md-4 control-label">Mức độ:</label>
                             <div class="col-md-5">
-                                <select name="mucdo" id="mucdo" onchange="" style="width:100%;">
-			                        <option selected="selected" value="All">----- Tất cả -----</option>
+                                <select name="ma_muc_do" id="ma_muc_do" onchange="" style="width:100%;">
+			                        <option selected="selected" value="">----- Tất cả -----</option>
                                     @if (LstMucDo != null)
                                     {
                                         foreach (var item in LstMucDo)

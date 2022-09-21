@@ -27,7 +27,8 @@
                 <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
                 <input hidden id="lstCode" />
             </p>
-            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+            <div >
+                <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
                 <div class="dataTables_length">
                     <label>
                         Hiển thị
@@ -68,8 +69,8 @@
                                                 @stt
                                                 <input type="hidden" name="" id="" value="@item.ma_don_vi" />
                                             </td>
-                                            <td><a href="/DonVi/ChinhSuaDonVi?code=@item.ma_don_vi&type=@(StatusAction.Edit.ToString())">@item.ten_don_vi</a></td>
-                                            <td><a href="/DonVi/ChinhSuaDonVi?code=@item.ma_don_vi&type=@(StatusAction.Edit.ToString())">@item.mo_ta </a></td>
+                                            <td><a href="/DonVi/ChinhSuaDonVi?code=@item.ma_don_vi&type=@(StatusAction.View.ToString())">@item.ten_don_vi</a></td>
+                                            <td><a href="/DonVi/ChinhSuaDonVi?code=@item.ma_don_vi&type=@(StatusAction.View.ToString())">@item.mo_ta </a></td>
                                             <td>
                                             <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="/DonVi/ChinhSuaDonVi?code=@item.ma_don_vi&type=@(StatusAction.View.ToString())">
                                                 <span class="glyphicon glyphicon-list-alt">Xem</span>
@@ -164,6 +165,7 @@
                 </div>
                 <!-- End Table with stripped rows -->
 
+            </div>
             </div>
         </div>
 

@@ -114,7 +114,7 @@
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemChucVu';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaChucVu?code=@Model.ma_chuc_vu&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaChucVu?code=@Model.ma_chuc_vu')">Xóa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaChucVu?code=@Model.ma_chuc_vu')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/ChucVu';">Đóng</button>
                             </div>
                         }

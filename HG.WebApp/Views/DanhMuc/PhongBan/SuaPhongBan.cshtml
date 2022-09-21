@@ -188,13 +188,13 @@
                         <div class="row mb-3">
                             <label for="ngay_sua" class="col-sm-2 control-label">Ngày sửa</label>
                             <div class="col-sm-8">
-                                <input disabled type="date" class="form-control input-default" id="ngay_sua" value="@(Model.UpdatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.UpdatedDateUtc))">
+                                <input disabled type="date" class="form-control input-default" id="ngay_sua" value="@(Model.UpdatedDateUtc == null? "": Model.UpdatedDateUtc)">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="ngay_tao" class="col-sm-2 control-label">Ngày tạo</label>
                             <div class="col-sm-8">
-                                <input disabled type="date" class="form-control input-default" id="ngay_tao" value="@(Model.CreatedDateUtc == null? "": HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)Model.CreatedDateUtc))">
+                                <input disabled type="date" class="form-control input-default" id="ngay_tao" value="@(Model.CreatedDateUtc == null? "": Model.CreatedDateUtc)">
                             </div>
                         </div>
                         @if (ViewBag.type_view == StatusAction.View.ToString())

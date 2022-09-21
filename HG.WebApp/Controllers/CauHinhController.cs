@@ -1,5 +1,6 @@
 ﻿using HG.Data.Business.CauHinh;
 using HG.Data.Business.DanhMuc;
+using HG.Data.Business.NguoiDung;
 using HG.Entities.CauHinh;
 using HG.Entities.Entities.Model;
 using HG.WebApp.Data;
@@ -21,6 +22,7 @@ namespace HG.WebApp.Controllers
         private readonly CauHinhDao _cauHinhDao;
         private readonly LuongXuLyDao _danhmucDao;
         private readonly DanhMucDao _dmDao;
+        private readonly NguoiDungDao _nguoiDungDao;
         //extend sys identity
         public CauHinhController(ILogger<UserController> logger, UserManager<AspNetUsers> userManager, SignInManager<AspNetUsers> signInManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -33,6 +35,7 @@ namespace HG.WebApp.Controllers
             _cauHinhDao = new CauHinhDao(DbProvider);
             _danhmucDao = new LuongXuLyDao(DbProvider);
             _dmDao = new DanhMucDao(DbProvider);
+            _nguoiDungDao = new NguoiDungDao(DbProvider);
         }
         [HttpGet]
         public IActionResult CauHinh()
@@ -112,9 +115,9 @@ namespace HG.WebApp.Controllers
         #region xóa người có thể xử lý
         public IActionResult XoaNguoiCTXLPartial()
         {
-            var db = new EAContext();
-            ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
-         
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.DanhSachNguoiDung =  _nguoiDungDao.DanhSachNguoiDung(UserId);
+
             return PartialView();
         }
         
@@ -149,8 +152,8 @@ namespace HG.WebApp.Controllers
         #region thay thế người xử lý
         public IActionResult DoiNguoiXLPartial()
         {
-            var db = new EAContext();
-            ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.DanhSachNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             return PartialView();
         }
 
@@ -170,8 +173,8 @@ namespace HG.WebApp.Controllers
         #region đổi người xử lý theo luồng
         public IActionResult DoiNguoiXLTLPartial()
         {
-            var db = new EAContext();
-            ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.DanhSachNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             return PartialView();
         }
         public async Task<IActionResult> DoiNguoiXLTLList(string ma_nguoi_dung = "", string ma_nguoi_dung_thay_the = "")
@@ -247,7 +250,8 @@ namespace HG.WebApp.Controllers
         public ActionResult ThemNguoiXLVBPartial()
         {
             var db = new EAContext();
-            ViewBag.DanhSachNguoiDung = db.AspNetUsers.Where(n => n.Deleted != 1).ToList();
+            var UserId = Guid.Parse(userManager.GetUserId(User));
+            ViewBag.DanhSachNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.ListLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
             return PartialView();
         }

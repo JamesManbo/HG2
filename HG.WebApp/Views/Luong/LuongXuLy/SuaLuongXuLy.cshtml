@@ -151,16 +151,16 @@
                             @if (ViewBag.type_view == StatusAction.View.ToString())
                             {
 
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ThemGanLuongXuLy';">Thêm</button>
-                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/SuaGanLuongXuLy?code=@Model.ma_luong&type=@StatusAction.Edit.ToString()';">Sửa</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/ThemLuongXuLy';">Thêm</button>
+                                <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Luong/SuaLuongXuLy?code=@Model.ma_luong&type=@StatusAction.Edit.ToString()';">Sửa</button>
                             }
                             @if (ViewBag.type_view == StatusAction.Edit.ToString())
                             {
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.Add.ToString())">Lưu và Thêm</button>
                                 <button type="submit" class="btn btn-primary" name="type_view" value="@(StatusAction.View.ToString())">Lưu</button>
                             }
-                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaGanLuongXuLy?code=@Model.ma_luong')">Xóa</button>
-                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/GanLuongXuLy';">Đóng</button>
+                            <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Luong/XoaLuongXuLy?code=@Model.ma_luong')">Xóa</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='/Luong/LuongXuLy';">Đóng</button>
 
                          
                           

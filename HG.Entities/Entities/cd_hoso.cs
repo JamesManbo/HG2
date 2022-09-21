@@ -29,5 +29,12 @@ namespace HG.Entities.Entities
         public string? files_thanh_phan_5 { set; get; }
         public string? files_thanh_phan_6 { set; get; }
         public string? files_thanh_phan_7 { set; get; }
+        public string? ma_thanh_phan_1 { set; get; }
+        public string? ma_thanh_phan_2 { set; get; }
+        public string? ma_thanh_phan_3 { set; get; }
+        public string? ma_thanh_phan_4 { set; get; }
+        public string? ma_thanh_phan_5 { set; get; }
+        public string? ma_thanh_phan_6 { set; get; }
+        public string? ma_thanh_phan_7 { set; get; }
     }
 }

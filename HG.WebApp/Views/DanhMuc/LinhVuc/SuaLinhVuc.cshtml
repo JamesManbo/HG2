@@ -141,7 +141,7 @@
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/ThemLinhVuc';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/Danhmuc/SuaLinhVuc?code=@Model.ma_linh_vuc&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaLinhVuc?code=@Model.ma_linh_vuc')">Xóa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/Danhmuc/XoaLinhVuc?code=@Model.ma_linh_vuc')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/Danhmuc/LinhVuc';">Đóng</button>
                             </div>
                         }

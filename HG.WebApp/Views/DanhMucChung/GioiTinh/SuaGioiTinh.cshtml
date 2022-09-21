@@ -95,7 +95,7 @@
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/DanhMucChung/ThemGioiTinh';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/DanhMucChung/SuaGioiTinh?code=@Model.ma_gioi_tinh&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMucChung/XoaGioiTinh?code=@Model.ma_gioi_tinh')">Xóa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMucChung/XoaGioiTinh?code=@Model.ma_gioi_tinh')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMucChung/GioiTinh';">Đóng</button>
                             </div>
                         }

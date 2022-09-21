@@ -13,8 +13,11 @@
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-            <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
+            @using (Html.BeginForm("ChuyenMuc", "Menu", FormMethod.Get, new { @class = "searchbar" }))
+            {
+                <input name="txtSearch" type="text" id="txtSearch" value="@ViewBag.txtSearch" placeholder="Gõ từ khóa và nhấn enter..." />
+                <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
+            }
         </div>
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
@@ -74,7 +77,7 @@
                                                 @stt
                                                 <input type="hidden" name="" id="" value="@item.ma_trang" />
                                             </td>
-                                            <td><a href="/Menu/ChuyenMuc?code=@item.ma_trang&type=@(StatusAction.View.ToString())">@item.ten_trang</a></td>
+                                            <td><a href="/Menu/SuaChuyenMuc?code=@item.ma_trang&type=@(StatusAction.View.ToString())">@item.ten_trang</a></td>
 
                                             <td>@item.mo_ta</td>
                                             <td>

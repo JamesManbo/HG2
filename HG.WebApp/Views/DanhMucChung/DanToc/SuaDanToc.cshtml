@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Danh mục dân tộc";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var ListDanToc = ViewBag.ListDanToc as List<HG.Entities.Dm_Dan_Toc>;
 }
 @model HG.Entities.Dm_Dan_Toc
 
@@ -107,7 +108,7 @@
                             <div class="text-center">
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/DanhMucChung/ThemDanToc';">Thêm</button>
                                 <button type="button" class="btn btn-primary" name="type" onclick="window.location.href='/DanhMucChung/SuaDanToc?code=@Model.ma_dan_toc&type=@StatusAction.Edit.ToString()';">Sửa</button>
-                                <button type="submit" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMucChung/XoaDanToc?code=@Model.ma_dan_toc')">Xóa</button>
+                                <button type="button" class="btn btn-primary" onclick="confirm.BeforDeletePost('/DanhMucChung/XoaDanToc?code=@Model.ma_dan_toc')">Xóa</button>
                                 <button type="button" class="btn btn-secondary" onclick="window.location.href='/DanhMucChung/DanToc';">Đóng</button>
                             </div>
                         }
@@ -139,6 +140,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                div style="overflow-y: auto;">
+                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                    <tbody>
+                        <tr class="widgettitle">
+                            <th align="center" scope="col">CHỌN</th>
+                            <th scope="col">TÊN</th>
+                        </tr>
+                        @if (ListDanToc != null)
+                        {
+                            foreach (var item in ListDanToc)
+                            {
+                                <tr>
+                                    <td align="center">
+                                        <a href="/DanhMucChung/SuaDanToc?code=@item.ma_dan_toc&type=@(StatusAction.Edit.ToString())">Chọn</a>
+                                    </td>
+                                    <td>
+                                        @item.ten_dan_toc
+                                    </td>
+                                    <td style="width: 25%;">@item.mo_ta</td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

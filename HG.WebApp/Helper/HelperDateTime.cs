@@ -25,7 +25,13 @@ namespace HG.WebApp.Common
             //string s = dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
             string s2 = dt.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             return s2;
-        } 
+        }
+        public static string DateTimeToDDMMYYYY2(DateTime dt)
+        {
+            //string s = dt.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture);
+            string s2 = dt.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture);
+            return s2;
+        }
         public static string DateTimeToHHmm(DateTime dt)
         {
             //DateTime dt = DateTime.Parse("6/22/2009 07:00:00 AM");

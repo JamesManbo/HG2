@@ -2,18 +2,19 @@
 @{
     Layout = "~/Views/Shared/_LayoutClient.cshtml";
     var LstThanhPhan = ViewBag.ListThanhPhan as List<HG.Entities.Entities.DanhMuc.dm_thanh_phan>;
+    var UserClient = ViewBag.UserClient as HG.Entities.Asp_user_client;
 }
 
 <script>
     $(document).ready(function () {
         $('#form_congdan').validate({
             rules: {
-                thongtinchitiet: "required",
-                chiphidukien: "required"
+                thongtinchitiet: "required"
+                //chiphidukien: "required"
             },
             messages: {
-                thongtinchitiet: "Bạn cần nhập thông tin chi tiết!",
-                chiphidukien: "Bạn cần nhập chi phí dự kiến!"
+                thongtinchitiet: "Bạn cần nhập thông tin chi tiết!"
+                //chiphidukien: "Bạn cần nhập chi phí dự kiến!"
             }
         });
         function convetArrayToObj(serialized) {
@@ -68,7 +69,7 @@
             <input name="ma_khach_hang" value="@ViewBag.MaKH" hidden />
             <input name="ma_don_vi" value="@ViewBag.ma_don_vi" hidden />
             <div class="send-document-top top-title-frame">
-                <p>THÔNG TIN HỒ SƠ (Mã khách hàng: @ViewBag.MaKH)</p>
+                <p>THÔNG TIN HỒ SƠ (Mã khách hàng: @ViewBag.MaKH) <span style="color: red">@ViewBag.Message</span></p>
             </div>
             <div class="send-document-content gray-border">
                 <div class="form-group form-group-new">
@@ -105,7 +106,7 @@
                 </div>
                 <div class="form-group form-group-new">
                     <span class="col-md-2 control-label" style="font-weight:bold;">
-                        Thông tin chi tiết
+                        Thông tin chi tiết:
                         <p class="red-asterisk">(*)</p>
                     </span>
                     <div class="col-md-7">
@@ -122,7 +123,7 @@
                 
                 <div class="form-group form-group-new">
                     <span class="col-md-2 control-label" style="font-weight:bold;">
-                        Hình thức nhận KQ
+                        Hình thức nhận KQ:
                     </span>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
                         <input value="0" type="checkbox" onclick="fnnhanquaemail()" id="nhanquaemail" name="nhanquaemail" />nhận kết quả qua Email
@@ -175,9 +176,11 @@
                         <script>
                             function fnnhanquabuudien() {
                                 if ($('#nhanquabuudien').is(':checked')) {
-                                    $("#nhanquabuudien").val(1)
+                                    $("#nhanquabuudien").val(1);
+                                    $('#frmbuudien').css('display', 'block');
                                 } else {
-                                    $("#nhanquabuudien").val(0)
+                                    $("#nhanquabuudien").val(0);
+                                    $('#frmbuudien').css('display', 'none');
                                 }
                             }
                         </script>
@@ -185,7 +188,7 @@
                 </div>
                 <div class="form-group form-group-new">
                     <span class="col-md-2 control-label" style="font-weight:bold;">
-                        Nhận thông báo
+                        Nhận thông báo:
                     </span>
                     <div class="col-md-3" style="padding-left: 10px;padding-top: 5px;">
                         <input type="checkbox" onclick="fndatiepnhan()" id="datiepnhan" name="datiepnhan" value="0" /> đã tiếp nhận
@@ -223,8 +226,51 @@
                             }
                         </script>
                     </div>
-
                 </div>
+                <div style="display:none" id="frmbuudien">
+                    <div class="form-group form-group-new" >
+                        <span class="col-md-2 control-label" style="font-weight:bold;">
+                            Tên người nhận:
+                        </span>
+                        <div class="col-md-4" style="padding-left: 10px;padding-top: 5px;">
+                            <input disabled value="@ViewBag.TenNguoiNhan" type="text" id="tennguoinhan" name="tennguoinhan" style="width:100%" />
+                        </div>
+                        <span class="col-md-2 control-label" style="font-weight:bold;">
+                            Số điện thoại:
+                        </span>
+                        <div class="col-md-4" style="padding-left: 10px;padding-top: 5px;">
+                            <input disabled value="@ViewBag.SoDienThoai" type="text" id="tennguoinhan" name="tennguoinhan" style="width:100%" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-new">
+                        <span class="col-md-2 control-label" style="font-weight:bold;">
+                            Địa chỉ:
+                        </span>
+                        <div class="col-md-4" style="padding-left: 10px;padding-top: 5px;">
+                            <input disabled value="@( UserClient == null? "" : UserClient.dia_chi )" type="text" id="diachi" name="diachi" style="width:100%"/>
+                        </div>
+                        <span class="col-md-2 control-label" style="font-weight:bold;">
+                            Tỉnh thành:
+                        </span>
+                        <div class="col-md-4" style="padding-left: 10px;padding-top: 5px;">
+                            <input disabled value="@(UserClient == null ? "": UserClient.ma_tinh_thanh )" type="text" id="tinhthanh" name="tinhthanh" style="width:100%" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-new">
+                        <span class="col-md-2 control-label" style="font-weight:bold;">
+                            Ghi chú:
+                        </span>
+                        <div class="col-md-10" style="padding-left: 10px;padding-top: 5px;">
+                            <input disabled value="@(UserClient == null ? "" : UserClient.dia_chi_co_quan)" type="text" id="ghichu" name="ghichu" style="width:100%" />
+                        </div>
+                    </div>
+                    <div class="form-group form-group-new">
+                        <span class="col-md-8 control-label" style="color:red;">
+                            (Lưu ý: khách hàng trực tiếp thanh toán cho nhân viên bưu điện)
+                        </span>
+                    </div>
+                </div>
+                
                 <a href="/News/HuongDanNhanThongBaoZalo" target="_blank">Hướng dẫn nhận thông báo qua Zalo</a>
             </div>
 
@@ -255,19 +301,23 @@
                                         <td text-align="justify">
                                             <p>
                                                 @item.ten_thanh_phan
-                                                <span class="important-box">
+                                                @*<span class="important-box">
                                                     Bắt
                                                     buộc
-                                                </span>
+                                                </span>*@
                                             </p>
                                         </td>
 
                                         <td text-align="justify">
-                                            <input type="file" onclick="$('#files_@stt').click();" id="files_@stt" name="filesName_@stt" />
-                                            <input type="text" id="files_thanh_phan_@stt" name="files_thanh_phan_@stt" style="display: none" />
+                                            <input type="file" id="files_@stt" name="files_@stt" style="display: none">
+                                            <input type="text" id="files_thanh_phan_@stt" name="files_thanh_phan_@stt" style="display: none">
+                                            <input type="text" id="ma_thanh_phan_@stt" name="ma_thanh_phan_@stt" value="@item.ma_thanh_phan" style="display: none">
+                                            <button type="button" onclick="$('#files_@stt').click();" class="btn btn-default">
+                                            <i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                            <label type="text" id="tenfiledinhkem_@stt" name="tenfiledinhkem_@stt" readonly></label>
                                             <script>
                                                 $(document).ready(function () {
-                                                    $("#files-@(stt)").on('change', function () {
+                                                    $("#files_@stt").on('change', function () {
                                                         // Checking whether FormData is available in browser
                                                         if (window.FormData !== undefined) {
                                                             var fileUpload = $(this).get(0);
@@ -290,7 +340,8 @@
                                                                     console.log(result);
                                                                     for (var i = 0; i < result.files.length; i++) {
                                                                         $('#files_thanh_phan_@stt').attr('value', result.files[i]);
-                                                                        //$('#namefile-@(item.Id)').html("" + result.names + "");
+                                                                        $('#tenfiledinhkem_@stt').html("" + result.names + "");
+                                                                        $("#btnDelete_@stt").show();
                                                                     }
                                                                 },
                                                                 error: function (err) {
@@ -304,6 +355,7 @@
                                                 });
                                             </script>
                                         </td>
+                                      
                                         <td text-align="left" style="width:25%;"><button>Ký số</button></td>
                                         <td>@item.bieu_mau</td>
                                     </tr>
@@ -324,19 +376,20 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6 pb-2">
+                        <div class="col-md-5 pb-2">
                         </div>
                         <div class="col-md-6">
-                            <div class="" style="text-align: left; margin-top: 5px; margin-bottom: 5px">
-                                <input type="submit" name="type_view"
-                                       value="Gửi"
-                                       class="btn-search">
-                            </div>
+                            <input type="submit" name="type_view"
+                                   value="Gửi"
+                                   class="btn-search">
+                            <input type="button" onclick="window.location.href='/GuiHoSo/MotCua'"  name="type_view"
+                               value="Xóa"
+                               class="btn-search">
                         </div>
                     </div>
                 </div>
             </div>
-            <a href="/News/HuongDanNhanThongBaoZalo" target="_blank">Lịch sử nạp hồ sơ</a>
+            <a href="/GuiHoSo/LichSuNapHoSo" target="_blank">Lịch sử nạp hồ sơ</a>
         </form><!-- End Horizontal Form -->
     </div>
 

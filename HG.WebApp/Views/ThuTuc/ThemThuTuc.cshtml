@@ -364,25 +364,25 @@
                                         <div class="row mb-3">
                                             <label for="so_ngay_xl" class="col-sm-2 control-label">Số ngày xử lý <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Số ngày xử lý" name="so_ngay_xl" value="">
+                                                <input type="number" min="0" class="form-control input-default" placeholder="Số ngày xử lý" name="so_ngay_xl" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="le_phi_truoc" class="col-sm-2 control-label">Lệ phí trước</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_truoc" value="">
+                                                <input type="number" min="0" class="form-control input-default" placeholder="Lệ phí" name="le_phi_truoc" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="le_phi_sau" class="col-sm-2 control-label">Lệ phí sau</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Lệ phí" name="le_phi_sau" value="">
+                                                <input type="number" min="0" class="form-control input-default" placeholder="Lệ phí" name="le_phi_sau" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="so_bo_hs" class="col-sm-2 control-label">Số bộ hồ sơ <span style="color:red">(*)</span></label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Số bộ hồ sơ" name="so_bo_hs" value="1">
+                                                <input type="number" min="0" class="form-control input-default" placeholder="Số bộ hồ sơ" name="so_bo_hs" value="1">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -400,13 +400,13 @@
                                         <div class="row mb-3">
                                             <label for="ten_pb" class="col-sm-2 control-label">Nội dung hướng dẫn</label>
                                             <div class="col-sm-8">
-                                                <textarea id="ckedit2" class="form-control input-default" placeholder="Nội dung hướng dẫn" name="noi_dung_hd"></textarea>
+                                                <textarea id="ckedit2" maxlength="500" class="form-control input-default" placeholder="Nội dung hướng dẫn" name="noi_dung_hd"></textarea>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <label for="stt" class="col-sm-2 control-label">Thứ tự</label>
                                             <div class="col-sm-8">
-                                                <input type="number" class="form-control input-default" placeholder="Thứ thự" name="stt" value="">
+                                                <input type="number" min="0" class="form-control input-default" placeholder="Thứ thự" name="stt" value="">
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -1048,12 +1048,12 @@
         <div class="modal-content">
             <div class="modal-header widgettitle">
                 <h5 class="modal-title">Danh sách</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

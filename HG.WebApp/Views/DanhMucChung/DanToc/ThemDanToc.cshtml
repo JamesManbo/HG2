@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Danh mục tôn giáo";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var ListDanToc = ViewBag.ListDanToc as List<HG.Entities.Dm_Dan_Toc>;
 }
 
 <div class="col-lg-12">
@@ -119,6 +120,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

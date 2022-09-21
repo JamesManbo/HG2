@@ -40,10 +40,10 @@ namespace HG.WebApp.Controllers
         }
 
         #region Menu cấp 1
-        public IActionResult ChuyenMuc()
+        public IActionResult ChuyenMuc(string txtSearch = "")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 0, tu_khoa = "", RecordsPerPage = pageSize };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 0, tu_khoa = txtSearch, RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhMenu(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
@@ -56,6 +56,7 @@ namespace HG.WebApp.Controllers
             MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 0, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhMenu(nhomSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
             ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
@@ -161,26 +162,29 @@ namespace HG.WebApp.Controllers
         #endregion
 
         #region Menu cấp 2
-        public IActionResult ChuyenMucCap2()
+        public IActionResult ChuyenMucCap2(string txtSearch = "")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = txtSearch, RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhMenu(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;
             ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            ViewBag.txtSearch = txtSearch;
             return View("~/Views/Menu/MenuCap2/Menu.cshtml", ds);
         }
-        public async Task<IActionResult> ChuyenMucCap2Paging(int currentPage = 0, int pageSize = 0, string tu_khoa = "")
+        public async Task<IActionResult> ChuyenMucCap2Paging(int currentPage = 0, int pageSize = 0, string txtSearch = "")
         {           
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 1, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 1, tu_khoa = txtSearch, RecordsPerPage = pageSize };
             var ds = _danhmucDao.DanhSanhMenu(nhomSearchItem);
             ds.Pagelist.CurrentPage = currentPage;
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = currentPage;
             ViewBag.RecoredFrom = (currentPage - 1) * pageSize == 0 ? 1 : (currentPage - 1) * pageSize;
             ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
+            ViewBag.Stt = (currentPage - 1) * pageSize;
+            ViewBag.txtSearch = txtSearch;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Menu/MenuCap2/MenuPaging.cshtml", ds);
             return Content(result);
         }

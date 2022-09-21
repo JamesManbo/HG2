@@ -22,7 +22,7 @@
         <tbody>
             @if (Model.lstMenu != null)
             {
-                var stt = 1;
+                 var stt = 1 + (int)ViewBag.Stt;
                 foreach (var item in Model.lstMenu)
                 {
                     <tr>

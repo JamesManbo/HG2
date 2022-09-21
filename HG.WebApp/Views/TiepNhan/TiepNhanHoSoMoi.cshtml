@@ -2,10 +2,10 @@
 @{
     ViewData["Title"] = "Tiếp nhận hồ sơ"; 
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-   var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
-   var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
-   var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
-   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.Entities.AspNetUsersModel>;
+    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
+    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Dm_Thu_Tuc>;
+    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
+    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.Entities.AspNetUsersModel>;
 }
 @model HG.Entities.Entities.HoSoModels
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -182,7 +182,16 @@
                                            success: function(data) {
                                                $("#LuongXuLy").html(data);
                                            }
-                                       });          
+                                       });
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/GetThuTucByCode?ma_thu_tuc=" + data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                        $("#le_phi").val(data.le_phi_truoc);
+                                           }
+                                       });
                                     } 
                                     function GetNguoiXLNguoiPH(ma_luong_data) {
                                           $.ajax({
@@ -369,6 +378,40 @@
                                        <input maxlength="50" type="checkbox" onclick="NhanKQQABC()" id="nhan_kq_qua_buu_chinh" name="nhan_kq_qua_buu_chinh" value="@Model.nhan_kq_qua_buu_chinh"  />
                                     </div>
                                 </div>
+                                <div id="NhanKQBC" hidden>
+                                     <div class="form-group row mb-3">
+                                    <label for="mota" class="col-sm-1 control-label">Họ và tên</label>
+                                    <div class="col-md-3">
+                                         <input type="text" id="ho_ten_bc" name="ho_ten_bc" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ và tên">
+                                    </div>
+                                     <label for="stt" class="col-sm-1 control-label">Điện thoại </label>
+                                    <div class="col-md-3">
+                                         <input maxlength="50" type="text" id="dien_thoai_bc" class="form-control input-default" name="dien_thoai_bc" value="@Model.dien_thoai" placeholder="Số điện thoại chỉ nhập dạng số">
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <label for="dia_chi" class="col-sm-1 control-label">Địa chỉ</label>
+                                    <div class="col-sm-3">
+                                        <input maxlength="250" type="text" class="form-control input-default" id="dia_chi_bc" name="dia_chi_bc" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ">
+                                    </div>
+                                     <label for="stt" class="col-sm-1 control-label">Tỉnh thành</label>
+                                    <div class="col-md-3">
+                                         <select class="dataTable-selector form-control" name="tinh_thanh" id="tinh_thanh" >
+                                            <option value="0" selected>Chọn tỉnh thành</option>
+                                            <option value="HG">Hà Giang</option>
+                                           
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <label for="dia_chi" class="col-sm-1 control-label">Ghi chú</label>
+                                    <div class="col-sm-11">
+                                        <input maxlength="250" type="text" class="form-control input-default" id="ghi_chu" name="ghi_chu" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ">
+                                    </div>
+                                    
+                                </div>
+                                </div>
+                                 
                                 <script>
                                     function NhanKQTT(){
                                          if ($('input[name=nhan_kq_truc_tuyen]:checked').length > 0) {
@@ -380,25 +423,30 @@
                                          if ($('input[name=nhan_kq_bo_phan_mot_cua]:checked').length > 0) {
                                             $("#nhan_kq_bo_phan_mot_cua").val(1)
                                          } else { 
-                                             ("#nhan_kq_bo_phan_mot_cua").val(0)
+                                             $("#nhan_kq_bo_phan_mot_cua").val(0)
                                          }
                                     } function NhanKQQABC(){
+                                       
+                                         let element = document.getElementById("NhanKQBC");
+                                         let hidden = element.getAttribute("hidden");
                                          if ($('input[name=nhan_kq_qua_buu_chinh]:checked').length > 0) {
                                             $("#nhan_kq_qua_buu_chinh").val(1)
+                                             element.removeAttribute("hidden");
                                          } else { 
-                                             ("#nhan_kq_qua_buu_chinh").val(0)
+                                             $("#nhan_kq_qua_buu_chinh").val(0)
+                                             element.setAttribute("hidden", "hidden");
                                          }
                                     }function DaThuPhi(){
                                         if ($('input[name=le_phi]:checked').length > 0) {
                                             $("#le_phi").val(1)
                                          } else { 
-                                             ("#le_phi").val(0)
+                                             $("#le_phi").val(0)
                                          }
                                     } function ChuaDuDieuKien() {
                                         if ($('input[name=ho_so_chua_du_dk_tiep_nhan_chinh_thuc]:checked').length > 0) {
                                             $("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(1)
                                          } else { 
-                                             ("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(0)
+                                             $("#ho_so_chua_du_dk_tiep_nhan_chinh_thuc").val(0)
                                          } 
                                     }
                                 </script>
@@ -470,10 +518,10 @@
                                     <div class="col-md-3">
                                        <input maxlength="50" type="number" id="le_phi" name="le_phi" class="form-control input-default" value="@Model.le_phi" placeholder="Lệ phí">
                                     </div>
-                                      <div class="col-md-1">
-                                        <input type="checkbox" id="da_thu_phi" onclick="DaThuPhi()" style="text-align:right" name="da_thu_phi" value="@Model.da_thu_phi" >
+                                      <div class="col-md-1"  style="text-align:right">
+                                        <input type="checkbox" id="da_thu_phi" onclick="DaThuPhi()" name="da_thu_phi" value="@Model.da_thu_phi" >
                                     </div>
-                                     <label for="stt" class="col-sm-1 control-label" style="text-align:right">Đã thu phí</label>
+                                     <label for="stt" class="col-sm-1 control-label" style="text-align:left">Đã thu phí</label>
                                   
                                     
                                 </div>

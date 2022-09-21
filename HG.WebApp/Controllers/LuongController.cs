@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using OfficeOpenXml.Table;
+using System.Drawing.Printing;
 using System.Xml.Serialization;
 
 namespace HG.WebApp.Controllers
@@ -304,15 +305,10 @@ namespace HG.WebApp.Controllers
                 ViewBag.msg = "cập nhật lỗi";
                 return PartialView("~/Views/Luong/GanLuongXuLy/SuaGanLuongXuLy.cshtml", item);
             }
-            if (item.type_view == StatusAction.Add.ToString())
+            else
             {
-                return RedirectToAction("ThemGanLuongXuLy", "Luong");
-            }
-            else if (item.type_view == StatusAction.View.ToString())
-            {
-                return RedirectToAction("SuaGanLuongXuLy", "Luong", new { code = item.ma_gan_luong, type = StatusAction.Edit.ToString() });
-            }
-            return BadRequest();
+                return RedirectToAction("GanLuongXuLy", "Luong");
+            }    
 
         }
         [HttpPost]
@@ -328,13 +324,31 @@ namespace HG.WebApp.Controllers
         [HttpPost]
         public IActionResult XoaGanLuongXuLy(string Id)
         {
-           
-            var _pb = _danhmucDao.XoaGanLuongXuLy(Guid.Parse(Id));
-            if (_pb > 0)
+            for (int i = 0; i < Id.Split(',').Length; i++)
             {
-                return Json(new { error = 1, msg = "Xóa lỗi" });
+                var _pb = _danhmucDao.XoaGanLuongXuLy(Guid.Parse(Id.Split(',')[i]));
+                if (_pb > 0)
+                {
+                    return Json(new { error = 1, msg = "Xóa lỗi" });
+                }
             }
+           
+            
             return Json(new { error = 0, msg = "Xóa thành công!", href = "/Luong/GanLuongXuLy" });
+        }
+        public async Task<IActionResult> RenderViewGanLuongXuLy()
+        {
+            DanhMucModel nhomSearchItem = new DanhMucModel() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = 25 };
+            var ds = _danhmucDao.DanhSanhGanLuongXuLy(nhomSearchItem);
+            ds.Pagelist.CurrentPage = 1;
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / 25) + ((ds.Pagelist.TotalRecords % 25) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.PageSize = (1 - 1) * 25;
+            ViewBag.TotalRecored = ds.Pagelist.TotalRecords;
+            ViewBag.RecoredFrom = (1 - 1) * 25 + 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : 1 * 25;
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/Luong/GanLuongXuLy/ViewGanLuongXuLy.cshtml", ds.lstGanLuongXuLy);
+            return Content(result);
         }
         #endregion
         #region Bước xử lý       
