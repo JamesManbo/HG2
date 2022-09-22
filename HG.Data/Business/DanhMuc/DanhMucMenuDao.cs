@@ -27,7 +27,7 @@ namespace HG.Data.Business.DanhMuc
                 Dm_menu_paging menu = new Dm_menu_paging();
                 menu.Pagelist = new Pagelist();
                 DbProvider.SetCommandText2("dm_danh_sach_menu", CommandType.StoredProcedure);
-                DbProvider.AddParameter("tu_khoa", "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa, SqlDbType.NVarChar);
                 DbProvider.AddParameter("level", item.level, SqlDbType.Int);
                 // Input params
                 DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);

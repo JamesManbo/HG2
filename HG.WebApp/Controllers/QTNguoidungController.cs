@@ -38,6 +38,7 @@ namespace HG.WebApp.Controllers
             _nguoiDungDao = new NguoiDungDao(DbProvider);
             _sys = new SystemDao(DbProvider);
             _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
+            _thuTucDao = new ThuTucDao(DbProvider);
         }
         #region nguoidung
         public IActionResult ListNguoiDung(string txtSearch = "", string ma_phong_ban = "", int trang_thai = 1, int da_xoa = 0)
@@ -987,6 +988,40 @@ namespace HG.WebApp.Controllers
         public IActionResult ThongKeTruyCap()
         {
             return View();
+        }
+        #endregion
+        #region Người dùng dịch vụ
+        public IActionResult ServicesUser(string txtSearch = "" ,string ma_phong_ban = "", string ma_nguoi_dung = "")
+        {
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", userId = Guid.Parse(userManager.GetUserId(User)), RecordsPerPage = pageSize };
+            var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = 1;
+            ViewBag.RecoredFrom = 1;
+            ViewBag.RecoredTo = ViewBag.TotalPage == 1 ? ds.Pagelist.TotalRecords : pageSize;
+            ViewBag.LstPhongBan = ds.lstPhongBan;
+            ViewBag.LstLinhVuc = ds.lstLinhVuc;
+            ViewBag.PageSize = 0;
+            ViewBag.txtSearch = txtSearch;
+            return View(ds);
+        }
+        public async Task<IActionResult> ServicesUserPaging(int currentPage = 0, int pageSize = 0, string ma_pb = "", string ma_lv = "", string tu_khoa = "")
+        {
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = currentPage, userId = Guid.Parse(userManager.GetUserId(User)), ma_pb = ma_pb, ma_lv = ma_lv, tu_khoa = tu_khoa, RecordsPerPage = pageSize };
+            var ds = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
+            ViewBag.CurrentPage = currentPage;
+            ViewBag.RecoredFrom = (currentPage - 1) * pageSize + 1;
+            ViewBag.PageSize = (currentPage - 1) * pageSize;
+            ViewBag.RecoredTo = ViewBag.TotalPage == currentPage ? ds.Pagelist.TotalRecords : currentPage * pageSize;
+            using (var db = new EAContext())
+            {
+                ViewBag.LstPhongBan = db.Dm_Phong_Ban.Where(n => n.Deleted == 0).ToList();
+                ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted == 0).ToList();
+            }
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/QTNguoidung/ServicesUserPaging.cshtml", ds);
+            return Content(result);
         }
         #endregion
     }

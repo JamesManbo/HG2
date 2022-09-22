@@ -27,25 +27,41 @@
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                $("#dataTable").html(data);
+                 $("#dataTable").html(data);
+                 $("#lstPageSize").val('25');
             }
         });
     }
     
     function LuuPhanQuyen() {
+        //if ($("#lstCode").val() == null || $("#lstCode").val() == "" || $("#lstCode").val() == undefined ) {
+        //    alert("Bạn chưa chọn hoặc chưa thay đổi chức năng !!!");
+        //    return;
+        //};
+        //var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+        //var objVaitroChucNangQuyen = [];
+        //var lst_chuc_nang_da_chon = $("#lstCode").val().split(",");
+        //    for (var j = 0; j < lst_chuc_nang_da_chon.length; j++) {
+        //        var MenuId = "MenuId-" + lst_chuc_nang_da_chon[j]; 
+        //        var chuc_nang = lst_chuc_nang_da_chon[j];
+        //        var obj = { ma_vai_tro: ma_vai_tro, ma_chuc_nang: chuc_nang, ds_quyen_da_chon: $("#" + MenuId).val() };
+        //        if (lst_chuc_nang_da_chon[j] != "") { objVaitroChucNangQuyen.push(obj) };
+        //    }
         if ($("#lstCode").val() == null || $("#lstCode").val() == "" || $("#lstCode").val() == undefined ) {
-            alert("Bạn chưa chọn hoặc chưa thay đổi chức năng !!!");
-            return;
-        };
-        var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
-        var objVaitroChucNangQuyen = [];
-        var lst_chuc_nang_da_chon = $("#lstCode").val().split(",");
-            for (var j = 0; j < lst_chuc_nang_da_chon.length; j++) {
-                var MenuId = "MenuId-" + lst_chuc_nang_da_chon[j]; 
-                var chuc_nang = lst_chuc_nang_da_chon[j];
-                var obj = { ma_vai_tro: ma_vai_tro, ma_chuc_nang: chuc_nang, ds_quyen_da_chon: $("#" + MenuId).val() };
-                if (lst_chuc_nang_da_chon[j] != "") { objVaitroChucNangQuyen.push(obj) };
-            }
+            var objVaitroChucNangQuyen = [];
+            var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+            objVaitroChucNangQuyen.push({ ma_vai_tro: ma_vai_tro, ma_chuc_nang: null, ds_quyen_da_chon: null })
+        }else {
+            var ma_vai_tro = document.getElementById("ma_vai_tro").options[document.getElementById("ma_vai_tro").selectedIndex].value;
+            var objVaitroChucNangQuyen = [];
+            var lst_chuc_nang_da_chon = $("#lstCode").val().split(",");
+                for (var j = 0; j < lst_chuc_nang_da_chon.length; j++) {
+                    var MenuId = "MenuId-" + lst_chuc_nang_da_chon[j]; 
+                    var chuc_nang = lst_chuc_nang_da_chon[j];
+                    var obj = { ma_vai_tro: ma_vai_tro, ma_chuc_nang: chuc_nang, ds_quyen_da_chon: $("#" + MenuId).val() };
+                    if (lst_chuc_nang_da_chon[j] != "") { objVaitroChucNangQuyen.push(obj) };
+                }
+        }
         var items = JSON.stringify({ "objVaitroChucNangQuyen":objVaitroChucNangQuyen });
         $.ajax({
             url: "/SuperAdmin/LuuPhanQuyen?pageSize="+$("#lstPageSize").val()+"&currentPage=1"+"&objVaitroChucNangQuyen="+items,
@@ -351,8 +367,8 @@
                             {
                                 if (CurrentPage > CurrentPage + 2)
                                 {
-                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>                                                                                                                                             
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>                                                                                                                                             
                                 };
                                 if (CurrentPage > 3)
                                 {
@@ -360,11 +376,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
                                 }
@@ -374,11 +390,11 @@
                                     {
                                         if (i == CurrentPage)
                                         {
-                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                         else
                                         {
-                                                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                          <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                         }
                                     }
 
@@ -386,8 +402,8 @@
 
                                 if (CurrentPage < CurrentPage + 2)
                                 {
-                                                  <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                          <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                 };
                             }
                             else
@@ -396,11 +412,11 @@
                                 {
                                     if (i == CurrentPage)
                                     {
-                                                 <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                         <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                     else
                                     {
-                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                     }
                                 }
                             }

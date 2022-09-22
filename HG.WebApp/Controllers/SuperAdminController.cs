@@ -108,7 +108,7 @@ namespace HG.WebApp.Controllers
 
         }
         [HttpPost]
-        public IActionResult SuaNhom(NhomModel item)
+        public async Task<IActionResult> SuaNhom(NhomModel item)
         {
             ViewBag.ListNhom = _nhomDao.LayDsNhomPhanTrang(new NhomSearchItem() { RecordsPerPage = 100 }).asp_Nhoms;
             item.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
@@ -118,6 +118,17 @@ namespace HG.WebApp.Controllers
                 if (ObjId.ErrorCode == 0)
                 {
                     ViewBag.type_view = StatusAction.Add.ToString();
+                    var obj = _nhomDao.LayNhomId(item.ma_nhom);
+                    if (obj != null && obj.CreatedUid != null)
+                    {
+                        var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                        ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                    };
+                    if (obj != null && obj.UpdatedUid != null)
+                    {
+                        var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                        ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                    };
                     return RedirectToAction("ThemNhom");
                 }
                 else
@@ -133,6 +144,17 @@ namespace HG.WebApp.Controllers
                 var ObjId = _nhomDao.ChinhSuaNhom(item);
                 if (ObjId.ErrorCode == 0)
                 {
+                    var obj = _nhomDao.LayNhomId(item.ma_nhom);
+                    if (obj != null && obj.CreatedUid != null)
+                    {
+                        var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                        ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                    };
+                    if (obj != null && obj.UpdatedUid != null)
+                    {
+                        var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                        ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                    };
                     ViewBag.type_view = StatusAction.View.ToString();
                     return View(item);
                 }
@@ -140,6 +162,17 @@ namespace HG.WebApp.Controllers
                 {
                     ViewBag.ErrorCode = ObjId.ErrorCode;
                     ViewBag.ErrorMsg = ObjId.ReturnMsg;
+                    var obj = _nhomDao.LayNhomId(item.ma_nhom);
+                    if (obj != null && obj.CreatedUid != null)
+                    {
+                        var UserCreated = await userManager.FindByIdAsync(obj.CreatedUid.ToString());
+                        ViewBag.UserCreated = UserCreated.ho_dem + " " + UserCreated.ten;
+                    };
+                    if (obj != null && obj.UpdatedUid != null)
+                    {
+                        var UserUpdate = await userManager.FindByIdAsync(obj.UpdatedUid.ToString());
+                        ViewBag.UserUpdate = UserUpdate.ho_dem + " " + UserUpdate.ten;
+                    };
                     return View(item);
                 }
             }
@@ -270,7 +303,7 @@ namespace HG.WebApp.Controllers
             return View(new AspNetRoles() { ma_quyen = ma_quyen });
         }
         [HttpPost]
-        public IActionResult QuyenThemMoi(AspNetRoles item)
+        public IActionResult QuyenThemMoi(AspNetRoles item, string type_view = "")
         {
             try
             {
@@ -291,8 +324,16 @@ namespace HG.WebApp.Controllers
                 var roleid = _role.Entity.Id;
                 if (!string.IsNullOrEmpty(roleid.ToString()))
                 {
-                    ViewBag.type_view = StatusAction.View.ToString();
-                    return View(item);
+                    if (type_view == StatusAction.Add.ToString())
+                    {
+                        return RedirectToAction("QuyenThemMoi", "SuperAdmin");
+                    }
+                    else if (type_view == StatusAction.View.ToString())
+                    {
+                        ViewBag.type_view = StatusAction.View.ToString();
+                        return View(item);
+                    }
+                   
                 }
                 return View();
             }
@@ -434,7 +475,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext eAContext = new EAContext();
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = 1, level = 3, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _menuDao.DanhSanhMenu(nhomSearchItem);
             ViewBag.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
@@ -489,7 +530,7 @@ namespace HG.WebApp.Controllers
         {
             EAContext eAContext = new EAContext();
             PhanQuyenModel phanQuyenModel = new PhanQuyenModel();
-            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            MenuModel nhomSearchItem = new MenuModel() { CurrentPage = currentPage, level = 3, tu_khoa = "", RecordsPerPage = pageSize };
             var ds = _menuDao.DanhSanhMenu(nhomSearchItem);
             phanQuyenModel.dm_Menu_Pagings = ds;
             phanQuyenModel.TotalPage = (ds.Pagelist.TotalRecords / pageSize) + ((ds.Pagelist.TotalRecords % pageSize) > 0 ? 1 : 0);

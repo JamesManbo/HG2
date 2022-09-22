@@ -293,8 +293,8 @@
         var data = $("#form_vblq").serialize();
         $.ajax({
             type: "Post",
-            url: "../ThuTuc/SaveVBLQ",
-            data: data,
+            url: "../ThuTuc/SaveVBLQ?" + data + "",
+           // data: data,
             //data: data,
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(data) {

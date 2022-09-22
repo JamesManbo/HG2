@@ -113,7 +113,21 @@
             alert("FormData is not supported.");
         }
     });
+     function XoaFileThanhPhan(code){
+         $.ajax({
+            type: "Post",
+            url: "../ThuTuc/XoaFileThanhPhan?code_tp="+code,           
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#files").val(null);
+                $("#url_file").val(null);
+                $("#file_dinh_kem").val(null);
+                alert("Xóa thành công!")
 
+            }
+        });
+    };
     function CleadFile() {
         $("#files").val(null);
         $("#url_file").val(null);
@@ -214,18 +228,31 @@
                     </div>
                 </div>
                 <div class="row mb-3">
+                   <label class="col-md-2 control-label">Bắt buộc</label>
+
+                    <div class="col-sm-2">
+                       <input id="bat_buoc1" type="radio" name="bat_buoc" value="0" @(Model.bat_buoc==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_1">Không</label>
+
+                    </div>
+                    <div class="col-sm-4">
+                       <input id="bat_buoc2" type="radio" name="bat_buoc" value="1" @(Model.bat_buoc==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_2">Có</label>
+
+                    </div>
+                </div>
+               @* <div class="row mb-3">
                     <label class="col-md-2 control-label">Bắt buộc</label>
                     <div class="col-md-8">
                         <table id="" border="0">
                             <tbody>
                                 <tr>
                                     <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0" @(Model.bat_buoc==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_1">Không</label></td>
+                                    <td></td>
                                     <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" @(Model.bat_buoc==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_2">Có</label></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </div>*@
                 <div class="row mb-3">
                     <label class="col-md-2 control-label">Mô tả</label>
                     <div class="col-md-8">
@@ -248,15 +275,27 @@
                     <div class="col-md-1">
                         @if (!String.IsNullOrEmpty(Model.url_file))
                         {
-                            <input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePostAlert('/ThuTuc/XoaFileThanhPhan?code_tp=@Model.ma_thanh_phan')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                            <input type="button" name="" value="Xóa tệp" onclick="XoaFileThanhPhan('@Model.ma_thanh_phan')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">
                         }
                     </div>
                     <div class="col-md-1"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
                 </div>
 
-                <div class="row mb-3">
-                    <label class="col-md-2 control-label">Có biểu mẫu không</label>
-                    <div class="col-md-2">
+                     <div class="row mb-3">
+                                  <label class="col-md-1 control-label">Có biểu mẫu không</label>
+                                       
+                                        <div class="col-sm-2">
+                                            <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" @(Model.bieu_mau==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                             <label for="bieu_mau1">Không</label>
+
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input id="bieu_mau2" type="radio" name="bieu_mau" value="1" @(Model.bieu_mau==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                        <label for="bieu_mau2">Có</label>
+
+                                        </div>
+                          </div>
+                   @* <div class="col-md-2">
 
                         <table id="=" border="0">
                             <tbody>
@@ -265,6 +304,7 @@
                                         <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" @(Model.bieu_mau==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                         <label for="bieu_mau1">Không</label>
                                     </td>
+                                    <td></td>
                                     <td>
                                         <input id="bieu_mau2" type="radio" name="bieu_mau" value="1" @(Model.bieu_mau==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                         <label for="bieu_mau2">Có</label>
@@ -272,8 +312,9 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <label class="col-md-1 control-label">Bắt đầu </label>
+                    </div>*@
+                     <div class="row mb-3">
+                    <label class="col-md-2 control-label">Bắt đầu </label>
                     <div class="col-md-2">
                         <input name="ngay_bat_dau" type="date" id="ngay_bat_dau" class="form-control  datepicker hasDatepicker" value="@(Model.ngay_bat_dau)" placeholder="ngày/tháng/năm" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                     </div>
@@ -303,26 +344,26 @@
                         Bản chính
                     </label>
                     <div class="col-md-2">
-                        <input name="ban_goc" type="text" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính" value="@(Model.ban_goc??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                        <input name="ban_goc" type="number" min="0" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính" value="@(Model.ban_goc??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                     </div>
                     <label class="col-md-1 control-label">
                         Bản sao
                     </label>
                     <div class="col-md-2">
-                        <input name="ban_sao" type="text" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao" value="@(Model.ban_sao??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                        <input name="ban_sao" type="number" min="0" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao" value="@(Model.ban_sao??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                     </div>
                     <label class="col-md-1 control-label">
                         Bản phô tô
                     </label>
                     <div class="col-md-2">
-                        <input name="ban_pho_to" type="text" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô" value="@(Model.ban_pho_to??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                        <input name="ban_pho_to" type="number" min="0" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô" value="@(Model.ban_pho_to??0)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label class="col-md-2 control-label">Thứ tự</label>
                     <div class="col-md-8">
-                        <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự" value="@(Model.Stt)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                        <input name="stt" type="number" min="0" id="stt" class="form-control input-default" placeholder="Số thứ tự" value="@(Model.Stt)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                     </div>
                 </div>
                 <input name="type_view" value="@ViewBag.type_view" hidden />

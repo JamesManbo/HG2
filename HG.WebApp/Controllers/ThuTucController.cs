@@ -288,30 +288,35 @@ namespace HG.WebApp.Controllers
                 return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
             }
             var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _thuTucDao.XoaThanhPhan(code_tp, uid, type);
-            if (_pb > 0)
+            for (int i = 0; i < code_tp.Split(',').Length; i++)
             {
-                // Xử lý các thông báo lỗi tương ứng
-                return Json(new { error = 1, msg = "Xóa lỗi" });
+                var _pb = _thuTucDao.XoaThanhPhan(code_tp.Split(',')[i], uid, type);
+                if (_pb > 0)
+                {
+                    // Xử lý các thông báo lỗi tương ứng
+                    return Json(new { error = 1, msg = "Xóa lỗi" });
+                }
             }
-            return Json(new { error = 0, msg = "Xóa thành công!", href = "/ThuTuc/SuaThuTuc?code_key=" + code_key.ToString() + "&code=" + code + "&type=" + type + "&active=" + ActionThuTuc.ThanhPhan.ToString() });
+           
+            return Json(new { error = 0, msg = "Xóa thành công!", href = "" + code_key.ToString() + "&code=" + code + "&type=" + type + "&active=" + ActionThuTuc.ThanhPhan.ToString() });
         }
 
         [HttpPost]
-        public string XoaFileThanhPhan(string code_tp)
+        public IActionResult XoaFileThanhPhan(string code_tp)
         {
-            if (String.IsNullOrEmpty(code_tp))
-            {
-                return "Bạn cần chọn mã để xóa";
-            }
+            //if (String.IsNullOrEmpty(code_tp))
+            //{
+            //    return "Bạn cần chọn mã để xóa";
+            //}
             var uid = Guid.Parse(userManager.GetUserId(User));
             var _pb = _thuTucDao.XoaThanhPhan(code_tp, uid, "file");
             if (_pb > 0)
             {
                 // Xử lý các thông báo lỗi tương ứng
-                return "Xóa lỗi";
+                return Json(new { error = 1, msg = "Xóa lỗi" });
             }
-            return "Xóa thành công!";
+            return Json(new { error = 0, msg = "Xóa thành công!" });
+
 
         }
 
@@ -536,7 +541,7 @@ namespace HG.WebApp.Controllers
             return Content(result);
         }
         [HttpPost]
-        public string SaveVBLQ(string Id = "", string ma_thu_tuc = "", string ten_van_ban = "", string mo_ta = "", string file_dinh_kem = "", string stt = "0")
+        public string SaveVBLQ(string Id, string ma_thu_tuc, string ten_van_ban , string mo_ta, string file_dinh_kem , string stt)
         {
             try
             {
