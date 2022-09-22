@@ -982,11 +982,12 @@ namespace HG.WebApp.Controllers
         public async Task<IActionResult> CheckSearchDV(string donvi = "", string linhvuc = "", string mucdo = "", string ten_thu_tuc = "", string ma_thu_tuc = "")
         {
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = "", tu_khoa = "", RecordsPerPage = pageSize };
-            var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            ThuTucCongDanModels nhomSearchItem = new ThuTucCongDanModels() { donvi = donvi, linhvuc = linhvuc, mucdo = mucdo, ten_thu_tuc = ten_thu_tuc, ma_thu_tuc = ma_thu_tuc, RecordsPerPage = pageSize, CurrentPage = 1 };
+            var LstThuTuc = _thuTucDao.DanhSanhThuTucCongDan(nhomSearchItem);
             ViewBag.TotalRecords = LstThuTuc.lstThuTuc.Count();
             ViewBag.TotalPage = (LstThuTuc.lstThuTuc.Count() / pageSize) + 1;
             ViewBag.CurrentPage = 1;
+            ViewBag.Tong = LstThuTuc.Pagelist.TotalRecords;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/CheckSearchDV.cshtml", LstThuTuc.lstThuTuc);
             return Content(result);
         }
@@ -1006,8 +1007,12 @@ namespace HG.WebApp.Controllers
             ViewBag.MaKH = "00000" + db.Ho_So.Count() + 1;
             ViewBag.ListThanhPhan = lstThanhPhan;
             ViewBag.MaThuTuc = Ma;
+            ViewBag.Message = "";
             var user = db.AspNetUsers.Where(n => n.UserName == User.Identity.Name).FirstOrDefault();
-            ViewBag.sodienthoai = user == null ? "098xx": user.PhoneNumber;
+            ViewBag.SoDienThoai = user == null ? "098xx": user.PhoneNumber;
+            ViewBag.TenNguoiNhan = user == null ? "": user.ho_dem + " "+ user.ten ;
+            //laays lai du lieu khi dang ky cd
+            ViewBag.UserClient = db.Asp_user_client.Where(m => m.ma_nguoi_dung == user.Id).FirstOrDefault();
             return View(obj);
         }
         [HttpPost]
@@ -1035,9 +1040,11 @@ namespace HG.WebApp.Controllers
                 des.trang_thai = (int)StatusTiepNhanHoSo.HoSoTrucTuyen;
                 des.nguoi_xu_ly = user_id.ToString();
                 des.CreatedUid = user_id;
+                des.CreatedDateUtc = DateTime.Now;
                 des.ho_ten = user_obj == null ? "" : user_obj.UserName;
                 des.ma_khach_hang = hoso.ma_khach_hang;
                 des.ma_thu_tuc_hc = hoso.ma_thu_tuc_hc;
+                des.ghi_chu = hoso.thongtinchitiet;
                 des.dia_chi = "";
                 des.ma_linh_vuc = hoso.ma_linh_vuc ?? "";
                 des.dien_thoai = "";
@@ -1046,8 +1053,8 @@ namespace HG.WebApp.Controllers
                 des.ngay_hen_tra = DateTime.Now.AddDays(5);
                 des.gio_hen_tra = DateTime.Now;
                 des.ma_luong_xu_ly = "0";
-                des.le_phi = hoso.chiphidukien;
-
+                //lấy theo tthc
+                des.le_phi = _thuTucDao.LayLePhi(hoso.ma_thu_tuc_hc);
                 des.nhan_kq_qua_buu_chinh = hoso.nhanquabuudien;
                 des.nhan_kq_truc_tuyen = hoso.nhanquatnvatkq;
                 des.nhan_kq_zalo = hoso.nhanquazalo;
@@ -1065,11 +1072,74 @@ namespace HG.WebApp.Controllers
                 hosoId = _hoso.Entity.Id;
                 if (hoso.files_thanh_phan_1 != null && hosoId != 0)
                 {
-                  
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_1;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_1;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp1 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
+                };
+                if (hoso.files_thanh_phan_2 != null && hosoId != 0)
+                {
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_2;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_2;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp2 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
+                };
+                if (hoso.files_thanh_phan_3 != null && hosoId != 0)
+                {
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_3;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_3;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp3 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
+                };
+                if (hoso.files_thanh_phan_4 != null && hosoId != 0)
+                {
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_4;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_4;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp4 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
+                };
+                if (hoso.files_thanh_phan_5 != null && hosoId != 0)
+                {
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_5;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_5;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp5 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
+                };
+                if (hoso.files_thanh_phan_6 != null && hosoId != 0)
+                {
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_6;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_6;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp6 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
+                };
+                if (hoso.files_thanh_phan_7 != null && hosoId != 0)
+                {
+                    var _ho_So_Thanh_Phan = new ho_so_thanh_phan();
+                    _ho_So_Thanh_Phan.file_dinh_kem = hoso.files_thanh_phan_7;
+                    _ho_So_Thanh_Phan.ma_thanh_phan = hoso.ma_thanh_phan_7;
+                    _ho_So_Thanh_Phan.ho_so_id = hosoId;
+                    Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<ho_so_thanh_phan> _hosotp7 = db.ho_so_thanh_phan.Add(_ho_So_Thanh_Phan);
+                    db.SaveChanges();
                 };
                 ViewBag.error = false;
-                ViewBag.Message = "Cập nhật hồ sơ thành công vui lòng chờ quản trị liên hệ!";
-
+                ViewBag.Message = "Tạo hồ sơ thành công vui lòng chờ quản trị liên hệ! mã hồ sơ là: " + hosoId;
+                ViewBag.MaKH = "00000" + db.Ho_So.Count() + 1;
+                ViewBag.ListThanhPhan = lstThanhPhan;
+                ViewBag.MaThuTuc = hoso.ma_thu_tuc_hc;
+                var user = db.AspNetUsers.Where(n => n.UserName == User.Identity.Name).FirstOrDefault();
+                ViewBag.sodienthoai = user == null ? "098xx" : user.PhoneNumber;
                 return View(obj);
             }
             catch(Exception e)
@@ -1078,6 +1148,39 @@ namespace HG.WebApp.Controllers
                 ViewBag.Message = "Chưa có file đính kèm hoặc file đính kèm bị lỗi!";
                 return View(obj);
             }
+        }
+        public IActionResult LichSuNapHoSo()
+        {
+            EAContext db = new EAContext();
+            var userid = Guid.Parse(userManager.GetUserId(User));
+            return View(db.Ho_So.Where(n=>n.CreatedUid == userid && n.type == (int)TypeHS.CongDan).ToList());
+        }
+        public IActionResult XemChiTietTTHC(string Ma = "")
+        {
+            EAContext db = new EAContext();
+            ViewBag.MaThuTuc = Ma;
+            var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = "", tu_khoa = "", RecordsPerPage = pageSize };
+            var LstThuTuc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem);
+            var obj = new HG.Entities.Entities.ThuTuc.DmThuTuc();
+            var lstThanhPhan = new List<dm_thanh_phan>();
+            if (LstThuTuc != null && LstThuTuc.lstThuTuc != null)
+            {
+                obj = LstThuTuc.lstThuTuc.Where(n => n.ma_thu_tuc == Ma).FirstOrDefault();
+                lstThanhPhan = db.dm_thanh_phan.Where(n => n.ma_thu_tuc == Ma).ToList();
+            };
+            
+            var objlv = db.Dm_Linh_Vuc.Where(n => n.ma_linh_vuc == obj.ma_linh_vuc).FirstOrDefault();
+            ViewBag.TenLinhVuc = objlv == null ? "" : objlv.ten_linh_vuc;
+            ViewBag.ListThanhPhan = lstThanhPhan;
+            return View(obj);
+        }
+        public async Task<IActionResult> LayLinhVucByDonVi(string ma_don_vi)
+        {
+            EAContext db = new EAContext();
+            var listObj = db.Dm_Linh_Vuc.Where(n => n.ma_don_vi == ma_don_vi).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/GuiHoSo/Ajax/LayLinhVucByDonVi.cshtml", listObj);
+            return Content(result);
         }
         #endregion
 

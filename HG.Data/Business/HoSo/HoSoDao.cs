@@ -40,7 +40,7 @@ namespace HG.Data.Business.HoSo
                 // Input params
                 DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
                 DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
-                DbProvider.AddParameter("tu_khoa", item.tu_khoa = null ?? "", SqlDbType.NVarChar);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa == null ? "" : item.tu_khoa, SqlDbType.NVarChar);
                 DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc, SqlDbType.NVarChar);
                 DbProvider.AddParameter("tat_ca", item.tat_ca, SqlDbType.Int);
                 DbProvider.AddParameter("dung_han", item.dung_han, SqlDbType.Int);
@@ -52,7 +52,87 @@ namespace HG.Data.Business.HoSo
 
                 // Lấy về danh sách các người dung
                 result = DbProvider.ExecuteListObject<Ho_So>();
-                total = result.Count();
+                total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                total = 0;
+                return new List<Ho_So>();
+            }
+        }
+        public List<Ho_So> HoSoLienThongPaging(HoSoPaging item, out int total)
+        {
+            try
+            {
+                List<Ho_So> result = new List<Ho_So>();
+
+                var abc = 1;
+                if (item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
+                else if (item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
+                DbProvider.SetCommandText2("[dbo].[hoso$lienthong$paging]", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
+                DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa == null ? "" : item.tu_khoa, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc, SqlDbType.NVarChar);
+                DbProvider.AddParameter("tat_ca", item.tat_ca, SqlDbType.Int);
+                DbProvider.AddParameter("dung_han", item.dung_han, SqlDbType.Int);
+                DbProvider.AddParameter("qua_han", item.qua_han, SqlDbType.Int);
+                DbProvider.AddParameter("trang_thai", 120, SqlDbType.Int);
+                DbProvider.AddParameter("userid", item.userid == null ? "" : item.userid, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                result = DbProvider.ExecuteListObject<Ho_So>();
+                total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                total = 0;
+                return new List<Ho_So>();
+            }
+        }
+        public List<Ho_So> HoSoGiaiDoanPaging(HoSoPaging item, out int total)
+        {
+            try
+            {
+                List<Ho_So> result = new List<Ho_So>();
+
+                var abc = 1;
+                if (item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
+                else if (item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
+                DbProvider.SetCommandText2("[dbo].[hoso$giaidoan$paging]", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
+                DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
+                DbProvider.AddParameter("tu_khoa", item.tu_khoa == null ? "" : item.tu_khoa, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc, SqlDbType.NVarChar);
+                DbProvider.AddParameter("tat_ca", item.tat_ca, SqlDbType.Int);
+                DbProvider.AddParameter("dung_han", item.dung_han, SqlDbType.Int);
+                DbProvider.AddParameter("qua_han", item.qua_han, SqlDbType.Int);
+                DbProvider.AddParameter("trang_thai", 120, SqlDbType.Int);
+                DbProvider.AddParameter("userid", item.userid == null ? "" : item.userid, SqlDbType.NVarChar);
+                // Output params
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                result = DbProvider.ExecuteListObject<Ho_So>();
+                total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
                 return result;
             }
             catch (Exception e)
@@ -100,6 +180,28 @@ namespace HG.Data.Business.HoSo
                 total = 0;
                 return new List<Ho_So>();
 
+            }
+        }
+        public List<AspNetUsersModel> DanhSachNguoiDung()
+        {
+            try
+            {
+                List<AspNetUsersModel> result = new List<AspNetUsersModel>();
+
+                
+                DbProvider.SetCommandText2("[dbo].[dm_danhsach_nguoidung]", CommandType.StoredProcedure);
+                // Input params
+                
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                result = DbProvider.ExecuteListObject<AspNetUsersModel>();
+                var total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<AspNetUsersModel>();
             }
         }
 
