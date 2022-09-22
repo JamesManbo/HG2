@@ -1,0 +1,14 @@
+﻿@model List<HG.Entities.Dm_Linh_Vuc>;
+<label class="col-md-4 control-label">Lĩnh vực:</label>
+<div class="col-md-5">
+    <select name="ma_linh_vuc" id="ma_linh_vuc" style="width:100%;">
+        <option selected="selected" value="">Toàn bộ lĩnh vực</option>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+            }
+        }
+    </select>
+</div>

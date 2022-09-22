@@ -1,0 +1,113 @@
+﻿@model HG.Entities.Entities.ThuTuc.DmThuTuc
+@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    var LstThanhPhan = ViewBag.ListThanhPhan as List<HG.Entities.Entities.DanhMuc.dm_thanh_phan>;
+}
+<style>
+        .imgA {
+            background-image: url('/BackEnd/Admin/Images/icon-view2.png') !important;
+            background-repeat: no-repeat;
+            /*padding-left: 25px;
+            padding-top: 2px;
+            font-size: 15px;*/
+            font-weight: bold;
+            color:red;
+        }
+       
+</style>
+<div class="widgetcontent">
+    <div class="form-horizontal">
+        <!-- Horizontal Form -->
+        <form id="form_congdan" action="/GuiHoSo/GuiHoSoMotCua" method="post" enctype="multipart/form-data">
+            <input name="ma_thu_tuc_hc" value="@ViewBag.MaThuTuc" hidden />
+            <input name="ma_khach_hang" value="@ViewBag.MaKH" hidden />
+            <input name="ma_don_vi" value="@ViewBag.ma_don_vi" hidden />
+            <div class="send-document-top top-title-frame">
+                <p>XEM CHI TIẾT THỦ TỤC HÀNH CHÍNH</p>
+            </div>
+            <div class="send-document-content gray-border">
+                <div class="form-group form-group-new">
+                    <span class="col-md-5" style="font-weight:bold;"></span>
+                    <div class="col-md-7" style="padding-left: 10px;padding-top: 5px;">
+                        <a id="GuiHoSo" class="btn btn-danger" href="/GuiHoSo/GuiHoSoMotCua?Ma=@ViewBag.MaThuTuc"><span style="">Gửi hồ sơ &gt;&gt;</span></a>
+                    </div>
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-3 imgA"><p style="padding-left: 20px;font-size:15px" class="control-label float-start">Thủ tục hành chính</p></span>
+                    <div class="col-md-9" style="font-size:13px; margin-top: 2px;">
+                        <span> @HG.WebApp.Helper.HelperSql.GetNameHTHC(ViewBag.MaThuTuc) </span>
+                        <span style="padding: 5px 5px;background: red;font-weight: bold;">Mức độ 4</span>
+                    </div>
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-3 imgA"><p style="padding-left: 20px;font-size:15px" class="control-label float-start">Lĩnh vực</p></span>
+                    <div class="col-md-9" style="font-size:13px; margin-top: 2px;">
+                        <span> @ViewBag.TenLinhVuc </span>
+                    </div>
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-3 imgA"><p style="padding-left: 20px;font-size:15px" class="control-label float-start">Nội dung hướng dẫn</p></span>
+                    <div class="col-md-9" style="font-size:13px; margin-top: 2px;">
+                        <a style="text-decoration:none; color:#337ab7" href="#">(Tải nội dung hướng dẫn)</a>
+                    </div>
+                </div>
+            </div>
+            <!-- DANH SACH CAC THANH PHAN -->
+            <div class="result-area">
+                <div class="result-top-title top-title-frame">
+                    <p>THÀNH PHẦN HỒ SƠ</p>
+                </div>
+                <div class="result-content">
+                    <table cellspacing="0" cellpadding="4" rules="all"
+                           class="table table-bordered table-result">
+                        <tbody>
+                            <tr class="table-headline">
+                                <th text-align="center" scope="col">STT</th>
+                                <th scope="col" style="width: 45%;">Tên thành phần</th>
+                                <th scope="col" style="width: 10%;">Bản chính</th>
+                                <th scope="col" style="width: 10%;">Bản sao</th>
+                                <th scope="col" style="width: 10%;">Phô tô</th>
+                                <th scope="col">Biểu mẫu</th>
+                            </tr>
+                            @if (LstThanhPhan != null)
+                            {
+                                var stt = 1;
+                                @foreach (var item in LstThanhPhan)
+                                {
+                                    <tr>
+                                        <td text-align="center" style="width:2%;">
+                                            @stt
+                                        </td>
+                                        <td text-align="justify">
+                                            <p>
+                                                @item.ten_thanh_phan
+                                                <span class="important-box">
+                                                    Bắt
+                                                    buộc
+                                                </span>
+                                            </p>
+                                        </td>
+                                        <td>@item.ban_goc</td>
+                                        <td>@item.ban_sao</td>
+                                        <td>@item.ban_pho_to</td>
+                                        <td><a href="#">Tải file</a></td>
+                                    </tr>
+                                    stt++;
+                                }
+                            }
+
+                        </tbody>
+                    </table>
+                  
+                </div>
+                <div class="form-group form-group-new">
+                    <span class="col-md-5" style="font-weight:bold;"></span>
+                    <div class="col-md-7" style="padding-left: 10px;padding-top: 5px;">
+                        <a id="GuiHoSo" class="btn btn-danger" href="/GuiHoSo/GuiHoSoMotCua?Ma=@ViewBag.MaThuTuc"><span style="">Gửi hồ sơ &gt;&gt;</span></a>
+                    </div>
+                </div>
+            </div>
+        </form><!-- End Horizontal Form -->
+    </div>
+
+</div>

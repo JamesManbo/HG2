@@ -10,7 +10,7 @@
 <div class="col-lg-12">
     <div class="pageheader">
         <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
+            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." onchange="HoSoPaging(this);" />
             <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
         </div>
         <div class="pageicon"><span class="iconfa-table"></span></div>
@@ -56,9 +56,9 @@
                                     });
                                 }
                                 function HoSoPaging(obj){
-                                    var tu_khoa = $("#txtSearch").val();
+                                     var tu_khoa = $("#Search").val();
                                     if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
-                                    var ma_thu_tuc = obj.value;
+                                    var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
                                     var ta_ca = $("#checkboxAll").val();
                                     var dung_han = $("#checkboxEndDate").val();
                                     var qua_han =  $("#checkboxLateDate").val();
@@ -74,8 +74,8 @@
                                     });
                                 }
                                 function HSDXLAutoComplete(tatca, dunghan, quahan){
-                                     var tu_khoa = $("#txtSearch").val();
-                                     var ma_thu_tuc = document.getElementById("ma_thu_tuc").options[document.getElementById("ma_thu_tuc").selectedIndex].value;
+                                      var tu_khoa = $("#Search").val();
+                                     var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
                                      var pageSize = $("#lstPageSize").val();
                                      $.ajax({
                                         type: "GET",
@@ -123,18 +123,22 @@
          
                                 }
                         </script>
-                            <div id="thutucbylinhvuc">
+                           <div id="thutucbylinhvuc">
                                 <div class="row mb-3">
                                     <label for="stt" class="col-sm-2 control-label" style="text-align: right">Thủ tục</label>
                                     <div class="col-sm-8">
-                                        <input type="number" class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                        @*<input type="" class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>*@
+                                        <select class="form-control input-default">
+                                        <option value="" selected>-Chọn thủ tục-</option> 
+                                      
+                                 </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="stt" class="col-sm-2 control-label" style="text-align: right">Trạng thái</label>
                                 <div class="col-sm-1">
-                                    <input type="radio" name="checkboxAll" onclick="TatCaChecked()" value="" id="checkboxAll"> Tất cả
+                                    <input type="radio" name="checkboxAll" onclick="TatCaChecked()" value="" checked="checked" id="checkboxAll"> Tất cả
                                 </div>
                                 <div class="col-sm-1">
                                     <input type="radio" name="checkboxEndDate" onclick="DungHanChecked()" value="" id="checkboxEndDate"> Đúng hạn
@@ -148,8 +152,7 @@
             </div>
             <p class="stdformbutton" style="margin-bottom: 10px;">
                 
-                <input type="button" value="In phiếu chuyển" onclick="window.location.href = '/TiepNhan/TiepNhanHoSoMoi';" class="btn btn-primary" />
-                <input type="button" value="Chuyển hồ sơ" onclick="window.location.href = '/TiepNhan/TiepNhanHoSoMoi';" class="btn btn-primary" />
+              
                 <input hidden id="lstCode" />
             </p>
 
@@ -282,30 +285,41 @@
     </div>
 <script>
     function GetListByCurrentPage(id) {
-        var pageSize = $("#lstPageSize").val();
-        $.ajax({
-            type: "GET",
-            url: "../DonVi/DiaBanPaging?currentPage=" + id + "&pageSize=" + pageSize + "&tu_khoa=",
-            data: "",
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                //console.log(data);
-                $("#dataTable").html(data);
-            }
-        });
+         var tu_khoa = $("#Search").val();
+                                    if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
+                                    var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
+                                    var ta_ca = $("#checkboxAll").val();
+                                    var dung_han = $("#checkboxEndDate").val();
+                                    var qua_han =  $("#checkboxLateDate").val();
+                                    var pageSize = $("#lstPageSize").val();
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/HoSoPaging?currentPage=" + id + "&tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=31",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                                    });
+       
     }
     function changePageSize(data) {
-        $("#lstPageSize").val(data.value);
-        $.ajax({
-            type: "GET",
-            url: "../DonVi/DiaBanPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
-            data: "",
-            contentType: 'application/json; charset=utf-8',
-            success: function(data) {
-                //console.log(data);
-                $("#dataTable").html(data);
-            }
-        });
+        var tu_khoa = $("#Search").val();
+                                    if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
+                                    var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
+                                    var ta_ca = $("#checkboxAll").val();
+                                    var dung_han = $("#checkboxEndDate").val();
+                                    var qua_han =  $("#checkboxLateDate").val();
+                                    var pageSize = $("#lstPageSize").val();
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=31",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                                    });
     }
 
     function DeleteMultiple() {

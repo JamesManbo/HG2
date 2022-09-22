@@ -23,11 +23,11 @@
                     {
                          required: true
                     }
-                    //,
-                    //ma_phong_ban:
-                    //{
-                    //    required: true
-                    //}
+                    ,
+                    ma_phong_ban:
+                    {
+                        required: true
+                    }
             },
                 messages:
                 {
@@ -43,10 +43,10 @@
                     {
                         required: "Tên không được trống!"
                     }
-                    //,
-                    //ma_phong_ban : {
-                    //    required: "Bạn phải chọn phòng ban!"
-                    //},
+                    ,
+                    ma_phong_ban : {
+                        required: "Bạn phải chọn phòng ban!"
+                    },
 
                 }
             });

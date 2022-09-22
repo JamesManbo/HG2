@@ -100,20 +100,11 @@
             }
         });
     });
-     function CheckedCode(abc){
-         $.ajax({
-                  type: "GET",
-                  url: "/QTNguoidung/KiemTraNguoiDung?Code=" + abc.value,
-                  data: "",
-                  contentType: 'application/json; charset=utf-8',
-                  success: function(data) {
-                      if (data == "") {
-                          window.location.href = '/QTNguoiDung/ThemNguoiDung?UserName=' +  abc.value
-                      } else {
-                          window.location.href = '/QTNguoiDung/SuaNguoiDung?Id=' + data +"&type=Edit"
-                      }
-                  }
-          });           
+     function CheckedMatkhau(){
+         if($("#mat_khau_re").val() != "" && $("#mat_khau_re").val() != $("#mat_khau").val())
+         {
+             alert("Xác nhận mật khẩu không đúng với mật khẩu!");
+         }
     }
 </script>
 
@@ -185,7 +176,7 @@
                            
 
                         </div>
-                        <div class="form-group" id="mat_khau">
+                        <div class="form-group row" id="mat_khau">
                             <label class="col-md-2 control-label">
                                 Mật khẩu<span id="ctl08_ctl00_Label2" style="color:Red;">(*)</span>
                             </label>
@@ -194,12 +185,12 @@
                             </div>
                         </div>
 
-                        <div class="form-group"  id="mkmd">
+                        <div class="form-group row" id="mkmd">
                             <label class="col-md-2 control-label">
                                 Nhập lại mật khẩu<span id="ctl08_ctl00_Label3" style="color:Red;">(*)</span>
                             </label>
                             <div class="col-md-9">
-                                <input name="ctl08$ctl00$TextBox1" type="password" id="ctl08_ctl00_TextBox1" class="form-control input-default" placeholder="">
+                                <input name="ctl08$ctl00$TextBox1" type="password" id="mat_khau_re" onchange="CheckedMatkhau()" class="form-control input-default" placeholder="">
                             </div>
                         </div>
 
@@ -208,55 +199,72 @@
                                 Họ và tên người dùng
                                 <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
                             </label>
-                            <div class="col-md-10">
+                            <div class="col-md-9">
                                 <input name="ten" type="text" id="ten" maxlength="50" class="form-control input-default" placeholder="Tên" value="@Model.ten">
                                 @*<span id="ctl08_ctl00_RequiredFieldValidator3" style="color:Red;display:none;">Tên không được trống!</span>*@
                             </div>
                         </div>
-                        <div class="form-group" hidden="hidden">
-                            <label class="col-md-2 control-label">Số điện thoại</label>
-                            <span id="ctl08_ctl00_Label6" style="color:Red;">(*)</span>
-                            <div class="col-md-10">
-                                <input name="ctl08$ctl00$Phone" id="PhoneNumber" type="text" maxlength="50" class="form-control input-default" placeholder="Số điện thoại">
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">
+                                Số điện thoại
+                                <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input name="PhoneNumber" type="text" id="PhoneNumber" maxlength="50" class="form-control input-default" placeholder="Số điện thoại" value="@Model.PhoneNumber">
+                                @*<span id="ctl08_ctl00_RequiredFieldValidator3" style="color:Red;display:none;">Tên không được trống!</span>*@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-2 control-label">Hộ khẩu thường trú</label>
-                            <span id="ctl08_ctl00_Label7" style="color:Red;">(*)</span>
-                            <div class="col-md-10">
-                                <input name="ho_khau_tt" type="text" id="ho_khau_tt" class="form-control input-default datepicker hasDatepicker" placeholder="Hộ khẩu thường trú" value="@Model.ho_khau_tt">
-                                @*<span id="ctl08_ctl00_CompareValidator2" style="color:Red;display:none;">Phải nhập dữ liệu kiểu ngày/tháng/năm!</span>*@
+                            <label class="col-md-2 control-label">
+                                Hộ khẩu thường trú
+                                <span id="ctl08_ctl00_Label1" style="color:Red;">(*)</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input name="ho_khau_tt" type="text" id="ho_khau_tt" maxlength="50" class="form-control input-default" placeholder="Hộ khẩu thường trú" value="@Model.ho_khau_tt">
+                                @*<span id="ctl08_ctl00_RequiredFieldValidator3" style="color:Red;display:none;">Tên không được trống!</span>*@
                             </div>
                         </div>
+                       
 
                      
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Ảnh đại diện</label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Ảnh đại diện<span id="ctl08_ctl00_Label7" style="color:Red;">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="file" id="files" name="files" style="display: none">
-                                <input type="text" id="anh_dai_dien1" name="anh_dai_dien" style="display: none">
+                                <input type="text" id="anh_dai_dien1" name="anh_dai_dien" placeholder="Ảnh 3x4">
                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                 <img id="anh_dai_dien" style="margin-top: 10px;" width="100" />
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="ten_pb" class="col-sm-2 control-label">Ảnh CMT</label>
+                            <label for="ten_pb" class="col-sm-2 control-label">Ảnh CMT<span id="ctl08_ctl00_Label7" style="color:Red;">(*)</span></label>
                             <div class="col-sm-8">
                                 <input type="file" id="filescmt" name="files" style="display: none">
-                                <input type="text" id="anh_cmt1" name="anh_cmt" style="display: none">
+                                <input type="text" id="anh_cmt1" name="anh_cmt" placeholder="Ảnh CMND mặt trước">
                                 <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
                                 <img id="anh_cmt" style="margin-top: 10px;" width="100" />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-2 control-label">Thứ tự</label>
-                            <div class="col-md-10">
-                                <input name="stt" type="text" id="stt" maxlength="10" class="form-control input-default" placeholder="Số thứ tự">
+                            <label class="col-md-2 control-label">Người tạo</label>
+                            <div class="col-md-9">
+                                <input name="CreatedUid" type="text" id="CreatedUid" disabled maxlength="10" class="form-control input-default" placeholder="Người tạo">
                             </div>
                         </div>
-
                         <div class="form-group row">
-                            <label class="col-md-2 control-label">Khóa tài khoản</label>
+                            <label class="col-md-2 control-label">Người sửa</label>
+                            <div class="col-md-9">
+                                <input name="UpdatedUid" type="text" id="UpdatedUid" disabled maxlength="10" class="form-control input-default" placeholder="Người sửa">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Ngày sửa</label>
+                            <div class="col-md-9">
+                                <input name="UpdatedDateUtc" type="date" id="UpdatedDateUtc" disabled maxlength="10" class="form-control input-default" placeholder="Ngày sửa">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 control-label">Kích hoạt tài khoản</label>
                             <div class="col-md-10">
                                 <input onclick="KhoaTaiKhoan()" id="khoa_tai_khoan" type="checkbox" name="khoa_tai_khoan" value="">
                             </div>

@@ -1,0 +1,307 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Tìm kiếm hồ sơ liên thông";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model List<HG.Entities.HoSo.Ho_So>;
+<style>
+    .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+        background: #fff;
+        border-bottom: 1px solid #fff;
+        color: #333;
+    }
+
+    .nav-pills .nav-link, .nav-pills .show > .nav-link {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+        border: 0;
+    }
+
+
+    .nav-pills .nav-link {
+        background: 0 0;
+        border: 0;
+        border-radius: 0;
+    }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <div class="pageheader">
+            <div class="pageicon"><span class="iconfa-pencil"></span></div>
+            <div class="pagetitle">
+                <h5>Tìm kiếm</h5>
+                <h1>Hồ sơ liên thông</h1>
+            </div>
+        </div>
+        <div class="maincontent">
+            <div class="maincontentinner">
+                <!-- Pills Tabs -->
+                <div class="tab-primary" style="border: 2px solid #0866c6;">
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist" style="background: #0866c6;">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link @(ViewBag.active==1?"active":"")" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-tab1" role="tab" aria-controls="pills-home" aria-selected="true">Hồ sơ gửi liên thông</button>
+                        </li>
+                        <li class="nav-item ui-state-default ui-corner-top" role="presentation">
+                            <button class="nav-link @(ViewBag.active==2?"active":"")" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-tab2" role="tab" aria-controls="pills-profile" aria-selected="false">Hồ sơ nhận liên thông</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent" style="padding: 15px;">
+                        @*TAB Cập nhật phiên làm việc*@
+                        <div class="tab-pane fade @(ViewBag.active==1?"show active":"")" id="pills-tab1" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="form-horizontal">
+                                <div class="widget">
+                                    <h4 class="widgettitle">Lọc danh sách theo</h4>
+                                    <form class="widgetcontent" method="get" action="/TraCuuHoSo/TimKiemHoSoLienThong">
+                                        <div class="form-group row">
+                                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Trạng thái:</label>
+                                            <div class="col-md-8">
+                                                <select name="trang_thai" id="trang_thai"  class="form-control input-default">
+                                                    <option value="0">Toàn bộ</option>
+                                                    <option value="3">Đang liên thông</option>
+                                                    <option value="1">Có kết quả</option>
+                                                    <option value="4">Kết thúc liên thông</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Từ khóa:</label>
+                                            <div class="col-md-8">
+                                                <input name="tu_khoa" type="text" id="Search" class="form-control input-default" placeholder="Gõ từ khóa và nhấn enter..." value="@ViewBag.txtSearch" />
+                                                <input type="submit" name="" style="cursor:pointer" id="BtnSearch" hidden="hidden" />
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <div id="dyntable_wrapper" class="dataTables_wrapper" role="grid">
+
+                                            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+                                                <div class="dataTables_length">
+                                                    <label>
+                                                        Hiển thị
+                                                        <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
+                                                            <option value="5">5</option>
+                                                            <option value="10" selected="">10</option>
+                                                            <option value="15">15</option>
+                                                            <option value="20">20</option>
+                                                            <option value="25">25</option>
+                                                        </select> bản ghi
+                                                    </label>
+                                                </div>
+                                                <div id="dataTable">
+                                                    <div class="dataTable-container">
+                                                        <table class="table table-bordered responsive">
+                                                            <thead class="widgettitle">
+                                                                <tr>
+                                                                 
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 25%;">MÃ HỒ SƠ</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">NGƯỜI NỘP</th>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 20%;">THỦ TỤC HÀNH CHÍNH</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 20%;">NGƯỜI GỬI</th>
+                                                                    <th class="head0" scope="col" data-sortable="" style="width: 5%;">NGÀY HẸN TRẢ</th>
+                                                                    <th class="head1" scope="col" data-sortable="" style="width: 5%;">TRẠNG THÁI</th>
+
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if (Model != null)
+                                                                {
+                                                                    var stt = 1;
+                                                                    foreach (var item in Model)
+                                                                    {
+                                                                        <tr>
+                                                                            <td scope="row">@stt</td>
+                                                                            <td>@item.Id</td>
+                                                                            <td>@item.ho_ten</td>
+                                                                            <td>@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc)</td>
+                                                                            <td>@HG.WebApp.Helper.HelperSql.GetUserName(item.CreatedUid)</td>
+                                                                            <td>@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra)</td>
+                                                                            <td>
+                                                                                @HG.WebApp.Helper.HelperStatus.GetListStatus().Where(n=>n.value == item.trang_thai).FirstOrDefault().name
+                                                                            </td>
+                                                                           
+                                                                        </tr>
+                                                                        stt++;
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                                                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                                                        @{
+                                                            var TotalPage = (int)ViewBag.TotalPage;
+                                                            var CurrentPage = (int)ViewBag.CurrentPage;
+                                                            if (TotalPage > 5)
+                                                            {
+                                                                if (CurrentPage > CurrentPage + 2)
+                                                                {
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                                };
+                                                                if (CurrentPage > 3)
+                                                                {
+                                                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                                                    {
+                                                                        if (i == CurrentPage)
+                                                                        {
+                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                        if (i == CurrentPage)
+                                                                        {
+                                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        }
+                                                                    }
+
+                                                                }
+
+                                                                if (CurrentPage < CurrentPage + 2)
+                                                                {
+                                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                                };
+                                                            }
+                                                            else
+                                                            {
+                                                                for (int i = 1; i <= TotalPage; i++)
+                                                                {
+                                                                    if (i == CurrentPage)
+                                                                    {
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <!-- End Table with stripped rows -->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*TAB thông tin chuyên viên online *@
+                        <div class="tab-pane fade @(ViewBag.active==2?"show active":"")" id="pills-tab2" role="tabpanel" aria-labelledby="profile-tab">
+                            <div class="form-horizontal">
+
+                                <form id="form_tab2" action="/CauHinhHeThong/SaveChuyenVien?type=@ViewBag.type_view" method="post" enctype="multipart/form-data" id="filterForm">
+                                    @*<input type="hidden" name="id" id="id" value="@Model.chuyen_vien.id">*@
+                                    
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-offset-2 col-md-10" style="text-align: right">
+                                            <input type="submit" name="" value="Lưu" id="" class="btn btn-primary">
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                        @*TAB cập nhật thông tin cấu hình *@
+                      
+                    </div>
+                </div>
+            </div>
+        </div><!-- End Pills Tabs -->
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#form_pb').validate({
+            rules: {
+                so_ban: {
+                    required: true,
+                    number: true
+                },
+                so_phien: {
+                    required: true,
+                    number: true
+                },
+            },
+            messages: {
+                so_ban: {
+                    required: "Bạn cần nhập số bàn!",
+                    number: "Chỉ được nhập số"
+                },
+                so_phien: {
+                    required: "Bạn cần nhập số phiên!",
+                    number: "Chỉ được nhập số"
+                },
+            }
+        });
+
+        $('#form_tab2').validate({
+            rules: {
+                sdt: {
+                    required: true,
+                    number: true
+                }
+            },
+            messages: {
+                sdt: {
+                    required: "Bạn cần nhập số điện thoại!",
+                    number: "Chỉ được nhập số"
+                }
+            }
+        });
+    });
+
+    function GetListByCurrentPage(id) {
+        var pageSize = $("#lstPageSize").val();
+        $.ajax({
+            type: "GET",
+            url: "../CauHinhHeThong/ChuyenVienPaging?currentPage=" + id + "&pageSize=" + pageSize,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+    function changePageSize(data) {
+        $("#lstPageSize").val(data.value);
+        $.ajax({
+            type: "GET",
+            url: "../CauHinhHeThong/ChuyenVienPaging?currentPage=" + 1 + "&pageSize=" + data.value,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //console.log(data);
+                $("#dataTable").html(data);
+            }
+        });
+    }
+
+    function ChangePhien(data) {
+        window.location.href = "/CauHinhHeThong/CauHinh?don_vi=" + data.value;
+    }
+</script>

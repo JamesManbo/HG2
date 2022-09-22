@@ -3,7 +3,7 @@
     ViewData["Title"] = "Danh sách nhóm Vai trò";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     var lst_nhom = ViewBag.lst_nhom as List<HG.Entities.Entities.Nhom.Asp_nhom>;
-    var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.WebApp.AspNetUsers>;
+    var lst_nguoi_dung = ViewBag.lst_nguoi_dung as List<HG.Entities.AspNetUsersModel>;
     var lst_nhom_nguoi_dung = ViewBag.lst_nhom_nguoi_dung as HG.Entities.Entities.phong_ban_nhom_nguoi_dung;
     var lst_nhom_nguoi_dung_obj = ViewBag.ListUsers as List<HG.WebApp.AspNetUsers>;
     var lst_vaitro = ViewBag.ls_vai_tro as List<HG.Entities.Entities.Nhom.Asp_dm_vai_tro> ;
@@ -21,7 +21,12 @@
         $("#profile").addClass('show'); // add active class to the clicked tab
         $("#profile").addClass('active'); // add active class to the clicked tab
     };
-   
+    function removeElement(array, elem) {
+        var index = array.indexOf(elem);
+        if (index > -1) {
+            array.splice(index, 1);
+        }
+    }
     var Arr = [];
     $(document).ready(function() {
         '@(lst_nhom_nguoi_dung == null ? "" : lst_nhom_nguoi_dung.lst_ma_nguoi_dung)'.split(",").forEach(function(item) {
@@ -41,7 +46,8 @@
             $('input[name="lstGroup"]').attr('value',Arr.join(","));
         });
         $('#multiselect').on("select2:unselect", function(e) {
-             Arr.pop(e.params.data.id);
+            removeElement(Arr, e.params.data.id);
+             //Arr.pop(e.params.data.id);
             console.log(Arr);
              $('input[name="lstGroup"]').attr('value', Arr.join(","));
            

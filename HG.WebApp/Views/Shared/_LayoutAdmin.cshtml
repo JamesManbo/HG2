@@ -28,6 +28,7 @@
     <link href="/BackEnd/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="/BackEnd/assets/vendor/simple-datatables/style.css" rel="stylesheet">
     <link href="/BackEnd/Admin/plugin/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/MenuTree/style.min.css" />
     <!-- Template Main CSS File -->
     <link href="/BackEnd/assets/css/style.css" rel="stylesheet">
     <link href="/BackEnd/Admin/plugin/style.default.css" rel="stylesheet">
@@ -36,6 +37,10 @@
     <script src="/BackEnd/assets/vendor/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="/BackEnd/Admin/plugin/select2/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.3/bootbox.min.js"></script>
+
+    @*<script type="text/javascript" src="/simpletreemenu.js"></script>*@
+    <script type="text/javascript" src="/MenuTree/jstree.min.js"></script>
+
     <script src="/BackEnd/Admin/Js/common/common.js"></script>
 
     <style>
@@ -217,9 +222,9 @@
     <aside id="sidebar" class="sidebar">
 
         @Html.RenderAction("Nav","User")
-
+       
     </aside><!-- End Sidebar-->
-
+    
     <main id="main" class="main">
         <section class="section dashboard">
             <div class="content row">
@@ -253,6 +258,21 @@
     <!-- Template Main JS File -->
     <script src="/BackEnd/assets/js/main.js"></script>
     <script src="/BackEnd/Admin/Js/JQuery/jquery.validate.js"></script>
+    <script type="text/javascript">
+        //$('#sidebar').jstree();
+        //ddtreemenu.createTree(treeid, enablepersist, opt_persist_in_days (default is 1))
+        ddtreemenu.createTree("sidebar-nav", true)
+        var toggler = document.getElementsByClassName("caret");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+            });
+        }
+
+    </script>
     @* <script src="~/BackEnd/daterangepicker/daterangepicker.js"></script>*@
 </body>
 

@@ -1,0 +1,657 @@
+﻿@using HG.WebApp
+@{
+    ViewData["Title"] = "Hồ sơ chờ trả kêt quả"; 
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+   var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
+   var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
+   var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
+   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+   var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
+   var lst_phong_ban = ViewBag.LstBieuMau as List<HG.Entities.Dm_Phong_Ban>;
+   var lst_quy_trinh = ViewBag.LstQuyTrinhXuLy as List<HG.Entities.Entities.Luong.QuyTrinhXuLy>;
+   var phancongthuchien = ViewBag.PhanCongThuHien as HG.Entities.Entities.Luong.PhanCongThucHienModels;
+   var thongtintraketqua = ViewBag.ThongTinTraKQ as HG.Entities.ThongTinTraKQModels;
+}
+@model HG.Entities.HoSo.Ho_So
+<script>
+$(document).ready(function() {
+    $("#files").on('change', function() {
+        // Checking whether FormData is available in browser
+        if (window.FormData !== undefined) {
+            var fileUpload = $(this).get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append(files[i].name, files[i]);
+            }
+            // Adding one more key to FormData object
+            fileData.append('username', 'Manas');
+            $.ajax({
+                url: '/Upload/UploadFiles?folder=TraKetQua',
+                type: "POST",
+                contentType: false, // Not to set any content header
+                processData: false, // Not to process data
+                data: fileData,
+                success: function(result) {
+                    console.log(result);
+                    for (var i = 0; i < result.files.length; i++) {
+                        $('#attach').attr('src', result.files[i]);
+                        $('#file_dinh_kem').val("" + result.files[i] + "");
+                    }
+                },
+                error: function(err) {
+                    alert(err.statusText);
+                }
+            });
+        } else {
+            alert("FormData is not supported.");
+        }
+    });
+    
+});
+</script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">-
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body">
+                @ViewBag.ErrorMsg
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewBag.ErrorCode > 0)
+{
+    <script>
+        $(document).ready(function() {
+            $("#exampleModal").modal("show");
+        });
+    </script>
+}
+<style>
+    .underline-partion {
+    width: 100%;
+    border-bottom: 1px solid #f0ad4e;
+    margin-bottom: 20px;
+    font-style: italic;
+    font-weight: bold;
+    padding-bottom: 4px;
+}
+.label-warning {
+    background-color: #f0ad4e;
+}
+</style>
+<div class="card">
+    <div class="pageheader">
+        <div class="pageicon"><span class="iconfa-pencil"></span></div>
+        <div class="pagetitle">
+            <h5>Thông tin</h5>
+            <h1>Hồ sơ</h1>
+        </div>
+    </div>
+
+
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <h4 class="widgettitle">Thông tin người nộp/ tổ chức</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <a href="/XuLyHoSo/ViewHoSo?code=@Model.Id&type=View" style="text-decoration:none"> Luồng xử lý hồ sơ</a>
+                    <div id="form_tiepnhan" class="row">
+                          
+                                <div class="form-group row mb-3">
+                                        <span for="ma_pb" class="col-sm-1 control-label">Mã khách hàng</span>
+                                        <div class="col-sm-3">
+                                            <label type="text" onfocusout="CheckedCode(this)" maxlength="50" name="ma_khach_hang"  id="ma_khach_hang" value="@Model.ma_khach_hang" placeholder="Nhập CMT hoặc mã khách hàng đã có" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ma_khach_hang</label>
+                                        </div>
+                                        <span for="ten_pb" class="col-sm-1 control-label">Tìm kiếm </span>
+                                        <div class="col-sm-7">
+                                            <input type="checkbox" value="">
+                                        </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Họ và tên<span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label  type="text" id="ho_ten" name="ho_ten" maxlength="50" value="@Model.ho_ten" placeholder="Nhập họ tên" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ho_ten</label>
+                                    </div>
+                                     <span for="stt" class="col-sm-1 control-label">Ngày sinh <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                        <label type="date" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ho_ten</label>
+                                    </div>
+                                     <span for="nguoi_sua" class="col-sm-1 control-label">Giới tính <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label>@(Model.gioi_tinh == 1 ? "Nam": "Nữ")</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Số giấy tờ<span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label maxlength="50" type="text" id="so_giay_to" name="so_giay_to" value="@Model.so_giay_to" placeholder="Nhập số giấy tờ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.so_giay_to</label>
+                                    </div>
+                                     <span for="stt" class="col-sm-1 control-label">Điện thoại <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                        <label maxlength="50" type="text" id="dien_thoai"name="dien_thoai" value="@Model.dien_thoai" placeholder="Nhập điện thoại" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.dien_thoai </label>
+                                    </div>
+                                     <span for="nguoi_sua" class="col-sm-1 control-label">Email <span style="color:red">(*)</span></span>
+                                    <div class="col-md-3">
+                                       <label maxlength="50" type="text" id="email" name="email" value="@Model.email" placeholder="Nhập email" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.email</label>
+                                    </div>
+                                </div>
+                                 <div class="form-group row mb-3">
+                                    <span for="dia_chi" class="col-sm-1 control-label">Địa chỉ <span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                        <label maxlength="250" type="text" id="dia_chi" name="dia_chi" value="@Model.dia_chi" placeholder="Nhập tên địa chỉ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.dia_chi</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="ten_to_chuc" class="col-sm-1 control-label">Tên cơ quan</span>
+                                    <div class="col-sm-11">
+                                        <label maxlength="50" type="text" id="ten_to_chuc" name="ten_to_chuc" value="@Model.ten_to_chuc" placeholder="Nhập tên cơ quan" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ten_to_chuc </label>
+                                    </div>
+                                </div>
+                           
+                                </div>
+                      
+                </div><!-- End Horizontal Form -->
+                </div>
+            <h4 class="widgettitle">Thông tin hồ sơ</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="tt_chitiet" class="row">
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Tên hồ sơ<span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                       <label maxlength="50" type="text" id="ten_ho_so" name="ten_ho_so" value="@Model.ten_ho_so" placeholder="Nhập tên hồ sơ" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>@Model.ten_ho_so </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Lĩnh vực<span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                           <label>@LstLinhVuc.Where(n=>n.ma_linh_vuc == Model.ma_linh_vuc).Select(n=>n.ten_linh_vuc).FirstOrDefault().ToString()</label>
+                                    </div>
+                                </div>
+                                 <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">Thủ tục hành chính<span style="color:red">(*)</span></span>
+                                    <div class="col-sm-11">
+                                    @if(LstThuTuc != null) {
+                                        var obj = LstThuTuc.Where(n => n.ma_thu_tuc == Model.ma_thu_tuc_hc).Select(n => n.ten_thu_tuc).FirstOrDefault();
+                                        <label>@(obj == null ? "" : obj.ToString()) </label>
+                                    }
+                                    @*<select name="ma_thu_tuc_hc" id="ma_thu_tuc_hc"  onchange="GetLuongByTTHC(this)" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+				                                 <option value="">Chọn thủ tục hành chính</option> 
+                                                @if(LstThuTuc != null)
+                                                {
+                                                    foreach (var item in LstThuTuc)
+                                                    {
+                                                        if (item.ma_thu_tuc == Model.ma_thu_tuc_hc  )
+                                                        {
+                                                            <option value="@item.ma_thu_tuc" selected>@item.ten_thu_tuc</option> 
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@item.ma_thu_tuc">@item.ten_thu_tuc</option> 
+                                                        }
+                                            
+                                                    }
+                                                }
+			                            </select>*@
+                                    </div>
+                                </div>
+                                <script>
+                                     function LayThuTucByLinhVuc(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#ThuTucXL").html(data);
+                                           }
+                                       });          
+                                    }
+                                    function GetLuongByTTHC(data){
+                                        $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value + "&type=Add" + "&ma_luong=" + $("#ma_luong_xu_ly").val(),
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                               $("#LuongXuLy").html(data);
+                                           }
+                                       });          
+                                    } 
+                                    function GetNguoiXLNguoiPH(ma_luong_data) {
+                                          $.ajax({
+                                           type: "GET",
+                                           url: "../TiepNhan/GetNguoiXLNguoiPH?ma_luong=" + ma_luong_data.value,
+                                           data: "",
+                                           contentType: 'application/json; charset=utf-8',
+                                           success: function(data) {
+                                              //$("#nguoi_xu_ly select").val(data.nguoi_xl_mac_dinh).change();
+                                              console.log(data.nguoi_xl_mac_dinh)
+                                              $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                           }
+                                       });        
+                                    }
+                                </script>
+                                <div id="LuongXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @Html.RenderAction("LayLuongThanhPhanByMaTTHC","TiepNhan", new {ma_thu_tuc = Model.ma_thu_tuc_hc, type = StatusAction.View.ToString(), lstThanhPhan = Model.lstThanhPhan, ma_luong = Model.ma_luong_xu_ly})
+                                </div>
+                                 
+                            </div>
+                           
+                       
+                    </div><!-- End Horizontal Form -->
+                </div>
+            <h4 class="widgettitle">Thông tin quá trình xử lý</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="tt_chitiet" class="row">     
+                                <script>
+                                     
+                                    //function GetLuongByTTHC(data){
+                                    //    $.ajax({
+                                    //       type: "GET",
+                                    //       url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value + "&type=Add" + "&ma_luong=" + $("#ma_luong_xu_ly").val(),
+                                    //       data: "",
+                                    //       contentType: 'application/json; charset=utf-8',
+                                    //       success: function(data) {
+                                    //           $("#LuongXuLy").html(data);
+                                    //       }
+                                    //   });          
+                                    //} 
+                                    //function GetNguoiXLNguoiPH(ma_luong_data) {
+                                    //      $.ajax({
+                                    //       type: "GET",
+                                    //       url: "../TiepNhan/GetNguoiXLNguoiPH?ma_luong=" + ma_luong_data.value,
+                                    //       data: "",
+                                    //       contentType: 'application/json; charset=utf-8',
+                                    //       success: function(data) {
+                                    //          //$("#nguoi_xu_ly select").val(data.nguoi_xl_mac_dinh).change();
+                                    //          console.log(data.nguoi_xl_mac_dinh)
+                                    //          $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                    //       }
+                                    //   });        
+                                   // }
+                                </script>
+                                 <div id="ThongTinXuLy" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    @Html.RenderAction("LayThongTinXuLyHoSo","XuLyHoSo", new {ma_ho_so = @Model.Id, type = StatusAction.View.ToString()})
+                                </div>
+                           
+                            </div>
+                           
+                       
+                    </div><!-- End Horizontal Form -->
+                </div>
+            @if (thongtintraketqua != null)
+            {
+              <h4 class="widgettitle">Thông tin trả kết quả</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="tt_chitiet" class="row">
+                        <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-3 control-label">Hạn xử lý</span>
+                                    <div class="col-sm-11">
+                                       <label  type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="" ></label>
+                                    </div>
+                          </div>
+                        <div class="form-group row mb-3">
+                                    
+                                     <span for="mota" class="col-sm-3 control-label">Tên người nhận</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="ten_nguoi_nhan" name="ten_nguoi_nhan" value="@thongtintraketqua.ten_nguoi_nhan " placeholder="Nhập nội dung"/>
+                                    </div>
+                          </div>
+                          <div class="form-group row mb-3">
+                              <span for="mota" class="col-sm-3 control-label">Số chứng thực</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="so_chung_thuc" name="so_chung_thuc" value="@thongtintraketqua.so_chung_thuc" placeholder="Nhập nội dung"/>
+                                    </div>       
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                              <span for="mota" class="col-sm-3 control-label">Điện thoại</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="dien_thoai" name="dien_thoai" value="@thongtintraketqua.so_dien_thoai" placeholder="Nhập nội dung"/>
+                                    </div>       
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                              <span for="mota" class="col-sm-3 control-label">Địa chỉ</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="dia_chi" name="dia_chi" value="@thongtintraketqua.dia_chi" placeholder="Nhập nội dung"/>
+                                    </div>       
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                              <label for="mota" class="col-sm-3 control-label">Lệ phí</label>
+                                    <div class="col-sm-11">
+                                       <input maxlength="50" type="number" id="le_phi"  name="le_phi" class="form-control input-default" value="@thongtintraketqua.le_phi" placeholder="Nhập lệ phí">
+                                    </div>
+                                     <label for="stt" class="col-sm-1 control-label">Đã thu phí</label>
+                                    <div class="col-sm-11">
+                                        <input type="checkbox" id="da_thu_phi"  name="da_thu_phi" @(Model.da_thu_phi == 1 ? "Checked": "") value="@thongtintraketqua.da_thu_phi" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    </div>   
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
+                                    <div class="col-sm-11">
+                                        <input type="file" id="files" name="files" style="display: none">
+                                        <input type="text" id="file_dinh_kem" name="attach" style="display: none">
+                                        <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <img id="attach" style="margin-top: 10px;" width="100" />
+                                    </div>
+                          </div>
+                          
+                         <div class="form-group row mb-3">
+                            
+                                    <span for="ten_to_chuc" class="col-sm-3 control-label">Ý kiến</span>
+                                    <div class="col-sm-11">
+                                        <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="@thongtintraketqua.y_kien" placeholder="Nhập nội dung"/>
+                                    </div>
+                         </div>      
+                    </div>
+                     <div class="text-center">
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,14)"  style="width: 150px" >Lưu</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,15)" style="width: 150px">Trả kết quả</button>
+                               <button type="button" class="btn btn-primary" onclick="">Trả KQ liên thông </button>
+                               <button type="button" class="btn btn-primary">In phiếu đánh giá</button>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/TraKetQua/HoSoChoTraKetQua';" style="width: 150px">Đóng</button>
+                    </div>
+                </div>
+
+
+
+                </div>
+            }
+            else
+            {
+                 <h4 class="widgettitle">Thông tin trả kết quả</h4>
+            <div class="widgetcontent">
+                <div class="form-horizontal">
+                    <div id="tt_chitiet" class="row">
+                        <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-3 control-label">Hạn xử lý</span>
+                                    <div class="col-sm-11">
+                                       <label  type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="" ></label>
+                                    </div>
+                          </div>
+                        <div class="form-group row mb-3">
+                                    
+                                     <span for="mota" class="col-sm-3 control-label">Tên người nhận</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="ten_nguoi_nhan" name="ten_nguoi_nhan" value="" placeholder="Nhập nội dung"/>
+                                    </div>
+                          </div>
+                          <div class="form-group row mb-3">
+                              <span for="mota" class="col-sm-3 control-label">Số chứng thực</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="so_chung_thuc" name="so_chung_thuc" value="" placeholder="Nhập nội dung"/>
+                                    </div>       
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                              <span for="mota" class="col-sm-3 control-label">Điện thoại</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="dien_thoai" name="dien_thoai" value="" placeholder="Nhập nội dung"/>
+                                    </div>       
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                              <span for="mota" class="col-sm-3 control-label">Địa chỉ</span>
+                                    <div class="col-sm-11">
+                                      <input maxlength="150" type="text" class="form-control input-default" id="dia_chi" name="dia_chi" value="" placeholder="Nhập nội dung"/>
+                                    </div>       
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                              <label for="mota" class="col-sm-3 control-label">Lệ phí</label>
+                                    <div class="col-md-5">
+                                       <input maxlength="50" type="number" id="le_phi"  name="le_phi" class="form-control input-default" value="" placeholder="Nhập lệ phí">
+                                    </div>
+                                     <label for="stt" class="col-sm-3 control-label">Đã thu phí</label>
+                                    <div class="col-md-5">
+                                        <input type="checkbox" id="da_thu_phi"  name="da_thu_phi" @(Model.da_thu_phi == 1 ? "Checked": "") value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    </div>   
+                                   
+                          </div>
+                          <div class="form-group row mb-3">
+                                    <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
+                                    <div class="col-md-3">
+                                        <input type="file" id="files" name="files" style="display: none">
+                                        <input type="text" id="file_dinh_kem" name="attach" style="display: none">
+                                        <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <img id="attach" style="margin-top: 10px;" width="100" />
+                                    </div>
+                          </div>
+                          
+                         <div class="form-group row mb-3">
+                            
+                                    <span for="ten_to_chuc" class="col-sm-3 control-label">Ý kiến</span>
+                                    <div class="col-sm-11">
+                                        <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="" placeholder="Nhập nội dung"/>
+                                    </div>
+                         </div>      
+                    </div>
+                     <div class="text-center">
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,14)"  style="width: 150px" >Lưu</button>
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,15)" style="width: 150px">Trả kết quả</button>
+                               <button type="button" class="btn btn-primary" onclick="">Trả KQ liên thông </button>
+                               <button type="button" class="btn btn-primary">In phiếu đánh giá</button>
+                               <button type="button" class="btn btn-secondary" onclick="window.location.href='/TraKetQua/HoSoChoTraKetQua';" style="width: 150px">Đóng</button>
+                    </div>
+                </div>
+
+
+
+                </div>
+            }
+
+    </div>
+</div>
+
+<!-- Basic Modal -->
+
+
+
+
+<script>
+    function TiepNhanHoSo(abc){
+         $.ajax({
+                  type: "GET",
+                  url: "/TiepNhan/TiepNhanHoSoOnline?code=" + abc.value,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      $("#NotifyVHSTitle").html(data);
+                      $("#NotifyVHS").modal("show");
+                  }
+          });           
+    }
+     function LoaiHoSo(abc){
+         $.ajax({
+           type: "GET",
+                  url: "/TiepNhan/LoaiHoSo?code=" + abc.value,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      $("#NotifyVHSTitle").html(data);
+                      $("#NotifyVHS").modal("show");
+                  }
+          });           
+    }
+    function LuuThongTinHoSo(id,trangthai) {
+        debugger;
+        var data = {};
+        data.ma_ho_so = id;
+        data.ten_nguoi_nhan =  $("#ten_nguoi_nhan").val();
+        data.so_chung_thuc =  $("#so_chung_thuc").val();
+        data.so_dien_thoai = $("#so_dien_thoai").val();
+        data.dia_chi = $("#dia_chi").val();
+        data.le_phi = $("#le_phi").val();
+        data.da_thu_phi = $("#da_thu_phi").val();      
+        data.file_dinh_kem = $("#file_dinh_kem").val();
+        data.y_kien = $("#y_kien").val();
+        //data.trang_thai = 18;
+       // data.Id_nguoi_nhan = $("#Id_nguoi_nhan").val();
+        var promise = $.ajax({
+            url: "/TraKetQua/LuuThongTinTraKetQua",
+            type: "post",
+            data: data,
+            contentType: 'application/x-www-form-urlencoded',          
+            success: function(result) {
+               
+            }
+        });
+
+       var promise1 = $.ajax({
+            url: "/TraKetQua/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"&trangthaitruoc=14",
+            type: "post",
+            contentType: 'application/x-www-form-urlencoded',          
+            success: function(result) {
+                $("#NotifyVHS").modal("show");
+                window.location.href = window.location.origin + "/TraKetQua/HoSoChoTraKetQua"
+            }
+        });
+        $.when(promise1, promise2).then(
+            function(result1, result2) {
+                
+
+            },
+            function(error) {
+               
+            }
+        );
+    };
+    function ThongBaoChoCongDan(abc){
+        var msg = $("#gui_tin_nhan").val();
+        if (msg = "") {
+             $("#NotifyVHSTitle").html("Bạn chưa nhập nội dung thông báo!");
+             $("#NotifyVHS").modal("show");
+            return;
+        }
+        $("#NotifyVHSTitle").html("Thông báo tin nhắn cho công dân thành công!");
+        this.LuuThongTinHoSo(abc,99)
+        $("#NotifyVHS").modal("show");
+    }
+     function LyDoGiaHan(abc){
+       // var msg = $("#gui_tin_nhan").val();
+       
+       // $("#NotifyVHSTitle").html("Thông báo tin nhắn cho công dân thành công!");
+       /// this.LuuThongTinHoSo(abc,99)
+        $("#Giahanxl").modal("show");
+
+    }
+</script>
+
+<div class="modal fade" id="NotifyVHS" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Thông báo</h5>
+            </div>
+            <div class="modal-body" id="NotifyVHSTitle">
+                Lưu thành công !!!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="Giahanxl" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="border: 2px solid #0866c6;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Gia hạn xử lý</h5>
+            </div>
+            <div class="form-horizontal">
+                 <div id="tt_chitiet" class="row">
+                    <div class="form-group row mb-3">
+                          <span for="mota" class="col-sm-3 control-label">Lý do gia hạn</span>
+                                    <div class="col-sm-8">
+                                        <input maxlength="200" type="text" class="form-control input-default" id="ly_do_gia_han" name="ly_do_gia_han" value="" placeholder="Nhập nội dung"/>
+                                    </div>
+                     </div>
+                      <div class="form-group row mb-3">
+                          <span for="mota" class="col-sm-3 control-label">Số ngày gia hạn</span>
+                                    <div class="col-sm-8">
+                                        <input maxlength="200" type="number" class="form-control input-default" id="so_ngay" name="so_ngay" value="" placeholder="Số ngày gia hạn"/>
+                                    </div>
+                     </div>
+                      <div class="form-group row mb-3">
+                               <span  class="col-sm-3 control-label">File đính kèm</span>
+                                    <div class="col-md-8">
+                                        <input type="file" id="files" name="files" style="display: none">
+                                        <input type="text" id="attach2" name="attach1" style="display: none">
+                                        <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <img id="attach1" style="margin-top: 10px;" width="100" />
+                                    </div>
+                     </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                 <div class="form-horizontal">
+                    <div class="row">
+                          <button type="button" class="btn btn-secondary modal-footer-btnclose"  onclick="LuuThongTinHoSo(@Model.Id,98)">Lưu</button>
+                           <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+                     </div>
+                      </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ChonBieuMau" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header widgettitle">
+                <h5 class="modal-title">Danh sách</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <div style="overflow-y: auto;">
+                        <div id="pnlMain">
+                            <div>
+                                <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                                    <tbody>
+                                        <tr class="widgettitle">
+                                            <th align="center" scope="col">CHỌN</th>
+                                            <th scope="col">Tên biểu mẫu</th>
+                                            <th scope="col">url biểu mẫu</th>
+                                        </tr>
+                                    @if(LstBieuMau != null)
+                                    {
+                                        foreach (var item in LstBieuMau)
+                                        {
+                                            <tr>
+                                                <td align="center">
+                                                     <button type="button" name="@item.Id" onclick="ChonBieuMau()">Chọn</button>
+                                                </td>
+                                                <td>
+                                                    @item.ten_bieu_mau
+                                                </td>
+                                                <td style="width: 25%;"> <a href="@("/"+item.url_bieu_mau)" target="_blank" style="text-decoration: none">@item.url_bieu_mau</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                  
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

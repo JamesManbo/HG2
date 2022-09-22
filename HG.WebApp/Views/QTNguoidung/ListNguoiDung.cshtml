@@ -232,39 +232,39 @@
                                 if (TotalPage> 5)
                                 {
 					                    if(CurrentPage > CurrentPage + 2 ){
-                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
-                                                          <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                              <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>  
+                                                              <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if(CurrentPage > 3)
                                         {
                                              for(int i = CurrentPage -2; i< CurrentPage+2; i++){
 						                                if(i == CurrentPage){
-                                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-                                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
                                         }else{
                                                     for(int i = 1 ; i <= 5; i++){
 						                                if(i == CurrentPage){
-                                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                }else{
-                                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                               <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                                } 
 					                                }
 
                                         }
                            
 					                    if(CurrentPage < CurrentPage + 2 ){
-                                                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
-                                                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
+                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)" >Trước</a></span>
+                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span> 
 					                    };
                                 }else{
 					                    for(int i = 1; i <= TotalPage; i++){
 						                    if(i == CurrentPage){
-                                                               <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
+                                                                   <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>  
 						                    }else{
-                                                              <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
+                                                                  <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)" >@i</a></span>   
 						                    } 
 					                    }
 			                    }
@@ -341,7 +341,12 @@
     //}
     function DeleteMultiple() {
         var listData = $("#lstCode").val();
-        confirm.BeforDeletePost('/QTNguoiDung/XoaNnguoiDung?Id=' + listData)
+        if(listData == "" || listData == undefined){
+            return false;
+        }else{
+             confirm.BeforDeletePost('/QTNguoiDung/XoaNnguoiDung?Id=' + listData)
+        }
+       
     }
 
     $(function() {

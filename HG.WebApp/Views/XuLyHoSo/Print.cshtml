@@ -6,19 +6,4 @@
     var path = ViewBag.Path;
 }
 @model List<HG.Entities.Entities.PhieuHenModel>
-<div class="card">
-    <div class="pageheader">
-        <div class="searchbar">
-            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." />
-            <input type="submit" name="" value="" onclick="" id="BtnSearch" hidden="hidden" />
-        </div>
-        <div class="pageicon"><span class="iconfa-table"></span></div>
-        <div class="pagetitle">
-            <h5>Danh sách</h5>
-            <h1>Hồ sơ trực tuyến</h1>
-        </div>
-    </div>
-    <div class="maincontent">
-        <iframe src="@path" style="width:100%; height:80%; border:none;"></iframe>
-    </div>
-</div>
+<iframe src="@path" style="width:100%; height:100%; border:none;"></iframe>

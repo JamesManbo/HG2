@@ -378,8 +378,7 @@ $(document).ready(function() {
         </div>
          <div class="text-center">
                                <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,23) "   style="width: 150px">Lưu</button>
-                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,24)" style="width: 150px">Ký hồ sơ</button> 
-                                <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,12)" style="width: 150px">Trả lại</button> 
+                               <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,24)" style="width: 150px">Ký hồ sơ</button>                            
                                <button type="button" class="btn btn-secondary"  onclick="window.location.href='/XuLyHoSo/HoSoChoKy';" style="width: 150px">Đóng</button>
                               
                     </div>
@@ -439,7 +438,7 @@ $(document).ready(function() {
         });
 
        var promise1 = $.ajax({
-            url: "/XuLyHoSo/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"&trangthaitruoc=20&y_kien="+$("#y_kien").val(),
+            url: "/XuLyHoSo/LuuThongTinHoSo?id="+id+"&type=View&trangthai="+trangthai+"&trangthaitruoc=20",
             type: "post",
             contentType: 'application/x-www-form-urlencoded',          
             success: function(result) {

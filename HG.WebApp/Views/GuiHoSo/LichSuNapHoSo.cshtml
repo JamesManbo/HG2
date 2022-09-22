@@ -1,0 +1,53 @@
+﻿@model List<HG.Entities.HoSo.Ho_So>
+@{
+    Layout = "~/Views/Shared/_LayoutClient.cshtml";
+    
+}
+
+<div class="result-area">
+                <div class="result-top-title top-title-frame">
+                    <p>DANH SÁCH LỊCH SỬ NẠP HỒ SƠ</p>
+                </div>
+                <div class="result-content">
+                    <table cellspacing="0" cellpadding="4" rules="all"
+                           class="table table-bordered table-result">
+                        <tbody>
+                            <tr class="table-headline">
+                                <th text-align="center" scope="col">STT</th>
+                                <th scope="col" style="width: 45%;">Tên Người gửi</th>
+                                <th scope="col" style="width: 10%;">Thủ tục hành chính</th>
+                                <th scope="col" style="width: 10%;">Mô tả chi tiết</th>
+                                <th scope="col" style="width: 10%;">Ngày gửi</th>
+                            </tr>
+                                    @if (Model != null)
+                                    {
+                                        var stt = 1;
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td text-align="center" style="width:2%;">
+                                                     @stt
+                                                </td>
+                                                <td text-align="justify">
+                                                    <p>
+                                                        @item.ho_ten
+                                                    </p>
+                                                </td>
+
+                                                <td text-align="justify">
+                                                    <p>
+                                                        @HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc)
+                                                    </p>
+                                                </td>
+
+                                                <td text-align="left" style="width:25%;"><p>@(item.ghi_chu == null ? "" : item.ghi_chu)</p></td>
+                                                <td>@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.CreatedDateUtc)</td>
+                                            </tr>
+                                            stt++;
+                                        }
+                                    }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>

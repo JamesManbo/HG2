@@ -637,7 +637,6 @@ h1, h2, h3, h4, h5, h6 {
         left: 0;
     }
 }
-
 @media (min-width: 1200px) {
     .toggle-sidebar #main, .toggle-sidebar #footer {
         margin-left: 0;
@@ -1232,3 +1231,19 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 13px;
         color: #012970;
     }
+
+.sidebar-nav .parent-custom {
+    background-color: #eeeeee !important;
+}
+
+    .sidebar-nav .parent-custom .bi-chevron-down {
+        margin-right: 1em;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+
+.sidebar-nav .custom {
+    margin-left: 2.5em;
+}
+

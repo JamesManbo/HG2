@@ -1,0 +1,379 @@
+﻿@using HG.Entities
+@using HG.WebApp
+@{
+    ViewData["Title"] = "Hồ sơ nhận kết quả qua bưu chính";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var LstLinhVuc = ViewBag.LstLinhVuc as List<Dm_Linh_Vuc>;
+}
+@model List<HG.Entities.HoSo.Ho_So>
+
+<div class="col-lg-12">
+    <div class="pageheader">
+        <div class="searchbar">
+            <input name="" type="text" id="Search" placeholder="Gõ từ khóa và nhấn enter..." onchange="HoSoPaging(this);" />
+            <input type="submit" name="" value="" onclick="HoSoPaging(this);" id="BtnSearch" hidden="hidden" />
+        </div>
+        <div class="pageicon"><span class="iconfa-table"></span></div>
+        <div class="pagetitle">
+            <h5>Danh sách</h5>
+            <h1>Hồ sơ nhận kết quả qua bưu chính</h1>
+        </div>
+    </div>
+    <div class="maincontent">
+        <div class="maincontentinner">
+            <div class="widget">
+                <h4 class="widgettitle">Lọc danh sách theo</h4>
+                <div class="widgetcontent">
+                        <div class="form-group row">
+                            <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Lĩnh vực</label>
+                            <div class="col-md-8">
+                                   <select name="ma_cap_co_quan" id="ma_cap_co_quan" onchange="LayThuTucByLinhVuc(this)" class="form-control input-default">
+                                        <option value="" selected>-Chọn lĩnh vực-</option> 
+                                       @if(LstLinhVuc != null)
+                                        {
+                                             foreach (var item in LstLinhVuc)
+                                             {
+                                                 if(item.ma_linh_vuc == ViewBag.MaLinhVuc){
+                                                     <option value="@item.ma_linh_vuc" selected>@item.ten_linh_vuc</option>
+                                                 }else{
+                                                    <option value="@item.ma_linh_vuc">@item.ten_linh_vuc</option>
+                                                 }
+                                             }
+                                        }
+                            </select>
+                            </div>
+                        </div>
+                        <script>
+                                function LayThuTucByLinhVuc(obj){
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/LayThuTucByLinhVuc?ma_linh_vuc=" + obj.value + "&LaTimKiem=LaTimKiem",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#thutucbylinhvuc").html(data);
+                                        }
+                                    });
+                                }
+                                function HoSoPaging(obj){
+                                    var tu_khoa = $("#Search").val();
+                                    if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
+                                    var ma_thu_tuc =  $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
+                                    var ta_ca = $("#checkboxAll").val();
+                                    var dung_han = $("#checkboxEndDate").val();
+                                    var qua_han =  $("#checkboxLateDate").val();
+                                    var pageSize = $("#lstPageSize").val();
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=16",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                                    });
+                                }
+                                function HSDXLAutoComplete(tatca, dunghan, quahan){
+                                     var tu_khoa = $("#Search").val();
+                                     var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
+                                     var pageSize = $("#lstPageSize").val();
+                                     $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + tatca + "&dung_han="+ dunghan + "&qua_han=" + quahan + "&pageSize=" + pageSize + "&trang_thai=16",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                                    });
+                                }
+                                function TatCaChecked() {
+                                     if ($('input[name=checkboxAll]:checked').length > 0) {
+                                         $("#checkboxEndDate").prop("checked", false);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSDXLAutoComplete(1, 0, 0)
+                                     } else { 
+                                         $("#checkboxEndDate").prop("checked", true);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSDXLAutoComplete(0, 1, 0)
+                                     }
+                                }
+                                function DungHanChecked() {
+                                     if ($('input[name=checkboxEndDate]:checked').length > 0) {
+                                         $("#checkboxAll").prop("checked", false);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSDXLAutoComplete(0, 1, 0)
+                                     } else { 
+                                         $("#checkboxAll").prop("checked", true);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSDXLAutoComplete(1, 0, 0)
+                                     }
+         
+                                }
+                                function QuaHanChecked() {
+                                     if ($('input[name=checkboxLateDate]:checked').length > 0) {
+                                         $("#checkboxAll").prop("checked", false);
+                                         $("#checkboxEndDate").prop("checked", false);
+                                         HSDXLAutoComplete(0,0, 1)
+                                     } else { 
+                                         $("#checkboxAll").prop("checked", true);
+                                         $("#checkboxLateDate").prop("checked", false);
+                                         HSDXLAutoComplete(1, 0, 0)
+                                     }
+         
+                                }
+                        </script>
+                            <div id="thutucbylinhvuc">
+                                <div class="row mb-3">
+                                    <label for="stt" class="col-sm-2 control-label" style="text-align: right">Thủ tục</label>
+                                    <div class="col-sm-8">
+                                        <input type="number" class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-md-8">
+                                   <select name="trang_thai" id="trang_thai" class="form-control input-default">
+                                        <option value="" selected>-Chọn trạng thái-</option> 
+                                    
+                            </select>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="stt" class="col-sm-2 control-label" style="text-align: right">Trạng thái</label>
+                                <div class="col-sm-1">
+                                    <input type="radio" name="checkboxAll" onclick="TatCaChecked()" value="" id="checkboxAll"> Tất cả
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="radio" name="checkboxEndDate" onclick="DungHanChecked()" value="" id="checkboxEndDate"> Đúng hạn
+                                </div>
+                                <div class="col-sm-1">
+                                    <input type="radio" name="checkboxLateDate" onclick="QuaHanChecked()" value="" id="checkboxLateDate"> Quá hạn
+                                </div>
+                            </div>
+                      </div>
+                </div>
+            </div>
+            <p class="stdformbutton" style="margin-bottom: 10px;">
+                
+             
+                <input hidden id="lstCode" />
+            </p>
+
+            <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+
+                <div class="dataTables_length">
+                    <label>
+                        Hiển thị
+                        <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
+                            <option value="5">5</option>
+                            <option value="10" selected="">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                        </select> bản ghi
+                    </label>
+                </div>
+                 <div id="dataTable">
+                    <div class="dataTable-container">
+                        <table class="table table-bordered responsive">
+                            <thead class="widgettitle">
+                                <tr>
+                                      <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                                        <input type="checkbox" name="" id="selectAll" />
+                                      </th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
+                                      <th class="head1" scope="col" data-sortable="" style="width: 15%;">MÃ HỒ SƠ</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI NỘP</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">THỦ TỤC HÀNH CHÍNH</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI XỬ LÝ</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGÀY HẸN TRẢ</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    var stt = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td><input type="checkbox" class="ads_Checkbox" value="@item.Id" /></td>
+                                            <td scope="row">
+                                                @stt
+                                                <input type="hidden" name="" id="" value="@item.Id" />
+                                            </td>
+                                            <td><a href="/TraKetQua/ViewHoSoDaTraKetQua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.Id</a></td>
+                                            <td><a href="/TraKetQua/ViewHoSoDaTraKetQua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
+                                            <td><a href="/TraKetQua/ViewHoSoDaTraKetQua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ma_thu_tuc_hc </a></td>
+                                            <td><a href="/TraKetQua/ViewHoSoDaTraKetQua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.nguoi_xu_ly </a></td>
+                                            <td><a href="/TraKetQua/ViewHoSoDaTraKetQua?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra) </a></td>
+                                            <td><a href="/XuLyHoSo/Print?Id=@item.Id" target="_blank"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="dataTables_info" id="dyntable_info">Hiển thị @ViewBag.RecoredFrom đến  @ViewBag.RecoredTo của @ViewBag.TotalRecored bản ghi</div>
+                    <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate">
+                        @{
+                            var TotalPage = (int)ViewBag.TotalPage;
+                            var CurrentPage = (int)ViewBag.CurrentPage;
+                            if (TotalPage > 5)
+                            {
+                                if (CurrentPage > CurrentPage + 2)
+                                {
+                                                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                  <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                };
+                                if (CurrentPage > 3)
+                                {
+                                    for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                                    {
+                                        if (i == CurrentPage)
+                                        {
+                                                           <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                        else
+                                        {
+                                                           <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i == CurrentPage)
+                                        {
+                                                          <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                        else
+                                        {
+                                                          <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                        }
+                                    }
+
+                                }
+
+                                if (CurrentPage < CurrentPage + 2)
+                                {
+                                                   <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                   <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                };
+                            }
+                            else
+                            {
+                                for (int i = 1; i <= TotalPage; i++)
+                                {
+                                    if (i == CurrentPage)
+                                    {
+                                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                    }
+                                    else
+                                    {
+                                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                    }
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+                <!-- End Table with stripped rows -->
+
+            </div>
+        </div>
+
+    </div>
+<script>
+    function GetListByCurrentPage(id) {
+         $("#lstPageSize").val(data.value);
+        var tu_khoa = $("#Search").val();
+                                    if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
+        var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
+                                    var ta_ca = $("#checkboxAll").val();
+                                    var dung_han = $("#checkboxEndDate").val();
+                                    var qua_han =  $("#checkboxLateDate").val();
+                                    var pageSize = $("#lstPageSize").val();
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/HoSoPaging?currentPage=" + id + "&tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=16",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                                    });
+       
+    }
+    function changePageSize(data) {
+        $("#lstPageSize").val(data.value);
+        var tu_khoa = $("#Search").val();
+                                    if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
+        var ma_thu_tuc = $("#ma_thu_tuc").val() == undefined ? "" : $("#ma_thu_tuc").val();
+                                    var ta_ca = $("#checkboxAll").val();
+                                    var dung_han = $("#checkboxEndDate").val();
+                                    var qua_han =  $("#checkboxLateDate").val();
+                                    var pageSize = $("#lstPageSize").val();
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/TiepNhan/HoSoPaging?tu_khoa=" + tu_khoa + "&ma_thu_tuc=" + ma_thu_tuc + "&tat_ca=" + ta_ca + "&dung_han="+ dung_han + "&qua_han=" + qua_han + "&pageSize=" + pageSize+ "&trang_thai=16",
+                                        data: "",
+                                        contentType: 'application/json; charset=utf-8',
+                                        success: function(data) {
+                                            $("#dataTable").html(data);
+                                        }
+                                    });
+        //$.ajax({
+        //    type: "GET",
+        //    url: "../DonVi/DiaBanPaging?currentPage=" + 1 + "&pageSize=" + data.value + "&tu_khoa=",
+        //    data: "",
+        //    contentType: 'application/json; charset=utf-8',
+        //    success: function(data) {
+        //        //console.log(data);
+        //        $("#dataTable").html(data);
+        //    }
+        //});
+    }
+
+    function DeleteMultiple() {
+        var listData = $("#lstCode").val();
+        confirm.BeforDeletePost('/DonVi/XoaDiaBan?code=' + listData)
+    }
+
+    $(function() {
+        $('#selectAll').click(function() {
+            var val = [];
+            if ($(this).is(':checked')) {
+                $(".ads_Checkbox").prop("checked", true);
+                $(':checkbox:checked').each(function(i) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                });
+            }
+            else {
+                $(".ads_Checkbox").prop("checked", false);
+                val = [];
+            }
+            $("#lstCode").val(val);
+        });
+
+
+        $('.ads_Checkbox').click(function() {
+            var val = [];
+            $(':checkbox:checked').each(function(i) {
+                if ($('#selectAll').is(':checked')) {
+                    if (i > 0) {
+                        val[i - 1] = $(this).val();
+                    }
+                } else {
+                    val[i] = $(this).val();
+                }
+
+            });
+            $("#lstCode").val(val);
+        });
+
+    });
+</script>
