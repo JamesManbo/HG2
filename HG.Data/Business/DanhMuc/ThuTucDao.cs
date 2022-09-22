@@ -4,6 +4,7 @@ using HG.Entities.Entities.DanhMuc;
 using HG.Entities.Entities.Luong;
 using HG.Entities.Entities.Model;
 using HG.Entities.Entities.ThuTuc;
+using HG.Entities.HoSo;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -62,28 +63,29 @@ namespace HG.Data.Business.ThuTuc
             {
                 ThuTucPaging menu = new ThuTucPaging();
                 menu.Pagelist = new Pagelist();
+                var abc = 1;
+                if (item.CurrentPage > 1)
+                {
+                    abc = (item.CurrentPage - 1) * item.RecordsPerPage;
+                }
+                else if (item.CurrentPage == 1)
+                {
+                    abc = 0;
+                }
                 DbProvider.SetCommandText2("dm_danh_sach_thu_tuc_cd_list", CommandType.StoredProcedure);
-                DbProvider.AddParameter("donvi", item.donvi ?? "", SqlDbType.NVarChar);
-                DbProvider.AddParameter("linhvuc", item.linhvuc ?? "", SqlDbType.VarChar);
-                DbProvider.AddParameter("mucdo", item.mucdo ?? "", SqlDbType.VarChar);
-                DbProvider.AddParameter("ten_thu_tuc", item.ten_thu_tuc ?? "", SqlDbType.VarChar);
-                DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc ?? "", SqlDbType.VarChar);
+                DbProvider.AddParameter("StartingRow", abc, SqlDbType.Int);
+                DbProvider.AddParameter("RecordsPerPage", item.RecordsPerPage, SqlDbType.Int);
+                DbProvider.AddParameter("donvi", item.donvi == null ? 0 : Int32.Parse(item.donvi), SqlDbType.Int);
+                DbProvider.AddParameter("ma_lv", item.linhvuc , SqlDbType.VarChar);
+                DbProvider.AddParameter("mucdo", item.mucdo, SqlDbType.VarChar);
+                DbProvider.AddParameter("ten_thu_tuc", item.ten_thu_tuc, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_thu_tuc", item.ma_thu_tuc, SqlDbType.VarChar);
                 // Input params
-                DbProvider.AddParameter("page", item.CurrentPage, SqlDbType.Int);
-                DbProvider.AddParameter("page_size", item.RecordsPerPage, SqlDbType.Int);
-                // Output params
-                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
 
-                DbProvider.ExecuteReader_ToMyReader();
                 // Lấy về danh sách các người dung
-                menu.lstThuTuc = DbProvider.ExecuteReader_frmMyReader<DmThuTuc>();
-                DbProvider.ExecuteReader_NextResult();
-                menu.lstPhongBan = DbProvider.ExecuteReader_frmMyReader<ThuTucPhongBan>();
-                DbProvider.ExecuteReader_NextResult();
-                menu.lstLinhVuc = DbProvider.ExecuteReader_frmMyReader<ThuTucLinhVuc>();
-                DbProvider.ExecuteReader_Close();
-                // Lấy về danh sách các người dung               
-                menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
+                menu.lstThuTuc = DbProvider.ExecuteListObject<DmThuTuc>();
+                menu.Pagelist.TotalRecords = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
                 return menu;
             }
             catch (Exception e)
@@ -175,6 +177,26 @@ namespace HG.Data.Business.ThuTuc
             catch (Exception ex)
             {
                 return 101;
+            }
+
+        }
+        public int LayLePhi(string ma_thu_tuc)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("dm_lay_le_phi_tthc", CommandType.StoredProcedure);
+                DbProvider.AddParameter("ma_thu_tuc", ma_thu_tuc, SqlDbType.VarChar);
+               
+                DbProvider.AddParameter("le_phi", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                // Lấy về danh sách các trường học
+                var obj = DbProvider.ExecuteNonQuery();
+                //ma_loi = int.Parse(DbProvider.Command.Parameters["total"].Value.ToString());
+                var ma_loi = int.Parse(DbProvider.Command.Parameters["le_phi"].Value.ToString() ?? "99");
+                return ma_loi;
+            }
+            catch (Exception ex)
+            {
+                return 0;
             }
 
         }

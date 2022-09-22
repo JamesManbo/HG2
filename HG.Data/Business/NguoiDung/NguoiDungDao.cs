@@ -18,7 +18,28 @@ namespace HG.Data.Business.NguoiDung
         {
 
         }
+        public List<AspNetUsersModel> DanhSachNguoiDung(Guid UserId)
+        {
+            try
+            {
+                List<AspNetUsersModel> result = new List<AspNetUsersModel>();
 
+
+                DbProvider.SetCommandText2("[dbo].[dm_danhsach_nguoidung2]", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("user", UserId, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("tong_ban_ghi", DBNull.Value, SqlDbType.Int, 100, ParameterDirection.Output);
+
+                // Lấy về danh sách các người dung
+                result = DbProvider.ExecuteListObject<AspNetUsersModel>();
+                var total = Convert.ToInt32(DbProvider.Command.Parameters["tong_ban_ghi"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<AspNetUsersModel>();
+            }
+        }
         public List<ds_nguoi_dung> LayDsNguoiDungPhanTrang(NguoiDungSearchItem item , out int Totalrecords)
         {
             try
@@ -452,6 +473,22 @@ namespace HG.Data.Business.NguoiDung
                 return new Asp_NguoiDung_Nhom();
             }
         }
+        public List<Asp_nhom> LayNhomBoiNguoiDung(Guid UserId)
+        {
+            try
+            {
+                List<Asp_nhom> result = new List<Asp_nhom>();
+                DbProvider.SetCommandText2("[LayNhomBoiNguoiDung]", CommandType.StoredProcedure);
+                // Input params
+                DbProvider.AddParameter("Uid", UserId, SqlDbType.UniqueIdentifier);
+                result = DbProvider.ExecuteListObject<Asp_nhom>();
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<Asp_nhom>();
+            }
+        }
         public Asp_NguoiDung_Nhom_Onl LayNguoiDungOnlBoiId(Guid UserId)
         {
             try
@@ -532,7 +569,7 @@ namespace HG.Data.Business.NguoiDung
                 return new phong_ban_nhom_nguoi_dung();
             }
         }
-
+        //thiếu người dùng
         public Response ThemNhomVaitro(string ma_nhom, string danhsachvaitro)
         {
             try
@@ -599,6 +636,49 @@ namespace HG.Data.Business.NguoiDung
                 return new List<Nhom_NguoiDung>();
             }
         }
+        public void XoaNguoiDungByMaNhom (string ma_nhom, Guid ma_nguoi_dung)
+        {
+            try
+            {
+                List<Nhom_NguoiDung> result = new List<Nhom_NguoiDung>();
+                DbProvider.SetCommandText2("[XoaNguoiDungByMaNhom]", CommandType.StoredProcedure);
 
+                // Input params
+                DbProvider.AddParameter("ma_nhom", ma_nhom, SqlDbType.NVarChar);
+                DbProvider.AddParameter("ma_nguoi_dung", ma_nguoi_dung, SqlDbType.UniqueIdentifier);
+                // Output params
+                DbProvider.AddParameter("ErrCode", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                DbProvider.ExecuteNonQuery();
+                // Lấy về danh sách các người dung
+                var ErrorCode = Convert.ToInt32(DbProvider.Command.Parameters["ErrCode"].Value.ToString());
+            }
+            catch (Exception e)
+            {
+               
+            }
+        }
+        public List<Dm_Phong_Ban> DanhSachPhongBanByDonVi(Guid userId)
+        {
+            try
+            {
+                List<Dm_Phong_Ban> result = new List<Dm_Phong_Ban>();
+                DbProvider.SetCommandText2("[dm_danh_sach_phong_ban_list]", CommandType.StoredProcedure);
+
+                // Input params
+                DbProvider.AddParameter("user", userId, SqlDbType.UniqueIdentifier);
+                DbProvider.AddParameter("page", 1, SqlDbType.Int);
+                DbProvider.AddParameter("page_size", 1000, SqlDbType.Int);
+                // Output params
+                DbProvider.AddParameter("total", DBNull.Value, SqlDbType.Int, ParameterDirection.Output);
+                result = DbProvider.ExecuteListObject<Dm_Phong_Ban>();
+                // Lấy về danh sách các người dung
+                var total = Convert.ToInt32(DbProvider.Command.Parameters["total"].Value.ToString());
+                return result;
+            }
+            catch (Exception e)
+            {
+                return new List<Dm_Phong_Ban>();
+            }
+        }
     }
 }
