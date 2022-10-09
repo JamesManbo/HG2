@@ -18,7 +18,7 @@
         <div class="pageicon"><span class="iconfa-table"></span></div>
         <div class="pagetitle">
             <h5>Danh sách</h5>
-            <h1>Theo tiêu chí</h1>
+            <h1>Tìm kiếm hồ sơ theo chí</h1>
         </div>
     </div>
     <div class="maincontent">
@@ -33,7 +33,7 @@
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Tên người nộp:</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control input-default" maxlength="50" name="ten_nguoi_nop" value="@ViewBag.ma_ho_so" id="ten_nguoi_nop">
+                            <input type="text" class="form-control input-default" maxlength="50" name="ten_nguoi_nop" value="@ViewBag.ten_nguoi_nop" id="ten_nguoi_nop">
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Cán bộ tiếp nhận:</label>
                         <div class="col-md-2">
@@ -43,7 +43,7 @@
                                 {
                                     foreach (var item in LstNguoiDung)
                                     {
-                                        if (item.Id == ViewBag.can_bo_tiep_nhan)
+                                        if (item.Id.ToString() == ViewBag.can_bo_tiep_nhan)
                                         {
                                             <option value="@item.Id" selected>@(item.ho_dem ?? "" + item.ten ?? "") </option>
                                         }
@@ -59,7 +59,7 @@
                     <div class="form-group row">
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Phòng ban:</label>
                         <div class="col-md-2">
-                            <select name="ma_phong_ban" id="ma_phong_ban" class="form-control input-default">
+                            <select name="ma_phong_ban" id="ma_phong_ban" onchange="LayLinhVucByPB(this)" class="form-control input-default">
                                 <option value="" selected>-Chọn phòng ban-</option>
                                 @if(list_phong_ban != null)
                                 {
@@ -80,14 +80,14 @@
                             </select>
                         </div>
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Cán bộ xử lý:</label>
-                        <div class="col-md-2">
+                        <div class="col-md-2" id="nguoidungbypb"> 
                             <select name="can_bo_xu_ly" id="can_bo_xu_ly" class="form-control input-default">
-                                <option value="" selected>-Chọn cán bộ xử lý-</option>
+                                <option value="" selected>-Chọn cán bộ tiếp nhận-</option>
                                 @if (LstNguoiDung != null)
                                 {
                                     foreach (var item in LstNguoiDung)
                                     {
-                                        if (item.Id == ViewBag.can_bo_tiep_nhan)
+                                        if (item.Id.ToString() == ViewBag.can_bo_xu_ly)
                                         {
                                             <option value="@item.Id" selected>@(item.ho_dem ?? "" + item.ten ?? "") </option>
                                         }
@@ -103,22 +103,12 @@
                         <div class="col-md-2">
                             <select name="ma_trang_thai" id="ma_trang_thai" class="form-control input-default">
                                 <option value="" selected>-Chọn trạng thái-</option>
-                                @foreach (var item in HG.WebApp.Helper.HelperStatus.GetListStatus())
-                                {
-                                        if (item.value == ViewBag.ma_trang_thai)
-                                        {
-                                            <option value="@item.value" selected>@item.name</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.value">@item.name</option>
-                                        }
-                                }
+                               
                             </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Từ ngày:</label>
+                        <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Ngày nộp từ ngày:</label>
                         <div class="col-md-2">
                             <input type="date" class="form-control input-default" maxlength="50" name="tu_ngay" value="@ViewBag.tu_ngay" id="tu_ngay">
                         </div>
@@ -131,21 +121,21 @@
                             <select name="tinh_trang" id="tinh_trang" class="form-control input-default">
                                 @if(ViewBag.tinh_trang == "02"){
                                     <option value="00" selected>-Tất cả-</option>
-                                    <option value="01">-Đúng hạn-</option>
+                                    <option value="01">-Trong hạn-</option>
                                     <option value="02" selected>-Quá hạn-</option>
                                 }else if(ViewBag.tinh_trang == "01"){
                                     <option value="00">-Tất cả-</option>
-                                    <option value="01" selected>-Đúng hạn-</option>
+                                    <option value="01" selected>-Trong hạn-</option>
                                     <option value="02">-Quá hạn-</option>
                                 }else{
                                     <option value="00" selected>-Tất cả-</option>
-                                    <option value="01">-Đúng hạn-</option>
+                                    <option value="01">-Trong hạn-</option>
                                     <option value="02">-Quá hạn-</option>
                                 }
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row" id="linhvucbyPB">
                         <label for="inputPassword" class="col-md-2 control-label" style="text-align: right">Lĩnh vực:</label>
                         <div class="col-md-8">
                             <select name="ma_linh_vuc" id="ma_linh_vuc" onchange="LayThuTucByLinhVuc(this)" class="form-control input-default">
@@ -180,6 +170,26 @@
                                 }
                             });
                         }
+                         function LayLinhVucByPB(obj) {
+                            $.ajax({
+                                type: "GET",
+                                url: "/TraCuuHoSo/GetLinhVucByPB?ma_phong_ban=" + obj.value,
+                                data: "",
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    $("#linhvucbyPB").html(data);
+                                }
+                            });
+                             $.ajax({
+                                type: "GET",
+                                url: "/TraCuuHoSo/GetNguoiDungByPB?ma_phong_ban=" + obj.value,
+                                data: "",
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                    $("#nguoidungbypb").html(data);
+                                }
+                            });
+                        }
                         function HoSoPaging(obj) {
                             var tu_khoa = $("#txtSearch").val();
                             if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
@@ -198,13 +208,27 @@
                                 }
                             });
                         }
-                      
+                        function GetLuongByTTHC(data) {
+                            $.ajax({
+                                type: "GET",
+                                url: "../TiepNhan/LayLuongThanhPhanByMaTTHC?ma_thu_tuc=" + data.value + "&type=Add" + "&ma_luong=" + $("#ma_luong_xu_ly").val(),
+                                data: "",
+                                contentType: 'application/json; charset=utf-8',
+                                success: function (data) {
+                                  //  $("#LuongXuLy").html(data);
+                                }
+                            });
+                        }
+
                     </script>
                     <div id="thutucbylinhvuc">
                         <div class="row mb-3">
                             <label for="stt" class="col-sm-2 control-label" style="text-align: right">Thủ tục:</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control input-default" name="stt" value="" @(ViewBag.type_view == StatusAction.View.ToString() ? "disabled" : "")>
+                                <select name="ma_thu_tuc" id="ma_thu_tuc"  class="form-control input-default">
+                                    <option value="" selected>-Chọn thủ tục-</option>
+                                   
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -223,8 +247,7 @@
         <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
 
             <div class="dataTables_length">
-                <label>
-                    6
+                <label>                   
                     Hiển thị
                     <select class="dataTable-selector" id="lstPageSize" onchange="changePageSize(this);">
                         <option value="5">5</option>
@@ -265,7 +288,7 @@
                                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
                                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc) </a></td>
                                         <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.CreatedDateUtc </a></td>
-                                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperStatus.GetListStatus().Where(n=>n.value == item.trang_thai).FirstOrDefault().name</a></td>
+                                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())"></a></td>
                                     </tr>
                                     stt++;
                                 }

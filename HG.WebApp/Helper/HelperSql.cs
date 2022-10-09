@@ -105,10 +105,10 @@ namespace HG.WebApp.Helper
         }
         public static int TotalHSTS()
         {
-            var manon = db.Ghs_Tuyen_Sinh_Cap_Mam_Non_Hoso.Count();
-            var tieuhoc = db.Ghs_Tuyen_Sinh_Cap_Tieu_Hoc_Hoso.Count();
-            var trunghoc = db.Ghs_Tuyen_Sinh_Cap_THCS_Hoso.Count();
-            var phothong = db.Ghs_Tuyen_Sinh_Cap_THPT_Hoso.Count();
+            var manon = db.Ghs_Tuyen_Sinh_Cap_Mam_Non.Count();
+            var tieuhoc = db.Ghs_Tuyen_Sinh_Cap_Tieu_Hoc.Count();
+            var trunghoc = db.Ghs_Tuyen_Sinh_Cap_THCS.Count();
+            var phothong = db.Ghs_Tuyen_Sinh_Cap_THPT.Count();
             return manon + tieuhoc+ trunghoc + phothong;
         }
         public static int TotalDangKyKhieuNai()
@@ -146,7 +146,7 @@ namespace HG.WebApp.Helper
         }
         public static int TotalHSDangXuLy()
         {
-            return db.Ho_So.Where(n => n.trang_thai == (int)StatusTiepNhanHoSo.HoSoDangXL && n.type == (int)TypeHS.CongDan).Count();
+            return db.Ho_So.Where(n => n.trang_thai == (int)StatusXuLyHoSo.HoSoDangXuLy && n.type == (int)TypeHS.CongDan).Count();
         }
         public static int TotalHSKhongDuocNhan()
         {

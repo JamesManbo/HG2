@@ -106,7 +106,7 @@
                                             Số phiên hiện tại:
                                         </label>
                                         <div class="col-md-8  ">
-                                            <span id="tong_phien" style="color:Red;font-weight:bold;">@Model.phien_lv.phien_hien_tai</span>
+                                            <span id="tong_phien" style="color:Red;font-weight:bold;">@ViewBag.phienlv</span>
                                             &nbsp; phiên
                                         </div>
 
@@ -233,6 +233,7 @@
                                                                     foreach (var item in Model.lst_chuyen_vien)
                                                                     {
                                                                         <tr>
+                                                                            <td></td>
                                                                             <td scope="row">@stt</td>
                                                                             <td>@item.ten_chuyen_vien</td>
                                                                             <td>@item.ten_don_vi</td>

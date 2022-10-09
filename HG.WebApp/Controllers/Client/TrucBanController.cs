@@ -33,7 +33,7 @@ namespace HG.WebApp.Controllers.Client
             var data = new List<cd_danh_sach_can_bo>();
             using (var db = new EAContext())
             {
-                var innerJoin = from e in db.cd_danh_sach_can_bo
+                var innerJoin = (from e in db.cd_danh_sach_can_bo
                                 join d in db.AspNetUsers on e.user_id equals d.Id
                                 join f in db.Dm_Phong_Ban on d.ma_phong_ban equals f.ma_phong_ban
                                 into a
@@ -46,8 +46,12 @@ namespace HG.WebApp.Controllers.Client
                                     id = e.id,
                                     ten_can_bo = d.ho_dem + " " + d.ten,
                                     ten_don_vi = g.ten_don_vi
-                                };
-                data = innerJoin.Skip(0).Take(pageSize).ToList();
+                                }).ToList();
+                //if (innerJoin != null)
+                //{
+                    data = innerJoin.Skip(0).Take(pageSize).ToList();
+                //}
+
                 ViewBag.lst_don_vi = db.dm_don_vi.Where(n => n.Deleted == 0).ToList();
             }
             ViewBag.don_vi = don_vi;

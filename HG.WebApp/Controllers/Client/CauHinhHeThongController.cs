@@ -68,6 +68,7 @@ namespace HG.WebApp.Controllers.Client
             }
             ViewBag.type_view = type;
             ViewBag.don_vi = don_vi;
+            ViewBag.phienlv = data.phien_lv.phien_hien_tai == null ? 0 : data.phien_lv.phien_hien_tai;
             ViewBag.TotalPage = (data.lst_chuyen_vien.Count() / pageSize) + ((data.lst_chuyen_vien.Count() % pageSize) > 0 ? 1 : 0);
             ViewBag.CurrentPage = 1;
             ViewBag.RecoredFrom = 1;

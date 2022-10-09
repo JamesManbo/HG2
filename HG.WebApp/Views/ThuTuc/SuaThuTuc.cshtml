@@ -437,7 +437,36 @@
             }
         });
     }
+    function SaveNhomTPKQ() {
+        var data = $("#form_nhom_tp_kq").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveAddTPKQXL",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#TitleEform").html(data);
+                $("#Notifyeform").modal("show");
 
+            }
+        });
+    }
+    function SaveAddNhomTPKQ() {
+        var data = $("#form_nhom_tp_kq").serialize();
+        $.ajax({
+            type: "Post",
+            url: "../ThuTuc/SaveAddNhomTPKQ",
+            data: data,
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#NhomThanhPhan").html(data);
+                $("#TitleEform").html("Thêm nhóm thành phần thành công!!!");
+                $("#Notifyeform").modal("show");
+            }
+        });
+    }
 </script>
 <div class="card">
     <div class="card-body">
@@ -1239,7 +1268,7 @@
                                                                 1
                                                                 <input type="hidden" value="@item.ma_tp_kq" />
                                                             </td>
-                                                            <td><a href="#">@item.ma_tp_kq</a></td>
+                                                            <td><a href="ThemTPKQXL(@item.Id,'@StatusAction.View.ToString()')">@item.ma_tp_kq</a></td>
                                                             <td>@item.mo_ta</td>
                                                             <td>
                                                                 <a id="" title="" data-placement="top" data-toggle="tooltip" data-original-title="Xem" href="#">

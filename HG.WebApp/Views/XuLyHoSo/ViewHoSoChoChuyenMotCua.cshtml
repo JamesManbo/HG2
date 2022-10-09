@@ -5,7 +5,7 @@
    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
-   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+    var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.Entities.AspNetUsersModel>;
    var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
    var lst_phong_ban = ViewBag.LstBieuMau as List<HG.Entities.Dm_Phong_Ban>;
    var lst_quy_trinh = ViewBag.LstQuyTrinhXuLy as List<HG.Entities.Entities.Luong.QuyTrinhXuLy>;
@@ -293,12 +293,24 @@ $(document).ready(function() {
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <div id="tt_chitiet" class="row" >
-                           <div class="form-group row mb-3">
-                                    <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
-                                    <div class="col-md-3">
-                                       <label  type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="@phancongthuchien == null ? "" : @phancongthuchien.han_xu_ly" ></label>
-                                    </div>
-                          </div>
+                        @if (ViewBag.QuaHan == 0)
+                        {
+                            <div class="form-group row mb-3">
+                                <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
+                                <div class="col-md-3">
+                                    <label type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50">@ViewBag.HanXuLy Ngày @ViewBag.NgayXuLy <span for="mota" class="col-sm-1 control-label" style="color:blue">Trong hạn</span></label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group row mb-3">
+                                <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
+                                <div class="col-md-3">
+                                    <label type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="">@ViewBag.HanXuLy Ngày @ViewBag.NgayXuLy <span for="mota" class="col-sm-1 control-label" style="color:red">Quá hạn(@ViewBag.SoNgayQH)</span></label>
+                                </div>
+                            </div>
+                        }
                           
                           <div class="form-group row mb-3">
                                     <span for="mota" class="col-sm-1 control-label">File đính kèm</span>

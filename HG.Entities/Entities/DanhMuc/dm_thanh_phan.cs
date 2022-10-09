@@ -29,5 +29,7 @@ namespace HG.Entities.Entities.DanhMuc
         public int? ban_pho_to { get; set; }
         public DateTime? ngay_bat_dau { get; set; }
         public DateTime? ngay_ket_thuc { get; set; }
+        [NotMapped]
+        public int? id_ho_so_thanh_phan { get; set; }
     }
 }

@@ -66,7 +66,7 @@
             $("#pills-profile-tab").addClass('active');
             $("#pills-profile").addClass('show');
             $("#pills-profile").addClass('active');
-            $("#Notifyeform").modal("show");
+           // $("#Notifyeform").modal("show");
         });
     </script>
 };
@@ -239,8 +239,8 @@
                                     {
                                         if (CurrentPage > CurrentPage + 2)
                                         {
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                         };
                                         if (CurrentPage > 3)
                                         {
@@ -248,11 +248,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
                                         }
@@ -262,11 +262,11 @@
                                             {
                                                 if (i == CurrentPage)
                                                 {
-                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                                 else
                                                 {
-                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                 }
                                             }
 
@@ -274,8 +274,8 @@
 
                                         if (CurrentPage < CurrentPage + 2)
                                         {
-                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                    <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                    <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                         };
                                     }
                                     else
@@ -284,11 +284,11 @@
                                         {
                                             if (i == CurrentPage)
                                             {
-                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                             else
                                             {
-                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                             }
                                         }
                                     }
@@ -322,7 +322,7 @@
                                     <input type="text" class="form-control input-default" name="ten_bieu_mau" id="ten_bieu_mau" value="" placeholder="Tên file">
                                 </div>
                                 <div class="col-sm-1">
-                                    <button class="control-label btn btn-primary" type="submit" style="float:right;width:100%;height:100%">Lưu</button>
+                                    <button class="control-label btn btn-primary" type="button" onclick="saveBieuMau()" style="float:right;width:100%;height:100%">Lưu</button>
                                 </div>
                                 <div class="col-sm-5">
                                     <button class="control-label btn btn-primary" style="float:right;height:100%">Đóng</button>
@@ -334,6 +334,7 @@
                     <table class="table table-bordered responsive">
                         <thead class="widgettitle">
                             <tr>
+                                <th class="head0">STT</th>
                                 <th class="head0">#</th>
                                 <th class="head0">#</th>
                                 <th class="head0">Xem biểu mãu HTML</th>
@@ -344,15 +345,20 @@
 
                         @if (LstBieuMau != null)
                         {
+                            var i = 1;
                             foreach (var item in LstBieuMau)
                             {
+                               
                                 <tr>
+                                    <td>@i</td>
                                     <td> <a onclick="SuaBieuMau(@item.Id)" href="#">Sửa</a></td>
                                     <td> <a onclick="XoaBieuMau(@item.Id)" href="#">Xóa</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.Edit.ToString()">@item.ten_bieu_mau</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.Edit.ToString()">@item.url_bieu_mau</a></td>
                                     <td> <a target="_blank" href="/ThuTuc/ViewBieuMau?Id=@item.Id&type=@StatusAction.View.ToString()">Xem</a></td>
+                                    
                                 </tr>
+                                i++;
                             }
                         }
                         else
@@ -399,9 +405,9 @@
             //data: data,
             //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             success: function(data) {
-                $("#TitleEform").html(data);
+                $("#TitleEform").html("Lưu thành công");
                 $("#Notifyeform").modal("show");
-
+                window.location.href = "/ThuTuc/QuanLy?tabbieumau=1";
             }
         });
     }
@@ -412,7 +418,7 @@
             data: "",
             contentType: 'application/json; charset=utf-8',
             success: function(data) {
-                $("#TitleEform").html(data);
+                $("#TitleEform").html("Xóa Thành công!");
                 $("#Notifyeform").modal("show");
                 setTimeout(window.location.href = "/ThuTuc/QuanLy?tabbieumau=2", 3000)
 

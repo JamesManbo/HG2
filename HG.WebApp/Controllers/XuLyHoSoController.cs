@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AspNetCore.Reporting;
-
+using HG.Data.Business.NguoiDung;
 
 namespace HG.WebApp.Controllers
 {
@@ -29,6 +29,7 @@ namespace HG.WebApp.Controllers
         private readonly ThuTucDao _thuTucDao;
         private readonly XuLyHoSoDao _xulyhsDao;
         private readonly HG.Data.Business.HoSo.HoSoDao _hoso;
+        private readonly NguoiDungDao _nguoiDungDao;
         private readonly IWebHostEnvironment _environment;
         public XuLyHoSoController(IWebHostEnvironment environment, ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -42,6 +43,7 @@ namespace HG.WebApp.Controllers
             _thuTucDao = new ThuTucDao(DbProvider);
             _xulyhsDao = new XuLyHoSoDao(DbProvider);
             _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
+            _nguoiDungDao = new NguoiDungDao(DbProvider);
 
         }
         public IActionResult Index()
@@ -392,17 +394,34 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSo(int code, string type)
         {
-            
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code,18);
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
+           
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = hoso.ma_thu_tuc_hc, RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }    
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -410,17 +429,33 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoDangXuLy(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 19);
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -428,10 +463,10 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoPhoiHop(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
@@ -439,7 +474,23 @@ namespace HG.WebApp.Controllers
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -447,13 +498,13 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoChoKy(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20) ;
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 23) ;
             ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             ViewBag.Status = hoso.trang_thai;
@@ -467,19 +518,35 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoDaKy(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 24);
             ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -487,19 +554,35 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoChoChuyenMotCua(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 29);
             ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -507,19 +590,35 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoGanDenHan(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 27);
             ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -527,19 +626,35 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoLienThong(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 31);
             ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 
@@ -557,19 +672,35 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoXuLyThay(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
-            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 20);
+            ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 30);
             ViewBag.PhanCongThuHien = ViewBag.PhanCongThuHien != null ? ViewBag.PhanCongThuHien : new PhanCongThucHienModels();
             var hoso = db.Ho_So.Where(n => n.Id == code).FirstOrDefault();
             ViewBag.Status = hoso.trang_thai;
             //Lấy thủ tục bởi mã lv
             ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, ma_pb = "", ma_lv = hoso.ma_linh_vuc, tu_khoa = "", RecordsPerPage = 25 };
-            ViewBag.LstThuTuc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            var thutuchc = _thuTucDao.GetDanhSachThuTuc(hoso.ma_thu_tuc_hc);
+            ViewBag.LstThuTuc = thutuchc;
+            var ngaynhan = (DateTime.Now - hoso.CreatedDateUtc.Value).TotalDays;
+            var ngayxuly = hoso.CreatedDateUtc.Value.AddDays(thutuchc.FirstOrDefault().so_ngay_xl);
+            if (ngaynhan > thutuchc.FirstOrDefault().so_ngay_xl)
+            {
+                ViewBag.QuaHan = 1;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+                ViewBag.SoNgayQH = Convert.ToInt32(ngaynhan - thutuchc.FirstOrDefault().so_ngay_xl);
+            }
+            else
+            {
+                ViewBag.QuaHan = 0;
+                ViewBag.HanXuLy = thutuchc.FirstOrDefault().so_ngay_xl;
+                ViewBag.NgayXuLy = ngayxuly.ToString("dd/MM/yyyy");
+            }
             //Lấy biểu mẫu
             ViewBag.LstBieuMau = db.dm_bieu_mau.Where(n => n.Deleted != 1).ToList();
 

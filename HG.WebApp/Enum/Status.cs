@@ -18,11 +18,11 @@ namespace HG.WebApp
     {
        HoSoDangTiepNhan = 1,
        HoSoChuyenChuaXL = 2,
-       HoSoDangXL = 3,
+       //HoSoDangXL = 3,
        HoSoBiThuHoi = 4,
        HoSoTrucTuyen = 5,
        HoSoChoBoSung = 6,
-       HoSoChoXL = 7,
+       //HoSoChoXL = 7,
        HoSoChuyenDaXL = 8,
        HoSoLienThong = 9,
        HoSoChoTiepNhanGD2 = 10,

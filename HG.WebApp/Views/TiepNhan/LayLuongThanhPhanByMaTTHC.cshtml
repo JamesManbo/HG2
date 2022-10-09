@@ -116,7 +116,7 @@
                                                                         <script>
                                                                             $("#btnDelete-@(item.Id)").click(function() {
                                                                                    $('#namefile-@(item.Id)').html("");
-                                                                                   $("#btnDelete-"@(item.Id)).hide();
+                                                                                   $('#btnDelete-@(item.Id)').hide();
                                                                                       //type: "GET",
                                                                                       //url: "/Upload/DeleteFilesTP?code=@item.Id",
                                                                                       //data: "",
@@ -127,7 +127,9 @@
                                                                                       //}
                                                                             });
                                                                             $(document).ready(function() {
+                                                                                ;
                                                                                 $("#files-@(item.Id)").on('change', function () {
+                                                                                    debugger;
                                                                                     // Checking whether FormData is available in browser
                                                                                     if (window.FormData !== undefined) {
                                                                                         var fileUpload = $(this).get(0);
@@ -138,6 +140,12 @@
                                                                                         for (var i = 0; i < files.length; i++) {
                                                                                             fileData.append(files[i].name, files[i]);
                                                                                         }
+                                                                                        if(files[0].size > 5146624 )
+                                                                                        {
+                                                                                            alert("File tải lên không vượt quá 5MB");
+                                                                                            return;
+                                                                                        }
+
                                                                                         // Adding one more key to FormData object
                                                                                         fileData.append('username', 'Manas');
                                                                                         $.ajax({

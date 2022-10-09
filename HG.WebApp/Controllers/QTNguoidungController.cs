@@ -390,7 +390,7 @@ namespace HG.WebApp.Controllers
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.LstNhom = db.Asp_nhom.ToList();
             ViewBag.UserName = userManager.GetUserName(User);
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", userId = Guid.Parse(userManager.GetUserId(User)), RecordsPerPage = pageSize };
             ViewBag.lst_thu_tuc_hc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);
@@ -404,7 +404,7 @@ namespace HG.WebApp.Controllers
             var pageSize = Convert.ToInt32(_config["AppSetting:PageSize"]);
             ViewBag.LstNhom = db.Asp_nhom.ToList();
             ViewBag.UserName = userManager.GetUserName(User);
-            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", RecordsPerPage = pageSize };
+            ThuTucModels nhomSearchItem = new ThuTucModels() { CurrentPage = 1, tu_khoa = "", userId = Guid.Parse(userManager.GetUserId(User)), RecordsPerPage = pageSize };
             ViewBag.lst_thu_tuc_hc = _thuTucDao.DanhSanhThuTuc(nhomSearchItem).lstThuTuc;
             NguoiDungSearchItem nguoidungSearchItem = new NguoiDungSearchItem() { CurrentPage = 1, ma_phong_ban = "", trang_thai = 0, da_xoa = 0, RecordsPerPage = 100 };
             ViewBag.ListNguoiDung = _nguoiDungDao.LayDsNguoiDungPhanTrang2(nguoidungSearchItem);

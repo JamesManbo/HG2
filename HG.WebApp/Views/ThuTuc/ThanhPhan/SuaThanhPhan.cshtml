@@ -294,6 +294,21 @@
             }
         });
     }
+    function XoaFileThanhPhan(code){
+         $.ajax({
+            type: "Post",
+            url: "../ThuTuc/XoaFileThanhPhan?code_tp="+code,           
+            //data: data,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(data) {
+                $("#files").val(null);
+                $("#url_file").val(null);
+                $("#file_dinh_kem").val(null);
+                alert("Xóa thành công!")
+
+            }
+        });
+    }
     function SaveVBLQ() {
         if ($("#ten_van_ban").val() == "" || $("#ten_van_ban").val() == null) {
             $("#TitleEform").html("Tên văn bản không được bỏ trống !!!");
@@ -447,6 +462,7 @@
             }
         });
     }
+
 </script>
 <div class="card">
     <div class="card-body">
@@ -833,6 +849,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0" @(Model.lstThanhPhan.FirstOrDefault().bat_buoc==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_1">Không</label></td>
+                                                                <td></td>
                                                                 <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" @(Model.lstThanhPhan.FirstOrDefault().bat_buoc==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")><label for="BatBuoc_2">Có</label></td>
                                                             </tr>
                                                         </tbody>
@@ -861,7 +878,8 @@
                                                 <div class="col-md-1">
                                                     @if (!String.IsNullOrEmpty(Model.lstThanhPhan.FirstOrDefault().url_file))
                                                     {
-                                                        <input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePost('/ThuTuc/XoaFileThanhPhan?code_key=@Model.thuTuc.ma_thu_tuc_old&code=@Model.thuTuc.ma_thu_tuc&code_tp=@Model.lstThanhPhan.FirstOrDefault().ma_thanh_phan&type=@ViewBag.type_view')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">
+                                                        <input type="button" name="" value="Xóa tệp" onclick="XoaFileThanhPhan(@Model.lstThanhPhan.FirstOrDefault())" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">
+                                                        @*<input type="button" name="" value="Xóa tệp" onclick="confirm.BeforDeletePost('/ThuTuc/XoaFileThanhPhan?code_key=@Model.thuTuc.ma_thu_tuc_old&code=@Model.thuTuc.ma_thu_tuc&code_tp=@Model.lstThanhPhan.FirstOrDefault().ma_thanh_phan&type=@ViewBag.type_view')" id="xoatepdb" title="Xóa tệp đính kèm" class="btn btn-default" style="height:32px;">*@
                                                     }
                                                 </div>
                                                 <div class="col-md-1"> <span style="color:#0026ff">  Biểu mẫu tham khảo</span></div>
@@ -878,6 +896,7 @@
                                                                     <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" @(Model.lstThanhPhan.FirstOrDefault().bieu_mau==0?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                                                     <label for="bieu_mau1">Không</label>
                                                                 </td>
+                                                                <td></td>
                                                                 <td>
                                                                     <input id="bieu_mau2" type="radio" name="bieu_mau" value="1" @(Model.lstThanhPhan.FirstOrDefault().bieu_mau==1?"checked":"") @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                                                     <label for="bieu_mau2">Có</label>
@@ -916,26 +935,26 @@
                                                     Bản chính
                                                 </label>
                                                 <div class="col-md-2">
-                                                    <input name="ban_goc" type="text" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính" value="@(Model.lstThanhPhan.FirstOrDefault().ban_goc)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <input name="ban_goc" type="number" min="0" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính" value="@(Model.lstThanhPhan.FirstOrDefault().ban_goc)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                                 </div>
                                                 <label class="col-md-1 control-label">
                                                     Bản sao
                                                 </label>
                                                 <div class="col-md-2">
-                                                    <input name="ban_sao" type="text" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao" value="@(Model.lstThanhPhan.FirstOrDefault().ban_sao)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <input name="ban_sao"  type="number" min="0" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao" value="@(Model.lstThanhPhan.FirstOrDefault().ban_sao)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                                 </div>
                                                 <label class="col-md-1 control-label">
                                                     Bản phô tô
                                                 </label>
                                                 <div class="col-md-2">
-                                                    <input name="ban_pho_to" type="text" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô" value="@(Model.lstThanhPhan.FirstOrDefault().ban_pho_to)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <input name="ban_pho_to"  type="number" min="0" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô" value="@(Model.lstThanhPhan.FirstOrDefault().ban_pho_to)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
                                                 <label class="col-md-2 control-label">Thứ tự</label>
                                                 <div class="col-md-8">
-                                                    <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự" value="@(Model.lstThanhPhan.FirstOrDefault().Stt)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
+                                                    <input name="stt"  type="number" min="0" id="stt" class="form-control input-default" placeholder="Số thứ tự" value="@(Model.lstThanhPhan.FirstOrDefault().Stt)" @(ViewBag.type_view_tp == StatusAction.View.ToString() ? "disabled" : "")>
                                                 </div>
                                             </div>
                                             <input name="type_view" value="@ViewBag.type_view" hidden />
@@ -1359,12 +1378,12 @@
         <div class="modal-content">
             <div class="modal-header widgettitle">
                 <h5 class="modal-title">Danh sách</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
             </div>
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>

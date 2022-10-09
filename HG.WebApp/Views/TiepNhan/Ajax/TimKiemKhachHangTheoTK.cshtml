@@ -1,0 +1,117 @@
+﻿@model List<HG.Entities.HoSo.Ho_So>
+@using HG.WebApp;
+
+<div style="overflow-y: auto;">
+    <div id="pnlMain">
+        <div>
+            <table class="table table-bordered responsive" cellspacing="0" rules="all" border="1" id="ctl02_gridMenu" style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                    <tr class="widgettitle">
+                        <th align="center" scope="col">STT</th>
+                        <th align="center" scope="col">Mã khách hàng</th>
+                        <th scope="col">Tên khách hàng</th>
+                        <th scope="col">Số giấy tờ</th>
+                        <th scope="col">Số điện thoại</th>
+                        <th scope="col">Mail</th>
+                        <th scope="col">Địa chỉ</th>
+                    </tr>
+                    @if (Model != null)
+                    {
+                        var stt = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td align="center">
+                                   @stt
+                                </td>
+                                <td align="center">
+                                    <a href="/TiepNhan/TiepNhanHoSoMoi?id=@item.Id&type=@(StatusAction.Edit.ToString())">@item.ma_khach_hang</a>
+                                </td>
+                                <td align="center">
+                                    <a href="/TiepNhan/TiepNhanHoSoMoi?id=@item.Id&type=@(StatusAction.Edit.ToString())">@item.ho_ten</a>
+                                </td>
+                                <td align="center">
+                                    <a href="/TiepNhan/TiepNhanHoSoMoi?id=@item.Id&type=@(StatusAction.Edit.ToString())">@item.so_giay_to</a>
+                                </td>
+                                <td align="center">
+                                    <a href="/TiepNhan/TiepNhanHoSoMoi?id=@item.Id&type=@(StatusAction.Edit.ToString())">@item.dien_thoai</a>
+                                </td>
+                                <td align="center">
+                                    <a href="/TiepNhan/TiepNhanHoSoMoi?id=@item.Id&type=@(StatusAction.Edit.ToString())">@item.email</a>
+                                </td>
+                                <td align="center">
+                                    <a href="/TiepNhan/TiepNhanHoSoMoi?id=@item.Id&type=@(StatusAction.Edit.ToString())">@item.dia_chi</a>
+                                </td>
+                            </tr>
+                            stt++;
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="dataTables_paginate paging_full_numbers" id="dyntable_paginate" style="margin-right: 5px !important;">
+            @{
+                var TotalPage = (int)ViewBag.TotalPage;
+                var CurrentPage = (int)ViewBag.CurrentPage;
+                if (TotalPage > 5)
+                {
+                    if (CurrentPage > CurrentPage + 2)
+                    {
+                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                    };
+                    if (CurrentPage > 3)
+                    {
+                        for (int i = CurrentPage - 2; i < CurrentPage + 2; i++)
+                        {
+                            if (i == CurrentPage)
+                            {
+                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                            else
+                            {
+                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 1; i <= 5; i++)
+                        {
+                            if (i == CurrentPage)
+                            {
+                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                            else
+                            {
+                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                            }
+                        }
+
+                    }
+
+                    if (CurrentPage < CurrentPage + 2)
+                    {
+                        <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                        <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                    };
+                }
+                else
+                {
+                    for (int i = 1; i <= TotalPage; i++)
+                    {
+                        if (i == CurrentPage)
+                        {
+                            <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                        }
+                        else
+                        {
+                            <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                        }
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>

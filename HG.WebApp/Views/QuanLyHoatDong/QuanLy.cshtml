@@ -79,7 +79,7 @@
                                                 <div class="row mb-3">
                                                     <label class="col-md-2 control-label">Thứ tự:</label>
                                                     <div class="col-md-8">
-                                                        <input name="stt" type="number" id="stt" class="form-control input-default" value="@Model.hoat_dong.Stt" placeholder="Thứ tự">
+                                                        <input name="stt" type="number" min="0" id="stt" class="form-control input-default" value="@Model.hoat_dong.Stt" placeholder="Thứ tự">
                                                     </div>
                                                     <label class="col-md-1 ">
                                                     </label>
@@ -98,7 +98,11 @@
                                                     <div class="col-md-offset-2 col-md-10">
                                                         <button type="submit" name="type_add" value="@(StatusAction.Add.ToString())" id="btnThemMoi" class="btn btn-primary">Lưu và Thêm</button>
                                                         <button type="submit" name="type_add" value="@(StatusAction.Edit.ToString())" class="btn btn-primary">Lưu</button>
-                                                        <button type="button" class="btn btn-primary" value="Xóa" onclick="confirm.BeforDeletePost('/QuanLyHoatDong/XoaHoatDong?code=@Model.hoat_dong.id')">Xóa</button>
+                                                        @if (@ViewBag.type_view != "Add"  )
+                                                        {
+                                                            <button type="button" class="btn btn-primary"  value="Xóa" onclick="confirm.BeforDeletePost('/QuanLyHoatDong/XoaHoatDong?code=@Model.hoat_dong.id')">Xóa</button>
+                                                        }
+                                                        
                                                         <button type="button" class="btn btn-primary" value="Đóng" onclick="window.location.href='/QuanLyHoatDong/QuanLy';">Đóng</button>
                                                     </div>
                                                 </div>
@@ -354,7 +358,7 @@
                                                                             <td scope="row">@stt</td>
                                                                             <td>@item.ten_ma</td>
                                                                             <td>@(item.ten_ma_cha)</td>
-                                                                            <td>@item.noi_dung</td>
+                                                                            <td>@item.noi_dung <br> <a href="@item.link">Link</a></td>
                                                                             <td>
                                                                                 <a onclick="confirm.BeforDeletePost('/QuanLyHoatDong/XoaThongBao?id=@item.id')"
                                                                            title=""

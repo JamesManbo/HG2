@@ -184,14 +184,14 @@
                                             <div class="row mb-3">
                                                 <label class="col-md-2 control-label">Ngày sửa</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" value="@Model.ngay_nghi.UpdatedDateUtc" id="" disabled="disabled" class="form-control input-default" placeholder="Ngày sửa">
+                                                    <input type="text" value="@ViewBag.NgaySua" id="" disabled="disabled" class="form-control input-default" placeholder="Ngày sửa">
                                                 </div>
                                             </div>
 
                                             <div class="row mb-3">
                                                 <label class="col-md-2 control-label">Ngày tạo</label>
                                                 <div class="col-md-8">
-                                                    <input name="" type="text" value="@Model.ngay_nghi.CreatedDateUtc" id="" disabled="disabled" class="form-control input-default" placeholder="Ngày tạo">
+                                                    <input name="" type="text" value="@ViewBag.NgayTao" id="" disabled="disabled" class="form-control input-default" placeholder="Ngày tạo">
                                                 </div>
                                             </div>
 
@@ -286,8 +286,8 @@
                                                     {
                                                         if (CurrentPage > CurrentPage + 2)
                                                         {
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(1)">Đầu</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage - 1)">Trước</a></span>
                                                         };
                                                         if (CurrentPage > 3)
                                                         {
@@ -295,11 +295,11 @@
                                                             {
                                                                 if (i == CurrentPage)
                                                                 {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                                 }
                                                             }
                                                         }
@@ -309,11 +309,11 @@
                                                             {
                                                                 if (i == CurrentPage)
                                                                 {
-                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                                 }
                                                                 else
                                                                 {
-                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                        <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                                 }
                                                             }
 
@@ -321,8 +321,8 @@
 
                                                         if (CurrentPage < CurrentPage + 2)
                                                         {
-                                                            <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
-                                                            <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
+                                                                <span> <a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@CurrentPage + 1)">Trước</a></span>
+                                                                <span><a class="first paginate_button paginate_button_disabled" onclick="GetListByCurrentPage(@TotalPage)">Cuối</a></span>
                                                         };
                                                     }
                                                     else
@@ -331,11 +331,11 @@
                                                         {
                                                             if (i == CurrentPage)
                                                             {
-                                                                <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class="active paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                             }
                                                             else
                                                             {
-                                                                <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
+                                                                    <span><a tabindex="0" class=" paginate_active" onclick="GetListByCurrentPage(@i)">@i</a></span>
                                                             }
                                                         }
                                                     }
@@ -350,7 +350,7 @@
                                     <p class="stdformbutton" style="margin-bottom: 10px;">
                                         <input type="button" value="Thêm" onclick="window.location.href = '/LichTruc/QuanLy?type=@StatusAction.Add.ToString()';" class="btn btn-primary" style="width:100px;" />
 
-                                        <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />
+                                       @* <input type="button" value="Xóa" onclick="DeleteMultiple()" class="btn btn-primary" style="width:100px;" />*@
 
                                     </p>
 
@@ -360,176 +360,6 @@
                         </div>
                         @*TAB thông tin chuyên viên online *@
                         <div class="tab-pane fade @(ViewBag.active==2?"show active":"")" id="pills-tab2" role="tabpanel" aria-labelledby="profile-tab">
-                            <div class="form-horizontal">
-                                <form id="form_pb" action="/lichTruc/SaveLichTruc" method="post" enctype="multipart/form-data" id="filterForm">
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Đơn vị:</label>
-                                        <div class="col-md-8">
-                                            <select name="don_vi" id="don_vi" class="form-control input-default-sm" onchange="ChangePhien(this)">
-                                                @if (Model.lst_don_vi != null)
-                                                    foreach (var item in Model.lst_don_vi)
-                                                    {
-                                                        if (ViewBag.don_vi.Trim() == item.ma_don_vi)
-                                                        {
-                                                            <option selected value="@item.ma_don_vi">@item.ten_don_vi</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@item.ma_don_vi">@item.ten_don_vi</option>
-                                                        }
-                                                    }
-                                            </select>
-                                        </div>
-                                        <label class="col-md-1 control-label">
-                                        </label>
-                                        <div class="col-md-1">
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label"></label>
-                                        <div class="col-md-10">
-                                            <input type="button" name="ctl08$bttruoc" value="<<" id="bttruoc" class="btn btn-primary">
-                                            <input type="button" name="ctl08$bthientai" value="Tuần hiện tại" id="bthientai" class="btn btn-primary">
-                                            <input type="button" name="ctl08$btsau" value=">>" id="btsau" class="btn btn-primary">
-
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Thứ 2:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect2" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu2" type="text" id="thu2" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Thứ 3:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect3" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu3" type="text" id="thu3" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Thứ 4:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect4" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu4" type="text" id="thu4" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Thứ 5:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect5" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu5" type="text" id="thu5" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Thứ 6:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect6" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu6" type="text" id="thu6" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Thứ 7:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect7" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu7" type="text" id="thu7" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <label class="col-md-2 control-label">Chủ nhật:</label>
-                                        <div class="col-md-8">
-                                            <select multiple style="width: 100%;" class="select2 form-select form-control input-default" id="multiselect8" data-placeholder="Chọn người trực giải quyết TTHC">
-
-                                                @if (Model.lst_can_bo != null)
-                                                {
-                                                    foreach (var item in Model.lst_can_bo)
-                                                    {
-                                                        <option value="@item.user_id">@item.ten_can_bo</option>
-                                                    }
-                                                }
-                                            </select>
-                                            <input name="thu8" type="text" id="thu8" class="form-control input-default" hidden>
-                                        </div>
-                                        <label class="col-md-1 ">
-                                        </label>
-                                    </div>
-                                    <div class="text-center" style="margin-top: 50px;">
-                                        <div class="col-md-offset-2 col-md-10">
-                                            <input type="submit" name="ctl08$btnSave" value="Lưu" id="btnSave" class="btn btn-primary">
-                                            <input type="button" name="ctl08$btnCopy" value="Sao chép lịch" id="btnCopy" class="btn btn-primary">
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -539,168 +369,7 @@
     </div>
 </div>
 <script>
-    var Arr2 = [];
-    var Arr3 = [];
-    var Arr4 = [];
-    var Arr5 = [];
-    var Arr6 = [];
-    var Arr7 = [];
-    var Arr8 = [];
-    function removeElement(array, elem) {
-        var index = array.indexOf(elem);
-        if (index > -1) {
-            array.splice(index, 1);
-        }
-    }
     $(document).ready(function() {
-        $('.select2').select2({
-            closeOnSelect: false,
-            language: {
-                noResults: function() {
-                    return "Không có kết quả nào được tìm thấy.";
-                }
-            }
-        });
-
-        var thu2 = "@Model.lich_truc.thu2";
-        var thu2xl = thu2.split(",");
-        if (thu2xl != "") {
-            thu2xl.forEach(function(i) {
-                Arr2.push(i);
-                $("#thu2").val(Arr2.join(","));
-            });
-            $("#multiselect2").val(thu2xl).trigger('change');
-        }
-
-        $('#multiselect2').on('select2:select', function(e) {
-            Arr2.push(e.params.data.id);
-            $("#thu2").val(Arr2.join(","));
-        });
-
-        $('#multiselect2').on("select2:unselect", function(e) {
-            removeElement(Arr2, e.params.data.id);
-            $("#thu2").val(Arr2.join(","));
-        });
-
-        var thu3 = "@Model.lich_truc.thu3";
-        var thu3xl = thu3.split(",");
-        if (thu3xl != "") {
-            thu3xl.forEach(function(i) {
-                Arr3.push(i);
-                $("#thu3").val(Arr3.join(","));
-            });
-            $("#multiselect3").val(thu3xl).trigger('change');
-        }
-
-        $('#multiselect3').on('select2:select', function(e) {
-            Arr3.push(e.params.data.id);
-            $("#thu3").val(Arr3.join(","));
-        });
-
-        $('#multiselect3').on("select2:unselect", function(e) {
-            removeElement(Arr3, e.params.data.id);
-            $("#thu3").val(Arr3.join(","));
-        });
-
-        var thu4 = "@Model.lich_truc.thu4";
-        var thu4xl = thu4.split(",");
-        if (thu4xl != "") {
-            thu4xl.forEach(function(i) {
-                Arr4.push(i);
-                $("#thu4").val(Arr4.join(","));
-            });
-            $("#multiselect4").val(thu4xl).trigger('change');
-        }
-
-        $('#multiselect4').on('select2:select', function(e) {
-            Arr4.push(e.params.data.id);
-            $("#thu4").val(Arr4.join(","));
-        });
-
-        $('#multiselect4').on("select2:unselect", function(e) {
-            removeElement(Arr4, e.params.data.id);
-            $("#thu4").val(Arr4.join(","));
-        });
-
-        var thu5 = "@Model.lich_truc.thu5";
-        var thu5xl = thu5.split(",");
-        if (thu5xl != "") {
-            thu5xl.forEach(function(i) {
-                Arr5.push(i);
-                $("#thu5").val(Arr5.join(","));
-            });
-            $("#multiselect5").val(thu5xl).trigger('change');
-        }
-
-        $('#multiselect5').on('select2:select', function(e) {
-            Arr5.push(e.params.data.id);
-            $("#thu5").val(Arr5.join(","));
-        });
-
-        $('#multiselect5').on("select2:unselect", function(e) {
-            removeElement(Arr5, e.params.data.id);
-            $("#thu5").val(Arr5.join(","));
-        });
-
-        var thu6 = "@Model.lich_truc.thu6";
-        var thu6xl = thu6.split(",");
-        if (thu6xl != "") {
-            thu6xl.forEach(function(i) {
-                Arr6.push(i);
-                $("#thu6").val(Arr6.join(","));
-            });
-            $("#multiselect6").val(thu6xl).trigger('change');
-        }
-
-        $('#multiselect6').on('select2:select', function(e) {
-            Arr6.push(e.params.data.id);
-            $("#thu6").val(Arr6.join(","));
-        });
-
-        $('#multiselect6').on("select2:unselect", function(e) {
-            removeElement(Arr6, e.params.data.id);
-            $("#thu6").val(Arr6.join(","));
-        });
-
-        var thu7 = "@Model.lich_truc.thu7";
-        var thu7xl = thu7.split(",");
-        if (thu7xl != "") {
-            thu7xl.forEach(function(i) {
-                Arr7.push(i);
-                $("#thu7").val(Arr7.join(","));
-            });
-            $("#multiselect7").val(thu7xl).trigger('change');
-        }
-
-        $('#multiselect7').on('select2:select', function(e) {
-            Arr7.push(e.params.data.id);
-            $("#thu7").val(Arr7.join(","));
-        });
-
-        $('#multiselect7').on("select2:unselect", function(e) {
-            removeElement(Arr7, e.params.data.id);
-            $("#thu7").val(Arr7.join(","));
-        });
-        var thu8 = "@Model.lich_truc.thu8";
-        var thu8xl = thu7.split(",");
-        if (thu8xl != "") {
-            thu8xl.forEach(function(i) {
-                Arr8.push(i);
-                $("#thu8").val(Arr8.join(","));
-            });
-            $("#multiselect8").val(thu8xl).trigger('change');
-        }
-
-        $('#multiselect8').on('select2:select', function(e) {
-            Arr8.push(e.params.data.id);
-            $("#thu8").val(Arr8.join(","));
-        });
-
-        $('#multiselect8').on("select2:unselect", function(e) {
-            removeElement(Arr8, e.params.data.id);
-            $("#thu8").val(Arr8.join(","));
-        });
-
         function GetDay(i) {
             var itemss = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
             var data = itemss[i];
@@ -783,10 +452,6 @@
                 $("#dataTable").html(data);
             }
         });
-    }
-
-    function ChangePhien(data) {
-        window.location.href = "/LichTruc/QuanLy?oid=0-2&don_vi=" + data.value;
     }
 
 </script>

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AspNetCore.Reporting;
+using HG.Data.Business.NguoiDung;
 
 namespace HG.WebApp.Controllers
 {
@@ -29,6 +30,7 @@ namespace HG.WebApp.Controllers
         private readonly XuLyHoSoDao _xulyhsDao;
         private readonly TraKetQuaDao _traketquaDao;
         private readonly HG.Data.Business.HoSo.HoSoDao _hoso;
+        private readonly NguoiDungDao _nguoiDungDao;
         private readonly IWebHostEnvironment _environment;
         public TraKetQuaController(IWebHostEnvironment environment, ILogger<UserController> logger, UserManager<AspNetUsers> userManager, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         : base(configuration, httpContextAccessor)
@@ -43,6 +45,7 @@ namespace HG.WebApp.Controllers
             _xulyhsDao = new XuLyHoSoDao(DbProvider);
             _traketquaDao = new TraKetQuaDao(DbProvider);
             _hoso = new HG.Data.Business.HoSo.HoSoDao(DbProvider);
+            _nguoiDungDao = new NguoiDungDao(DbProvider);
 
         }
         public IActionResult Index()
@@ -151,10 +154,10 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoChoTraKetQua(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 18);
@@ -170,10 +173,10 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoSoDaTraKetQua(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 18);
@@ -189,10 +192,10 @@ namespace HG.WebApp.Controllers
         }
         public IActionResult ViewHoCoKQGD1(int code, string type)
         {
-
+            var UserId = Guid.Parse(userManager.GetUserId(User));
             EAContext db = new EAContext();
             ViewBag.LstLinhVuc = db.Dm_Linh_Vuc.Where(n => n.Deleted != 1).ToList();
-            ViewBag.LstNguoiDung = db.AspNetUsers.ToList();
+            ViewBag.LstNguoiDung = _nguoiDungDao.DanhSachNguoiDung(UserId);
             ViewBag.type_view = StatusAction.View.ToString();
             ViewBag.LstQuyTrinhXuLy = _xulyhsDao.DanhSachQuyTrinhXuLyKey();
             ViewBag.PhanCongThuHien = _xulyhsDao.GetPhanCongXuLy(code, 18);

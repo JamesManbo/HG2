@@ -5,7 +5,7 @@
    var LstLinhVuc = ViewBag.LstLinhVuc as List<HG.Entities.Dm_Linh_Vuc>; 
    var LstThuTuc = ViewBag.LstThuTuc as List<HG.Entities.Entities.ThuTuc.DmThuTuc>;
    var LstLuongXL = ViewBag.LstLuongXL as List<HG.Entities.Dm_Luong_Xu_Ly>;
-   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.WebApp.AspNetUsers>;
+   var LstNguoiDung = ViewBag.LstNguoiDung as List<HG.Entities.AspNetUsersModel>;
    var LstBieuMau = ViewBag.LstBieuMau as List<HG.Entities.DanhMuc.dm_bieu_mau>;
    var lst_phong_ban = ViewBag.LstBieuMau as List<HG.Entities.Dm_Phong_Ban>;
    var lst_quy_trinh = ViewBag.LstQuyTrinhXuLy as List<HG.Entities.Entities.Luong.QuyTrinhXuLy>;
@@ -293,110 +293,138 @@ $(document).ready(function() {
             <div class="widgetcontent">
                 <div class="form-horizontal">
                     <div id="tt_chitiet" class="row">
-                        <div class="form-group row mb-3">
+                        @if (ViewBag.QuaHan == 0)
+                        {
+                            <div class="form-group row mb-3">
                                     <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
                                     <div class="col-md-3">
-                                       <label  type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="" ></label>
+                                    <label type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50">@ViewBag.HanXuLy Ngày @ViewBag.NgayXuLy <span for="mota" class="col-sm-1 control-label" style="color:blue">Trong hạn</span></label>
                                     </div>
+                              </div>
+                        }
+                        else
+                        {
+                             <div class="form-group row mb-3">
+                                <span for="mota" class="col-sm-1 control-label">Hạn xử lý</span>
+                                <div class="col-md-3">
+                                    <label type="text" id="han_xu_ly" name="han_xu_ly" maxlength="50" value="">@ViewBag.HanXuLy Ngày @ViewBag.NgayXuLy <span for="mota" class="col-sm-1 control-label" style="color:red">Quá hạn(@ViewBag.SoNgayQH)</span></label>
+                                </div>
                           </div>
+                        }
+                       
                         <div class="form-group row mb-3">
-                                    
-                                    <div class="form-group row">
-                                    <label class="col-md-2 control-label">Quy trình</label>
-                                    <div class="col-md-10">
-                                        <select name="ma_quy_trinh" id="ma_quy_trinh" class="form-control input-default form-select" placeholder="Quy trình">
-                                            <option value="0">------------ Chọn quy trình ------------</option>
-                                            @if(lst_quy_trinh != null)
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Quy trình</label>
+                                <div class="col-md-10">
+                                    <select name="ma_quy_trinh" id="ma_quy_trinh" class="form-control input-default form-select" placeholder="Quy trình">
+                                        <option value="0">------------ Chọn quy trình ------------</option>
+                                        @if (lst_quy_trinh != null)
+                                        {
+                                            foreach (var item in lst_quy_trinh)
                                             {
-                                                 foreach (var item in lst_quy_trinh)
-                                                 {
-                                                     if(phancongthuchien != null && phancongthuchien.ma_quy_trinh == @item.ma_buoc)
-                                                    {
-                                                        <option value="@item.ma_buoc" selected>@item.ten_buoc</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@item.ma_buoc">@item.ten_buoc</option>
-                                                    }
-                                                
-                                                 }   
+                                                if (phancongthuchien != null && phancongthuchien.ma_quy_trinh == @item.ma_buoc)
+                                                {
+                                                    <option value="@item.ma_buoc" selected>@item.ten_buoc</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.ma_buoc">@item.ten_buoc</option>
+                                                }
+
                                             }
-                                    
-                                        </select>
-                                    </div>
+                                        }
+
+                                    </select>
                                 </div>
-                          </div>
-                          <div class="form-group row mb-3">
-                                    
-                                    <div class="form-group row">
-                                    <label class="col-md-2 control-label">Người nhận</label>
-                                    <div class="col-md-10">
-                                        <select name="Id_nguoi_nhan" id="Id_nguoi_nhan" class="form-control input-default form-select" placeholder="Phòng ban">
-                                            <option value="0">------------ Chọn người nhận ------------</option>
-                                            @if(LstNguoiDung != null)
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Người nhận</label>
+                                <div class="col-md-10">
+                                    <select name="Id_nguoi_nhan" id="Id_nguoi_nhan" class="form-control input-default form-select" placeholder="Phòng ban">
+                                        <option value="0">------------ Chọn người nhận ------------</option>
+                                        @if (LstNguoiDung != null)
+                                        {
+                                            foreach (var item in LstNguoiDung)
                                             {
-                                                 foreach (var item in LstNguoiDung)
-                                                 {
-                                                     if(phancongthuchien != null && phancongthuchien.Id_nguoi_nhan == @item.Id)
-                                                        {
-                                                            <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
-                                                        }
-                                                        else
-                                                        {
-                                                             <option value="@item.Id">@item.ho_dem @item.ten</option>
-                                                        }
-                                                   
-                                                 }   
+                                                if (phancongthuchien != null && phancongthuchien.Id_nguoi_nhan == @item.Id)
+                                                {
+                                                    <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.ho_dem @item.ten</option>
+                                                }
+
                                             }
-                                    
-                                        </select>
-                                    </div>
+                                        }
+
+                                    </select>
                                 </div>
-                          </div>
-                           <div class="form-group row mb-3">
-                                    
-                                    <div class="form-group row">
-                                    <label class="col-md-2 control-label">Người phối hợp</label>
-                                    <div class="col-md-10">
-                                        <select name="Id_nguoi_phoi_hop" id="Id_nguoi_phoi_hop" class="form-control input-default form-select" placeholder="Phòng ban">
-                                            <option value="0">------------ Chọn người phối hợp ------------</option>
-                                            @if(LstNguoiDung != null)
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+
+                            <div class="form-group row">
+                                <label class="col-md-2 control-label">Người phối hợp</label>
+                                <div class="col-md-10">
+                                    <select name="Id_nguoi_phoi_hop" id="Id_nguoi_phoi_hop" class="form-control input-default form-select" placeholder="Phòng ban">
+                                        <option value="0">------------ Chọn người phối hợp ------------</option>
+                                        @if (LstNguoiDung != null)
+                                        {
+                                            foreach (var item in LstNguoiDung)
                                             {
-                                                 foreach (var item in LstNguoiDung)
-                                                 {
-                                                       if(phancongthuchien != null && phancongthuchien.Id_nguoi_phoi_hop == @item.Id)
-                                                        {
-                                                            <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
-                                                        }
-                                                        else
-                                                        {
-                                                             <option value="@item.Id">@item.ho_dem @item.ten</option>
-                                                        }
-                                                   
-                                                 }   
+                                                if (phancongthuchien != null && phancongthuchien.Id_nguoi_phoi_hop == @item.Id)
+                                                {
+                                                    <option value="@item.Id" selected>@item.ho_dem @item.ten</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Id">@item.ho_dem @item.ten</option>
+                                                }
+
                                             }
-                                    
-                                        </select>
-                                    </div>
+                                        }
+
+                                    </select>
                                 </div>
-                          </div>
-                          <div class="form-group row mb-3">
-                                    <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
-                                    <div class="col-md-3">
-                                        <input type="file" id="files" name="files" style="display: none">
-                                        <input type="text" id="file_dinh_kem" name="attach" style="display: none">
-                                        <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
-                                        <img id="attach" style="margin-top: 10px;" width="100" />
-                                    </div>
-                          </div>
-                          
-                         <div class="form-group row mb-3">
-                            
-                                    <span for="ten_to_chuc" class="col-sm-1 control-label">Ý kiến</span>
-                                    <div class="col-sm-11">
-                                        <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="@phancongthuchien.y_kien" placeholder="Nhập nội dung"/>
-                                    </div>
-                         </div>      
+                            </div>
+                        </div>
+                        <div class="form-group row mb-3">
+                            <span for="mota" class="col-sm-1 control-label">File đính kèm</span>
+                            <div class="col-md-3">
+                                <input type="file" id="files" name="files" style="display: none">
+                                <input type="text" id="file_dinh_kem" name="attach" style="display: none">
+                                <button type="button" onclick="$('#files').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                <img id="attach" style="margin-top: 10px;" width="100" />
+                            </div>
+                        </div>
+
+
+                        @if (phancongthuchien != null)
+                        {
+                            <div class="form-group row mb-3">
+                                <span class="col-sm-1 control-label">Ý kiến</span>
+                                <div class="col-sm-11">
+                                    <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="@(phancongthuchien.y_kien)" placeholder="Nhập nội dung" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group row mb-3">
+                            <span  class="col-sm-1 control-label">Ý kiến</span>
+                            <div class="col-sm-11">
+                                <input maxlength="50" type="text" class="form-control input-default" id="y_kien" name="y_kien" value="" placeholder="Nhập nội dung" />
+                            </div>
+                            </div>
+
+                        }
+
+
                     </div>
                      <div class="text-center">
                                <button type="button" class="btn btn-primary"  onclick="LuuThongTinHoSo(@Model.Id,18)"  style="width: 150px" >Lưu</button>
@@ -409,7 +437,7 @@ $(document).ready(function() {
                                <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,12)">Trả lại</button>
                                <button type="button" class="btn btn-primary" onclick="LuuThongTinHoSo(@Model.Id,12)">Kết thúc XL</button>
                                <button type="button" class="btn btn-primary">In kết quả</button>
-                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id)">Thông báo cho công dân</button>
+                               <button type="button" class="btn btn-primary" onclick="ThongBaoChoCongDan(@Model.Id, 18)">Thông báo cho công dân</button>
                                <button type="button" class="btn btn-primary" onclick="LyDoGiaHan(@Model.Id)">Gia hạn xử lý</button>
                                <button type="button" class="btn btn-secondary" onclick="window.location.href='/XuLyHoSo/HoSoChoXuLy';" style="width: 150px">Đóng</button>
                     </div>

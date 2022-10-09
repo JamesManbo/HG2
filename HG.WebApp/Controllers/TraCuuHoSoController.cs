@@ -188,6 +188,23 @@ namespace HG.WebApp.Controllers
             ViewBag.trang_thai = trang_thai;
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TraCuuHoSo/Paging/TimKiemHoSoLienThongPaging.cshtml", hs);
             return Content(result);
+        }      
+        public async Task<IActionResult> GetNguoiDungByPB(string ma_phong_ban = "")
+        {
+            EAContext db = new EAContext();
+            var lstUser = new List<AspNetUsers>();
+            lstUser = db.AspNetUsers.Where(s => s.ma_phong_ban == ma_phong_ban).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayNguoiDungByPB.cshtml", lstUser);
+            return Content(result);
+        }
+        public async Task<IActionResult> GetLinhVucByPB(string ma_phong_ban = "")
+        {
+            EAContext db = new EAContext();
+            var lstlinhvuc = new List<Dm_Linh_Vuc>();
+            var lstPB = db.Dm_Phong_Ban.Where(s => s.ma_phong_ban == ma_phong_ban).FirstOrDefault();
+            lstlinhvuc = db.Dm_Linh_Vuc.Where(s => s.ma_don_vi == lstPB.ma_don_vi).ToList();
+            var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/TiepNhan/LayLinhVucByPB.cshtml", lstlinhvuc);
+            return Content(result);
         }
     }
 }

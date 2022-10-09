@@ -422,6 +422,36 @@ namespace HG.Data.Business.DanhMuc
                 return 101;
             }
         }
-        #endregion -- end kênh tin ----- 
+        #endregion -- end dvlt ----- 
+        #region thanh phan kqxl
+        public int LuuThanhPhanKQXL(dm_thanh_phan_kqxl item)
+        {
+            try
+            {
+                DbProvider.SetCommandText2("select  * from dm_thanh_phan_kqxl where Id =" + item.Id + "", CommandType.Text);
+                var dm = DbProvider.ExecuteListObject<List<dm_thanh_phan_kqxl>>();
+                if (dm.Count == 0)
+                {
+                    DbProvider.SetCommandText2("insert into [dm_thanh_phan_kqxl] values('" + item.ma_tp_kq + "','" + item.ma_thu_tuc + "','" + item.ten_tp_kq + "','" + item.mo_ta + "','" + item.Stt + "','" + item.CreatedDateUtc + "','" + item.CreatedUid + "',null,null,'0',null,null)", CommandType.Text);
+
+                }
+                else
+                {
+                    DbProvider.SetCommandText2("update [dm_thanh_phan_kqxl] set ma_tp_kq ='" + item.ma_tp_kq + "',ma_thu_tuc ='" + item.ma_thu_tuc + "',ten_tp_kq ='" + item.ten_tp_kq + "',mo_ta ='" + item.mo_ta + "',Stt = '" + item.Stt + "'", CommandType.Text);
+
+                }
+
+                // Lấy về danh sách các trường học
+                DbProvider.ExecuteNonQuery();
+                var ma_loi = 0;
+                return ma_loi;
+            }
+            catch (Exception ex)
+            {
+                return 101;
+            }
+
+        }
+        #endregion
     }
 }

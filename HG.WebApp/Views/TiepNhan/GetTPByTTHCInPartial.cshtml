@@ -75,7 +75,7 @@
                         <input type="checkbox" name="" id="selectAll" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "") />
                     </th>
                     <th align="center">Tên thành phần</th>
-                    <th align="center" scope="col" style="white-space: nowrap; text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Đính kèm</th>
+                    <th align="center" scope="col" style="white-space: nowrap; text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "Disabled" : "")>Đính kèm</th>
                     <th align="center" scope="col" style="text-align: center;">Biểu mẫu</th>
                     <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản chính</th>
                     <th align="center" scope="col" style="text-align: center;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>Bản sao</th>
@@ -98,24 +98,25 @@
                             </td>
                             @*<input id="addData-@(item.ma_thanh_phan)" name="addData-@(item.ma_thanh_phan)" hidden />*@
                             <td>
+                                <input hidden name="id_ho_so_thanh_phan"  value="@item.id_ho_so_thanh_phan">
+                                <input hidden name="ThanhPhan_@(stt + 5)" value="@item.ten_thanh_phan">
                                 <span id="Label3">@item.ten_thanh_phan</span>
                             </td>
-                            <td align="center" style="width:15%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                            <td align="center" style="width:15%;" >
                                 <div class="fileupload fileupload-new" data-provides="fileupload">
                                     <div class="input-append">
-                                        <input type="file" id="files-@(item.Id)" name="files" style="display: none">
-                                        <input type="text" id="name-@(item.Id)" name="name-@(item.Id)" style="display: none">
-                                        <button type="button" onclick="$('#files-@(item.Id)').click();" class="btn btn-default"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
-                                        <label type="text" id="namefile-@(item.Id)" name="namefile-@(item.Id)" readonly></label> <input type="button" id="btnDelete-@(item.Id)" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFile(@item.Id)">
+                                        <input type="file" id="files@(stt + 5)" name="files" style="display: none">
+                                        <input type="text" id="file_dinh_kem@(stt + 5)" name="file_dinh_kem@(stt + 5)" style="display: none">
+                                        <button type="button" onclick="$('#files@(stt + 5)').click();" class="btn btn-default" @(ViewBag.view_type == StatusAction.View.ToString() ? "hidden" : "")><i class="glyphicon glyphicon-folder-open"></i>&nbsp;&nbsp;Chọn File</button>
+                                        <label type="text" id="namefile@(stt + 5)" name="namefile@(stt + 5)" readonly> @(item.file_dinh_kem == null ? "" : Html.Raw("<a target='_blank' href='" + @item.file_dinh_kem + "'>Xem File</a>")) </label> <input type="button" id="btnDelete-@(item.Id)" class="btn" style="background-color: gainsboro; color: blue; display: none" value="Xóa" onclick="DeleteFile(@item.Id)">
                                     </div>
                                     <script>
                                         $("#btnDelete-@(item.Id)").click(function () {
-                                            $('#namefile-@(item.Id)').html("");
-                                            $("#btnDelete-"@(item.Id)).hide();
-                                           
+                                            $('#namefile@(stt + 5)').html("");
+                                            $('#btnDelete-@(item.Id)').hide();
                                         });
                                         $(document).ready(function () {
-                                            $("#files-@(item.Id)").on('change', function () {
+                                            $("#files@(stt + 5)").on('change', function () {
                                                 // Checking whether FormData is available in browser
                                                 if (window.FormData !== undefined) {
                                                     var fileUpload = $(this).get(0);
@@ -138,7 +139,7 @@
                                                             console.log(result);
                                                             for (var i = 0; i < result.files.length; i++) {
                                                                 //$('#avatar').attr('src', result.files[i]);
-                                                                $('#namefile-@(item.Id)').html("" + result.names + "");
+                                                                $('#namefile@(stt + 5)').html("" + result.names + "");
                                                                 $("#btnDelete").show();
                                                             }
                                                         },
@@ -158,13 +159,13 @@
                                 <button type="button" class="btn btn-primary" @((danhsachThanhPhan ?? "").ToString().Contains(item.ma_thanh_phan) ? "" : "disabled" ) data-bs-toggle="modal" id="addData-@(item.ma_thanh_phan)" data-bs-target="#ChonBieuMau" @(ViewBag.view_type == StatusAction.View.ToString()? "" : "hidden")>Chọn</button>
                             </td>
                             <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
-                                <input name="BanGoc" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <input name="BanChinh@(stt + 5)" type="text" value="@item.ban_goc" id="BanGoc" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
                             </td>
                             <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
-                                <input name="BanSao" type="text" value="@item.ban_sao" id="BanSao" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <input name="BanSao@(stt + 5)" type="text" value="@item.ban_sao" id="BanSao" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
                             </td>
                             <td style="width:6%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
-                                <input name="BanPhoTo" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
+                                <input name="BanPhoTo@(stt + 5)" type="text" value="@item.ban_pho_to" id="BanPhoTo" class="form-control" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
                             </td>
                             <td align="center" style="width:5%;" @(ViewBag.view_type == StatusAction.View.ToString()? "hidden" : "")>
                             </td>

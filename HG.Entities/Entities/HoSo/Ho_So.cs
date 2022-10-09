@@ -10,27 +10,27 @@ namespace HG.Entities.HoSo
     [Table("ho_so")]
     public class Ho_So : BaseEntities
     {
-        public string ma_khach_hang { get; set; }
-        public string ho_ten { get; set; }
-        public DateTime ngay_sinh { get; set; }
+        public string? ma_khach_hang { get; set; }
+        public string? ho_ten { get; set; }
+        public DateTime? ngay_sinh { get; set; }
         public int? nam_sinh { get; set; }
-        public int gioi_tinh { get; set; }
+        public int? gioi_tinh { get; set; }
         public int? id_giay_to { get; set; }
         public string? so_giay_to { get; set; }
-        public string dien_thoai { get; set; }
-        public string email { get; set; }
+        public string? dien_thoai { get; set; }
+        public string? email { get; set; }
         public string? ten_to_chuc { get; set; }
         public string? dia_chi { get; set; }
-        public string ten_ho_so { get; set; }
-        public string ma_linh_vuc { get; set; }
+        public string? ten_ho_so { get; set; }
+        public string? ma_linh_vuc { get; set; }
         //public string ten_lich_vuc { get; set; }
-        public string ma_thu_tuc_hc { get; set; }
+        public string? ma_thu_tuc_hc { get; set; }
         public string? ma_thu_tuc_hc_old { get; set; }
         public string? ten_thu_tuc_hc { get; set; }
-        public string ma_luong_xu_ly { get; set; }
+        public string? ma_luong_xu_ly { get; set; }
         public string? ten_luong_xu_ly { get; set; }
         public string? ghi_chu { get; set; }
-        public string nguoi_xu_ly { get; set; }
+        public string? nguoi_xu_ly { get; set; }
         public string? ten_nguoi_xu_ly { get; set; }
         public string? nguoi_phoi_hop { get; set; }
         public DateTime? gio_hen_tra { get; set; }

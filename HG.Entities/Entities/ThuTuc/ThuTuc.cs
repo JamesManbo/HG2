@@ -104,6 +104,7 @@ namespace HG.Entities.Entities.ThuTuc
     }
     public class ThanhPhanKQXL
     {
+        public int Id { get; set; }
         public string ma_thu_tuc { get; set; }
         public string ma_tp_kq { get; set; }
         public string ten_tp_kq { get; set; }

@@ -16,5 +16,10 @@ namespace HG.Entities.HoSo
         public int ho_so_id { get; set; }
         public string ma_thanh_phan { get; set; }
         public string? file_dinh_kem { get; set; }
+        public string? ten_thanh_phan { get; set; }
+        public int? ban_goc { get; set; }
+        public int? ban_sao { get; set; }
+        public int? ban_pho_to { get; set; }
+        public int? Deleted { get; set; }
     }
 }

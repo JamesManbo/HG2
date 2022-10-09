@@ -4,13 +4,17 @@
     <table class="table table-bordered responsive">
         <thead class="widgettitle">
             <tr>
-                
+                <th class="head0 nosort" scope="col" data-sortable="" style="width: 5%;">
+                    <input type="checkbox" name="" id="selectAll" />
+                </th>
                 <th class="head0" scope="col" data-sortable="" style="width: 5%;">STT</th>
                 <th class="head1" scope="col" data-sortable="" style="width: 15%;">MÃ HỒ SƠ</th>
                 <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI NỘP</th>
                 <th class="head0" scope="col" data-sortable="" style="width: 15%;">THỦ TỤC HÀNH CHÍNH</th>
-                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGÀY TIẾP NHẬN</th>
-                <th class="head0" scope="col" data-sortable="" style="width: 15%;">TRẠNG THÁI</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI XỬ LÝ</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGÀY HẸN TRẢ</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
             </tr>
         </thead>
         <tbody>
@@ -20,16 +24,18 @@
                 foreach (var item in Model)
                 {
                     <tr>
-                       
+                        <td><input type="checkbox" class="ads_Checkbox" value="@item.Id" /></td>
                         <td scope="row">
                             @stt
                             <input type="hidden" name="" id="" value="@item.Id" />
                         </td>
-                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.Id</a></td>
-                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
-                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc) </a></td>
-                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())">@item.CreatedDateUtc </a></td>
-                        <td><a href="/TraCuuHoSo/ViewTraCuHoSo?code=@item.Id&type=@(StatusAction.View.ToString())"> </a></td>
+                        <td><a href="/TiepNhan/ViewHoSoDaXL?code=@item.Id&type=@(StatusAction.View.ToString())">@item.Id</a></td>
+                        <td><a href="/TiepNhan/ViewHoSoDaXL?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
+                        <td><a href="/TiepNhan/ViewHoSoDaXL?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc)</a></td>
+                        <td><a href="/TiepNhan/ViewHoSoDaXL?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetUserName(Guid.Parse(item.nguoi_xu_ly)) </a></td>
+                        <td><a href="/TiepNhan/ViewHoSoDaXL?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra) </a></td>
+                        <td><a href="#" onclick="ChuyenXuLy(@item.Id)"><span class="glyphicon glyphicon-print">Chuyển CBXL</span> </a></td>
+                        <td><a href="/XuLyHoSo/Print?Id=@item.Id"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
                     </tr>
                     stt++;
                 }

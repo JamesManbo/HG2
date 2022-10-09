@@ -257,7 +257,7 @@ namespace HG.WebApp.Controllers
                 }
                 else
                 {
-                    linhvuc = ds.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
+                   linhvuc = ds.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).Skip(pageSize * (currentPage - 1)).Take(pageSize).ToList();
                 }
                 totalRecored = ds.Count();
             }
@@ -285,7 +285,7 @@ namespace HG.WebApp.Controllers
                     }
                     else
                     {
-                        ds = ds.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId) && n.ma_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
+                       // ds = ds.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId) && n.ma_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper()) || n.ten_linh_vuc.ToUpper().Contains(tu_khoa.ToUpper())).ToList();
                         //dv = db.dm_don_vi.Where(n => n.ma_don_vi == _sys.GetMaDonViByUserId(UserId)).ToList();
                     }
                 }
@@ -1051,14 +1051,30 @@ namespace HG.WebApp.Controllers
             {
                 return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
             }
-            var uid = Guid.Parse(userManager.GetUserId(User));
-            var _pb = _danhmucDao.XoaSoHoSo(code, uid);
-            if (_pb > 0)
+            if (code.Split(',').Length == 0)
             {
-                // Xử lý các thông báo lỗi tương ứng
-                return Json(new { error = 1, msg = "Xóa lỗi" });
+                var uid = Guid.Parse(userManager.GetUserId(User));
+                var _pb = _danhmucDao.XoaSoHoSo(code, uid);
+                if (_pb > 0)
+                {
+                    // Xử lý các thông báo lỗi tương ứng
+                    return Json(new { error = 1, msg = "Xóa lỗi" });
+                }
+                return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/SoHoSo" });
+            } else {
+                for (int i = 0; i < code.Split(',').Length; i++)
+                {
+                    var uid = Guid.Parse(userManager.GetUserId(User));
+                    var _pb = _danhmucDao.XoaSoHoSo(code.Split(',')[i], uid);
+                    if (_pb > 0)
+                    {
+                        // Xử lý các thông báo lỗi tương ứng
+                        return Json(new { error = 1, msg = "Xóa lỗi" });
+                    }
+                    return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/SoHoSo" });
+                }
             }
-            return Json(new { error = 0, msg = "Xóa thành công!", href = "/DanhMuc/SoHoSo" });
+            return Json(new { error = 1, msg = "Bạn cần chọn mã để xóa" });
         }
 
         public async Task<IActionResult> RenderViewSoHoSo()

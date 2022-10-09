@@ -23,6 +23,21 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="dskh" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">-
+        <div class="modal-content" style="border: 2px solid #0866c6;width: 900px;margin-left: -30%;">
+            <div class="modal-header" style="background-color: #0866c6;">
+                <h5 class="modal-title" style="color:white" id="exampleModalLabel">Danh sách khách hàng</h5>
+            </div>
+            <div class="modal-body" id="dskhbody">
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-footer-btnclose" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 @if (ViewBag.ErrorCode > 0)
 {
     <script>
@@ -33,7 +48,7 @@
 }
 <style>
     .underline-partion {
-    width: 10%%;
+    width: 100%;
     border-bottom: 1px solid #f0ad4e;
     margin-bottom: 20px;
     font-style: italic;
@@ -70,20 +85,23 @@
                                         <div class="col-sm-3">
                                             <input type="text" class="form-control input-default" onfocusout="CheckedCode(this)" maxlength="50" name="ma_khach_hang"  id="ma_khach_hang" value="@Model.ma_khach_hang" placeholder="Nhập CMT hoặc mã khách hàng đã có">
                                         </div>
-                            <div class="col-sm-1" style="text-align:right">
-                                <input type="checkbox" value="">
-                            </div>
+                                        <div class="col-sm-1" style="text-align:right">
+                                            <input type="checkbox" value="" id="TimkiemKH" name="TimkiemKH" onclick="TimKiemKhachHangCb()" @(string.IsNullOrEmpty(Model.ma_khach_hang ) ? "" : "checked") >
+                                        </div>
                                         <label for="ten_pb" class="col-sm-1 control-label" style="text-align:left">Tìm kiếm </label>
-                                       
+                                       <div class="col-md-3">
+                                         <input type="text" id="inp_timkiem" name="inp_timkiem" maxlength="50" class="form-control input-default" placeholder="Tìm kiếm khách hàng" style="display:none">
+                                        </div>
+                                         <button for="ten_pb" id="btnTimKiem" class="col-sm-1 btn-primary" onclick="TimKiemKhachHangTheoTK()" style="display:none" >Tìm kiếm </button>
                                 </div>
                                 <div class="form-group row mb-3">
                                     <label for="mota" class="col-sm-1 control-label">Họ và tên<span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                <input type="text" id="ho_ten" name="ho_ten" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ và tên người nộp">
+                                         <input type="text" id="ho_ten" name="ho_ten" maxlength="50" class="form-control input-default" value="@Model.ho_ten" placeholder="Nhập họ và tên người nộp">
                                     </div>
                                      <label for="stt" class="col-sm-1 control-label">Ngày sinh <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
-                                <input type="date" class="form-control input-default" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" onfocus="this.showPicker()">
+                                        <input type="date" class="form-control input-default" name="ngay_sinh" value="@Model.ngay_sinh" placeholder="Nhập ngày sinh" onfocus="this.showPicker()">
                                     </div>
                                      <label for="nguoi_sua" class="col-sm-1 control-label">Giới tính <span style="color:red">(*)</span></label>
                                     <div class="col-md-3">
@@ -201,8 +219,10 @@
                                            contentType: 'application/json; charset=utf-8',
                                            success: function(data) {
                                               //$("#nguoi_xu_ly select").val(data.nguoi_xl_mac_dinh).change();
-                                              console.log(data.nguoi_xl_mac_dinh)
-                                              $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                             if(data != ""){
+                                                  $("#nguoi_xu_ly").val(data.nguoi_xl_mac_dinh);
+                                             }
+                                             
                                            }
                                        });        
                                     }
@@ -284,7 +304,7 @@
                                  <div class="form-group row mb-3" id="3"  style="display:none">
                                             <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
                                             <div class="col-md-2">
-                                                <input name="" type="text" id="ThanhPhan_3" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
+                                                <input name="ThanhPhan_3" type="text" id="ThanhPhan_3" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
                                                  <input type="file" id="files3" name="files3" style="display: none">
@@ -309,7 +329,7 @@
                                  <div class="form-group row mb-3" id="4"  style="display:none">
                                             <label class="col-md-1 control-label">Tên&nbsp;<span id="ctl14_Label3" style="color:Red;">(*)</span></label>
                                             <div class="col-md-2">
-                                                <input name="" type="text" id="ThanhPhan_4" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
+                                                <input name="ThanhPhan_4" type="text" id="ThanhPhan_4" class="form-control input-default-sm" placeholder="Nhập tên thành phần">
                                             </div>
                                             <div class="col-md-2">
                                                  <input type="file" id="files4" name="files4" style="display: none">
@@ -462,7 +482,7 @@
                                                 {
                                                     foreach (var item in LstNguoiDung)
                                                     {
-                                                        <option value="@item.       Id">@(item.ho_dem + item.ten)</option> 
+                                                        <option value="@item.Id">@(item.ho_dem + item.ten)</option> 
                                                     }
                                                 }
 			                            </select>
@@ -505,7 +525,7 @@
                                 </div>
                                  <div class="form-group row mb-3">
                                       <div class="col-sm-1">
-                                        <input type="checkbox" name="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" conclick="ChuaDuDieuKien()"id="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" style="text-align:right" placeholder="Nhập người tiếp nhận">
+                                        <input type="checkbox" name="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" onclick="ChuaDuDieuKien()" id="ho_so_chua_du_dk_tiep_nhan_chinh_thuc" value="@Model.ho_so_chua_du_dk_tiep_nhan_chinh_thuc" style="text-align:right" placeholder="Nhập người tiếp nhận">
                                     </div>
                                     <label for="mota" class="col-sm-3 control-label" style="color:red;text-align:left">Hồ sơ chưa đủ điều kiện tiếp nhận chính thức</label>
                                    
@@ -608,19 +628,56 @@
         });
     });
     function CheckedCode(abc){
-         $.ajax({
+        $.ajax({
                   type: "GET",
                   url: "/TiepNhan/KiemTraMaKH?code=" + abc.value,
                   data: "",
                   contentType: 'application/json; charset=utf-8',
                   success: function(data) {
-                      if (data == "") {
-                          window.location.href = '/SuperAdmin/ThemNhom?ma_nhom=' + abc.value;
+                      if (data == false) {
+                          window.location.href = '/TiepNhan/TiepNhanHoSoMoi?code=' + abc.value;
                       } else {
-                          window.location.href = '/SuperAdmin/SuaNhom?code=' + abc.value +"&type=Edit"
+                          window.location.href = '/TiepNhan/SuaHoSo?code=' + abc.value +"&type=Edit"
                       }
                   }
-          });           
+          });       
+    }
+    function TimKiemKhachHangCb(){
+            if ($('input[name=TimkiemKH]:checked').length > 0) {
+
+                $("#inp_timkiem").show();
+                $("#btnTimKiem").show();
+            } else { 
+                $("#inp_timkiem").hide();
+                $("#btnTimKiem").hide();
+            }
+    }
+    
+    function GetListByCurrentPage(id) {
+        var tu_khoa = $("#inp_timkiem").val();
+        if (tu_khoa == null || tu_khoa == undefined) { tu_khoa = ""; };
+        $.ajax({
+            type: "GET",
+            url: "/TiepNhan/TimKiemKhachHangTheoTK?tukhoa=" + tu_khoa + "&currentPage="+id,
+            data: "",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                //console.log(data);
+                $("#dskhbody").html(data);
+            }
+        });
+    }
+    function TimKiemKhachHangTheoTK(){
+         $.ajax({
+                  type: "GET",
+                  url: "/TiepNhan/TimKiemKhachHangTheoTK?tukhoa=" + $("#inp_timkiem").val() ,
+                  data: "",
+                  contentType: 'application/json; charset=utf-8',
+                  success: function(data) {
+                      $("#dskhbody").html(data);
+                      $("#dskh").modal("show");
+                  }
+          });       
     }
     function DeleteFileDinhKemTP(filenumber){
         if (filenumber == 1) {
@@ -651,6 +708,10 @@
                 // Looping over all files and add it to FormData object
                 for (var i = 0; i < files.length; i++) {
                     fileData.append(files[i].name, files[i]);
+                }
+                if (files[0].size > 31457280) {
+                        alert("File tải lên không vượt quá 5MB");
+                        return;
                 }
                 // Adding one more key to FormData object
                 fileData.append('username', 'Manas');
@@ -688,6 +749,11 @@
                 for (var i = 0; i < files.length; i++) {
                     fileData.append(files[i].name, files[i]);
                 }
+                if(files[0].size > 5146624 )
+                {
+                        alert("File tải lên không vượt quá 5MB");
+                        return;
+                }
                 // Adding one more key to FormData object
                 fileData.append('username', 'Manas');
                 $.ajax({
@@ -722,6 +788,11 @@
                 // Looping over all files and add it to FormData object
                 for (var i = 0; i < files.length; i++) {
                     fileData.append(files[i].name, files[i]);
+                }
+                if(files[0].size > 31457280 )
+                {
+                        alert("File tải lên không vượt quá 5MB");
+                        return;
                 }
                 // Adding one more key to FormData object
                 fileData.append('username', 'Manas');
@@ -758,6 +829,10 @@
                 for (var i = 0; i < files.length; i++) {
                     fileData.append(files[i].name, files[i]);
                 }
+                if (files[0].size > 31457280) {
+                        alert("File tải lên không vượt quá 5MB");
+                        return;
+                }
                 // Adding one more key to FormData object
                 fileData.append('username', 'Manas');
                 $.ajax({
@@ -792,6 +867,10 @@
                 // Looping over all files and add it to FormData object
                 for (var i = 0; i < files.length; i++) {
                     fileData.append(files[i].name, files[i]);
+                }
+                if (files[0].size > 31457280) {
+                    alert("File tải lên không vượt quá 5MB");
+                    return;
                 }
                 // Adding one more key to FormData object
                 fileData.append('username', 'Manas');

@@ -25,6 +25,7 @@ namespace HG.WebApp.Controllers
         Sercutiry sercutiry = new Sercutiry();
         private readonly ThuTucDao _thuTucDao;
         private readonly LuongXuLyDao _luongDao;
+        private readonly DanhMucDao _danhmucDao;
         private IWebHostEnvironment Environment;
 
         //extend sys identity
@@ -38,6 +39,7 @@ namespace HG.WebApp.Controllers
             this._httpContextAccessor = httpContextAccessor;
             _thuTucDao = new ThuTucDao(DbProvider);
             _luongDao = new LuongXuLyDao(DbProvider);
+            _danhmucDao = new DanhMucDao(DbProvider);
         }
         public IActionResult QuanLy(int tabbieumau = 0)
         {
@@ -690,7 +692,7 @@ namespace HG.WebApp.Controllers
             try
             {
                 EAContext db = new EAContext();
-                if (!string.IsNullOrEmpty(Id))
+                if (!string.IsNullOrEmpty(Id) && Id != "0")
                 {
                     var objVBLQ = db.dm_nhom_tp.Where(n => n.Id == Convert.ToInt32(Id)).FirstOrDefault();
                     objVBLQ.UpdatedDateUtc = DateTime.Now;
@@ -833,37 +835,20 @@ namespace HG.WebApp.Controllers
             var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_thanh_phan_kqxl() { ma_thu_tuc = ma_thu_tuc, ma_tp_kq = ma_thu_tuc + "-kqxl" + (obj + 1).ToString() });
             return Content(result);
         }
-        public string SaveTPKQXL(string Id = "", string ma_thu_tuc = "", string ma_nhom = "", string ten_nhom = "", string mo_ta = "", string Stt = "0")
+        public string SaveTPKQXL(string Id = "", string ma_thu_tuc = "", string ma_tp_kq = "", string ten_tp_kq = "", string mo_ta = "", string Stt = "0")
         {
             try
             {
-                EAContext db = new EAContext();
-                if (!string.IsNullOrEmpty(Id))
-                {
-                    var objVBLQ = db.dm_nhom_tp.Where(n => n.Id == Convert.ToInt32(Id)).FirstOrDefault();
-                    objVBLQ.UpdatedDateUtc = DateTime.Now;
-                    objVBLQ.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
-                    objVBLQ.ma_nhom = ma_nhom;
-                    objVBLQ.ten_nhom = ten_nhom;
-                    objVBLQ.mo_ta = mo_ta;
-                    objVBLQ.Stt = Convert.ToInt32(Stt);
-                    db.Entry(objVBLQ).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return "Sửa nhóm thành phần thành công!!!";
-                }
-                dm_nhom_tp item = new dm_nhom_tp();
-                item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
-                item.CreatedDateUtc = DateTime.Now;
-                item.Deleted = 0;
-                item.ma_nhom = ma_nhom;
+                var item = new dm_thanh_phan_kqxl();
+                item.Id = Int32.Parse( Id);
                 item.ma_thu_tuc = ma_thu_tuc;
-                item.ten_nhom = ten_nhom;
-                item.Stt = Convert.ToInt32(Stt);
+                item.ma_tp_kq = ma_tp_kq;
+                item.ten_tp_kq = ten_tp_kq;
                 item.mo_ta = mo_ta;
-                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<dm_nhom_tp> _role = db.dm_nhom_tp.Add(item);
-                db.SaveChanges();
-                int id = item.Id;
-                if (id > 0)
+                item.Stt = Int32.Parse(Stt);
+
+                var dm = _danhmucDao.LuuThanhPhanKQXL(item);
+                if (dm > 0)
                 {
                     return "Thêm nhóm thành phần thành công!!!";
                 }
@@ -878,48 +863,33 @@ namespace HG.WebApp.Controllers
             }
 
         }
-        public async Task<IActionResult> SaveAddTPKQXL(string Id = "", string ma_thu_tuc = "", string ma_nhom = "", string ten_nhom = "", string mo_ta = "", string Stt = "0")
+        public async Task<IActionResult> SaveAddTPKQXL(string Id = "", string ma_thu_tuc = "", string ma_tp_kq = "", string ten_tp_kq = "", string mo_ta = "", string Stt = "0")
         {
             try
             {
                 EAContext db = new EAContext();
-                if (!string.IsNullOrEmpty(Id) && Id != "0")
-                {
-                    var objVBLQ = db.dm_nhom_tp.Find(Id);
-                    objVBLQ.UpdatedDateUtc = DateTime.Now;
-                    objVBLQ.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
-                    objVBLQ.ma_nhom = ma_nhom;
-                    objVBLQ.ten_nhom = ten_nhom;
-                    objVBLQ.mo_ta = mo_ta;
-                    objVBLQ.Stt = Convert.ToInt32(Stt);
-                    db.Entry(objVBLQ).State = EntityState.Modified;
-                    db.SaveChanges();
-                    var demNhomTP = db.dm_nhom_tp.Where(n => n.ma_thu_tuc == ma_thu_tuc).Count();
-                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemNhomThanhPhan.cshtml", new dm_nhom_tp() { ma_thu_tuc = ma_thu_tuc, ma_nhom = ma_thu_tuc + "-nhom" + (demNhomTP + 1).ToString() });
-                    return Content(result);
-                }
-                dm_nhom_tp item = new dm_nhom_tp();
+                var item = new dm_thanh_phan_kqxl();
+                item.Id = Int32.Parse(Id);
+                item.ma_thu_tuc = ma_thu_tuc;
+                item.ma_tp_kq = ma_tp_kq;
+                item.ten_tp_kq = ten_tp_kq;
+                item.mo_ta = mo_ta;
                 item.CreatedUid = Guid.Parse(userManager.GetUserId(User));
                 item.CreatedDateUtc = DateTime.Now;
-                item.Deleted = 0;
-                item.ma_nhom = ma_nhom;
-                item.ma_thu_tuc = ma_thu_tuc;
-                item.ten_nhom = ten_nhom;
-                item.Stt = Convert.ToInt32(Stt);
-                item.mo_ta = mo_ta;
-                Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<dm_nhom_tp> _role = db.dm_nhom_tp.Add(item);
-                db.SaveChanges();
-                int id = item.Id;
-                if (id > 0)
+                item.Stt = Int32.Parse(Stt);
+
+                var dm = _danhmucDao.LuuThanhPhanKQXL(item);
+                
+                if (dm > 0)
                 {
                     var demNhomTP = db.dm_nhom_tp.Where(n => n.ma_thu_tuc == ma_thu_tuc).Count();
-                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_nhom_tp() { ma_thu_tuc = ma_thu_tuc, ma_nhom = ma_thu_tuc + "-nhom" + (demNhomTP + 1).ToString() });
+                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_thanh_phan_kqxl() { ma_thu_tuc = ma_thu_tuc, ma_tp_kq = ma_thu_tuc + "-nhom" + (demNhomTP + 1).ToString() });
                     return Content(result);
                 }
                 else
                 {
                     var demNhomTP = db.dm_nhom_tp.Where(n => n.ma_thu_tuc == ma_thu_tuc).Count();
-                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_nhom_tp() { ma_thu_tuc = ma_thu_tuc, ma_nhom = ma_thu_tuc + "nhom" + (demNhomTP + 1).ToString() });
+                    var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_thanh_phan_kqxl() { ma_thu_tuc = ma_thu_tuc, ma_tp_kq = ma_thu_tuc + "nhom" + (demNhomTP + 1).ToString() });
                     return Content(result);
                 }
             }
@@ -927,7 +897,7 @@ namespace HG.WebApp.Controllers
             {
                 EAContext db = new EAContext();
                 var demNhomTP = db.dm_nhom_tp.Where(n => n.ma_thu_tuc == ma_thu_tuc).Count();
-                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_nhom_tp() { ma_thu_tuc = ma_thu_tuc, ma_nhom = ma_thu_tuc + "-nhom" + (demNhomTP + 1).ToString() });
+                var result = await CoinExchangeExtensions.RenderViewToStringAsync(this, "~/Views/ThuTuc/ThemTPKQXL.cshtml", new dm_thanh_phan_kqxl() { ma_thu_tuc = ma_thu_tuc, ma_tp_kq = ma_thu_tuc + "-nhom" + (demNhomTP + 1).ToString() });
                 return Content(result);
 
             }

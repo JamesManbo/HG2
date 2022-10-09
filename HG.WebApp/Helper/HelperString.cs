@@ -15,6 +15,38 @@ namespace HG.WebApp.Helper
         public string LinkPage = "";
         public int TotalPage = 0;
 
+        public static string CheckMaKH(string makh)
+        {
+            if(makh.Length == 1)
+            {
+                return "0000000" + makh;
+            }else if(makh.Length == 2)
+            {
+                return "000000" + makh;
+            }
+            else if (makh.Length == 3)
+            {
+                return "00000" + makh;
+            }
+            else if (makh.Length == 4)
+            {
+                return "0000" + makh;
+            }
+            else if (makh.Length == 5)
+            {
+                return "000" + makh;
+            }
+            else if (makh.Length == 6)
+            {
+                return "00" + makh;
+            }
+            else if (makh.Length == 7)
+            {
+                return "0" + makh;
+            }
+            return makh;
+        }
+
 
         private static readonly string[] VietnameseSigns = new string[]
         {

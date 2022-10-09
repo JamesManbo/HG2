@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Project\\HG.Entities\\HG.Entities.csproj": {}
+    "F:\\HaGiang\\Project\\HG.Entities\\HG.Entities.csproj": {}
   },
   "projects": {
-    "D:\\Project\\HG.Entities\\HG.Entities.csproj": {
+    "F:\\HaGiang\\Project\\HG.Entities\\HG.Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Project\\HG.Entities\\HG.Entities.csproj",
+        "projectUniqueName": "F:\\HaGiang\\Project\\HG.Entities\\HG.Entities.csproj",
         "projectName": "HG.Entities",
-        "projectPath": "D:\\Project\\HG.Entities\\HG.Entities.csproj",
+        "projectPath": "F:\\HaGiang\\Project\\HG.Entities\\HG.Entities.csproj",
         "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-        "outputPath": "D:\\Project\\HG.Entities\\obj\\",
+        "outputPath": "F:\\HaGiang\\Project\\HG.Entities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",

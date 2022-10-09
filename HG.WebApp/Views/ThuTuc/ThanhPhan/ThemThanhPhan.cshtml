@@ -375,20 +375,20 @@
             }
         });
     }
-    function SaveNhomTP() {
-        var data = $("#form_nhom_tp").serialize();
-        $.ajax({
-            type: "Post",
-            url: "../ThuTuc/SaveNhomTP",
-            data: data,
-            //data: data,
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-            success: function(data) {
-                $("#TitleEform").html(data);
-                $("#Notifyeform").modal("show");
+    //function SaveNhomTP() {
+    //    var data = $("#form_nhom_tp").serialize();
+    //    $.ajax({
+    //        type: "Post",
+    //        url: "../ThuTuc/SaveNhomTP",
+    //        data: data,
+    //        //data: data,
+    //        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+    //        success: function(data) {
+    //            $("#TitleEform").html(data);
+    //            $("#Notifyeform").modal("show");
 
-            }
-        });
+    //        }
+    //    });
     }
     function SaveAddNhomTP() {
         var data = $("#form_nhom_tp").serialize();
@@ -848,6 +848,7 @@
                                                     <tbody>
                                                         <tr>
                                                             <td><input id="bat_buoc1" type="radio" name="bat_buoc" value="0"><label for="BatBuoc_0">Không</label></td>
+                                                            <td></td>
                                                             <td><input id="bat_buoc2" type="radio" name="bat_buoc" value="1" checked="checked"><label for="BatBuoc_1">Có</label></td>
                                                         </tr>
                                                     </tbody>
@@ -884,6 +885,7 @@
                                                                 <input id="bieu_mau1" type="radio" name="bieu_mau" value="0" checked="checked">
                                                                 <label for="bieu_mau1">Không</label>
                                                             </td>
+                                                            <td></td>
                                                             <td>
                                                                 <input id="bieu_mau2" type="radio" name="bieu_mau" value="1">
                                                                 <label for="bieu_mau2">Có</label>
@@ -922,14 +924,14 @@
                                                 Bản chính
                                             </label>
                                             <div class="col-md-2">
-                                                <input name="ban_goc" type="text" value="0" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính">
+                                                <input name="ban_goc" type="number" min="0" value="0" id="ban_goc" class="form-control input-default" placeholder="Số lượng bản chính">
                                             </div>
 
                                             <label class="col-md-1 control-label">
                                                 Bản sao
                                             </label>
                                             <div class="col-md-2">
-                                                <input name="ban_sao" type="text" value="0" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao">
+                                                <input name="ban_sao" type="number" min="0" value="0" id="ban_sao" class="form-control input-default" placeholder="Số lượng bản sao">
 
                                             </div>
 
@@ -937,7 +939,7 @@
                                                 Bản phô tô
                                             </label>
                                             <div class="col-md-2">
-                                                <input name="ban_pho_to" type="text" value="0" id="ban_pho_to" class="form-control input-default" placeholder="Số lượng bản phô tô">
+                                                <input name="ban_pho_to" type="number" min="0" value="0" id="ban_pho_to"  class="form-control input-default" placeholder="Số lượng bản phô tô">
 
                                             </div>
                                         </div>
@@ -945,7 +947,7 @@
                                         <div class="row mb-3">
                                             <label class="col-md-2 control-label">Thứ tự</label>
                                             <div class="col-md-8">
-                                                <input name="stt" type="text" id="stt" class="form-control input-default" placeholder="Số thứ tự">
+                                                <input name="stt" type="text" id="stt" class="form-control input-default"  placeholder="Số thứ tự">
                                             </div>
                                         </div>
                                         <input name="type_view" value="@ViewBag.type_view" hidden />

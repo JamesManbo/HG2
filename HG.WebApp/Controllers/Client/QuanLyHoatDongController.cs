@@ -189,6 +189,12 @@ namespace HG.WebApp.Controllers.Client
             {
                 EAContext eAContext = new EAContext();
                 var obj = eAContext.cd_thong_bao.FirstOrDefault(n => n.id == item.id);
+                if (type_add == 2 && item.ten_ma_cha == null)
+                {
+                    ViewBag.ErrorCode = 1;
+                    ViewBag.ErrorMsg = "Bạn chưa nhập thông báo cha";
+                    return RedirectToAction("QuanLy", "QuanLyHoatDong", new { oid = "0-2" });
+                }
 
                 if (obj != null)
                 {

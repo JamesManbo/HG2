@@ -58,13 +58,13 @@ namespace HG.WebApp.Controllers
             var obj = db.Ho_So.Where(n => n.Id == ho_so_id).FirstOrDefault();
             if (obj != null)
             {
-                obj.trang_thai = (int)StatusTiepNhanHoSo.HoSoChoXL;
+                obj.trang_thai = (int)StatusXuLyHoSo.HoSoChoXuLy;
                 obj.id_trang_thai_xl = 0; //chưa tiếp nhận
                 obj.UpdatedUid = Guid.Parse(userManager.GetUserId(User));
                 obj.UpdatedDateUtc = DateTime.Now;
                 db.Entry(obj).State = EntityState.Modified;
                 db.SaveChanges();
-                SaveLogHS(ho_so_id, "Hồ sơ chuyển qua chờ xử lý", (int)StatusTiepNhanHoSo.HoSoDangTiepNhan, (int)StatusTiepNhanHoSo.HoSoChoXL, Guid.Parse(userManager.GetUserId(User)));
+                SaveLogHS(ho_so_id, "Hồ sơ chuyển qua chờ xử lý", (int)StatusTiepNhanHoSo.HoSoDangTiepNhan, (int)StatusXuLyHoSo.HoSoChoXuLy, Guid.Parse(userManager.GetUserId(User)));
                 return "Chuyển xử lý hồ sơ thành công!";
             }
             else
