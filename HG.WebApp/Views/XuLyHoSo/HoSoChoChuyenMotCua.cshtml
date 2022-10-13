@@ -182,9 +182,8 @@
                                       <th class="head1" scope="col" data-sortable="" style="width: 15%;">MÃ HỒ SƠ</th>
                                       <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI NỘP</th>
                                       <th class="head0" scope="col" data-sortable="" style="width: 15%;">THỦ TỤC HÀNH CHÍNH</th>
-                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI XỬ LÝ</th>
-                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGÀY HẸN TRẢ</th>
-                                      <th class="head0" scope="col" data-sortable="" style="width: 5%;">#</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGƯỜI KÝ</th>
+                                      <th class="head0" scope="col" data-sortable="" style="width: 15%;">NGÀY KÝ</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,10 +200,9 @@
                                             </td>
                                             <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.Id</a></td>
                                             <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ho_ten </a></td>
-                                            <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.ma_thu_tuc_hc </a></td>
-                                            <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@item.nguoi_xu_ly </a></td>
-                                            <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra) </a></td>
-                                            <td><a href="#"><span class="glyphicon glyphicon-print">Phiếu hẹn</span> </a></td>
+                                            <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetNameHTHC(item.ma_thu_tuc_hc)</a></td>
+                                            <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Helper.HelperSql.GetUserName(Guid.Parse(item.nguoi_xu_ly))</a></td>
+                                            <td><a href="/XuLyHoSo/ViewHoSoChoChuyenMotCua?code=@item.Id&type=@(StatusAction.View.ToString())">@HG.WebApp.Common.HelperDateTime.DateTimeToYYYYMMDD((DateTime)item.ngay_hen_tra)</a></td>
                                         </tr>
                                         stt++;
                                     }

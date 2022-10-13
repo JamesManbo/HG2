@@ -46,13 +46,49 @@ namespace HG.WebApp.Helper
                 return "";
             }
         }
+        public static string LayTenNguoiNhan(int idhs, int trangthai = 0 )
+        {
+            var obj = db.Ho_So_History.Where(n => n.ma_ho_so == idhs && n.tra_thai_xu_ly_sau == trangthai).FirstOrDefault();
+            if(obj != null)
+            {
+                return GetUserName(obj.CreatedUid);
+            }
+            else
+            {
+                return "";
+            }
+        }
+        public static string LayTenNguoiChuyen(int idhs, int trangthai = 0)
+        {
+            var obj = db.Ho_So_History.Where(n => n.ma_ho_so == idhs && n.tra_thai_xu_ly_sau == trangthai).FirstOrDefault();
+            if (obj != null)
+            {
+                return GetUserName(obj.CreatedUid);
+            }
+            else
+            {
+                return "";
+            }
+        }
+        public static DateTime? LayTimeNguoiChuyen(int idhs, int trangthai = 0)
+        {
+            var obj = db.Ho_So_History.Where(n => n.ma_ho_so == idhs && n.tra_thai_xu_ly_sau == trangthai).FirstOrDefault();
+            if (obj != null)
+            {
+                return obj.CreatedDateUtc;
+            }
+            else
+            {
+                return DateTime.Now;
+            }
+        }
         public static string GetNameHTHC(string ma_thu_tuc_hc)
         {
             try
             {
                 var tentthc = "";
-                //using (SqlConnection conn = new SqlConnection("Server=DESKTOP-ER8BTDC\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
-                using (SqlConnection conn = new SqlConnection("Server=WIN-20421CI14U0\\SQLEXPRESS2014;Database=HG; User ID=sa;Password=abcABC123"))
+                using (SqlConnection conn = new SqlConnection("Server=DESKTOP-ER8BTDC\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
+                //using (SqlConnection conn = new SqlConnection("Server=WIN-20421CI14U0\\SQLEXPRESS2014;Database=HG; User ID=sa;Password=abcABC123"))
                 {
                     conn.Open();
 

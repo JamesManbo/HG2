@@ -22,8 +22,8 @@ namespace HG.Data.SqlService
         #region CREATE NEW OBJECT
         public SqlDbProvider()
         {
-            //connectStr = "Server=DESKTOP-ER8BTDC\\SQLEXPRESS; Database=HG; Trusted_Connection=True;";
-            connectStr = "Server=WIN-20421CI14U0\\SQLEXPRESS2014;Database=HG; User ID=sa;Password=abcABC123";
+            connectStr = "Server=DESKTOP-ER8BTDC\\SQLEXPRESS; Database=HG; Trusted_Connection=True;";
+            //connectStr = "Server=WIN-20421CI14U0\\SQLEXPRESS2014;Database=HG; User ID=sa;Password=abcABC123";
             SqlConnection conn = new SqlConnection(connectStr);
             this.dbCommand = conn.CreateCommand();
             this.dataAdapter = new SqlDataAdapter();
