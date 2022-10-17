@@ -239,4 +239,31 @@ namespace HG.WebApp.Helper
             }
         }
     }
+     public class BaseCoreDbContextFactory : IDesignTimeDbContextFactory<bdDataContext>
+    {
+        public static string connectionstring = "";
+       
+        public bdDataContext CreateDbContext(string[] args)
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            connectionstring = configuration.GetConnectionString("EAContext");
+            Set(configuration.GetConnectionString("GSContext"));
+            var optionsBuilder = new DbContextOptionsBuilder<bdDataContext>();
+            optionsBuilder.UseSqlServer(connectionstring);
+
+            return new bdDataContext(optionsBuilder.Options);
+        }
+        public static string Get()
+        {
+            return connectionstring;
+        } 
+        public static string Set(string value)
+        {
+            return connectionstring = value;
+        }
+    }
 }
