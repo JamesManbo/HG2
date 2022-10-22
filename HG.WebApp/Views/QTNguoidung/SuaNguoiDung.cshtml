@@ -317,10 +317,10 @@
                         <div class="form-group row">
 									<label class="col-md-2 control-label">Khóa tài khoản</label>
 									<div class="col-md-10">
-										<input onclick="KhoaTaiKhoan()" id="khoa_tai_khoan" type="checkbox" name="khoa_tai_khoan" @(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? 1 : 0 )" >
+										<input onclick="fnKhoaTaiKhoan()" id="khoa_tai_khoan" type="checkbox" name="khoa_tai_khoan" @(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? "checked" : "" ) value="@(@Model.aspNetUsersModel.First().khoa_tai_khoan == 1 ? 1 : 0 )" >
 									</div>
                                     <script>
-                                        function KhoaTaiKhoan() {
+                                        function fnKhoaTaiKhoan() {
                                             if ($('#khoa_tai_khoan').is(':checked')) {
                                                 $("#khoa_tai_khoan").val(1)
                                             }else{
