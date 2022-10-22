@@ -2,7 +2,7 @@
 {
     public class HelperStatus
     {
-        public static List<ObjectStatus> GetListStatus()
+        public static string GetListStatus(int? trangthai = 0)
         {
             List<ObjectStatus> lstStatus = new List<ObjectStatus>();
             lstStatus.Add(new ObjectStatus() { value = 1, name = "Hồ sơ đang tiếp nhận" });
@@ -36,7 +36,7 @@
             lstStatus.Add(new ObjectStatus() { value = 29, name = "Hồ sơ chuyển một cửa" });
             lstStatus.Add(new ObjectStatus() { value = 30, name = "Hồ sơ xử lý thay" });
             lstStatus.Add(new ObjectStatus() { value = 31, name = "Hồ sơ liên thông" });
-            return lstStatus;
+            return lstStatus.Where(n => n.value == trangthai).FirstOrDefault().name;
         }
     }
     public class ObjectStatus

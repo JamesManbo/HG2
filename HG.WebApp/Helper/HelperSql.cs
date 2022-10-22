@@ -1,12 +1,14 @@
 ﻿using HG.WebApp.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace HG.WebApp.Helper
 {
     
-    public class HelperSql
+    public class HelperSql : BaseCoreDbContextFactory
     {
       
         private readonly static EAContext db = new EAContext();
@@ -87,7 +89,7 @@ namespace HG.WebApp.Helper
             try
             {
                 var tentthc = "";
-                using (SqlConnection conn = new SqlConnection("Server=DESKTOP-ER8BTDC\\SQLEXPRESS; Database=HG; Trusted_Connection=True;"))
+                using (SqlConnection conn = new SqlConnection(Get()))
                 //using (SqlConnection conn = new SqlConnection("Server=WIN-20421CI14U0\\SQLEXPRESS2014;Database=HG; User ID=sa;Password=abcABC123"))
                 {
                     conn.Open();
@@ -239,11 +241,11 @@ namespace HG.WebApp.Helper
             }
         }
     }
-     public class BaseCoreDbContextFactory : IDesignTimeDbContextFactory<bdDataContext>
+     public class BaseCoreDbContextFactory : IDesignTimeDbContextFactory<EAContext>
     {
         public static string connectionstring = "";
        
-        public bdDataContext CreateDbContext(string[] args)
+        public EAContext CreateDbContext(string[] args)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -251,11 +253,11 @@ namespace HG.WebApp.Helper
                 .Build();
 
             connectionstring = configuration.GetConnectionString("EAContext");
-            Set(configuration.GetConnectionString("GSContext"));
-            var optionsBuilder = new DbContextOptionsBuilder<bdDataContext>();
+            Set(configuration.GetConnectionString("EAContext"));
+            var optionsBuilder = new DbContextOptionsBuilder<EAContext>();
             optionsBuilder.UseSqlServer(connectionstring);
 
-            return new bdDataContext(optionsBuilder.Options);
+            return new EAContext(optionsBuilder.Options);
         }
         public static string Get()
         {

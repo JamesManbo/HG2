@@ -555,11 +555,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\HaGiang\\Project\\HG.Entities\\HG.Entities.csproj",
+      "projectUniqueName": "C:\\Users\\PC\\Documents\\HG2\\HG.Entities\\HG.Entities.csproj",
       "projectName": "HG.Entities",
-      "projectPath": "F:\\HaGiang\\Project\\HG.Entities\\HG.Entities.csproj",
+      "projectPath": "C:\\Users\\PC\\Documents\\HG2\\HG.Entities\\HG.Entities.csproj",
       "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "F:\\HaGiang\\Project\\HG.Entities\\obj\\",
+      "outputPath": "C:\\Users\\PC\\Documents\\HG2\\HG.Entities\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
